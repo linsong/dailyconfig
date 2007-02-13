@@ -1,0 +1,69 @@
+#"\e[3~": delete-char
+# this is actually equivalent to "\C-?": delete-char
+
+# VT
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+
+# kvt
+"\e[H":beginning-of-line
+"\e[F":end-of-line
+
+# rxvt and konsole (i.e. the KDE-app...)
+"\e[7~":beginning-of-line
+"\e[8~":end-of-line
+
+# use "man readline" command to get help about configurations in this file
+
+# add by wangwei on 2004/2/27
+set meta-flag on 
+set convert-meta off
+set output-meta on
+# ignore case while completing 
+set completion-ignore-case on
+
+# shut off the bell 
+# read the <<Learning the bash shell>> for more detail
+set bell-style none
+# I want some sound now ;)
+#set bell-style audible
+
+set editing-mode vi
+
+# Adding this to your /etc/inputrc or ~/.inputrc will result in a character being appended 
+# to any file-names returned by completion, in much the same way as ls -F works.
+set visible-stats on
+
+# If you have this in your /etc/inputrc or ~/.inputrc, you will no longer have to 
+# hit the <Tab> key twice to produce a list of all possible completions. A single 
+# <Tab> will suffice. This setting is highly recommended. 
+#set show-all-if-ambiguous on
+
+# WARNNING: there *MUST NOT* be space between ":", otherwise, it 
+# will not work!
+#set keymap vi-insert
+"\C-A":beginning-of-line
+"\C-B":backward-char
+"\C-D":delete-char
+"\C-E":end-of-line
+"\C-F":forward-char
+"\C-G":abort
+"\C-H":backward-delete-char
+"\C-I":complete
+#"\C-J":accept-line
+"\C-K":kill-line
+"\C-L":clear-screen
+#"\C-M" : accept-line
+"\C-N":next-history
+"\C-P":previous-history
+"\C-Q":quoted-insert
+"\C-R":reverse-search-history
+"\C-S":forward-search-history
+"\C-T":transpose-chars
+"\C-U":unix-line-discard
+"\C-V":quoted-insert
+"\C-W":unix-word-rubout
+"\C-Y":yank
+"\C-]":character-search
+"\C-_":undo
+

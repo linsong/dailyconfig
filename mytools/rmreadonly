@@ -1,0 +1,3 @@
+#! /bin/sh
+echo remove readonly attribute from file: $@
+chmod u+w $@

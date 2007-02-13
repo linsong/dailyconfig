@@ -1,0 +1,99 @@
+!!
+!*VT100.Translations:	#override Mod1<KeyPress>:  string("\033") insert()
+*blinkRate: 0
+*border:		3
+!!
+cterm*font:		9x13
+cterm*geometry:		143x73+0+0
+cterm*iconGeometry:	+357+4
+cterm*background:	#ffffef
+*background: white
+*foreground: black
+!*scheme:       Willis
+!*Scheme:       Willis
+*maxLen: 100
+xterm*font:8x13 
+xterm*scrollBar: true
+xterm*scrollTtyOutput: true
+xterm*background: white
+xterm*foreground: black
+xterm*cursorColor: black
+!!
+maker*background:	white
+maker*geometry:		+12-10
+Maker.makerkit.geometry:       +600+0
+Maker.edit_search.bb.x: 600
+Maker.edit_search.bb.y: 0
+Maker.edit_spell.bb.x:  600
+Maker.edit_spell.bb.y:  20
+Maker.pgf.bb.x: 755
+Maker.pgf.bb.y: 692
+Maker.fontdesign.bb.x:  756
+Maker.fontdesign.bb.y:  423
+Maker.edit_markers.bb.x:        600
+Maker.edit_markers.bb.y:        20
+Maker.tools.tools_form.x:       750
+Maker.tools.tools_form.y:       50
+Maker.cCatalog.form.x:  1116
+Maker.cCatalog.form.y:  51
+Maker.cCatalog.form.width: 136
+Maker.cCatalog.form.height: 168
+Maker.pCatalog.form.x:  1116
+Maker.pCatalog.form.y:  246
+Maker.pCatalog.form.width: 136
+Maker.pCatalog.form.height: 168
+Maker.bookkit.form.width: 300
+Maker.bookkit.form.height: 225
+!!
+xbiff*geometry:		48x52+125+0
+xbiff*onceOnly:		true
+xbiff*fullPixmap:	/usr/local/X11/xbm/eagle.xbm
+xbiff*emptyPixmap:	/usr/local/X11/xbm/eagle.xbm
+!!
+xclock*background:	#402
+xclock*foreground:	#fe1
+xclock*geometry:	97x76+1100+0
+xclock*highlight:	white
+xclock*update:		60
+!!
+xload*font:			6x10
+xload*geometry:		117x73+0+0
+xload*reverseVideo:	true
+!!
+xterm*eightBitInput:	false
+xterm*font:				9x13
+xterm*scrollBar:		true
+xterm*scrollTtyOutput:	true
+xterm*background:		#eee
+!!
+! mwm   - the Motif Window Manager
+mwm*cleanText:                                  true
+mwm*activeForeground:                   black
+mwm*activeBackground:                   LightRed
+mwm*activeTopShadowColor:               #DD7
+mwm*activeBottomShadowColor:    #662
+mwm*foreground:                                 black
+mwm*background:                                 #7AA
+mwm*backgroundPixmap:           none
+mwm*menu*foreground:            black
+mwm*menu*topShadowColor:        #DDD
+mwm*menu*bottomShadowColor:     #444
+Mwm*useIconBox:                 False
+Mwm*background:                 CadetBlue
+Mwm*activeBackground:           LightGrey
+Mwm*fadeNormalIcon:             True
+Mwm*buttonBindings:             DefaultButtonBindings
+Mwm*iconDecoration:             label image
+Mwm*keyboardFocusPolicy:        pointer
+Mwm*interactivePlacement:       True
+Mwm*XBiff*clientDecoration:     none
+Mwm*XBiff*iconImage:			flagdown
+Mwm*XClock*clientDecoration:    none
+Mwm*cterm*clientDecoration:     none
+Mwm*xload*clientDecoration:     none
+Mwm*defaults*clientDecoration:  none
+!! Xman
+xman*manualFontNormal:		lucidasans-10
+xman*manualFontBold:		lucidasans-bold-10
+xman*manualFontItalic:		lucidasans-italic-10
+

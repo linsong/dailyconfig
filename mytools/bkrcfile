@@ -1,0 +1,11 @@
+#! /bin/sh 
+echo "backup all rc files of $HOME dir to cygwincfg.tar.bz2 file!"
+echo "Usage: 
+             $0 [ output filename [rc fileslist] ]
+     "
+cd $HOME
+
+DATE=$(date +%Y_%m_%d)
+FILENAME='cygwincfg_'$DATE'.tar.bz2'
+sed -n -e "/^[^#].*/p" ${2:-"mytools/rcfilelist"} | xargs tar -cjhvf ${1:-$FILENAME} 
+

@@ -1,0 +1,11 @@
+#!/bin/sh 
+echo $@
+
+echo " Begin deleting files in $1 ... ... "
+
+find $1 -type f -a \( -name "*.pdb" -o -name "*.ncb" -o -name "*.aps" -o -name "*.opt" -o -name "*.plg" -o -name "*.exp" -o -name "*.obj" -o -name "*.ilk" -o -name "*.pch" \) -a -exec rm -f {} \;
+
+echo " Finish! "
+
+
+

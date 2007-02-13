@@ -1,0 +1,24 @@
+# $Id: 90xfree86-common_ssh-agent 1329 2004-04-28 16:16:44Z branden $
+
+# This file is sourced by Xsession(5), not executed.
+
+STARTSSH=
+SSHAGENT=/usr/bin/ssh-agent
+SSHAGENTARGS=
+
+if grep -qs ^use-ssh-agent "$OPTIONFILE"; then
+  if [ -x "$SSHAGENT" ] && [ -z "$SSH_AUTH_SOCK" ] \
+     && [ -z "$SSH2_AUTH_SOCK" ]; then
+    STARTSSH=yes
+    if [ -f /usr/bin/ssh-add1 ] && cmp -s $SSHAGENT /usr/bin/ssh-agent2; then
+      # use ssh-agent2's ssh-agent1 compatibility mode
+      SSHAGENTARGS=-1
+    fi
+  fi
+fi
+
+if [ -n "$STARTSSH" ]; then
+  STARTUP="$SSHAGENT $SSHAGENTARGS $STARTUP"
+fi
+
+# vim:set ai et sts=2 sw=2 tw=80:

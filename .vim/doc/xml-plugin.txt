@@ -1,0 +1,163 @@
+*xml-plugin.txt*  Help edit XML and SGML documents.                   v1.4
+
+				   XML Edit      ~
+
+A filetype plugin to help edit XML and SGML documents.
+
+This script provides some convenience when editing XML (and some SGML
+including HTML) formated documents. It allows you to jump to the beginning
+or end of the tag block your cursor is in. '%' will jump between '<' and '>'
+within the tag your cursor is in. When in insert mode and you finish a tag
+(pressing '>') the tag will be completed. If you press '>' twice it will
+complete the tag and place the cursor in the middle of the tags on it's own
+line (helps with nested tags).
+
+Usage: Place this file into your ftplugin directory. To add html support
+Sym-link or copy this file to html.vim in your ftplugin directory. To activte
+the script place 'filetype plugin on' in your |.vimrc| file. See |ftplugins|
+for more information on this topic.
+
+Known Bugs      ~
+
+- < & > marks inside of a CDATA section are interpreted as actual XML tags
+  even if unmatched.
+- The script can not handle leading spaces such as < tag></ tag> it is
+  illegal XML syntax and considered very bad form.
+- Placing a literal `>' in an attribute value will auto complete despite that
+  the start tag isn't finished. This is poor XML anyway you should use
+  &gt; instead.
+
+------------------------------------------------------------------------------
+							 *xml-plugin-mappings*
+Mapings and their functions      ~
+
+Typing '>' will start the tag closing routine.
+Typing (Where | means cursor position)
+           <para>|
+results in
+           <para>|</para>
+
+Typing
+           <para>>|</para>
+results in
+           <para>
+                |
+           </para>
+typing a lone '>' and no '<' infront of it accepts the '>' (But having
+lone '>' or '<' in a XML file is frown upon except in <!CDATA> sections,
+and that will throw of the plugin!!).
+
+Typing </tag> or <tag/> also results in noexpanding. So when editing
+html type <input .... />
+
+The closing routing also ignores DTD tags '<!,,>' and processing
+instructions '<?....?>'. Thus typing these result in no expansion.
+
+
+<LocalLeader> is a setting in VIM that depicts a prefix for scripts and
+plugins to use. By default this is the backslash key `\'. See |mapleader|
+for details.
+
+<LocalLeader>5
+        - Jump to the matching tag.
+
+<LocalLeader>c 
+        - Rename tag
+
+<LocalLeader>C 
+        - Rename tag and remove attributes
+
+<LocalLeader>d
+        - Deletes the surrounding tags from the cursor.
+            <tag1>outter <tag2>inner text</tag2> text</tag1>
+               |
+       Turns to: 
+            outter <tag2>inner text</tag2> text
+            |
+<LocalLeader>D
+        - Deletes the tag and it contents and put it in register x.
+            <tag1>outter <tag2>inner text</tag2> text</tag1>
+                           |
+       Turns to: 
+            <tag1>outter text</tag1>
+
+<LocalLeader>e
+        - provide endtag for open tags. Watch where de cursor is
+            <para><listitem>list item content
+                                            |
+        pressing \e twice produces
+            <para><listitem>list item content</para></listitem>
+
+<LocalLeader>f 
+        - fold the tag under the cursor
+          <para>
+            line 1
+            line 2
+            line 3
+          </para>
+        \f produces
+        +--  5 lines: <para>--------------------------
+
+
+<LocalLeader>F 
+      - all tags of name 'tag' will be fold. If there isn't a tag under
+        the cursor you will be asked for one.
+                  
+<LocalLeader>g
+      - Format (Vim's gq function) will make a visual block of tag under
+	cursor and then format using gq
+
+                  
+<LocalLeader>j
+      - Joins two the SAME sections together. The sections must
+	    be next to each other. 
+			<para> This is line 1
+			 of a paragraph. </para>
+			<para> This is line 2
+			|
+			 of a paragraph. </para>
+		\j produces
+			<para> This is line 1
+			 of a paragraph. 
+			 This is line 2
+			 of a paragraph. </para>
+
+<LocalLeader>o 
+      - Insert a tag under the current one (like vim o)
+
+        <tag1><tag2><tag3>blaah</tag3></tag2></tag1>
+          |
+        \o produces
+        <tag1>
+            <aftertag><tag2><tag3>blaah</tag3></tag2></aftertag>
+        </tag1>
+    
+<LocalLeader>O 
+     - Insert a tag Above the current one
+
+        <tag1><tag2><tag3>blaah</tag3></tag2></tag1>
+          |
+    \O produces
+        <beforetag>
+          <tag1><tag2><tag3>blaah</tag3></tag2></tag1>
+        </beforetag>
+
+<LocalLeader>s 
+    - Insert an opening tag for an closing tag. 
+            list item content</para></listitem>
+            |
+        pressing \s twice produces
+            <para><listitem>list item content</para></listitem>
+
+<LocalLeader>v   (Visual)
+        - Place a custom XML tag to suround the selected text. You
+        need to have selected text in visual mode before you can use this
+        mapping. See |visual-mode| for details.
+        Be careful where you place the marks.
+        The top uses insert
+        The bottom uses append
+        Useful when marking up a text file
+
+
+
+ vim:tw=78:ts=8:ft=help:norl:

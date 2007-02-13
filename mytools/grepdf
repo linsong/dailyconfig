@@ -1,0 +1,19 @@
+#! /usr/bin/sh 
+#2004-06-22 Ulf Rompe <ulf@@@@rompe.org>
+
+if [ $# -lt 2 ]; then
+ echo 'Syntax: pdfgrep [grep options] <pattern> <file> [file ...]'
+        exit 1
+fi
+grepopts=""
+while [ `echo $1 | cut -c1` == "-" ]; do
+        grepopts="$grepopts $1"
+        shift
+done
+pat=$1
+shift
+if [ $# -gt 1 ]; then shownames=1; else shownames=0; fi
+for i in $*; do
+        [ "$shownames" == 1 ] && echo $i":"
+        pdftotext -layout $i - | egrep -n $grepopts $pat
+done

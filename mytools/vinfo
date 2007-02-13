@@ -1,0 +1,2 @@
+#! /bin/sh
+vim --noplugin  -c "ru info.vim" -c ":Info $@" -c ":only"

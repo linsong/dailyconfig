@@ -1,0 +1,88 @@
+#deb cdrom:[Ubuntu 5.10 _Breezy Badger_ - Release i386 (20051012)]/ breezy main restricted
+
+#########################################################################
+### a mirror from TaiWan
+deb http://apt.ubuntu.org.tw/ubuntu breezy-updates main restricted universe multiverse
+deb-src http://apt.ubuntu.org.tw/ubuntu breezy-updates main restricted universe multiverse
+
+deb http://apt.ubuntu.org.tw/ubuntu breezy main universe multiverse restricted
+deb-src http://apt.ubuntu.org.tw/ubuntu breezy main universe multiverse restricted
+deb http://apt.ubuntu.org.tw/ubuntu breezy main multiverse restricted
+deb-src http://apt.ubuntu.org.tw/ubuntu breezy main multiverse restricted
+
+deb http://apt.ubuntu.org.tw/ubuntu breezy-security main restricted universe multiverse
+deb-src http://apt.ubuntu.org.tw/ubuntu breezy-security main restricted universe multiverse
+
+deb http://apt.ubuntu.org.tw/ubuntu breezy-backports main restricted universe multiverse
+deb-src http://apt.ubuntu.org.tw/ubuntu breezy-backports main restricted universe multiverse
+
+# security update
+deb http://security.ubuntu.com/ubuntu breezy-security main restricted universe multiverse
+deb-src http://security.ubuntu.com/ubuntu breezy-security main restricted universe multiverse
+
+########## source list for individual tools #########
+
+### sources.list for wine 
+#deb http://wine.sourceforge.net/apt/ binary/
+#deb-src http://wine.sourceforge.net/apt/ source/
+
+### sources list for beep media player
+#deb http://eros.vlo.gda.pl/~szuwarek/files/linux/bmpx ./
+
+
+#########################################################################
+###  the following mirror from a mirror of china mainland
+#deb http://mirror.lupaworld.com/ubuntu/archive/ breezy main restricted universe multiverse
+#deb http://mirror.lupaworld.com/ubuntu/archive/ breezy-security main restricted universe multiverse
+#deb http://mirror.lupaworld.com/ubuntu/archive/ breezy-updates main restricted universe multiverse
+#deb http://mirror.lupaworld.com/ubuntu/archive/ breezy-backports main restricted universe multiverse
+#deb http://mirror.lupaworld.com/ubuntu/ubuntu-cn/ breezy main restricted universe multiverse
+#deb http://mirror.lupaworld.com/ubuntu/backports/ breezy-extras main restricted universe multiverse
+
+#########################################################################
+### another ubuntu mirror of china
+#deb http://ubuntu.cn99.com/ubuntu/ breezy main restricted universe multiverse
+#deb http://ubuntu.cn99.com/ubuntu/ breezy-updates main restricted universe multiverse
+#deb http://ubuntu.cn99.com/ubuntu/ breezy-security main restricted universe multiverse
+#deb http://ubuntu.cn99.com/ubuntu/ breezy-backports main restricted universe multiverse
+#deb http://ubuntu.cn99.com/ubuntu-cn/ breezy main restricted universe multiverse
+#deb http://ubuntu.cn99.com/backports/ breezy-extras main restricted universe multiverse
+#########################################################################
+
+## Uncomment the following two lines to fetch updated software from the network
+#deb http://cn.archive.ubuntu.com/ubuntu breezy main restricted
+#deb-src http://cn.archive.ubuntu.com/ubuntu breezy main restricted
+
+#deb http://archive.ubuntu.org.cn/ubuntu/ breezy main restricted
+#deb-src http://debian.cn99.com/ubuntu/ breezy main restricted
+
+## Uncomment the following two lines to fetch major bug fix updates produced
+## after the final release of the distribution.
+#deb http://cn.archive.ubuntu.com/ubuntu breezy-updates main restricted
+#deb-src http://cn.archive.ubuntu.com/ubuntu breezy-updates main restricted
+
+## Uncomment the following two lines to add software from the 'universe'
+## repository.
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
+## universe WILL NOT receive any review or updates from the Ubuntu security
+## team.
+# deb http://cn.archive.ubuntu.com/ubuntu breezy universe
+# deb-src http://cn.archive.ubuntu.com/ubuntu breezy universe
+
+## Uncomment the following two lines to add software from the 'backports'
+## repository.
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+# deb http://cn.archive.ubuntu.com/ubuntu breezy-backports main restricted universe multiverse
+# deb-src http://cn.archive.ubuntu.com/ubuntu breezy-backports main restricted universe multiverse
+
+deb http://security.ubuntu.com/ubuntu breezy-security main restricted
+deb-src http://security.ubuntu.com/ubuntu breezy-security main restricted
+
+deb http://security.ubuntu.com/ubuntu breezy-security universe
+deb-src http://security.ubuntu.com/ubuntu breezy-security universe

@@ -1,0 +1,15 @@
+SYSMODMAP="/etc/X11/Xmodmap"
+USRMODMAP="$HOME/.Xmodmap"
+
+if [ -x /usr/bin/X11/xmodmap ]; then
+   if [ -f "$SYSMODMAP" ]; then
+	   xmodmap "$SYSMODMAP"
+   fi
+fi
+
+if [ -x /usr/bin/X11/xmodmap ]; then
+   if [ -f "$USRMODMAP" ]; then
+	   xmodmap "$USRMODMAP"
+   fi
+fi
+

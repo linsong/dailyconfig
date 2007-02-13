@@ -1,0 +1,8 @@
+#! /bin/sh
+cd $1
+find . \
+-path "*/CVS" -prune -o \
+-path "*/Release" -prune -o \
+-path "*/Debug" -prune -o \
+! -iname "Copy of *" \( -iname "*.cpp" -o -iname "*.h" -o -iname "*.idl" -o -iname "*.rc" \) -print >cscope.files
+cscope -b -q 

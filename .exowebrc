@@ -1,0 +1,46 @@
+
+ ################### Alias for Exoweb's work #############################
+
+ #alias gvim='gvim -geometry 156x55+1280+0'
+
+ # for laszlo configuration
+ #export JAVA_HOME=/home/vincent/bin/java/jdk1.5.0_03'
+ export JAVA_HOME='/usr/lib/jvm/java-1.5.0-sun-1.5.0.08'
+ export LPS_HOME=/usr/local/lps-3.1/Server/lps-3.1
+ #PATH="${PATH}:~/mytools:~/win32tools:/usr/local/lps-3.1/bin:/usr/local/Adobe/Acrobat7.0/bin:~/bin/KeePassX-0.2.2"
+ PATH="${PATH}:~/mytools:~/win32tools:/usr/local/lps-3.1/Server/lps-3.1/WEB-INF/lps/server/bin:/usr/local/Adobe/Acrobat7.0/bin:~/bin/KeePassX-0.2.2"
+
+alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop all && ./nordicbetsite start application_server && ./nordicbetsite start presentation_server && ./nordicbetsite start back_office_server && ./nordicbetsite start stats_server && ./nordicbetsite start livebet_bo && ./nordicbetsite start livebet_fo && cd -"
+ alias lb="cd /home/vincent/work/livebet/src"
+
+ #alias tomcat='sudo /usr/local/lps-3.1/Server/tomcat-5.0.24/bin/startup.sh'
+ function lb_start()
+ {
+     OLDDIR=$PWD
+     cd ${1:-$PWD}
+	 if [ -n "$(ls *.pid)" ]; then 
+		 ./nordicbetsite stop all 
+	 fi
+	 ./nordicbetsite start application_server && ./nordicbetsite start presentation_server && ./nordicbetsite start back_office_server && ./nordicbetsite start livebet_bo && ./nordicbetsite start livebet_fo && ./nordicbetsite start stats_server && ./nordicbetsite start livebet_bo_logger && ./nordicbetsite start livebet_fo_logger
+	 cd $OLDDIR 
+ }
+
+ function tomcat()
+ {
+     CMD=${1:-'-h'}
+	 case $CMD in 
+		 start ) 
+		 	echo 'Start Tomcat ...'
+			sudo /usr/local/lps-3.1/Server/tomcat-5.0.24/bin/startup.sh
+		 	;;
+		 stop ) 
+		 	echo 'Stop Tomcat ...'
+			sudo /usr/local/lps-3.1/Server/tomcat-5.0.24/bin/shutdown.sh
+		 	;;
+		 -h|--help|* )
+		 	echo "$0 : start/stop tomcat"
+			echo "     Usage: $0 start/stop"
+			;;
+	 esac
+ }
+# }}}

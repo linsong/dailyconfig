@@ -1,0 +1,27 @@
+# use # to add comments lines
+.Xdefault
+.bash_profile
+.bashrc
+.emacs
+.viper
+.fetchmailrc
+.inputrc
+.lftprc
+.newsdeliverrc
+.newsrc
+.procmailrc
+.vimrc
+.lftp
+.elinks
+.mutt
+.ssh
+.vim
+.ipython
+.fvwm
+DIR_COLORS
+mytools
+tools
+tips
+elisp
+Xsetting
+_ipython

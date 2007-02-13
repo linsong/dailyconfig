@@ -1,0 +1,13 @@
+#! /bin/sh
+cd 
+find $1 \
+-path "$1/*/CVS" -prune -o \
+-path "$1/*/Release" -prune -o \
+-path "$1/*/Debug" -prune -o \
+-path "$1/UnCompleteSZ" -prune -o \
+-path "$1/sz1793" -prune -o \
+! -iname "Copy of *" \( -iname "*.cpp" -o -iname "*.h" -o -iname "*.idl" \) -print >$HOME/cscope.files
+#find $1 -iname '*.C' -or -iname '*.H' -or -iname '*.cpp' -or -iname '*.idl' > $HOME/cscope.files
+cd
+cscope -b -q
+CSCOPE_DB=cscope.out;export CSCOPE_DB

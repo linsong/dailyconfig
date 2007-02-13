@@ -1,0 +1,4 @@
+# Write your default config options here!
+nolirc=yes
+msgcharset=utf8
+#shuffle=yes

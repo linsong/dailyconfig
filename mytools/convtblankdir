@@ -1,0 +1,22 @@
+#! /bin/env python
+
+import os
+import sys
+import string 
+
+def convtblank(flist):
+	length = len(flist)
+	for i in range(length):
+	 if flist[i].find(' ')!=-1:
+		 newdir = flist[i].replace(' ','_')
+		 os.rename(os.path.join(root,flist[i]),os.path.join(root,newdir))
+		 flist[i]=newdir
+
+
+if __name__=="__main__":
+	args = sys.argv[1:]
+	for arg in args:
+		for root,dirs,files in os.walk(arg):
+			convtblank(dirs)
+			convtblank(files)
+
