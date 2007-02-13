@@ -40,5 +40,8 @@ if [ -f /opt/local/etc/bash_completion ]; then
 fi
 
 # use keychain to replace ssh-agent, because keychain can be used under both X window mode and console mode
-/usr/bin/keychain ~/.ssh/id_dsa 
-. ~/.keychain/$HOSTNAME-sh
+KEYCHAIN_CMD=$(which keychain)
+if [ -n $KEYCHAIN_CMD ]; then 
+    $KEYCHAIN_CMD ~/.ssh/id_dsa 
+    . ~/.keychain/$HOSTNAME-sh
+fi
