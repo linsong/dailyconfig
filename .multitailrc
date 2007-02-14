@@ -1,0 +1,746 @@
+# Format of this file:
+#
+# include:configfile
+#             Also pars 'configfile'.
+#
+# defaultcscheme:<name of colorscheme>
+#             Selects the default color scheme to use. If this one is set, you
+#             no longer need -cS/-CS.
+#
+# colorscheme:<name of colorscheme>
+#             This name can be given for the commandline-parameter -cS. That
+#             way, one can select what colorscheme to use for the next
+#             logfile.
+#
+# cs_re:<color>:<regular expression>
+#             This defines a regular expression to find a particular string.
+#
+# cs_re_s:<color>:<regular expression>
+#             Like cs_re but only the substrings are used(!). E.g.:
+#             ^....(...)...(...)
+#             In the example above only what matches between '(' and ')' is
+#             assigned a color. See the 'acctail' colorscheme for an example.
+#
+# cs_re_val_less:<color>:<value>:<regular expression>
+# cs_re_val_bigger:<color>:<value>:<regular expression>
+# cs_re_val_equal:<color>:<value>:<regular expression>
+#             Like cs_re_s(!) but here the value of the sub(!)-string is
+#             compared against the given value. e.g.:
+#             cs_re_val_less: if "<value>" less then the value matched with
+#             the regular expression, then use the selected color. Please
+#             note that you have to select the value in the string with a
+#             substring match; put '(' and ')' around it.
+#
+# Possible colors: red, green, yellow, blue, magenta, cyan and white.
+#
+# scheme:<name of colorscheme>:<regular expression>
+#             This defines what colorscheme to use when the filename matches
+#             the given regular expression. This way, one can automatically
+#             use the correct colorscheme for certain files.
+#
+# check_mail:<seconds>
+#             How often MultiTail should check for new e-mail. You can switch
+#             mail-checking off by setting this value to 0.
+#
+# tab_stop:<number of spaces>
+#             Specifies the width of TAB characters. Default-value is 4.
+#
+# bind:key:program
+#             Binds a key to a external command. For example:
+#             bind:^j:/bin/bash   - binds ^j (control + j) to bash. While the
+#             selected program is running, MultiTail is suspended. MultiTail
+#             will automatically come back when the external command ends.
+#
+# titlebar:
+#             what to put in the titlebar of the xterm in which MultiTail is
+#             running. see below for details
+#
+# tail:tail_program
+#             path to the tail-program (in case you want to use turbotail or
+#             so instead of the regular tail)
+#
+# bright:(1|0)
+#             use bright colors (1) or not (0)
+#
+# abbreviate_filesize
+#             wether to abbreviate filesizes to xKB/MB/GB (1) or not (0)
+#
+# show_subwindow_id
+#             when set to 1 and merging multiple inputs (e.g. logfiles) the
+#             output show is prepended with a number indicating the input
+#
+# markerline_color
+#             with this one you can set how a markerline looks. e.g. yellow on
+#             red or so
+#
+# markerline_timestamp
+#             sets wether to put a timestamp in the markerline (1) or not (0)
+#
+# ts_format:<format>
+#             format of timestamps. see the man-page of 'strftime' for a list
+#             of the fields that can be used
+#
+# shell:<path>
+#             shell to use when invoking programs. default is /bin/sh
+#
+# umask:<mask>
+#             umask used when creating files
+#
+#defaultcscheme:syslog
+#
+# /var/log/messages & .../syslog
+colorscheme:syslog:kernel and unsorted messages
+# segfaults
+cs_re_s:red,,bold:kernel: ([^:]*): segfault at [^ ]* rip [^ ]* rsp [^ ]* error
+cs_re:yellow:kernel: .*: segfault at [^ ]* rip [^ ]* rsp [^ ]* error
+# misc
+cs_re:red,,inverse/underline:kernel
+cs_re:green:Detected.*$
+cs_re:green:\[
+cs_re:green:\]
+cs_re:cyan::
+cs_re:blue:^... .. ..:..:..
+cs_re_s:,,bold:^... .. ..:..:.. [^ ]* ([A-z0-9]*)
+cs_re:red:scanlogd.*
+cs_re:yellow:Did.not
+#
+# ssh
+colorscheme:ssh:www.openssh.org
+cs_re:yellow:error: Could not get shadow information for.*
+cs_re:yellow:fatal: Timeout before authentication for.*
+cs_re_s:red,,bold:error: PAM: Authentication failure for(.*)
+cs_re:red:error: PAM: Authentication failure for
+cs_re:red,,blink:error: Bind to port [0-9]* on [^ ]* failed: Address already in use.
+cs_re_s:red,,bold:error: PAM: Authentication failure for ([^ ]*) from (.*)
+cs_re:red:error: PAM: Authentication failure for ([^ ]*) from (.*)
+cs_re_s:green,,bold:Accepted [^ ]* for ([^ ]*) from ([^ ]*) port ([0-9]*) ssh2
+cs_re:green:Accepted [^ ]* for [^ ]* from [^ ]* port.*
+cs_re:red:PAM session setup failed\[[0-9]*\]:.*
+cs_re_s:yellow,,bold:Failed ([^ ]*) for ([^ ]*) from ([^ ]*) port ([0-9]*).*
+cs_re:yellow:Failed [^ ]* for [^ ]* from [^ ]* port [0-9]* .*
+cs_re:red:Disconnecting: Too many authentication failures for.*
+#
+# linux iptables firewall
+colorscheme:liniptfw:Linux IPtables (2.6.x kernel)
+cs_re:cyan::
+cs_re:blue:^... .. ..:..:..
+cs_re_s:red:kernel: .*(DPT=[0-9]*)
+cs_re_s:yellow:kernel: (IN=[^ ]*)
+cs_re_s:cyan:kernel: .*(SRC=[^ ]*) *(DST=[^ ]*)
+cs_re_s:green:kernel: .*(PROTO=[^ ]*)
+#
+# postfix log
+colorscheme:postfix:www.postfix.org
+cs_re:cyan::
+cs_re:yellow:status=sent
+cs_re:magenta:queue.active
+cs_re:green:from=.*>
+cs_re:red:to=.*>
+cs_re:blue:^... .. ..:..:..
+cs_re:green:\[
+cs_re:green:\]
+#
+# apache
+colorscheme:apache:default Apache logging (webserver)
+cs_re:red: 404 
+cs_re:cyan::
+cs_re:green:\[
+cs_re:green:\]
+# ip-adresses in the format x.x.x.x
+cs_re:yellow:^[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}
+# hostnames
+cs_re:yellow:^[^ ]*
+### Apache errorlog
+colorscheme:apache_error:default Apache error logging
+cs_re:yellow:\[client .*\]
+cs_re:red: [^ ]*$
+cs_re:blue:^\[... ... .. ..:..:.. ....\]
+#
+# rsstail (http://www.vanheusden.com/rsstail/)
+colorscheme:rsstail:RSSTail output (RSS feed reader)
+cs_re:cyan::
+cs_re:blue:^.......... ..:..:..  
+cs_re:green:Title:.*
+cs_re:red:^Link:.*
+cs_re:yellow:^Description:
+#
+# acctail (http://www.vanheusden.com/acctail/)
+colorscheme:acctail:(BSD-) process accounting reader
+cs_re:green:^................
+cs_re_s:red:^.................(....)
+cs_re_s:cyan:^......................(........)
+cs_re_s:yellow:^...............................(........)
+cs_re:blue:\.
+#
+# wtmptail (http://www.vanheusden.com/wtmptail/)
+colorscheme:wtmptail:www.vanheusden.com/wtmptail/
+cs_re:blue:\.
+cs_re:blue::
+cs_re:yellow:^USER.*
+cs_re:green:^........
+cs_re:cyan:[0-9]*:[0-9]*[ap]m
+cs_re:red:^..................................
+cs_re:black,red,blink:BOOT
+cs_re:black,yellow:DEAD
+#
+# squid
+colorscheme:squid:http proxy server
+cs_re:blue:^[^ ]*
+cs_re_s:yellow:^[^ ]* *[0-9]* *([^ ]*)
+cs_re_s:green:^[^ ]* *[0-9]* *[^ ]* ([^ ]*)
+cs_re_s:cyan:^[^ ]* *[0-9]* *[^ ]* [^ ]* *[0-9]* *[^ ]* *([^ ]*)
+#
+# asterisk
+colorscheme:asterisk:software PBX
+cs_re:blue::
+cs_re:cyan:^...............
+cs_re:red:ERROR
+cs_re:yellow:WARNING
+cs_re:green:NOTICE
+cs_re:magenta:DEBUG
+cs_re:magenta:VERBOSE
+cs_re:red,black,underline:Unable to.*
+#
+# sendmail
+colorscheme:sendmail
+cs_re:blue:^...............
+cs_re:cyan:to=<[^>]*>
+cs_re:yellow:stat=Deferred.*
+cs_re:red:stat=User unknown
+cs_re:green:stat=Sent.*
+cs_re:magenta:relay=[^ ]*
+cs_re:cyan::
+cs_re:red:verify=FAIL
+#
+# MailScanner
+colorscheme:mailscanner:wrapper around sendmail/clamav/spamassassin
+cs_re:red:Detected HTML-specific exploits in.*
+cs_re:magenta:Delivered [0-9]* warnings to virus senders
+cs_re:yellow:Spam Checks: Found [0-9]* spam messages
+cs_re:yellow:Content Checks: Detected and will disarm HTML message in.*
+cs_re:green:Uninfected: Delivered [0-9]* messages
+cs_re:red:Infected message [^ ]* came from.*
+cs_re:yellow:Saved infected "[^"]*" to.*
+cs_re:blue:^...............
+cs_re:cyan::
+#
+# SpamAssassin
+colorscheme:spamassassin
+cs_re:magenta::
+cs_re:blue:^... .. ..:..:..
+cs_re:yellow:autolearn=failed
+cs_re:red,,blink:server killed by [^,]*, shutting down
+cs_re_s:yellow,,bold:identified spam ([^ ]*) for ([^ ]*) in ([^ ]*) seconds, ([^ ]*) bytes.
+cs_re:yellow:identified spam [^ ]* for [^ ]* in [^ ]* seconds, [^ ]* bytes.
+cs_re_s:green,,bold:server successfully spawned child process, pid (.*)
+cs_re:green:server successfully spawned child process, pid
+#
+# ClamAV
+colorscheme:clamav:clamd logging
+cs_re:magenta::
+cs_re:blue:^... ... [0-9]* ..:..:.. ....
+cs_re_s:red,,bold:ERROR:(.*)
+cs_re:red:ERROR:
+cs_re_s:green,,bold:Protecting against ([0-9]*) viruses.
+cs_re:green:Protecting against [0-9]* viruses.
+cs_re:red,black,inverse:Exiting.*
+cs_re_s:yellow,,bold:^(.*): Unable to open file or directory ERROR
+cs_re:yellow:^.*: Unable to open file or directory ERROR
+cs_re:red,black,inverse:LOGGING DISABLED.*
+#
+# samba
+colorscheme:samba
+cs_re_s:blue:^.([0-9]*/[0-9]*/[0-9]* [0-9]*:[0-9]*:[0-9]*, [0-9]*)
+cs_re:blue:\.
+cs_re_s:green:^ *([^ ]*).*(connect to service folkert initially as user [^ ]*)
+cs_re:yellow:closed connection to service.*
+cs_re:red:Error =.*
+cs_re:red:ERRNO =.*
+cs_re:red:^.*does not exist or is not a directory, when connecting to.*
+cs_re:red:Ignoring unknown parameter.*
+cs_re:green,,bold:smbd version.*started.
+cs_re:green,,bold:Netbios nameserver version.*started.
+cs_re:green:Samba name server.*is now a local master browser for workgroup.*on subnet.*
+cs_re:yellow:Attempting to become domain master browser on workgroup.*, subnet.*
+cs_re:green:Samba is now a logon server for workgroup.*on subnet.*
+cs_re:yellow,,bold:Server.*at IP.*is announcing itself as a local master browser for workgroup.*and we think we are master. Forcing election.
+#
+# audit.log
+colorscheme:audit
+cs_re:cyan::
+cs_re:blue:^... .. ..:..:..
+cs_re:red:Illegal user.*
+cs_re:green:session opened for user.*
+cs_re:green:Accepted publickey for
+cs_re:yellow:Did not receive identification string from.*
+#
+# exim
+colorscheme:exim
+cs_re:cyan::
+cs_re:blue:^....-..-.. ..:..:..
+cs_re:magenta,,bold:<=
+cs_re:magenta,,bold:=>
+cs_re:green,,bold:=> *[^ ]*
+cs_re:green:<= *[^ ]*
+cs_re:green,,bold:=> *[^ ]* <[^>]*>
+cs_re:green:<= *[^ ]* <[^>]*>
+cs_re:yellow:H=[^ ]*
+cs_re:red:verify failed for SMTP recipient.*
+cs_re:red: *[^ ]* \[[0-9\.:]*\]: Connection refused
+cs_re:red:SMTP.*timeout.*
+cs_re:yellow:Spool file is locked (another process is handling this message)
+#
+# httping
+colorscheme:httping:ping for HTTP
+cs_re:green:^PING .*:
+cs_re:magenta:time=[0-9\.]* ms
+cs_re:yellow:seq=[0-9]*
+cs_re:green:^---.*
+cs_re_s:green:^([0-9]*) connects, ([0-9]*) ok, ([^%]*)
+cs_re_s:green:^round-trip.*= ([0-9\.]*)/([0-9\.]*)/([0-9\.]*)
+cs_re:red:404 Not Found
+cs_re:blue:[0-9]*KB/s
+cs_re:red:could not connect
+#
+# netstat (use for example with multitail -R 1 -l "netstat")
+colorscheme:netstat:see www.vanheusden.com/multitail/examples.html
+cs_re:green:ESTABLISHED
+cs_re:yellow:SYN_SENT
+cs_re:magenta:CLOSE_WAIT
+cs_re:blue:FIN_WAIT1
+cs_re:blue,,underline:FIN_WAIT2
+cs_re_s:red::([^ ]*)
+cs_re:cyan:^[^ ]*
+#
+# tcpdump
+colorscheme:tcpdump
+cs_re:magenta::
+cs_re:blue:^[^ ]*
+#17:44:07.363010 IP muur.intranet.vanheusden.com.49584 > keetweej.intranet.vanheusden.com.ssh:
+cs_re_s:red:^[^ ]* [^ ]* *[^ ]* > [^:]*: *([^ ]*)
+cs_re_s:green:^[^ ]* [^ ]* *[^ ]*\.([^ ]*) > [^ ]*\.([^:]*):
+cs_re:magenta:\.
+#
+# dhcpd
+colorscheme:dhcpd
+cs_re:magenta::
+cs_re:blue:^... .. ..:..:..
+cs_re:green,,bold:DHCPACK
+cs_re_s:green:DHCPACK on ([^ ]*) to ([^ ]*) to (.*)
+cs_re_s:red,,bold:DHCPINFORM from ([^ ]*) via
+cs_re:red:DHCPINFORM from.*via.*not authoritative for subnet.*
+cs_re_s:yellow,,bold:DHCPDECLINE of ([^ ]*) from ([^ ]*) via
+cs_re:yellow:DHCPDECLINE of.*from.*via.*
+cs_re:cyan:DHCPNAK
+#
+# bind
+colorscheme:bind
+cs_re:magenta::
+cs_re:blue:^... .. ..:..:..
+cs_re_s:yellow,,bold:lame server resolving ([^ ]*).*in ([^?]*).*: (.*$)
+cs_re:yellow:lame server resolving [^ ]* .in [^:]*..:
+cs_re_s:red,,bold:client ([^#]*)#[0-9]*: update forwarding denied
+cs_re:red:client [^:]*: update forwarding denied
+cs_re_s:cyan,,bold:received notify for zone (.*)
+cs_re:cyan:received notify for zone
+cs_re:cyan:zone [^:]*: transferred serial.*
+cs_re:cyan:zone [^:]*: sending notifies .serial [0-9]*.
+cs_re_s:green,,bold:transfer of [^ ]* from ([^#]*)#[0-9]*: end of transfer
+cs_re:green:transfer of [^ ]* from [^:]*: end of transfer
+cs_re:yellow:loading configuration from.*
+cs_re:yellow:no IPv6 interfaces found
+cs_re:red:logging channel [^ ]* file [^:]*: permission denied
+cs_re:red:isc_log_open [^ ]* failed: permission denied
+cs_re:red:zone [^:]*: loading master file [^:]*: file not found
+cs_re:green,,bold:named reload succeeded
+#
+# smartd
+colorscheme:smartd
+cs_re_s:red,,bold:Device: [^,]*, SMART Usage Attribute: [0-9]* ([^ ]*) changed from [0-9]* to (.*)
+cs_re:red:Device: [^,]*, SMART Usage Attribute: [0-9]* [^ ]* changed from [0-9]* to.*
+#
+# kerberos
+colorscheme:kerberos
+cs_re_s:yellow,,bold:klogind.*: Authentication failed from ([^:]*): Software caused connection abort
+cs_re:yellow:klogind.*: Authentication failed from [^:]*: Software caused connection abort
+cs_re:red:klogind.*: Kerberos authentication failed
+cs_re:red,,bold:klogind.*: User ([^ ]*) is not authorized to login to account(.*)
+cs_re:red:klogind.*: User [^ ]* is not authorized to login to account.*
+cs_re_s:red,,bold:ksu.*:.*authentication failed for ([^ ]*) on
+cs_re:red:ksu.*:.*authentication failed for [^ ]* on.*
+#
+# Oracle
+colorscheme:oracle
+cs_re:red,,bold:^ORA-0*600.*
+cs_re:red,,bold:^ORA-0*7445.*
+# ORA-07745:?
+cs_re_s:yellow:^ORA-([^:]*):
+#
+# ntpd
+colorscheme:ntpd
+cs_re:magenta::
+cs_re:blue:^... .. ..:..:..
+cs_re_s:red,,bold:configure: keyword "([^"]*)" unknown, line ignored
+cs_re:red:configure: keyword "([^"]*)" unknown, line ignored
+cs_re:yellow,,blink:ntpd\[.*\]: ntpd exiting on signal.*
+cs_re:green,,bold:ntpd\[.*\]: ntpd [^e].*
+cs_re_s:green,,bold:synchronized to ([^,]*)
+cs_re:green:synchronized to.*
+cs_re:red:check receiver configuration / cableling
+#
+# nagtail
+colorscheme:nagtail:www.nagios.org status viewer
+cs_re:magenta::
+cs_re:magenta:/
+cs_re:blue:^..../../.. ..:..
+cs_re_s:red,,bold:^................ (CRIT)
+cs_re_s:yellow,,bold:^................ (WARN)
+cs_re_s:green:^................ ( OK )
+cs_re_s:white,,bold:^................ ( \?\? )
+cs_re_s:green:^..../../.. ..:.. ..... *([^ ]*)
+cs_re_s:yellow:^..../../.. ..:.. ..... *[^ ]* *(.*)
+#
+# WebSphere errorlog
+colorscheme:websphere:WebSphere error-log
+cs_re:magenta::
+cs_re:magenta:/
+cs_re:blue,,bold:\.
+cs_re:blue:^.[0-9]*/[0-9]*/[0-9]* *[0-9]*:..:..:[0-9]* [^ ]*
+cs_re_s:yellow:^.*\(([^:\)]*)
+cs_re:red:Reason:.*
+cs_re:red,,bold:Unable to
+cs_re_s:red:Unable to(.*)
+cs_re:red,,bold:Failed to
+cs_re_s:red:Failed to(.*)
+cs_re_s:green:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *([^ ]*)
+cs_re_s:red,,bold:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( F )
+cs_re_s:red:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( E )
+cs_re_s:yellow,,bold:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( W )
+cs_re_s:yellow:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( A )
+cs_re_s:green,,bold:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *(I)
+cs_re_s:green:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( C )
+cs_re_s:magenta,,bold:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( R )
+cs_re_s:magenta:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( O )
+cs_re_s:red,,bold:^[^ ]* *[^ ]* *[^ ]* *[^ ]* *[^ ]* *( Z )
+cs_re:yellow:Next Linked Exception:
+cs_re:magenta,,bold:Queue manager security exit rejected connection with error code [0-9]*
+cs_re:red,,bold:com.ibm.mq.MQException: [^:]*: An MQException occurred: Completion Code [0-9]*, Reason [0-9]*
+cs_re:yellow:Begin backtrace for nested exception
+cs_re:yellow:Socket connection attempt refused
+cs_re:yellow:Other data:
+cs_re:yellow:Exception data follows:
+cs_re:green:Target name: .*
+#
+# NNTPcache
+colorscheme:nntpcache
+cs_re:magenta::
+cs_re:magenta:/
+cs_re:blue:^... .. ..:..:..
+cs_re:yellow:nntpcache-expire.*: clean shutdown
+cs_re:green:nntpcache-expire.*: expire task awakening
+cs_re_s:red,,bold:Connection timed out: could.*t connect to ([^ ]*) as (.*)
+cs_re:red:Connection timed out: could.*t connect to [^ ]* as
+cs_re:yellow:^.*dropped connection during rebuild of.*$
+cs_re:red,,bold:'501.*
+cs_re:red,,bold:'480.*
+#
+# Veritas Netbackup restore log
+colorscheme:vnetbr:Veritas Netbackup backup/restore logs
+cs_re:magenta::
+cs_re:magenta:\(
+cs_re:magenta:\)
+cs_re:blue:^..:..:.. .[0-9]*.[^\)]*.
+cs_re_s:green:Restore job id ([0-9]*) will require ([0-9]*) image
+cs_re:green:Restore job id [0-9]* will require [0-9]* image.*
+cs_re_s:yellow,,bold:Media id ([^ ]*) is needed for the restore.
+cs_re:yellow:Media id ([^ ]*) is needed for the restore.
+cs_re:green:INF - Beginning restore from server [^ ]* to client [^ ]*.
+cs_re_s:yellow,,bold:Changed ([^ ]*) to ([^ ]*)
+cs_re:yellow:Changed [^ ]* to [^ ]*
+cs_re_s:red,,bold:Directory ([^ ]*) already exists.
+cs_re:red:Directory [^ ]* already exists.
+cs_re_s:green,,bold:Added ([^ ]*) permission to directory (.*)
+cs_re:green:Added [^ ]* permission to directory.*
+cs_re_s:yellow,,blink:INF - Media id ([^ ]*) is not in a robotic library; administrative interaction may be required to satisfy a mount request.
+cs_re:yellow:INF - Media id [^ ]* is not in a robotic library; administrative interaction may be required to satisfy a mount request.
+cs_re:red,black,inverse:INF - Status = termination requested by administrator.
+cs_re:red,,blink:media read error
+cs_re:red,,bold:Status of restore from image created.*media read error
+cs_re:red:INF - Status = the restore failed to recover the requested files.
+cs_re:green,,bold:INF - Status = the requested operation was successfully completed.
+#
+# procmail
+colorscheme:procmail
+cs_re:magenta::
+cs_re:magenta:/
+cs_re_s:blue,,bold:^procmail: \[[0-9]*\] ([^ ]* [^ ]* *[^ ]* ..:..:.. [^ ]*)
+cs_re:blue:^procmail: \[[0-9]*\] [^ ]* [^ ]* *[^ ]* ..:..:.. [^ ]*
+cs_re_s:green,,bold:^procmail: Match on "(.*)"
+cs_re:green:^procmail: Match on.*
+cs_re:red:^procmail: Executing.*
+cs_re:magenta,,bold:^procmail: Assigning
+cs_re:yellow:warning:.*
+cs_re:yellow:Couldn't determine implicit lockfile from.*
+#
+# checkpoint
+colorscheme:checkpoint:Checkpoint Firewall-1
+cs_re:magenta::
+cs_re:blue:^[0-9]*:[0-9]*:[0-9]*
+cs_re:red,,bold:^..:..:.. *drop
+cs_re_s:red,,bold:^..:..:.. *drop.*(service: *[^;]*)
+cs_re:green:^..:..:.. *accept
+cs_re:yellow,,bold:^..:..:.. *reject
+cs_re_s:yellow,,bold:^..:..:.. *reject.*(service: *[^;]*)
+cs_re:green,,bold:rule: *[^;]*
+cs_re:yellow:service: *[^;]*
+cs_re:magenta:src: *[^;]*
+cs_re:magenta,,bold:dst: *[^;]*
+cs_re:blue,,bold:>[^ ]*
+#
+# pppd
+colorscheme:pppd:PPP daemon
+cs_re:magenta::
+cs_re:blue:^... .. ..:..:..
+cs_re_s:red,,bold:Hangup(.*)
+cs_re:red:Hangup
+cs_re_s:yellow,,bold:Terminating on signal(.*)
+cs_re:yellow:Terminating on signal.*
+cs_re_s:green,,bold:Connect time ([^ ]*) minutes.
+cs_re:green:Connect time [^ ]* minutes.
+cs_re_s:magenta,,bold:Sent ([0-9]*) bytes, received ([0-9]*) bytes.
+cs_re:magenta:Sent [0-9]* bytes, received [0-9]* bytes.
+cs_re:green:pppd [^ ]* started by [^,]*, uid [0-9]*
+cs_re_s:blue,,bold:Using interface (.*)
+cs_re:blue:Using interface.*
+cs_re_s:green,,bold:local *IP address (.*)
+cs_re:green:local *IP address.*
+cs_re:red,black,inverse:Couldn't detach (fork failed:.*)
+cs_re_s:yellow,,bold:Unsupported protocol (.*) received
+cs_re:yellow,black,inverse:Unsupported protocol .* received
+cs_re:yellow,,blink:Peer not responding
+cs_re:,,inverse:DNS address.*
+#
+# INN
+colorscheme:inn
+cs_re:magenta::
+cs_re:blue:^... .. ..:..:..
+cs_re:yellow:nnrpd.*: .* timeout
+#
+# Netscape Directory server (LDAP)
+colorscheme:netscapeldap:Netscape Directory server (LDAP)
+cs_re:magenta::
+cs_re:magenta:/
+cs_re:blue:^.../.../....:..:..:.. ......
+cs_re:green:Netscape-Directory.*starting up
+cs_re:yellow:All database threads now stopped
+cs_re:green:Backing up file.*
+cs_re:red:Detected Disorderly Shutdown last time Directory Server was running, recovering database.
+cs_re_s:yellow,,bold:Entry ([^ ]*) unknown object class ([^ ]*)
+cs_re:yellow:Entry [^ ]* unknown object class [^ ]*
+cs_re:red,,blink:Shutting down due to possible conflicts with other slapd processes
+cs_re:red,,bold:Unable to start slapd because it is already running as process ([0-9]*)
+cs_re:red,,blink:Unable to start slapd because it is already running as process [0-9]*
+cs_re:yellow:slapd got [^ ]* signal
+#
+# vmstat
+colorscheme:vmstat:vmstat is part of sysstat
+cs_re_s:magenta:^(procs) -----------memory---------- ---swap-- -----io---- --system-- ----cpu----
+cs_re_s:red:^procs (-----------memory----------) ---swap-- -----io---- --system-- ----cpu----
+cs_re_s:green:^procs -----------memory---------- (---swap--) -----io---- --system-- ----cpu----
+cs_re_s:yellow:^procs -----------memory---------- ---swap-- (-----io----) --system-- ----cpu----
+cs_re_s:blue:^procs -----------memory---------- ---swap-- -----io---- (--system--) ----cpu----
+cs_re_s:magenta,,bold:^ (r  b)   swpd   free   buff  cache   si   so    bi    bo   in    cs us sy id wa
+cs_re_s:red,,bold:^ r  b   (swpd   free   buff  cache)   si   so    bi    bo   in    cs us sy id wa
+cs_re_s:green,,bold:^ r  b   swpd   free   buff  cache   (si   so)    bi    bo   in    cs us sy id wa
+cs_re_s:yellow,,bold:^ r  b   swpd   free   buff  cache   si   so    (bi    bo)   in    cs us sy id wa
+cs_re_s:blue,,bold:^ r  b   swpd   free   buff  cache   si   so    bi    bo   (in    cs) us sy id wa
+cs_re_s:,,bold:^ r  b   swpd   free   buff  cache   si   so    bi    bo   in    cs (us sy id wa)
+cs_re_val_bigger:yellow:0:^ *[0-9]* *[0-9]* *[0-9]* *[0-9]* *[0-9]* *[0-9]* *[0-9]* *[0-9]* *([0-9]*) *([0-9]*)
+#
+# log4j
+colorscheme:log4j
+cs_re:magenta::
+cs_re:magenta:/
+cs_re:blue:^[0-9]*-[0-9]*-[0-9]* [0-9]*:[0-9]*:[0-9]*,[0-9]*
+cs_re_s:blue,,bold:^[^ ]* *[^,]*,[^ ]* *[0-9]* *(DEBUG) *[^ ]* [^ ]* *(.*)$
+cs_re_s:green:^[^ ]* *[^,]*,[0-9]* *[0-9]* *(INFO) *[^ ]* [^ ]* *(.*)$
+cs_re_s:yellow:^[^ ]* *[^,]*,[0-9]* *[0-9]* *(WARN) *[^ ]* [^ ]* *(.*)$
+cs_re_s:red:^[^ ]* *[^,]*,[0-9]* *[0-9]* *(ERROR) *[^ ]* [^ ]* *(.*)$
+cs_re_s:red,,bold:^[^ ]* *[^,]*,[0-9]* *[0-9]* *(FATAL) *[^ ]* [^ ]* *(.*)$
+cs_re_s:white,,bold:^[^ ]* *[^,]*,[0-9]* *[0-9]* *[A-Z]* *(.*)
+#
+# kerberos
+colorscheme:kerberos
+cs_re:magenta::
+cs_re:blue:^... [0-9]* ..:..:..
+cs_re:green:commencing operation
+cs_re_s:,,bold:AS_REQ [^}]*}, ([^ ]*) for (.*)
+cs_re:magenta:Ticket expired
+cs_re:red:Client not found in Kerberos database
+#
+# LambdaMOO
+colorscheme:lambdamoo:MUD/MOO server http://www.moo.mud.org/
+cs_re:magenta::
+cs_re:blue:^... [0-9]* ..:..:..:
+cs_re:green:STARTING: Version [^ ]* of the LambdaMOO server
+cs_re:yellow:DUMPING:.*
+cs_re:red:Can't create initial connection point
+cs_re_s:red,,bold/blink:Trying to dump database:(.*)
+cs_re:red,,bold:Trying to dump database:
+#
+#
+# default colorschemes:
+scheme:postfix:/var/log/mail/
+scheme:sendmail:/var/log/mail/
+scheme:exim:/var/log/mail/
+scheme:apache:/var/log/apache/.*access
+scheme:apache_error:/var/log/apache/.*error
+scheme:asterisk:/var/log/asterisk/messages
+scheme:samba:/var/log/samba/
+scheme:squid:/var/log/squid/
+scheme:syslog,ssh:/var/log/
+scheme:vnetbr:bplog.rest
+scheme:procmail:procmail.log
+scheme:inn:/var/log/news/
+#
+# default number of lines to buffer FOR THESE PATTERNS:
+default_nlines:250:/var/log/apache/*.access
+default_bytes:50kb:/var/log/
+#
+# default number of lines to buffer globally
+# one can set only 1 of these two
+#global_default_nlines:500
+global_default_nkb:25kb
+#
+# how often to check for mail
+# set to 0 to disable
+# default is every 5 seconds
+check_mail:5
+#
+# width of a TAB-character. in the VI editor this is, for
+# example, 8. default in multitail is 4
+tab_stop:4
+#
+# what program to start when the user presses a key
+# ...:x:...  just that key
+# ...:^x:... that key with control
+bind:g:/usr/bin/pine
+bind:^j:/bin/bash
+bind:^t:/usr/bin/telnet
+bind:^s:/bin/su
+#
+# enable things with the xterm title bar
+# %f  changed file
+# %h  hostname
+# %l  system load
+# %m  "New mail" or nothing
+# %u  username
+# %t  date + time
+titlebar:%m %u@%h %f (%t) [%l]
+#
+# where to find tail. this is used when you don't use the default tail (using
+# turbotail for example)
+# or your tail is located somewhere else
+#tail:/usr/bin/tail
+#
+# use bright colors
+#bright:1
+#
+# wether to abbreviate filesizes to xKB/MB/GB
+abbreviate_filesize:on
+#
+# show number of subwindow?
+show_subwindow_id:off
+#
+# attributes for the marker-line
+markerline_color:red,black,reverse
+#
+# show timestamp in markerline?
+markerline_timestamp:on
+# whot character to print in the markerline
+markerline_char:-
+#
+# attributes for the line that is printed when multitail switches subwindow
+changeline_color:blue,black,bold/reverse
+changeline_char:-
+#
+# line printed when nothing happens in a window for a while
+idleline_color:yellow,black,bold/reverse
+idleline_char:-
+#
+# line printed for multitail messages (regexp errors, file truncated, etc)
+msgline_color:magenta,black,bold/reverse
+msgline_char:-
+#
+# when converting to a timestring, use this format:
+# (also for markerline)
+ts_format:%b %d %H:%M:%S
+#
+# timestring format for conversions
+cnv_ts_format:%b %d %H:%M:%S %Y
+#
+# timestring format for statusline
+statusline_ts_format:%Y/%m/%d %H:%M:%S
+#
+# put statusline above the data instead below it?
+statusline_above_data:no
+#
+# statusline attributes
+statusline_attrs:white,black,reverse
+#
+# conversions
+# note: the part you want to have replaced must be between '(' and ')'
+# possible conversions:
+#	ip4tohost:   an ip-address in 4 byte dotted format to a hostname
+#	epochtodate: a value representing the number of seconds since 1970 to
+#	             a time-string. format of the string can be set with
+#	             "ts_format".
+#	errnotostr:  an errno-value to the error message it represents
+#	hextodec:    a hex-value into its decimal version
+#	dectohex:    a decimal value into hexadecimal
+convert:apache:ip4tohost:^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})
+convert:squid:epochtodate:^([0-9]*)
+convert:squid:ip4tohost:^[^ ]* *[0-9]* *([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})
+convert:asterisk:epochtodate:^([0-9]*).([0-9]*)
+#
+# shell to invoke
+shell:/bin/sh
+#
+# default scrollback linewrap mode
+# default is yes (do wrap)
+dsblwm:yes
+#
+# should a popup box be displayed when a window closes by itself?
+warn_closed:yes
+#
+# allow 8 bit ascii? (e.g. umlauts etc.)
+allow_8bit:yes
+#
+# beep, flash, popup or none when error?
+beep_method:flash
+# in case of beep_method:popup; how long to display the popup before it
+# automatically disappears (in seconds)
+beep_popup_length:0.1
+#
+# ^x instead of an inverse .
+caret_notation:yes
+#
+# what umask to use when creating files
+umask:0022
+#
+# how often to refresh popups (in case applicable)
+popup_refresh_interval:5
+#
+# print a markerline when one merges multiple logfiles and tail changes
+# from one logfile to an other
+global_mark_change:no
+# default settings for files selected with a regular expression(!)
+default_mark_change:yes:/var/log/apache/.*
+#
+replace_by_markerline:-- MARK --
+#
+# what to buffer by default 'a'll or what went through the 'f'ilter
+default_bufferwhat:f
+
+
+check_mail:0
