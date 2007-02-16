@@ -1,0 +1,108 @@
+##########################################################
+###  OUTGOING MAILS SETTING
+##########################################################
+set envelope_from = yes
+
+# use msmtp to send mail
+set sendmail = "/usr/bin/msmtp"
+set hidden_host                           # Hide host details.
+
+##########################################################
+###  INCOMING MAILS SETTING
+##########################################################
+set spoolfile = $HOME/Mail/vincent
+
+# use mutt to get mails 
+set pop_user = "linsong.qizi@gmail.com"
+set pop_delete = no
+#set pop_pass = "password"
+set pop_host = "pops://pop.gmail.com:995"
+
+set spoolfile=imaps://imap.exoweb.net/INBOX
+set imap_user="vincent"
+#set imap_pass=password
+
+set message_cachedir = $HOME/Mail/cache
+
+set mail_check = 10                       # How often(seconds) we look for new mails 
+
+# ignore some headers, there are too many headers default 
+ignore headers *
+unignore headers from to subject date cc
+
+# specify what order headers should appear in, use the hdr_order directive: 
+hdr_order to from subject date
+
+# don't display '+' marker before wrapped line
+set markers=no
+
+# ask me to confirm before quit
+set quit=ask-yes
+
+# folder for mailboxes, later '+' or '=' will be expanded to the value 
+# of this variable
+set folder = $HOME/Mail/
+
+# set up my mailboxes
+set postponed = +postponed
+set mbox = +mbox
+set record = +sent-mail
+set copy                                  # Keep copies of outgoing mail...
+set postpone=ask-yes                       # Ask about postponing.
+set nomove                                # Hold messages in $MAIL.
+set nobeep                                # We don't need no beeping software.
+
+set sort_aux=date-received                # Sort threads by date received.
+
+set charset=gb2312                        # use gb2312 as the default charset 
+set allow_8bit                            # allow 8bit otherwise it will damage the chinese characters
+
+set print=ask-yes                         # Ask before printing.
+set delete=ask-yes                        # Ask before doing a delete.
+
+set read_inc=30                           # Read counter ticks every 30 msgs.
+set write_inc=30                          # Write counter ticks every 30 msgs.
+
+##########################################################
+###  EDIT MAILS 
+##########################################################
+# use vim to compose emails 
+set editor = "vim \"+set textwidth=70\""
+# I want to edit the message headers in my editor
+set edit_headers                          
+
+set attribution="* %n <%a> [%{%Y-%m-%d %H:%M:%S %Z}]:\n"
+set include                               # Include the message in replies.
+set nomark_old                            # Don't mark unread new msgs as old.
+set noconfirmappend                       # Just append, don't hassle me.
+set pager_stop                            # Don't skip msgs on next page.
+
+#############################################################
+### unverified config
+#############################################################
+                                          # Where to find the mailcap.
+set mailcap_path=~/.mutt/mailcap:/usr/local/etc/mailcap:/etc/mailcap
+set quote_regexp="^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+
+#source /usr/local/doc/mutt/samples/gpg.rc # Use GPG
+#source ~/.mutt/auto_views                 # Define auto_views.
+#set alias_file=~/.mutt/aliases            # Keep aliases in this file.
+#source ~/.mutt/aliases                    # Load in my aliases.
+#source ~/.mutt/subscriptions              # Define the list of subscribed mailing lists.
+#source ~/.mutt/mailboxes                  # Define the list of folders that receive mail.
+#source ~/.mutt/headers                    # Configure header display.
+
+#source ~/.mutt/folder-hooks               # Define folder-hooks.
+#source ~/.mutt/save-hooks                 # Define save-hooks.
+#source ~/.mutt/fcc-hooks                  # Define fcc-hooks.
+#source ~/.mutt/message-hooks              # Define message hooks.
+#source ~/.mutt/bindings                   # Define key bindings.
+#source ~/.mutt/macros                     # Define macros.
+#source ~/.mutt/colours                    # Define colours.
+#source ~/.mutt/non-standard               # Support for mutt patches.
+
+# HTML is the last option.
+alternative_order text/enriched text/plain text/html 
+
+# Last, but not least, get mutt to display its version on startup.
+push <show-version>
