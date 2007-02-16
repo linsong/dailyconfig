@@ -63,7 +63,8 @@ export LANG=en_US.UTF-8
 # using the vi style command line
 set -o vi
 
-EDITOR='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
+export EDITOR='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
+export VISUAL='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
 
 # set prompt string: user@host and current_directory
 # set different prompt basedd on different host 

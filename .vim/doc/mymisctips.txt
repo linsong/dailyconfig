@@ -13,6 +13,7 @@ Last change: 10/12/2004 Tue
       Python-tips                           |python-tips|
           Twisted                           |python-twisted|
       Linux                                 |linux| 
+          Shell                             |linux-Shell|
           Debian                            |linux-Debian|
           Gnome                             |linux-Gnome|
           readline                          |linux-readline|
@@ -619,6 +620,37 @@ p'
 
 
 *linux*
+
+*linux-Shell*
+===============================================================================
+ * how to handle space in file's name
+   Code1: 
+      for file in *   # here shell will save every file's name into variable
+                      # file even the file's name includes space.  
+      do 
+          echo "$file" # quoting the variable is good under any case
+      done 
+
+   Code2:
+      for file in $(find . -type f -iname "foo*")
+      do
+          echo "$file" 
+      done
+   For Code2, shell will split the result of 'find . -type f -iname "foo*"'
+   based on space and save them into variable file. 
+   
+   The difference between Code1 and Code2 is: the source for "for" is
+   different, for Code1, it is files; for Code2, it is string. So the way to
+   split the source and save into variable is different.
+
+   Code3: [comes from http://www.macgeekery.com/tips/cli/handling_filenames_with_spaces_in_bash]
+      find . -name '* *' -print0 | xargs -0 -n 1 -I % echo % 
+
+      You need the "-print0" and "-0" to delimit things with zeros instead of spaces.
+      You need "-n 1" to do them one at a time instead of as many as will fit in a command line.
+      You need "-I %" to put the argument not at the end of the command,
+===============================================================================
+
 
 *linux-Gnome*
 ===============================================================================
