@@ -1,13 +1,7 @@
 # ~/.bash_profile: executed by bash for login shells.
 
-PATH=/opt/local/bin:$PATH
-
 if [ -e /etc/bash.bashrc ] ; then
   source /etc/bash.bashrc
-fi
-
-if [ -e ~/.bashrc ] ; then
-  source ~/.bashrc
 fi
 
 # Set PATH so it includes user's private bin if it exists
@@ -34,7 +28,12 @@ fi
      . /sw/bin/init.sh
  fi
 
-#f for darwinports bash-completion
+if [ -f /sw/etc/bash_completion ]; then 
+    . /sw/etc/bash_completion
+fi
+
+PATH=/opt/local/bin:$PATH
+# for darwinports bash-completion
 if [ -f /opt/local/etc/bash_completion ]; then
     . /opt/local/etc/bash_completion
 fi
@@ -44,4 +43,8 @@ KEYCHAIN_CMD=$(which keychain)
 if [ -n $KEYCHAIN_CMD ]; then 
     $KEYCHAIN_CMD ~/.ssh/id_dsa 
     . ~/.keychain/$HOSTNAME-sh
+fi
+
+if [ -e ~/.bashrc ] ; then
+  source ~/.bashrc
 fi
