@@ -1,0 +1,51 @@
+# -*- muttrc -*-
+#
+# macros for mutt.
+# NOTE: use "," to define shortcuts  if possible. NOT ";" since it is used as tag-prefix
+
+# Macros for use in the index.
+macro index ",v"    "<pipe-message>urlview<enter>"                       # URL viewer.
+macro index "\'"     "<clear-flag>r"                                      # Mark as un-replied
+#macro index "\Cx\Cb" "<change-folder>?"                                   # Folder list.
+#macro index "\Cx\Cs" "<pipe-message>cat > ~/"                             # Save message
+#macro index "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
+#macro index "\Cb"    "<pipe-message>urlview<enter>"                       # URL viewer.
+#macro index "<esc>a"    "<change-folder>=archives/<tab><tab>"                # List archives
+#macro index "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.
+#macro index "<esc>h"    "<pipe-message>mailhops<enter>"                      # View the path of the mail.
+#macro index "<esc>f"    "<pipe-message>view-x-face<enter>"                   # View the X-Face (if there is one).
+#macro index "<esc>v"    "<pipe-message>less<enter>"                          # View the message in less.
+#macro index "\Cs\Co" "<limit>~h \"X-SpamProbe: GOOD\"<enter><last-entry>" # View good emails.
+#macro index "\Cs\Cs" "<limit>~h \"X-SpamProbe: SPAM\"<enter><last-entry>" # View bad emails.
+
+# Macros for use in the pager.
+macro pager ",v"    "<pipe-message>urlview<enter>"                       # URL viewer.
+macro pager "w"      "<enter-command>set invsmart_wrap invmarkers<enter>" # Toggle wrap stuff
+macro pager "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
+macro pager "<esc>1"    "<enter-command>set pager_index_lines=1<enter>"      # Change PIL size
+macro pager "<esc>2"    "<enter-command>set pager_index_lines=2<enter>"      # Change PIL size
+macro pager "<esc>3"    "<enter-command>set pager_index_lines=3<enter>"      # Change PIL size
+macro pager "<esc>4"    "<enter-command>set pager_index_lines=4<enter>"      # Change PIL size
+macro pager "<esc>5"    "<enter-command>set pager_index_lines=5<enter>"      # Change PIL size
+macro pager "<esc>6"    "<enter-command>set pager_index_lines=6<enter>"      # Change PIL size
+macro pager "<esc>7"    "<enter-command>set pager_index_lines=7<enter>"      # Change PIL size
+macro pager "<esc>8"    "<enter-command>set pager_index_lines=8<enter>"      # Change PIL size
+macro pager "<esc>9"    "<enter-command>set pager_index_lines=9<enter>"      # Change PIL size
+macro pager "<esc>0"    "<enter-command>set pager_index_lines=0<enter>"      # Change PIL size
+#macro pager "\Cx\Cb" "<change-folder>?"                                   # Folder list.
+#macro pager "\Cx\Cs" "<pipe-message>cat > ~/"                             # Save message
+#macro pager "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.
+#macro pager "<esc>h"    "<pipe-message>mailhops<enter>"                      # View the path of the mail.
+#macro pager "<esc>f"    "<pipe-message>view-x-face<enter>"                   # View the X-Face (if there is one).
+#macro pager "<esc>v"    "<pipe-message>less<enter>"                          # View the message in less.
+#macro pager "<esc>l"    "<enter-command>set invpipe_decode<enter>\
+#<pipe-message>linkify|w3m -T text/html<enter><enter-command>\
+#set invpipe_decode<enter>"                                                # View the message in w3m.
+#macro pager "\Cs\Cs" "<pipe-message>spamprobe -T score<enter>"            # What's the score for this message?
+#macro pager "\Cs\Cj" "<pipe-message>spamprobe spam<enter>"                # This message is junk.
+#macro pager "\Cs\Cg" "<pipe-message>spamprobe good<enter>"                # This message is good.
+
+# Provide some "on-line" help.
+macro generic "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
+macro index   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
+macro pager   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"

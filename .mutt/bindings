@@ -1,0 +1,54 @@
+# -*- muttrc -*-
+#
+# Keyboard bindings for mutt.
+#
+
+# Generic key bindings.
+# The generic menu is not a real menu, but specifies common functions (such as movement) 
+# available in all menus except for pager and editor. Changing settings for this menu will 
+# affect the default bindings for all menus (except as noted).
+bind generic "g"     first-entry
+bind generic "G"     last-entry
+bind generic <home>  first-entry
+bind generic <end>   last-entry
+bind generic <left>  previous-entry
+bind generic <right> next-entry
+
+# Specific key bindings.
+bind index   "g"        first-entry
+bind index   "G"        last-entry
+bind index   "\Cg"      fetch-mail
+bind index   "\Cf"      next-page
+bind index   "\Cb"      previous-page
+bind index   "{"      previous-thread
+bind index   "}"      next-thread
+bind index   "x"      noop
+bind index   ",g"       group-reply
+
+bind alias   " "      tag-entry
+bind alias   "\r"     select-entry
+bind attach  "v"      select-entry
+bind compose "v"      view-attach
+
+bind pager   "g"      top
+bind pager   "G"      bottom
+bind pager   <home>   top
+bind pager   <end>    bottom
+bind pager   "\Cf"    next-page
+bind pager   "\Cb"    previous-page
+bind pager   "j"      next-line
+bind pager   "k"      previous-line
+bind pager   "{"      previous-thread
+bind pager   "}"      next-thread
+bind pager   <up>     previous-line
+bind pager   <down>   next-line
+bind pager   <left>   previous-undeleted
+bind pager   <right>  next-undeleted
+bind pager   "["      previous-thread
+bind pager   "]"      next-thread
+bind pager   "\Cp"    previous-undeleted
+bind pager   "\Cn"    next-undeleted
+bind pager   "t"      display-toggle-weed
+bind pager   "\Cu"    half-up
+bind pager   "\Cd"    half-down
+bind pager   ",g"     group-reply

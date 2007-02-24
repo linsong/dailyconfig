@@ -1,0 +1,8 @@
+# -*- muttrc -*-
+#
+# List of folders that are considered to be "mailboxes" (folders that
+# receive incoming mail).
+#
+
+
+mailboxes `ls $MAIL/maillists/*`
