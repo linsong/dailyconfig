@@ -1,0 +1,10 @@
+# vim: set ft=muttrc
+#
+# Fine tune mutt depending on which folder I'm viewing.
+#
+
+folder-hook .                        source ~/.mutt/defaults
+folder-hook =maillists/.*$           source ~/.mutt/defaults.maillist
+folder-hook imaps://imap.exoweb.net  source ~/.mutt/defaults.exoweb
+
+

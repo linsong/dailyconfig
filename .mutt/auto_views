@@ -2,6 +2,8 @@
 #
 # Tell mutt which MIME types to auto-view
 #
+# auto_view: view MIME type data in mutt's pager directly (sure, the MIMIE data will be converted to 
+# pure text anyhow)
 
 auto_view application/zip
 auto_view application/x-gzip

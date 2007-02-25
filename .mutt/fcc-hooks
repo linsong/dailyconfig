@@ -1,0 +1,16 @@
+# -*- muttrc -*-
+#
+# Fcc hooks, everything else goes to =send-mail
+# where to save the outgoing mails
+#
+
+#fcc-hook garble-.*@.*\.sourceforge\.net                          /dev/null
+#fcc-hook lbc@.*linuxemporium\.co\.uk                             /dev/null
+#fcc-hook librep-list@.*\.sourceforge\.net                        /dev/null
+#fcc-hook mutt-users@(.*cs\.hmc\.edu|mutt\.org|gbnet\.net)        /dev/null
+#fcc-hook (peterboro|lincs)@mailman\.lug\.org\.uk                 /dev/null
+#fcc-hook stormcock@(steamradio\.com|mistlethrush\.co\.uk)        /dev/null
+#fcc-hook (clocc|cclan)-list@lists\.sourceforge\.net              /dev/null
+#fcc-hook debian-.*@lists\.debian\.org                            /dev/null
+fcc-hook .*                                                      =sent-mail
+

@@ -1,4 +1,4 @@
-# -*- muttrc -*-
+# vim: set ft=muttrc
 #
 # Configure where things get saved to.
 #
@@ -12,4 +12,4 @@ save-hook "~C python-chinese@lists.python.cn" =maillists/pythonCN
 save-hook "~C .*@python.org"                  =maillists/python
 save-hook "~C ubuntu-users@lists.ubuntu.com"  =maillists/ubuntu
 save-hook "~C .*cygwin@cygwin.com"            =maillists/cygwin
-#save-hook .*                                =mbox
+save-hook .*                                =mbox

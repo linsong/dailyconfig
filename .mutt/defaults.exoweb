@@ -1,0 +1,18 @@
+# vim: set ft=muttrc
+
+# Use the global defaults first.
+source ~/.mutt/defaults.global
+
+set index_format="%4C %Z %{%b %d} %-15.15n %?M?(#%03M)&(%4l)? %s"
+
+# Reset any headers that may have been set in other folder-hooks
+unmy_hdr From:
+unmy_hdr Reply-To:
+unmy_hdr Fcc:
+unmy_hdr Return-Receipt-To:
+unmy_hdr Organization:
+unmy_hdr X-URL:
+
+my_hdr From: Vincent Wang <vincent@exoweb.net>
+set from = vincent@exoweb.net
+

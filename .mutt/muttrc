@@ -1,3 +1,4 @@
+# vim: set ft=muttrc
 ##########################################################
 ###  OUTGOING MAILS SETTING
 ##########################################################
@@ -7,8 +8,6 @@ set sendmail = "/usr/bin/msmtp"
 set use_from = yes
 set envelope_from = yes
 set realname = "Vincent Wang" 
-#set from = linsong.qizi@gmail.com
-set from = vincent@exoweb.net
 set hidden_host                           # Hide host details.
 set forward_format="Fwd: %s"
 
@@ -23,7 +22,6 @@ set pop_delete = no
 #set pop_pass = "password"
 set pop_host = "pops://pop.gmail.com:995"
 
-#set spoolfile=imaps://imap.exoweb.net/INBOX
 set imap_user="vincent"
 #set imap_pass=xxxxxxxxxxx
 mailboxes imaps://imap.exoweb.net/INBOX
@@ -32,13 +30,6 @@ set message_cachedir = $HOME/Mail/cache
 
 set mail_check = 60                       # How often(seconds) we look for new mails 
 set timeout = 15
-
-# ignore some headers, there are too many headers default 
-ignore headers *
-unignore headers from to subject date cc
-
-# specify what order headers should appear in, use the hdr_order directive: 
-hdr_order to from subject date
 
 # don't display '+' marker before wrapped line
 set markers=no
@@ -62,11 +53,9 @@ set postpone=ask-yes                       # Ask about postponing.
 set nomove                                # Hold messages in $MAIL.
 set nobeep                                # We don't need no beeping software.
 
-set sort_aux=date-received                # Sort threads by date received.
-
 #set charset=gb2312                        # use gb2312 as the default charset 
 set charset="UTF-8"
-set send_charset="UTF-8"
+set send_charset="us-ascii:gbk:UTF-8"
 set assumed_charset="UTF-8"
 set allow_8bit                            # allow 8bit otherwise it will damage the chinese characters
 #charset-hook ^us-ascii$ GB18030
@@ -91,9 +80,6 @@ set attribution="* %n <%a> [%{%Y-%m-%d %H:%M:%S %Z}]:\n"
 set include                               # Include the message in replies.
 set nomark_old                            # Don't mark unread new msgs as old.
 set noconfirmappend                       # Just append, don't hassle me.
-set pager_stop                            # Don't skip msgs on next page.
-set pager_context = 1 
-set pager_index_lines = 10                 # when in pager mode, show a miniindex
 
 #############################################################
 ### unverified config
@@ -106,25 +92,23 @@ set quote_regexp="^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
 set alias_file=~/.mutt/aliases            # Keep aliases in this file.
 source ~/.mutt/aliases                    # Load in my aliases.
 
+source ~/.mutt/mailboxes                  # Define the list of folders that receive mail.
+
+source ~/.mutt/headers                    # Configure header display.
 source ~/.mutt/bindings                   # Define key bindings.
 source ~/.mutt/auto_views                 # Define auto_views.
 source ~/.mutt/macros                     # Define macros.
-source ~/.mutt/mailboxes                  # Define the list of folders that receive mail.
 source ~/.mutt/colours                    # Define colours.
 source ~/.mutt/subscriptions              # Define the list of subscribed mailing lists.
 source ~/.mutt/save-hooks                 # Define save-hooks.
-
-#source ~/.mutt/folder-hooks               # Define folder-hooks.
+source ~/.mutt/folder-hooks               # Define folder-hooks.
+source ~/.mutt/fcc-hooks                  # Define fcc-hooks.
+source ~/.mutt/message-hooks              # Define message hooks.
 
 #source /usr/local/doc/mutt/samples/gpg.rc # Use GPG
-#source ~/.mutt/headers                    # Configure header display.
-
-#source ~/.mutt/fcc-hooks                  # Define fcc-hooks.
-#source ~/.mutt/message-hooks              # Define message hooks.
 #source ~/.mutt/non-standard               # Support for mutt patches.
 
-# HTML is the last option.
-alternative_order text/enriched text/plain text/html 
+alternative_order text/enriched text/plain text/html application/postscript image/*
 
 # Last, but not least, get mutt to display its version on startup.
 push <show-version>
