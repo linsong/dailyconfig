@@ -28,5 +28,5 @@ my_hdr From: Vincent Wang <linsong.qizi@gmail.com>
 # my_hdr Organization: (davep 'org)
 # my_hdr X-URL: http://www.davep.org/
 
-set sort=thread
+set sort=threads
 set sort_aux=date-received                # Sort threads by date received.
