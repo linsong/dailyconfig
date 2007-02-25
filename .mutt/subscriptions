@@ -1,0 +1,18 @@
+# -*- muttrc -*-
+#
+# List of mailing lists I'm subscribed to.
+#
+
+subscribe vim@vim.org
+subscribe vim-dev@vim.org
+subscribe vim-announce@vim.org
+subscribe mutt-users@mutt.org
+subscribe ipython-user@scipy.net
+subscribe python-chinese@lists.python.cn
+subscribe tutor@python.org
+subscribe python-list@python.org
+subscribe ubuntu-users@lists.ubuntu.com
+subscribe cygwin@cygwin.com
+subscribe comp.lang.python@googlegroups.com
+subscribe ELinks-users@linuxfromscratch.org
+

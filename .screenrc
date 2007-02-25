@@ -98,11 +98,11 @@ termcapinfo xterm|xterms|xs|rxvt ti@:te@
 #   in the next window, and then open mutt and tail in windows 8 and 9
 #   respectively.
 #
-screen -t mc 0 
-screen -t misc 1
+screen -t music 0 
+screen -t mail 1 mutt
 screen -t work 2 
 screen -t work2 3
-screen -t psql 4 
+screen -t misc 4
 screen -t ipython 5 ipython 
 screen -t w3m 6 w3m www.google.com
 # screen 0 top 

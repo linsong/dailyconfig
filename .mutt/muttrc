@@ -10,6 +10,7 @@ set realname = "Vincent Wang"
 #set from = linsong.qizi@gmail.com
 set from = vincent@exoweb.net
 set hidden_host                           # Hide host details.
+set forward_format="Fwd: %s"
 
 ##########################################################
 ###  INCOMING MAILS SETTING
@@ -17,14 +18,15 @@ set hidden_host                           # Hide host details.
 set spoolfile = $HOME/Mail/vincent
 
 # use mutt to get mails 
-set pop_user = "linsong.qizi@gmail.com"
+set pop_user = "linsong.qizi"
 set pop_delete = no
 #set pop_pass = "password"
 set pop_host = "pops://pop.gmail.com:995"
 
-set spoolfile=imaps://imap.exoweb.net/INBOX
+#set spoolfile=imaps://imap.exoweb.net/INBOX
 set imap_user="vincent"
-set imap_pass=qizidw@2000
+#set imap_pass=xxxxxxxxxxx
+mailboxes imaps://imap.exoweb.net/INBOX
 
 set message_cachedir = $HOME/Mail/cache
 
@@ -40,6 +42,9 @@ hdr_order to from subject date
 
 # don't display '+' marker before wrapped line
 set markers=no
+
+# use ";" tag_prefix to do this 
+#set auto_tag          # when tagged, actions for messages are default for all tagged messages
 
 # ask me to confirm before quit
 set quit=ask-yes
@@ -88,7 +93,7 @@ set nomark_old                            # Don't mark unread new msgs as old.
 set noconfirmappend                       # Just append, don't hassle me.
 set pager_stop                            # Don't skip msgs on next page.
 set pager_context = 1 
-set pager_index_lines = 6                 # when in pager mode, show a miniindex
+set pager_index_lines = 10                 # when in pager mode, show a miniindex
 
 #############################################################
 ### unverified config
@@ -97,24 +102,23 @@ set pager_index_lines = 6                 # when in pager mode, show a miniindex
 set mailcap_path=~/.mailcap:/usr/local/etc/mailcap:/etc/mailcap
 set quote_regexp="^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
 
-source ~/.mutt/bindings                   # Define key bindings.
 
 set alias_file=~/.mutt/aliases            # Keep aliases in this file.
 source ~/.mutt/aliases                    # Load in my aliases.
 
+source ~/.mutt/bindings                   # Define key bindings.
 source ~/.mutt/auto_views                 # Define auto_views.
-
 source ~/.mutt/macros                     # Define macros.
 source ~/.mutt/mailboxes                  # Define the list of folders that receive mail.
-
-#source ~/.mutt/colours                    # Define colours.
-
-#source /usr/local/doc/mutt/samples/gpg.rc # Use GPG
-#source ~/.mutt/subscriptions              # Define the list of subscribed mailing lists.
-#source ~/.mutt/headers                    # Configure header display.
+source ~/.mutt/colours                    # Define colours.
+source ~/.mutt/subscriptions              # Define the list of subscribed mailing lists.
+source ~/.mutt/save-hooks                 # Define save-hooks.
 
 #source ~/.mutt/folder-hooks               # Define folder-hooks.
-#source ~/.mutt/save-hooks                 # Define save-hooks.
+
+#source /usr/local/doc/mutt/samples/gpg.rc # Use GPG
+#source ~/.mutt/headers                    # Configure header display.
+
 #source ~/.mutt/fcc-hooks                  # Define fcc-hooks.
 #source ~/.mutt/message-hooks              # Define message hooks.
 #source ~/.mutt/non-standard               # Support for mutt patches.

@@ -5,4 +5,11 @@
 #
 
 
-mailboxes `ls $MAIL/maillists/*`
+#mailboxes `ls $HOME/Mail/maillists/*`
+mailboxes =maillists/cygwin
+mailboxes =maillists/ipython
+mailboxes =maillists/mutt
+mailboxes =maillists/python
+mailboxes =maillists/pythonCN
+mailboxes =maillists/ubuntu
+mailboxes =maillists/vim

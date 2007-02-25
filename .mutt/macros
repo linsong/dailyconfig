@@ -2,6 +2,10 @@
 #
 # macros for mutt.
 # NOTE: use "," to define shortcuts  if possible. NOT ";" since it is used as tag-prefix
+#
+# macros for generic mode
+macro generic "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
+macro generic ,sm ":source $HOME/.mutt/muttrc\r"
 
 # Macros for use in the index.
 macro index ",v"    "<pipe-message>urlview<enter>"                       # URL viewer.
@@ -46,6 +50,5 @@ macro pager "<esc>0"    "<enter-command>set pager_index_lines=0<enter>"      # C
 #macro pager "\Cs\Cg" "<pipe-message>spamprobe good<enter>"                # This message is good.
 
 # Provide some "on-line" help.
-macro generic "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
 macro index   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
 macro pager   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"

@@ -402,71 +402,44 @@ SENDMAIL=/usr/sbin/sendmail
 #***************************************************************
 #******************** my recipes *******************************
 # mail from my lover :)
-:0:
-* ^From.*angel.*
-IN.qizi
-
-:0:
-* ^From.*linqi@pansky.com.cn
-IN.qizi
-
-## mail from my friends 
-:0:
-* ^From.*sinsel@163.com
-IN.friends
-
+#:0:
+#* ^From.*angel.*
+#IN.qizi
 
 # maillist I subscribed
 :0:
 * ^TOvim@vim.org
-maillists/IN.vim
+maillists/vim
 
 :0:
 * ^TOvim-dev@vim.org
-maillists/IN.vim
+maillists/vim
 
 :0:
 * ^TOvim-announce@vim.org
-maillists/IN.vim
-
-:0:
-* ^TOnoreply@freshmeat.net
-maillists/IN.freshmeat
+maillists/vim
 
 :0:
 * ^TOipython-user@scipy.net
-maillists/IN.ipython-user
+maillists/ipython
 
 :0:
 * ^TOpython-chinese@lists.python.cn
-maillists/IN.python-chinese
+maillists/pythonCN
 
 :0:
 * ^TO.*@python.org
-maillists/IN.python-list
+maillists/python
 
 :0:
 * ^TOubuntu-users@lists.ubuntu.com
-maillists/IN.ubuntu-users
+maillists/ubuntu
 
 :0:
 * ^TO.*cygwin@cygwin.com
-maillists/IN.cygwin
+maillists/cygwin
 
 :0:
 * ^TOmutt-users@mutt.org
-maillists/IN.mutt
+maillists/mutt
 
-:0:
-* ^TO.*@exoweb.net
-work/exoweb/IN.exoweb
-
-# test mail
-#:0:
-#* ^Subject: .*test.*
-#IN.testmail
-
-# rm spam emails
-:0:
-* .*noreplymaster@hanmail.net.*
-IN.Spam
