@@ -38,6 +38,14 @@ if [ -f /opt/local/etc/bash_completion ]; then
     . /opt/local/etc/bash_completion
 fi
 
+ if [ -d /opt/local/share/man ]; then
+   MANPATH="/opt/local/share/man:${MANPATH}"
+ fi
+
+ if [ -d /opt/local/share/info ]; then
+   INFOPATH="/opt/local/share/info:${INFOPATH}"
+ fi
+
 # use keychain to replace ssh-agent, because keychain can be used under both X window mode and console mode
 KEYCHAIN_CMD=$(which keychain)
 if [ -n $KEYCHAIN_CMD ]; then 
