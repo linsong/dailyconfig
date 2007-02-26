@@ -28,10 +28,7 @@ bind index   ",g"       group-reply
 bind index   ",z"    collapse-thread 
 bind index   ",Z"    collapse-all
 
-bind alias   " "      tag-entry
-bind alias   "\r"     select-entry
-bind attach  "v"      select-entry
-bind compose "v"      view-attach
+bind index   "h"     noop
 
 bind pager   "g"      top
 bind pager   "G"      bottom
@@ -51,7 +48,20 @@ bind pager   "["      previous-thread
 bind pager   "]"      next-thread
 bind pager   "\Cp"    previous-undeleted
 bind pager   "\Cn"    next-undeleted
-bind pager   "t"      display-toggle-weed
+bind pager   "\Ct"    display-toggle-weed
+bind pager   "t"      tag-message
 bind pager   "\Cu"    half-up
 bind pager   "\Cd"    half-down
 bind pager   ",g"     group-reply
+
+bind pager   "h"      noop
+bind pager   ",fm"    noop
+
+bind alias   " "      tag-entry
+bind alias   "\r"     select-entry
+
+bind attach  "v"      select-entry
+bind compose "v"      view-attach
+
+bind editor "\Cn"     history-down
+bind editor "\Cp"     history-up
