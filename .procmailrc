@@ -443,3 +443,28 @@ maillists/cygwin
 * ^TOmutt-users@mutt.org
 maillists/mutt
 
+:0:
+* ^TOmacports-users@lists.macosforge.org
+maillists/macports
+
+:0:
+* ^TO.*@openlaszlo.org
+maillists/openlaszlo
+
+:0:
+* ^TOlinsong.qizi@gmail.com
+vincent
+
+# recipes for mails from exoweb.net
+:0:
+* ^From.*@exoweb.net
+exoweb/work
+
+:0:
+* ^TO.*@exoweb.net
+exoweb/work
+
+:0:
+* .*
+vincent
+

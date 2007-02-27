@@ -46,7 +46,6 @@ fi
    INFOPATH="/opt/local/share/info:${INFOPATH}"
  fi
 
-# use keychain to replace ssh-agent, because keychain can be used under both X window mode and console mode
 KEYCHAIN_CMD=$(which keychain)
 if [ -n $KEYCHAIN_CMD ]; then 
     $KEYCHAIN_CMD ~/.ssh/id_dsa 
@@ -56,3 +55,10 @@ fi
 if [ -e ~/.bashrc ] ; then
   source ~/.bashrc
 fi
+
+# start to fetch mails 
+# NOTE: we need to config fetchmail to run in daemon mode, 
+#       then it does not matter if we call this multiple times
+#if [ -z "$(pgrep -u $LOGNAME fetchmail)" ]; then 
+#    fetchmail --nodetach >/dev/null 
+#fi

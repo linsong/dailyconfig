@@ -16,3 +16,5 @@ unmy_hdr X-URL:
 my_hdr From: Vincent Wang <vincent@exoweb.net>
 set from = vincent@exoweb.net
 
+macro generic ,fm "<imap-fetch-mail>"
+

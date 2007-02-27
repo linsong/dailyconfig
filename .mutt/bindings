@@ -1,4 +1,4 @@
-# -*- muttrc -*-
+# vim: set ft=muttrc
 #
 # Keyboard bindings for mutt.
 #
@@ -15,8 +15,12 @@ bind generic <left>  previous-entry
 bind generic <right> next-entry
 
 # Specific key bindings.
-bind index  ",fm"  fetch-mail
-bind index  ",fi"  imap-fetch-mail
+bind index   "h"     noop
+bind index   "z"     noop
+bind index   "Z"     noop
+
+#bind index  ",fm"  fetch-mail
+#bind index  ",fi"  imap-fetch-mail
 bind index   "g"        first-entry
 bind index   "G"        last-entry
 bind index   "\Cf"      next-page
@@ -27,8 +31,10 @@ bind index   "x"      noop
 bind index   ",g"       group-reply
 bind index   ",z"    collapse-thread 
 bind index   ",Z"    collapse-all
+bind index   "zt"    current-top
+bind index   "zb"    current-bottom
+bind index   "zz"    current-middle
 
-bind index   "h"     noop
 
 bind pager   "g"      top
 bind pager   "G"      bottom

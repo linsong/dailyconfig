@@ -13,3 +13,6 @@ mailboxes =maillists/python
 mailboxes =maillists/pythonCN
 mailboxes =maillists/ubuntu
 mailboxes =maillists/vim
+mailboxes =maillists/macports
+mailboxes =maillists/openlaszlo
+mailboxes =exoweb/work

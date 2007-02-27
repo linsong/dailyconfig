@@ -3,6 +3,8 @@
 # Configure where things get saved to.
 #
 
+save-hook "~C .*@exoweb.net"                  =exoweb/work
+
 save-hook "~C vim@vim.org"                    =maillists/vim
 save-hook "~C vim-dev@vim.org"                =maillists/vim
 save-hook "~C vim-announce@vim.org"           =maillists/vim
@@ -12,4 +14,6 @@ save-hook "~C python-chinese@lists.python.cn" =maillists/pythonCN
 save-hook "~C .*@python.org"                  =maillists/python
 save-hook "~C ubuntu-users@lists.ubuntu.com"  =maillists/ubuntu
 save-hook "~C .*cygwin@cygwin.com"            =maillists/cygwin
+save-hook "~C macports-users@lists.macosforge.org" =maillists/macports
+save-hook "~C .*@openlaszlo.org"              =maillists/openlaszlo
 save-hook .*                                =mbox

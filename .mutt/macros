@@ -1,4 +1,4 @@
-# -*- muttrc -*-
+# vim: set ft=muttrc
 #
 # macros for mutt.
 # NOTE: use "," to define shortcuts  if possible. NOT ";" since it is used as tag-prefix
@@ -13,8 +13,9 @@ macro index "\'"     "<clear-flag>r"                                      # Mark
 macro index "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
 macro index "<esc>v"    "<pipe-message>urlview<enter>"                       # URL viewer.
 macro index "<esc>1" "<change-folder> =vincent<enter>"
-macro index "<esc>2" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
+macro index "<esc>2" "<change-folder> =exoweb/work<enter>"
 macro index "<esc>3" "<change-folder> =maillists/<tab><tab>"
+macro index "<esc>4" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
 #macro index "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.
 #macro index "<esc>h"    "<pipe-message>mailhops<enter>"                      # View the path of the mail.
 #macro index "<esc>f"    "<pipe-message>view-x-face<enter>"                   # View the X-Face (if there is one).

@@ -17,10 +17,10 @@ set forward_format="Fwd: %s"
 set spoolfile = $HOME/Mail/vincent
 
 # use mutt to get mails 
-set pop_user = "linsong.qizi"
-set pop_delete = no
+#set pop_user = "linsong.qizi"
+#set pop_delete = no
 #set pop_pass = "password"
-set pop_host = "pops://pop.gmail.com:995"
+#set pop_host = "pops://pop.gmail.com:995"
 
 set imap_user="vincent"
 #set imap_pass=xxxxxxxxxxx
@@ -34,8 +34,12 @@ set timeout = 15
 # don't display '+' marker before wrapped line
 set markers=no
 
+set check_new = yes
 # use ";" tag_prefix to do this 
 #set auto_tag          # when tagged, actions for messages are default for all tagged messages
+
+# when you press "t" or "D", don't move the cursor
+set resolve
 
 # ask me to confirm before quit
 set quit=ask-yes
@@ -58,8 +62,10 @@ set charset="UTF-8"
 set send_charset="us-ascii:gbk:UTF-8"
 set assumed_charset="UTF-8"
 set allow_8bit                            # allow 8bit otherwise it will damage the chinese characters
+
 #charset-hook ^us-ascii$ GB18030
-#charset-hook ^UTF-8 GB18030
+# make mutt think not utf-8 encodings as gb2312
+#charset-hook !utf-8 gb2312
 
 set print=ask-yes                         # Ask before printing.
 set delete=ask-yes                        # Ask before doing a delete.

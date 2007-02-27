@@ -1,0 +1,18 @@
+defaults
+logfile ~/.msmtplog
+
+account gmail
+host smtp.gmail.com
+from linsong.qizi@gmail.com
+tls on
+auth on
+port 587
+user linsong.qizi@gmail.com
+
+account exoweb
+host smtp.exoweb.net
+from vincent@exoweb.net
+port  25 
+user vincent@exoweb.net
+
+account default: exoweb
