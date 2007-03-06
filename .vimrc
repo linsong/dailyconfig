@@ -497,14 +497,17 @@ if has("autocmd")
         :au BufNewFile,BufRead *.lzx let g:snip_end_tag = "@"
 
         :au BufEnter *.lzx :call FoldOnRegex('^\s*<\w\+', 0)
-        ":au BufEnter *.py  :call FoldOnRegex('^\s*\(\<def\>\|\<class\>\)', 0)
+        :au BufEnter *.py  :call FoldOnRegex('^\s*\(\<def\>\|\<class\>\)', 0)
 
+        " following config will let vim to read non-plain-text file format
+        "
         " autocmd for read MS Word document
         " Vim Tip 790 - view word documents in Vim (good for diff'ing)
         :autocmd BufReadPre *.doc set ro
         :autocmd BufReadPre *.doc set hlsearch
         :autocmd BufReadPost *.doc %!antiword "%"
 
+        " read pdf in vim
         if has('unix')  
             :au BufReadPre *.pdf set ro
             :au BufReadPost *.pdf silent %!pdftotext -nopgbrk "%" - | fmt -csw78

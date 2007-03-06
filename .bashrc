@@ -337,5 +337,17 @@ __END
     vim -u NONE -i NONE -Nnes "+se ul=-1" $VIMCMD "+update|q"  $FILE
  }
 
+ function ding()
+ {
+     # to use gnome-osd-client, you need to install package gnome-osd 
+     # view manpage for gnome-osd-client for the format of notification message
+     # gnome-osd provide a python binding also, not have a look yet.
+     if [ -n "$(which gnome-osd-client)" ]; then
+         gnome-osd-client -f "<message id='ding' osd_fake_translucent_bg='on' osd_vposition='center' animations='on' hide_timeout='10000' osd_halignment='right'>$*</message>"
+     fi
+ }
+
+ growl() { echo -e $'\e]9;'${1}'\007' ; return  ; }
+
  # }}}
 

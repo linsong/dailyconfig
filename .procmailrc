@@ -424,6 +424,10 @@ maillists/vim
 maillists/ipython
 
 :0:
+* ^TOIPython-user@scipy.org
+maillists/ipython
+
+:0:
 * ^TOpython-chinese@lists.python.cn
 maillists/pythonCN
 
@@ -463,6 +467,10 @@ exoweb/work
 :0:
 * ^TO.*@exoweb.net
 exoweb/work
+
+:0:
+* ^Subject: Cron <vincent@vincent> /home/vincent/mytools/streamrecorder.sh.*
+/dev/null
 
 :0:
 * .*

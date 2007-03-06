@@ -16,4 +16,5 @@ save-hook "~C ubuntu-users@lists.ubuntu.com"  =maillists/ubuntu
 save-hook "~C .*cygwin@cygwin.com"            =maillists/cygwin
 save-hook "~C macports-users@lists.macosforge.org" =maillists/macports
 save-hook "~C .*@openlaszlo.org"              =maillists/openlaszlo
+save-hook "~C nkeric-daily@googlegroups.com"  =maillists/dailyread
 save-hook .*                                =mbox
