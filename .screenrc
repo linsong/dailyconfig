@@ -105,6 +105,7 @@ screen -t work2 3
 screen -t misc 4
 screen -t ipython 5 ipython 
 screen -t w3m 6 w3m www.google.com
+screen -t irssi 7 irssi
 # screen 0 top 
 # screen -t monkey ssh monkey
 # screen -t daemon 9 tail -f /var/log/daemon.log

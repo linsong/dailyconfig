@@ -22,11 +22,11 @@ set spoolfile = $HOME/Mail/vincent
 #set pop_pass = "password"
 #set pop_host = "pops://pop.gmail.com:995"
 
-set imap_user="vincent"
+#set imap_user="vincent"
 #set imap_pass=xxxxxxxxxxx
-mailboxes imaps://imap.exoweb.net/INBOX
+#mailboxes imaps://imap.exoweb.net/INBOX
 
-set message_cachedir = $HOME/Mail/cache
+#set message_cachedir = $HOME/Mail/cache
 
 set mail_check = 60                       # How often(seconds) we look for new mails 
 set timeout = 15

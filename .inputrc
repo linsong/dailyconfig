@@ -18,6 +18,7 @@
 # add by wangwei on 2004/2/27
 set meta-flag on 
 set convert-meta off
+set input-meta on
 set output-meta on
 # ignore case while completing 
 set completion-ignore-case on

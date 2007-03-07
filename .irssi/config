@@ -1,6 +1,20 @@
 servers = (
-  { address = "irc.exoweb.net"; chatnet = "WorkIRCnet"; port = "6667"; },
-  { address = "im.bitlbee.org"; chatnet = "BitBeeIRCnet"; port = "6667"; },
+  {
+    address = "irc.exoweb.net";
+    chatnet = "WorkIRCnet";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  },
+  {
+    address = "im.bitlbee.org";
+    chatnet = "BitlBeeIRCnet";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  },
   { address = "irc.stealth.net"; chatnet = "IRCnet"; port = "6668"; },
   { address = "irc.efnet.net"; chatnet = "EFNet"; port = "6667"; },
   { 
@@ -15,6 +29,14 @@ servers = (
     port = "6667";
   },
   { address = "silc.silcnet.org"; chatnet = "SILC"; port = "706"; },
+  {
+    address = "irc.freenode.net";
+    chatnet = "IRCnet";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  }
 );
 
 # for one chatnet, we can define multiple servers, so when we 
@@ -37,7 +59,7 @@ chatnets = {
     max_whois = "4";
     max_query_chans = "5";
   };
-  BitBeeIRCnet = {
+  BitlBeeIRCnet = {
     type = "IRC";
     max_kicks = "4";
     max_msgs = "5";
@@ -72,11 +94,11 @@ chatnets = {
 };
 
 channels = (
-  { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
+  { name = "#irssi"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
-  { name = "#dev"; chatnet = "IRCnet"; autojoin = "Yes"; },
-  { name = "#livebet"; chatnet = "IRCnet"; autojoin = "Yes"; },
-  { name = "#exoweb"; chatnet = "IRCnet"; autojoin = "Yes"; }
+  { name = "#livebet"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
+  { name = "#dev"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
+  { name = "#exoweb"; chatnet = "WorkIRCnet"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -126,6 +148,13 @@ aliases = {
   "MANUAL-WINDOWS" = "set use_status_window off;set autocreate_windows off;set autocreate_query_level none;set autoclose_windows off;set reuse_unused_windows on;save";
   EXEMPTLIST = "mode $C +e";
   ATAG = "WINDOW SERVER";
+  split2 = "window 3; window show 2; window size 20; window 3; window stick";
+  unstickall = "window goto 1; window stick off; window goto 2;window stick off; window goto 3; window stick off; window goto 4; window stick off; window goto 5; window stick off; window goto 6; window stick off";
+  single = "unstickall; window hide; window hide";
+  fortune = "exec - -o fortune -s ";
+  wu = "window up";
+  wd = "window down ";
+  wl = "window last ";
 };
 
 statusbar = {
@@ -240,9 +269,99 @@ statusbar = {
   };
 };
 settings = {
-  core = { 
-    real_name = "vincent";
+  core = {
+    real_name = "Vincent Wang";
     user_name = "vincent";
     nick = "vincent";
+    recode_fallback = "utf-8";
+    recode_out_default_charset = "utf-8";
+  };
+  "fe-common/core" = { print_active_channel = "no"; };
+};
+keyboard = (
+  { key = "^F"; id = "forward_character"; data = ""; },
+  { key = "^B"; id = "backward_character"; data = ""; },
+  { key = "^W"; id = "key"; data = "window "; },
+  { key = "window-^C"; id = "command"; data = "WINDOW NEW SPLIT"; },
+  { key = "window-^K"; id = "command"; data = "WINDOW UP"; },
+  { key = "window-^J"; id = "command"; data = "WINDOW DOWN"; },
+  { key = "^X"; id = "active_window"; data = ""; }
+);
+hilights = (
+  { text = "ISSUE"; color = "%R"; nick = "no"; word = "yes"; },
+  {
+    text = "vincent.*";
+    color = "%R%4";
+    act_color = "%R";
+    priority = "9";
+    nick = "no";
+    word = "no";
+  },
+  {
+    text = "scrum";
+    color = "%5";
+    act_color = "%M";
+    nick = "no";
+    word = "yes";
+  }
+);
+windows = {
+  3 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#livebet";
+        tag = "WorkIRCnet";
+      }
+    );
+    sticky = "yes";
+  };
+  1 = { immortal = "yes"; name = "(status)"; level = "ALL"; };
+  2 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#dev";
+        tag = "WorkIRCnet";
+      }
+    );
+    sticky = "yes";
+  };
+  6 = { name = "hilight"; sticky = "yes"; parent = "3"; };
+  5 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "&bitlbee";
+        tag = "BitlBeeIRCnet";
+      }
+    );
+  };
+  4 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#exoweb";
+        tag = "WorkIRCnet";
+      }
+    );
   };
 };
+mainwindows = {
+  3 = { first_line = "22"; lines = "22"; };
+  2 = { first_line = "1"; lines = "21"; };
+};
+ignores = (
+  { mask = "*zzz*"; level = "NICKS"; },
+  { 
+    level = "ACTIONS";
+    pattern = "is (away|gone|back)";
+    regexp = "yes";
+  },
+  { mask = "*afk*"; level = "NICKS"; },
+  { mask = "*away*"; level = "NICKS"; }
+);
