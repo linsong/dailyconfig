@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+# URL for this script: http://the.taoofmac.com/space/Projects/netgrowl.py
 """Growl 0.6 Network Protocol Client for Python"""
 __version__ = "0.6" # will always match Growl version
 __author__ = "Rui Carmo (http://the.taoofmac.com)"
@@ -7,6 +8,7 @@ __copyright__ = "(C) 2004 Rui Carmo. Code under BSD License."
 __contributors__ = "Ingmar J Stein (Growl Team)"
 
 import sys
+import optparse
 import struct
 import md5
 from socket import AF_INET, SOCK_DGRAM, socket
@@ -130,13 +132,43 @@ def unit_test():
     print "Done."
 
 if __name__ == '__main__':
-    if len(sys.argv) == 0:
+    parser = optparse.OptionParser(usage="%prog [OPTION]...",
+                                   version="%prog1.0")
+    parser.add_option('-n', '--name', dest='name',
+                      help='Set the name of the application that sends the \
+                      notification [Default: growlnotify]')
+    parser.add_option('-s', '--sticky', dest='sticky',
+                      help='Make the notification sticky')
+    parser.add_option('-m', '--message', dest='message',
+                      help='Sets the message to be used instead of using stdin')
+    parser.add_option('-p', '--priority', dest='priority',
+                       help='Specify an int or named key (default is 0)')
+    parser.add_option('-H', '--host', dest='host', default='localhost',
+                       help='Specify a hostname to which to send a remote \
+                       notification.')
+    parser.add_option('-P', '--password', dest='password', default="WRONG_PASSWORD",
+                      help = 'Password used for remote notifications.')
+    parser.add_option('', '--port',  dest='port', default=GROWL_UDP_PORT,
+                      help = 'Port number for UDP notifications.')
+    parser.add_option('-q', '--quiet', dest='quiet', default=False,
+                      action="store_true", help="don't print debug info")
+
+    options, args = parser.parse_args()
+
+    assert options.password != 'WRONG_PASSWORD'
+
+    if not args and not options:
         unit_test()
     else:
-        addr = ("192.168.0.192", GROWL_UDP_PORT)
-        s = socket(AF_INET,SOCK_DGRAM)
-        print "Assembling standard notification packet"
-        p = GrowlNotificationPacket(password='hello')
-        print "Sending standard notification packet"
+        addr = (options.host, options.port)
+        s = socket(AF_INET, SOCK_DGRAM)
+        if not options.quiet:
+            print "Assembling standard notification packet"
+        p = GrowlNotificationPacket(title=options.name,
+                                    description=options.message,
+                                    password=options.password)
+        if not options.quiet:
+            print "Sending standard notification packet"
         s.sendto(p.payload(), addr)
+        s.close()
 
