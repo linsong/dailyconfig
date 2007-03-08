@@ -14,75 +14,83 @@ $VERSION = "1";
 );
 
 sub cmd_help1 {
-    Irssi::print('===================================================================');  
-    Irssi::print('Irssi\'s colors that you can use in text formats, hilights, etc. :');
-    Irssi::print(' ');
-    Irssi::print('                             text            text              background');
-    Irssi::print('   ---------------------------------------------------------------------');
-    Irssi::print('   %%k     %%K     %%0          %kblack%n           %Kdark grey%n         %0black%n');
-    Irssi::print('   %%r     %%R     %%1          %rred%n             %Rbold red%n          %1red%n');
-    Irssi::print('   %%g     %%G     %%2          %ggreen%n           %Gbold green%n        %2green%n');
-    Irssi::print('   %%y     %%Y     %%3          %yyellow%n          %Ybold yellow%n       %3yellow%n');
-    Irssi::print('   %%b     %%B     %%4          %bblue%n            %Bbold blue%n         %4blue%n');
-    Irssi::print('   %%m     %%M     %%5          %mmagenta%n         %Mbold magenta%n      %5magenta%n');
-    Irssi::print('   %%p     %%P                 %pmagenta (think: purple)');
-    Irssi::print('   %%c     %%C     %%6          %ccyan%n            %Cbold cyan%n         %6cyan%n');
-    Irssi::print('   %%w     %%W     %%7          %wwhite%n           %Wbold white%n        %K%7white%n');
-    Irssi::print('   %%n     %%N                 Changes the color to "default color", removing');
-    Irssi::print('                             all other coloring and formatting. %%N is always');
-    Irssi::print('                             the terminal\'s default color. %%n is usually too,');
-    Irssi::print('                             except in themes it changes to "previous color",');
-    Irssi::print('                             ie. hello = "%%Rhello%%n" and "%%G{hello} world"');
-    Irssi::print('                             would print hello in red, and %%n would turn back');
-    Irssi::print('                             into %%G making world green.');
-    Irssi::print('   %%F                        Blinking on/off (think: flash)');
-    Irssi::print('   %%U                        Underline on/off');
-    Irssi::print('   %%8                        Reverse on/off');
-    Irssi::print('   %%9      %%_                Bold on/off');
-    Irssi::print('   %%:                        Insert newline');
-    Irssi::print('   %%|                        Marks the indentation position');
-    Irssi::print('   %%#                        Monospace font on/off (useful with lists and GUI)');
-    Irssi::print('   %%%                        A single %%');
+    Irssi::print( <<SCRIPTHELP_EOF
+    
+===================================================================  
+Irssi's colors that you can use in text formats, hilights, etc. :
+ 
+                             text            text              background
+   ---------------------------------------------------------------------
+   %%k     %%K     %%0          %kblack%n           %Kdark grey%n         %0black%n
+   %%r     %%R     %%1          %rred%n             %Rbold red%n          %1red%n
+   %%g     %%G     %%2          %ggreen%n           %Gbold green%n        %2green%n
+   %%y     %%Y     %%3          %yyellow%n          %Ybold yellow%n       %3yellow%n
+   %%b     %%B     %%4          %bblue%n            %Bbold blue%n         %4blue%n
+   %%m     %%M     %%5          %mmagenta%n         %Mbold magenta%n      %5magenta%n
+   %%p     %%P                 %pmagenta (think: purple)
+   %%c     %%C     %%6          %ccyan%n            %Cbold cyan%n         %6cyan%n
+   %%w     %%W     %%7          %wwhite%n           %Wbold white%n        %K%7white%n
+   %%n     %%N                 Changes the color to "default color", removing
+                             all other coloring and formatting. %%N is always
+                             the terminal's default color. %%n is usually too,
+                             except in themes it changes to "previous color",
+                             ie. hello = "%%Rhello%%n" and "%%G{hello} world"
+                             would print hello in red, and %%n would turn back
+                             into %%G making world green.
+   %%F                        Blinking on/off (think: flash)
+   %%U                        Underline on/off
+   %%8                        Reverse on/off
+   %%9      %%_                Bold on/off
+   %%:                        Insert newline
+   %%|                        Marks the indentation position
+   %%#                        Monospace font on/off (useful with lists and GUI)
+   %%%                        A single %%
+SCRIPTHELP_EOF
+);
 }
 
 sub cmd_help2 {
-    Irssi::print('==============================================================');  
-    Irssi::print('MIRC colors that you can use when writing text to channel:');
-    Irssi::print('               foreground (fg)     background (bg)');
-    Irssi::print('   -------------------------------------------------------');
-    Irssi::print('    0          %Wwhite%n               %Flight gray%n   + blinking fg');
-    Irssi::print('    1          %Kblack%n               black');
-    Irssi::print('    2          %Bblue%n                %4blue%n');
-    Irssi::print('    3          %Ggreen%n               %2green%n');
-    Irssi::print('    4          light red           %1%Fred%n          + blinking fg');
-    Irssi::print('    5          %Rred%n                 %1red%n');
-    Irssi::print('    6          %Mmagenta (purple)%n    %5magenta%n');
-    Irssi::print('    7          orange              orange');
-    Irssi::print('    8          %Yyellow%n              %Forange%n       + blinking fg');
-    Irssi::print('    9          light green         %2%Fgreen%n       + blinking fg');
-    Irssi::print('    10         %Ccyan%n                cyan         ');
-    Irssi::print('    11         light cyan          %6%Fcyan%n         + blinking fg');
-    Irssi::print('    12         light blue          %4%Fblue%n         + blinking fg');
-    Irssi::print('    13         light magenta       %5%Fmagenta%n      + blinking fg');
-    Irssi::print('    14         gray                %Fblack%n        + blinking fg ');
-    Irssi::print('    15         light gray          light gray');
-    Irssi::print(' ');
-    Irssi::print('These colors may differ depending on your terminal. In particular');
-    Irssi::print('the meaning for background may be the same as for the foreground');
-    Irssi::print('(bright colors, no blinking), and orange often looks like brown or');
-    Irssi::print('dark yellow.');
-    Irssi::print('How to use these colors (\'#\' means a number as MIRC color code):');
-    Irssi::print(' ');
-    Irssi::print('<Ctrl>-b        set bold');
-    Irssi::print('<Ctrl>-c#[,#]   set foreground and optionally background color');
-    Irssi::print('<Ctrl>-o        reset all formats to plain text');
-    Irssi::print('<Ctrl>-v        set inverted color mode');
-    Irssi::print('<Ctrl>-_        set underline');
-    Irssi::print('<Ctrl>-7        same as <Ctrl>-_');
-    Irssi::print(' ');
-    Irssi::print('To reset a mode set it again, f.e.');
-    Irssi::print('  <Ctrl-C>3<Ctrl-V>FOO<Ctrl-V>BAR');
-    Irssi::print('creates black on green FOO followed by a green on black BAR');
+    Irssi::print( <<SCRIPTHELP_EOF
+
+==============================================================  
+MIRC colors that you can use when writing text to channel:
+               foreground (fg)     background (bg)
+   -------------------------------------------------------
+    0          %Wwhite%n               %Flight gray%n   + blinking fg
+    1          %Kblack%n               black
+    2          %Bblue%n                %4blue%n
+    3          %Ggreen%n               %2green%n
+    4          light red           %1%Fred%n          + blinking fg
+    5          %Rred%n                 %1red%n
+    6          %Mmagenta (purple)%n    %5magenta%n
+    7          orange              orange
+    8          %Yyellow%n              %Forange%n       + blinking fg
+    9          light green         %2%Fgreen%n       + blinking fg
+    10         %Ccyan%n                cyan         
+    11         light cyan          %6%Fcyan%n         + blinking fg
+    12         light blue          %4%Fblue%n         + blinking fg
+    13         light magenta       %5%Fmagenta%n      + blinking fg
+    14         gray                %Fblack%n        + blinking fg 
+    15         light gray          light gray
+ 
+These colors may differ depending on your terminal. In particular
+the meaning for background may be the same as for the foreground
+(bright colors, no blinking), and orange often looks like brown or
+dark yellow.
+How to use these colors ('#' means a number as MIRC color code):
+ 
+<Ctrl>-b        set bold
+<Ctrl>-c#[,#]   set foreground and optionally background color
+<Ctrl>-o        reset all formats to plain text
+<Ctrl>-v        set inverted color mode
+<Ctrl>-_        set underline
+<Ctrl>-7        same as <Ctrl>-_
+ 
+To reset a mode set it again, f.e.
+  <Ctrl-C>3<Ctrl-V>FOO<Ctrl-V>BAR
+creates black on green FOO followed by a green on black BAR: %G%8FOO%8BAR%n
+SCRIPTHELP_EOF
+);
 }
 
 Irssi::command_bind('colorhelp1', 'cmd_help1');
