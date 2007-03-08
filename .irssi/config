@@ -155,6 +155,7 @@ aliases = {
   wu = "window up";
   wd = "window down ";
   wl = "window last ";
+  split3 = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick";
 };
 
 statusbar = {
@@ -277,6 +278,7 @@ settings = {
     recode_out_default_charset = "utf-8";
   };
   "fe-common/core" = { print_active_channel = "no"; };
+  "fe-text" = { autostick_split_windows = "no"; };
 };
 keyboard = (
   { key = "^F"; id = "forward_character"; data = ""; },
@@ -305,6 +307,16 @@ hilights = (
     word = "yes";
   }
 );
+ignores = (
+  { mask = "*zzz*"; level = "NICKS"; },
+  { 
+    level = "ACTIONS";
+    pattern = "is (away|gone|back)";
+    regexp = "yes";
+  },
+  { mask = "*afk*"; level = "NICKS"; },
+  { mask = "*away*"; level = "NICKS"; }
+);
 windows = {
   3 = {
     items = (
@@ -317,7 +329,7 @@ windows = {
     );
     sticky = "yes";
   };
-  1 = { immortal = "yes"; name = "(status)"; level = "ALL"; };
+  6 = { name = "hilight"; };
   2 = {
     items = (
       {
@@ -327,9 +339,8 @@ windows = {
         tag = "WorkIRCnet";
       }
     );
-    sticky = "yes";
   };
-  6 = { name = "hilight"; sticky = "yes"; parent = "3"; };
+  1 = { immortal = "yes"; name = "(status)"; level = "ALL"; };
   5 = {
     items = (
       {
@@ -350,18 +361,19 @@ windows = {
       }
     );
   };
+  7 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#irssi";
+        tag = "IRCnet";
+      }
+    );
+  };
 };
 mainwindows = {
   3 = { first_line = "22"; lines = "22"; };
-  2 = { first_line = "1"; lines = "21"; };
+  2 = { first_line = "7"; lines = "15"; };
+  6 = { first_line = "1"; lines = "6"; };
 };
-ignores = (
-  { mask = "*zzz*"; level = "NICKS"; },
-  { 
-    level = "ACTIONS";
-    pattern = "is (away|gone|back)";
-    regexp = "yes";
-  },
-  { mask = "*afk*"; level = "NICKS"; },
-  { mask = "*away*"; level = "NICKS"; }
-);
