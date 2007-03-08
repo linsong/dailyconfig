@@ -115,7 +115,13 @@ sub cmd_color {
   $op = lc $op;
 
   if (!$op) {
-    Irssi::print ("No operation given");
+      irssi::print('%G>>%n nickcolor can give different color for different nick names');
+      irssi::print('%G>>%n available commands are: ');
+      irssi::print('%G>>%n   color list  -- list all nick names with color');
+      irssi::print('%G>>%n   color set nick_name color_number  -- set color for a nick name');
+      irssi::print('%G>>%n   color clear nick_name  -- clear color for a nick name ');
+      irssi::print('%G>>%n   color save  -- save modification ');
+      irssi::print('%G>>%n   color preview  -- preview all colors ');
   } elsif ($op eq "save") {
     save_colors;
   } elsif ($op eq "set") {
@@ -145,15 +151,6 @@ sub cmd_color {
     foreach my $i (2..14) {
       Irssi::print (chr (3) . "$i" . "Color #$i");
     }
-  }
-  else {
-      irssi::print('%G>>%n nickcolor can give different color for different nick names');
-      irssi::print('%G>>%n available commands are: ');
-      irssi::print('%G>>%n   color list  -- list all nick names with color');
-      irssi::print('%G>>%n   color set nick_name color_number  -- set color for a nick name');
-      irssi::print('%G>>%n   color clear nick_name  -- clear color for a nick name ');
-      irssi::print('%G>>%n   color save  -- save modification ');
-      irssi::print('%G>>%n   color preview  -- preview all colors ');
   }
 }
 
