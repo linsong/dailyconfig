@@ -1,0 +1,1 @@
+../mynotify.pl

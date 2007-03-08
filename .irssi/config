@@ -300,11 +300,12 @@ hilights = (
     word = "no";
   },
   {
-    text = "scrum";
+    text = "scrum[^:]";
     color = "%5";
     act_color = "%M";
     nick = "no";
     word = "yes";
+    regexp = "yes";
   }
 );
 ignores = (

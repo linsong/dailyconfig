@@ -27,6 +27,7 @@ sub cmd_help ($$$) {
 	Irssi::print('%G>>%n notify_show_privmsg : Notify about private messages.');
 	Irssi::print('%G>>%n notify_show_hilight : Notify when your name is hilighted.');
 	Irssi::print('%G>>$h notify_show_notify : Notify when someone on your away list joins or leaves.');  
+    Irssi::print('%G>>$h notify_notification_tool : Use which notification. growl(for Mac) or notifiy-send(for linux).');
 }
 
 $Notes = ["Script message", "Message notification"];
@@ -34,13 +35,26 @@ $AppName = "irssi";
 
 sub notify($$$$)
 {
-    my ($appname, $title, $nick, $data) = @_;
+    my ($appname, $identifier, $title, $data) = @_;
 
-    # for MacOSX
-    system("growlnotify  -n '$appname' -t '$title' -d '$nick' -m '$data'");
+    $title =~ s#'#''''#g;
+    $data =~ s#'#''''#g;
 
-    #for linux
-    #system("notify-send -i gtk-dialog-info -t 5000 '$title' '$nick said: $data'");
+    my $tool_type = Irssi::settings_get_str('notify_notification_tool');
+    if ($tool_type =~ m/grow/i)
+    {
+        # for MacOSX
+        system("netgrowl.py -q -n '$title' -m '$data'");
+    }
+    elsif ($tool_type =~ m/notify_send/i)
+    {
+        #for linux
+        system("notify-send -i gtk-dialog-info -t 5000 '$title' '$data'");
+    }
+    else
+    {
+        Irssi::print('Error: value of notify_notification_tool is not correct');
+    }
 }
 
 sub sig_message_private ($$$$) {
@@ -88,5 +102,6 @@ Irssi::signal_add_last('notifylist left', \&sig_notify_left);
 Irssi::settings_add_bool($IRSSI{'name'}, 'notify_show_privmsg', 1);
 Irssi::settings_add_bool($IRSSI{'name'}, 'notify_show_hilight', 1);
 Irssi::settings_add_bool($IRSSI{'name'}, 'notify_show_notify', 1);
+Irssi::settings_add_str( $IRSSI{'name'}, 'notify_notification_tool', 'growl');
 
 Irssi::print('%G>>%n '.$IRSSI{name}.' '.$VERSION.' loaded (/mynotify for help)');
