@@ -1,0 +1,3 @@
+#Triggers file version 1.0
+-privmsgs -regexp '[Tt][hH][Aa][Nn][Kk]|(3 *[qQ])' -command 'say $N: You are welcome ' 
+-publics -regexp '^[vV]incen.*:\s*([Tt][hH][Aa][Nn][Kk]|(3\s*[qQ]))' -command 'say $N: You are welcome!' 
