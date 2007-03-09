@@ -61,10 +61,11 @@ chatnets = {
   };
   BitlBeeIRCnet = {
     type = "IRC";
+    nick = "vincent_wang";
+    max_query_chans = "5";
     max_kicks = "4";
     max_msgs = "5";
     max_whois = "4";
-    max_query_chans = "5";
   };
   EFNet = { 
     type = "IRC";
@@ -277,8 +278,13 @@ settings = {
     recode_fallback = "utf-8";
     recode_out_default_charset = "utf-8";
   };
-  "fe-common/core" = { print_active_channel = "no"; };
+  "fe-common/core" = {
+    print_active_channel = "no";
+    beep_when_away = "no";
+    theme = "default";
+  };
   "fe-text" = { autostick_split_windows = "no"; };
+  "fe-common/irc" = { show_away_once = "no"; };
 };
 keyboard = (
   { key = "^F"; id = "forward_character"; data = ""; },
@@ -292,17 +298,16 @@ keyboard = (
 hilights = (
   { text = "ISSUE"; color = "%R"; nick = "no"; word = "yes"; },
   {
+    text = "scrum[^:]?";
+    color = "%5";
+    act_color = "%M";
+    nick = "no";
+    word = "yes";
+  },
+  {
     text = "vincent.*";
     color = "%R%4";
     act_color = "%R";
-    priority = "9";
-    nick = "no";
-    word = "no";
-  },
-  {
-    text = "scrum[^:]";
-    color = "%5";
-    act_color = "%M";
     nick = "no";
     word = "yes";
     regexp = "yes";
@@ -378,3 +383,4 @@ mainwindows = {
   2 = { first_line = "7"; lines = "15"; };
   6 = { first_line = "1"; lines = "6"; };
 };
+logs = { };
