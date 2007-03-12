@@ -164,8 +164,9 @@ if __name__ == '__main__':
         s = socket(AF_INET, SOCK_DGRAM)
         if not options.quiet:
             print "Assembling standard notification packet"
-        p = GrowlNotificationPacket(title=options.name,
-                                    description=options.message,
+        #TODO: guess the encoding of message and decode them 
+        p = GrowlNotificationPacket(title=options.name.decode('utf-8'),
+                                    description=options.message.decode('utf-8'),
                                     password=options.password)
         if not options.quiet:
             print "Sending standard notification packet"
