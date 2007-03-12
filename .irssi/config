@@ -150,13 +150,14 @@ aliases = {
   EXEMPTLIST = "mode $C +e";
   ATAG = "WINDOW SERVER";
   split2 = "window 3; window show 2; window size 20; window 3; window stick";
-  unstickall = "window goto 1; window stick off; window goto 2;window stick off; window goto 3; window stick off; window goto 4; window stick off; window goto 5; window stick off; window goto 6; window stick off";
+  unstickall = "window goto 1; window stick off; window goto 2;window stick off; window goto 3; window stick off; window goto 4; window stick off; window goto 5; window stick off; window goto 6; window stick off; window goto 7; window stick off; window goto 8; window stick off; window goto 9; window stick off; window goto 10; window stick off";
   single = "unstickall; window hide; window hide";
   fortune = "exec - -o fortune -s ";
   wu = "window up";
   wd = "window down ";
   wl = "window last ";
   split3 = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick";
+  mklayout = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick 1 on; window stick 3 on; window stick 7 on; window 2; window stick 2 on; window stick 4 on; window stick 5 on; window 6; window stick 6 on;";
 };
 
 statusbar = {
@@ -282,9 +283,13 @@ settings = {
     print_active_channel = "no";
     beep_when_away = "no";
     theme = "default";
+    window_history = "yes";
+    autocreate_split_windows = "no";
+    expand_escapes = "yes";
   };
   "fe-text" = { autostick_split_windows = "no"; };
   "fe-common/irc" = { show_away_once = "no"; };
+  "irc/core" = { alternate_nick = "vincent@china"; };
 };
 keyboard = (
   { key = "^F"; id = "forward_character"; data = ""; },
@@ -305,7 +310,7 @@ hilights = (
     word = "yes";
   },
   {
-    text = "vincent.*";
+    text = "vincent[^ ]*";
     color = "%R%4";
     act_color = "%R";
     nick = "no";
@@ -323,6 +328,7 @@ ignores = (
   { mask = "*afk*"; level = "NICKS"; },
   { mask = "*away*"; level = "NICKS"; }
 );
+logs = { };
 windows = {
   3 = {
     items = (
@@ -335,7 +341,6 @@ windows = {
     );
     sticky = "yes";
   };
-  6 = { name = "hilight"; };
   2 = {
     items = (
       {
@@ -345,17 +350,7 @@ windows = {
         tag = "WorkIRCnet";
       }
     );
-  };
-  1 = { immortal = "yes"; name = "(status)"; level = "ALL"; };
-  5 = {
-    items = (
-      {
-        type = "CHANNEL";
-        chat_type = "IRC";
-        name = "&bitlbee";
-        tag = "BitlBeeIRCnet";
-      }
-    );
+    sticky = "yes";
   };
   4 = {
     items = (
@@ -366,6 +361,28 @@ windows = {
         tag = "WorkIRCnet";
       }
     );
+    sticky = "yes";
+    parent = "2";
+  };
+  1 = {
+    immortal = "yes";
+    name = "(status)";
+    level = "ALL";
+    sticky = "yes";
+    parent = "3";
+  };
+  6 = { name = "hilight"; };
+  5 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "&bitlbee";
+        tag = "BitlBeeIRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "2";
   };
   7 = {
     items = (
@@ -376,6 +393,8 @@ windows = {
         tag = "IRCnet";
       }
     );
+    sticky = "yes";
+    parent = "3";
   };
 };
 mainwindows = {
@@ -383,4 +402,7 @@ mainwindows = {
   2 = { first_line = "7"; lines = "15"; };
   6 = { first_line = "1"; lines = "6"; };
 };
-logs = { };
+completions = {
+  sls = { value = "since last scrum:"; };
+  bns = { value = "before next scrum:"; };
+};
