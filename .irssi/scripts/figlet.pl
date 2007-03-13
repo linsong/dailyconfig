@@ -1,3 +1,6 @@
+# use it like 
+#      /figlet ^C4 hello ^C2 world 
+# will print hello in red and world in blue
 use IPC::Open3;
 use strict;
 use vars qw($VERSION %IRSSI);
