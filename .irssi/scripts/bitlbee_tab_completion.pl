@@ -1,196 +1,83 @@
 use strict;
-use vars qw(%topics);
 use vars qw($VERSION %IRSSI);
-use Irssi qw(signal_add_last signal_add_first settings_add_bool settings_add_str
-             settings_get_bool settings_get_str signal_stop);
-use Irssi::Irc;
 
-$VERSION = '1.00';
+$VERSION = '1.2';
 
 %IRSSI = (
-    authors     => 'Tijmen Ruizendaal & Wilmer van der Gaast',
-    contact     => 'timing@fokdat.nl timing@OFTC',
+    authors     => 'Tijmen "timing" Ruizendaal & Wilmer van der Gaast',
+    contact     => 'tijmen.ruizendaal@gmail.com',
     name        => 'BitlBee_tab_completion',
-    description => 'Intelligent Tab-completion for Bitlbee commands (for more info: http://www.bitlbee.org).',
+    description => 'Intelligent Tab-completion for Bitlbee commands.',
     license     => 'GPLv2',
-    url         => 'http://fokdat.nl/~tijmen/software/index.html',
-    changed     => '05-18-2004',
+    url         => 'http://the-timing.nl/stuff/irssi-bitlbee',
+    changed     => '2006-10-27',
 );
 
-my $debug = 0; ## change this into 1 if you want to see some output in your control panel, it's not much, so don't be scared.
-
-## Hardcoded defaults, most of these will be auto-guessed when the BitlBee server supports this.
-
 my $root_nick = 'root';
-my $bitlbee_channel = '#bitlbee';
-my $getting_completions = '0';
+my $bitlbee_channel = '&bitlbee';
+my $bitlbee_server_tag = 'localhost';
+my $get_completions = 0;
 
-my @commands = ('account','allow','block','blist','help','identify','info','nick','qlist','register','remove','rename','save','set');
-my @setlist = ('auto_connect','auto_reconnect','auto_reconnect_delay','away_devoice','buddy_sendbuffer','buddy_sendbuffer_delay','charset','debug','handle_unknown','html','ops','private','save_on_quit','typing_notice','to_char');
-my @helplist = ('away','commands','groupchats','groupchats2','groupchats3','index','quickstart','quickstart2','quickstart3','quickstart4','quickstart5','smileys');
+my @commands;
 
-my @accountlist = ('add','del','list','on','off');
-my @blist = ('all','away','offline','online');
-my @boolean = ('true', 'false');
-my @handle_unknown = ('root', 'add', 'add_private', 'add_channel', 'ignore');
-my @ops = ('both', 'root', 'user', 'none');
-my @html = ('strip', 'nostrip');
+Irssi::signal_add_last 'channel sync' => sub {
+        my( $channel ) = @_;
+        if( $channel->{topic} eq "Welcome to the control channel. Type \x02help\x02 for help information." ){
+                $bitlbee_server_tag = $channel->{server}->{tag};
+                $bitlbee_channel = $channel->{name};
+        }
+};
 
-##pfft, done with that...
-
-my $i;
-
-for $i ( @commands )
-{
-	@helplist = ( @helplist, $i );
+if (get_channel()) {
+	$get_completions = 1;
+        Irssi::server_find_tag($bitlbee_server_tag)->send_raw( 'COMPLETIONS' );
 }
 
-signal_add_last 'channel sync' => sub {
-	my( $channel ) = @_;
-	my( $server ) = $channel->{server};
-	
-	if( $channel->{topic} eq "Welcome to the control channel. Type \x02help\x02 for help information." )
-	{
-		$bitlbee_channel = $channel->{name};
-		$getting_completions = 1;
-		$server->send_raw( 'COMPLETIONS' );
-		if($debug == 1){
-		print( 'Detected a #bitlbee: ' . $channel->{name} );
-		}
-	}
-};
+sub get_channel {
+        my @channels = Irssi::channels();
+        foreach my $channel(@channels) {
+                if ($channel->{topic} eq "Welcome to the control channel. Type \x02help\x02 for help information.") {
+                        $bitlbee_channel = $channel->{name};
+                        $bitlbee_server_tag = $channel->{server}->{tag};
+			return 1;
+                }
+        }
+	return 0;
+}
 
-signal_add_last 'message irc notice' => sub {
+sub irc_notice {
+	return unless $get_completions;
 	my( $server, $msg, $from, $address, $target ) = @_;
 	
-	## Ignore the notice if we have the completions already.
-	return unless $getting_completions;
-	
-	if( $msg =~ s/^COMPLETIONS // )
-	{
+	if( $msg =~ s/^COMPLETIONS // )	{
 		$root_nick = $from;
-		if( $msg eq 'OK' )
-		{
-			## We're sure that the server supports the COMPLETIONS
-			## command now, so let's flush our hardcoded stuff.
-			@commands = @setlist = @helplist = ();
-			if($debug == 1)
-			{
-			print( 'COMPLETIONS fetching supported!' );
-			}
+		if( $msg eq 'OK' ) {
+			@commands = ();
 		}
-		elsif( $msg eq 'END' )
-		{
-			## Ignore further notices.
-			$getting_completions = 0;
-			if($debug == 1)
-			{
-			print( 'COMPLETIONS fetching finished!' );
-			}
+		elsif( $msg eq 'END' ) {
+			$get_completions = 0;
 		}
-		elsif( $msg =~ s/^help // )
-		{
-			@helplist = ( @helplist, $msg );
-		}
-		elsif( $msg =~ s/^set // )
-		{
-			@setlist = ( @setlist, $msg );
-		}
-		else
-		{
-			@commands = ( @commands, $msg );
-		}
+		@commands = ( @commands, $msg );
 		
-		signal_stop();
+		Irssi::signal_stop();
 	}
-};
+}
 
-signal_add_last 'complete word' => sub {
+sub complete_word {
 	my ($complist, $window, $word, $linestart, $want_space) = @_;
 	my $channel = $window->get_active_name();
 	if ($channel eq $bitlbee_channel or $channel eq $root_nick or $linestart =~ /^\/(msg|query) \Q$root_nick\E */i){
 		$linestart =~ s/^\/(msg|query) \Q$root_nick\E *//i;
 		$linestart =~ s/^\Q$root_nick\E[:,] *//i;
-		if ($linestart eq ""){
-			foreach my $command(@commands)
-			{	
-				if ($command =~ /^$word/i)
-			    	{
-					push @$complist, $command;
-			    	}
-			}
-		}elsif ($linestart eq "set" or $linestart eq "help set")
-		{
-			foreach my $set(@setlist)
-			{
-				if ($set =~ /^$word/i)
-			    	{
-					push @$complist, $set;
-	    			}
-			}
-		}elsif ($linestart eq "help")
-		{
-			foreach my $help(@helplist)
-			{
-				if ($help =~ /^$word/i)
-			    	{
-					push @$complist, $help;
-	    			}
-			}
-		}elsif ($linestart eq "blist")
-		{
-			foreach my $list(@blist)
-			{
-				if ($list =~ /^$word/i)
-			    	{
-					push @$complist, $list;
-	    			}
-			}
-		}elsif ($linestart eq "account" || $linestart eq "help account")
-		{
-			foreach my $account(@accountlist)
-			{
-				if ($account =~ /^$word/i)
-				{
-					push @$complist, $account;
-				}
-			}
-		}elsif($linestart eq 'set away_devoice' || $linestart eq 'set auto_connect' || $linestart eq 'set auto_reconnect' || $linestart eq 'set buddy_sendbuffer' || $linestart eq 'set debug' || $linestart eq 'set private' || $linestart eq 'set save_on_quit' || $linestart eq 'set typing_notice')
-		{
-			foreach my $bool(@boolean)
-			{
-				if ($bool =~ /^$word/i)
-				{
-					push @$complist, $bool;
-				}
-			}
-		}elsif($linestart eq 'set handle_unknown')
-		{
-			foreach my $handle(@handle_unknown)
-			{
-				if ($handle =~ /^$word/i)
-				{
-					push @$complist, $handle;
-				}
-			}
-		}elsif($linestart eq 'set ops')
-		{
-			foreach my $op(@ops)
-			{
-				if ($op =~ /^$word/i)
-                                {
-                                        push @$complist, $op;
-                                }
-			}
-		}elsif($linestart eq 'set html')	
-		{
-			 foreach my $strip(@html)
-                         {
-				if ($strip =~ /^$word/i)
-				{
-					push @$complist, $strip;
-				}
-			}
+		foreach my $command(@commands) {	
+			if ($command =~ /^$word/i) {
+				push @$complist, $command;
+		    	}
 		}
 	}
-};
+}
+
+
+Irssi::signal_add_first('complete word', 'complete_word');
+Irssi::signal_add_first('message irc notice', 'irc_notice');
+

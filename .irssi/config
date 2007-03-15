@@ -8,7 +8,7 @@ servers = (
     autoconnect = "yes";
   },
   {
-    address = "im.bitlbee.org";
+    address = "localhost";
     chatnet = "BitlBeeIRCnet";
     port = "6667";
     use_ssl = "no";

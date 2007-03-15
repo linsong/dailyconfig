@@ -62,3 +62,8 @@ fi
 #if [ -z "$(pgrep -u $LOGNAME fetchmail)" ]; then 
 #    fetchmail --nodetach >/dev/null 
 #fi
+
+if [ -f /opt/local/sbin/bitlbee ] ; then 
+    /opt/local/sbin/bitlbee -c $HOME/.bitlbee/bitlbee.conf 
+fi
+
