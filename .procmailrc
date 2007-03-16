@@ -407,53 +407,83 @@ SENDMAIL=/usr/sbin/sendmail
 #IN.qizi
 
 # maillist I subscribed
+# following config comes from http://linuxbrit.co.uk/procmail/
+#
+#:0:
+#* ^X-Mailing-List:[   ]<\/[^ >`']+
+#maillists/`echo $MATCH | sed -e 's/[\/]/_/g' | tr A-Z a-z`
+
+#:0:
+#* ^X-Mailing-List:[   ]\/[^ `']+
+#maillists/`echo $MATCH | sed -e 's/[\/]/_/g' | tr A-Z a-z`
+
+#:0:
+#* ^Sender:[   ]owner-\/[^ `']+
+#maillists/`echo $MATCH | sed -e 's/[\/]/_/g' | tr A-Z a-z`
+
+#:0:   
+#* ^X-BeenThere:[  ]\/[^ `']+
+#maillists/`echo $MATCH | sed -e 's/[\/]/_/g' | tr A-Z a-z`
+
+#:0:
+#* ^Delivered-To:[   ]mailing list \/[^ `']+
+#maillists/`echo $MATCH | sed -e 's/[\/]/_/g' | tr A-Z a-z`
+
+#:0:
+#* ^X-Loop:[   ]\/[^ `']+
+#maillists/`echo $MATCH | sed -e 's/[\/]/_/g' | tr A-Z a-z`
+
 :0:
 * ^TOvim@vim.org
-maillists/vim
+maillists/vim@vim.org
 
 :0:
 * ^TOvim-dev@vim.org
-maillists/vim
+maillists/vim-dev@vim.org
 
 :0:
 * ^TOvim-announce@vim.org
-maillists/vim
+maillists/vim-annouce@vim.org
 
 :0:
 * ^TOipython-user@scipy.net
-maillists/ipython
+maillists/ipython-user@scipy.net
 
 :0:
 * ^TOIPython-user@scipy.org
-maillists/ipython
+maillists/ipython-user@scipy.org
 
 :0:
 * ^TOpython-chinese@lists.python.cn
-maillists/pythonCN
+maillists/python-chinese@lists.python.cn
 
 :0:
 * ^TO.*@python.org
-maillists/python
+maillists/python-list@python.org
+
+:0:
+* ^TOcomp.lang.python@googlegroups.com
+maillists/comp.lang.python@googlegroups.com 
 
 :0:
 * ^TOubuntu-users@lists.ubuntu.com
-maillists/ubuntu
+maillists/ubuntu-users@lists.ubuntu.com
 
 :0:
 * ^TO.*cygwin@cygwin.com
-maillists/cygwin
+maillists/cygwin@cygwin.com
 
 :0:
 * ^TOmutt-users@mutt.org
-maillists/mutt
+maillists/mutt-users@mutt.org
 
 :0:
 * ^TOmacports-users@lists.macosforge.org
-maillists/macports
+maillists/macports-users@lists.macosforge.org
 
 :0:
-* ^TO.*@openlaszlo.org
-maillists/openlaszlo
+* ^TOlaszlo-dev@openlaszlo.org
+maillists/laszlo-dev@openlaszlo.org
 
 :0:
 * ^TOlinsong.qizi@gmail.com

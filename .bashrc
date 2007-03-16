@@ -347,7 +347,8 @@ __END
      fi
  }
 
- growl() { echo -e $'\e]9;'${1}'\007' ; return  ; }
+ #growl() { echo -e $'\e]9;'${1}'\007' ; return  ; }
+ growl() { netgrowl.py -q -n "ShellNotification" -m "$*"; }
 
  # }}}
 

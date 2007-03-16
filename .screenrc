@@ -107,7 +107,7 @@ ignorecase on
 # Example of automatically running some programs in windows on screen startup.
 #
 screen -t music 0 
-screen -t mail 1 /bin/bash -c 'if [ $(uanme) != "Darwin" ]; then mutt; fi'
+screen -t mail 1 /bin/bash -c 'if [ $(uname) != "Darwin" ]; then mutt; fi'
 screen -t work 2 
 screen -t work2 3
 screen -t misc 4

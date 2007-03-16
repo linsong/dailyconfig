@@ -3,17 +3,25 @@
 # List of mailing lists I'm subscribed to.
 #
 
-subscribe vim@vim.org
-subscribe vim-dev@vim.org
-subscribe vim-announce@vim.org
-subscribe mutt-users@mutt.org
-subscribe ipython-user@scipy.net
-subscribe python-chinese@lists.python.cn
-subscribe tutor@python.org
-subscribe python-list@python.org
-subscribe ubuntu-users@lists.ubuntu.com
-subscribe cygwin@cygwin.com
-subscribe comp.lang.python@googlegroups.com
-subscribe ELinks-users@linuxfromscratch.org
-subscribe macports-users@lists.macosforge.org
-subscribe laszlo-dev@openlaszlo.org
+unsubscribe *
+subscribe `cd $HOME/Mail/maillists && echo *`
+#subscribe vim@vim.org
+#subscribe vim-dev@vim.org
+#subscribe vim-announce@vim.org
+#subscribe mutt-users@mutt.org
+#subscribe ipython-user@scipy.net
+#subscribe python-chinese@lists.python.cn
+#subscribe tutor@python.org
+#subscribe python-list@python.org
+#subscribe ubuntu-users@lists.ubuntu.com
+#subscribe cygwin@cygwin.com
+#subscribe comp.lang.python@googlegroups.com
+#subscribe ELinks-users@linuxfromscratch.org
+#subscribe macports-users@lists.macosforge.org
+#subscribe laszlo-dev@openlaszlo.org
+
+
+# to create all the files for maillists:
+#    $ for ml in vim@vim.org vim-dev@vim.org vim-announce@vim.org mutt-users@mutt.org ipython-user@scipy.net python-chinese@lists.python.cn tutor@python.org python-list@python.org ubuntu-users@lists.ubuntu.com cygwin@cygwin.com comp.lang.python@googlegroups.com ELinks-users@linuxfromscratch.org macports-users@lists.macosforge.org laszlo-dev@openlaszlo.org ; do if [ ! -e $ml ]; then touch $ml; fi done 
+
+

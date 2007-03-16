@@ -301,7 +301,6 @@ keyboard = (
   { key = "^X"; id = "active_window"; data = ""; }
 );
 hilights = (
-  { text = "ISSUE"; color = "%R"; nick = "no"; word = "yes"; },
   {
     text = "scrum[^:]?";
     color = "%5";
