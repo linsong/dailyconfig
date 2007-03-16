@@ -132,7 +132,8 @@ def unit_test():
     s.close()
     print "Done."
 
-def send_notify_by_growl(name, message, password, host='localhost', port=GROWL_UDP_PORT, quiet=True):
+def send_notify_by_growl(name, message, password, host='localhost',
+                         port=GROWL_UDP_PORT, quiet=True, sticky=False):
     addr = (host, port)
     s = socket(AF_INET, SOCK_DGRAM)
     if not quiet:
@@ -140,7 +141,8 @@ def send_notify_by_growl(name, message, password, host='localhost', port=GROWL_U
     #TODO: guess the encoding of message and decode them 
     p = GrowlNotificationPacket(title=name.decode('utf-8'),
                                 description=message.decode('utf-8'),
-                                password=password)
+                                password=password,
+                               sticky=sticky)
     if not quiet:
         print "Sending standard notification packet"
     s.sendto(p.payload(), addr)
@@ -186,7 +188,8 @@ if __name__ == '__main__':
         unit_test()
     else:
         send_notify_by_growl(options.name, options.message, options.password,
-                             options.host, options.port, options.quiet)
+                             options.host, options.port, options.quiet,
+                             options.sticky)
         play_sound_effect(options.sound, options.host)
 
 

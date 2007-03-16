@@ -23,12 +23,14 @@ def check_mail(mailbox_file):
     elif readSinceLastWrite:
         has_new_mail = False
     elif mailboxsize != new_mail_infos[mailbox_file]["mailboxsize"]:
+        print "True"
         has_new_mail = True
     else:
         # we arrive here because: 
         # since we found some new mails in mailbox, 
         # user have not read the new mail, it is normal,
         # don't need to send notification again 
+        print "Ping"
         pass
 
     new_mail_infos[mailbox_file]["mailboxsize"] = mailboxsize
@@ -37,8 +39,11 @@ def check_mail(mailbox_file):
 if __name__ == '__main__':
     parser = optparse.OptionParser(usage="%prog [OPTION] mailfile1 [mailfile2 ... mailfileN]",
                                    version="%prog1.0")
-    parser.add_option('-u', '--update', dest='update_interval', default=60.0,
-                      help='how often(in second) to check new mail, default is 60 secs')
+    parser.add_option('-u', '--update', dest='update_interval', default=5.0,
+                      help='how often(in second) to check new mail, default is 5 secs')
+    parser.add_option('-H', '--host', dest='host', default='localhost',
+                       help='Specify a hostname to which to send a remote \
+                       notification.')
 
     options, args = parser.parse_args()
 
@@ -55,6 +60,9 @@ if __name__ == '__main__':
             if check_mail(mf):
                 print "Found new mails in %s. " % mf
                 netgrowl.send_notify_by_growl(name="Mail",
-                    message="You got a new mail in %s." % mf)
+                    message="You got a new mail in %s." % mf,
+                                             sticky=True,
+                                             host=options.host)
+                #netgrowl.play_sound_effect(True, options.host)
         time.sleep(float(options.update_interval))
 
