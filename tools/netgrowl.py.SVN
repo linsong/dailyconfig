@@ -176,9 +176,11 @@ if __name__ == '__main__':
         s.sendto(p.payload(), addr)
         s.close()
         
+        # there are more sound effect files in /System/Library/Sounds 
         #TODO: make sound effect file is configurable
         if options.sound:
-            cmd = 'esdplay -s ' + options.host + ' ~/sound/ping.aiff'
+            # to use esdplay, you need to install esound or esound-clients package
+            cmd = 'esdplay -s ' + options.host + ' ~/sound/glass.aiff'
             os.system(cmd)
 
 
