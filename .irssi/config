@@ -309,7 +309,7 @@ hilights = (
     word = "yes";
   },
   {
-    text = "vincent[^ ]*";
+    text = "vincent[^ @]?";
     color = "%R%4";
     act_color = "%R";
     nick = "no";

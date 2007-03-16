@@ -4,6 +4,7 @@ import os
 import time
 import stat
 import optparse
+import netgrowl
 
 new_mail_infos = {}
 
@@ -24,8 +25,11 @@ def check_mail(mailbox_file):
     elif mailboxsize != new_mail_infos[mailbox_file]["mailboxsize"]:
         has_new_mail = True
     else:
-        # we can not arrive here 
-        raise Exception("We should not arrive here!")
+        # we arrive here because: 
+        # since we found some new mails in mailbox, 
+        # user have not read the new mail, it is normal,
+        # don't need to send notification again 
+        pass
 
     new_mail_infos[mailbox_file]["mailboxsize"] = mailboxsize
     return has_new_mail
@@ -33,10 +37,8 @@ def check_mail(mailbox_file):
 if __name__ == '__main__':
     parser = optparse.OptionParser(usage="%prog [OPTION] mailfile1 [mailfile2 ... mailfileN]",
                                    version="%prog1.0")
-    parser.add_option('-u', '--update', dest='update_interval', default=60,
+    parser.add_option('-u', '--update', dest='update_interval', default=60.0,
                       help='how often(in second) to check new mail, default is 60 secs')
-    parser.add_option('-f', '--resultfile', dest='result_file',
-                      help='write result into this file')
 
     options, args = parser.parse_args()
 
@@ -48,18 +50,11 @@ if __name__ == '__main__':
         new_mail_infos[mf] = {'mailboxsize':0,
                                'new_mails':[]}
 
-    if not options.result_file:
-        result_file = os.path.join(os.environ["HOME"], "new_mail_result")
-    else:
-        result_file = options.result_file
-
-    update_interval = options.update_interval
     while True:
-        result = file(result_file, "w")
         for mf in new_mail_infos:
             if check_mail(mf):
                 print "Found new mails in %s. " % mf
-                result.write("New mails in %s." % mf)
-        result.close()
-        time.sleep(update_interval)
+                netgrowl.send_notify_by_growl(name="Mail",
+                    message="You got a new mail in %s." % mf)
+        time.sleep(float(options.update_interval))
 
