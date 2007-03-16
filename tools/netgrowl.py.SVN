@@ -132,6 +132,28 @@ def unit_test():
     s.close()
     print "Done."
 
+def send_notify_by_growl(name, message, password, host='localhost', port=GROWL_UDP_PORT, quiet=True):
+    addr = (host, port)
+    s = socket(AF_INET, SOCK_DGRAM)
+    if not quiet:
+        print "Assembling standard notification packet"
+    #TODO: guess the encoding of message and decode them 
+    p = GrowlNotificationPacket(title=name.decode('utf-8'),
+                                description=message.decode('utf-8'),
+                                password=password)
+    if not quiet:
+        print "Sending standard notification packet"
+    s.sendto(p.payload(), addr)
+    s.close()
+
+def play_sound_effect(sound, host='localhost'):
+    # there are more sound effect files in /System/Library/Sounds 
+    #TODO: make sound effect file is configurable
+    if sound:
+        # to use esdplay, you need to install esound or esound-clients package
+        cmd = 'esdplay -s ' + host + ' ~/sound/glass.aiff'
+        os.system(cmd)
+
 if __name__ == '__main__':
     parser = optparse.OptionParser(usage="%prog [OPTION]...",
                                    version="%prog1.0")
@@ -163,24 +185,8 @@ if __name__ == '__main__':
     if not args and not options:
         unit_test()
     else:
-        addr = (options.host, options.port)
-        s = socket(AF_INET, SOCK_DGRAM)
-        if not options.quiet:
-            print "Assembling standard notification packet"
-        #TODO: guess the encoding of message and decode them 
-        p = GrowlNotificationPacket(title=options.name.decode('utf-8'),
-                                    description=options.message.decode('utf-8'),
-                                    password=options.password)
-        if not options.quiet:
-            print "Sending standard notification packet"
-        s.sendto(p.payload(), addr)
-        s.close()
-        
-        # there are more sound effect files in /System/Library/Sounds 
-        #TODO: make sound effect file is configurable
-        if options.sound:
-            # to use esdplay, you need to install esound or esound-clients package
-            cmd = 'esdplay -s ' + options.host + ' ~/sound/glass.aiff'
-            os.system(cmd)
+        send_notify_by_growl(options.name, options.message, options.password,
+                             options.host, options.port, options.quiet)
+        play_sound_effect(options.sound, options.host)
 
 
