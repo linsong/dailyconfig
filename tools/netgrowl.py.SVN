@@ -7,6 +7,7 @@ __author__ = "Rui Carmo (http://the.taoofmac.com)"
 __copyright__ = "(C) 2004 Rui Carmo. Code under BSD License."
 __contributors__ = "Ingmar J Stein (Growl Team)"
 
+import os
 import sys
 import optparse
 import struct
@@ -150,6 +151,8 @@ if __name__ == '__main__':
                       help = 'Password used for remote notifications.')
     parser.add_option('', '--port',  dest='port', default=GROWL_UDP_PORT,
                       help = 'Port number for UDP notifications.')
+    parser.add_option('-S', '--sound', dest='sound', default=False,
+                      action='store_true', help="play sound effect file")
     parser.add_option('-q', '--quiet', dest='quiet', default=False,
                       action="store_true", help="don't print debug info")
 
@@ -172,4 +175,10 @@ if __name__ == '__main__':
             print "Sending standard notification packet"
         s.sendto(p.payload(), addr)
         s.close()
+        
+        #TODO: make sound effect file is configurable
+        if options.sound:
+            cmd = 'esdplay -s ' + options.host + ' ~/sound/ping.aiff'
+            os.system(cmd)
+
 
