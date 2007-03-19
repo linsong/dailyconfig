@@ -1,0 +1,68 @@
+# Name of Server List configuration file
+config_serverlist=serverlist
+
+# Directory where to store downloaded files
+dir_library=/home/vincent/download/mp3/POD
+
+# Directory to store logs in
+# dir_log=/home/vincent/POD/LOG
+
+# Set logging files
+log_fail=errors
+log_comp=done
+
+# Build playlists (comment out or set to null value to disable)
+playlist_namebase=New-
+
+# Date format for new playlist names
+date_format=+%m-%d-%Y
+
+# Wget base options
+# Commonly used options:
+#   -c            Continued interupted downloads
+#   -nH           No host directories (overrides .wgetrc defaults if necessary)
+#   --proxy=off   To disable proxy set by environmental variable http_proxy/
+#wget_baseopts=-c --proxy=off
+wget_baseopts=-c -nH
+
+# Most Recent
+# 0  == download all new items.
+# 1+ == download only the <count> most recent
+most_recent=0
+
+# Force
+# 0 == Only download new material.
+# 1 == Force download all items even those you've downloaded before. 
+force=0
+
+# Autocleanup. 
+# 0 == disabled
+# 1 == delete any old content
+cleanup=0
+
+# Number of days to keep files.   Cleanup will remove anything 
+# older than this.
+cleanup_days=7
+
+# Filename Cleanup: For FAT32 filename compatability (Feature Request #1378956)
+# Tested with the following characters: !@#$%^&*()_-+=||{[}]:;"'<,>.?/
+# filename_badchars=!#$^&=+{}[]:;"'<>?|\
+
+# Filename Replace Character: Character to use to replace any/all 
+# bad characters found.
+filename_replacechar=_
+
+# Filename Cleanup 2:  Some RSS Feeds (like the BBC World News Bulletin) download files with names like filename.mp3?1234567.
+# Enable this mode to fix the format to filename1234567.mp3.
+# 0 == disabled
+# 1 == enabled (default)
+filename_formatfix=1
+
+# Stop downloading if available space on the partition drops below value (in KB)
+# default:  614400 (600MB)
+min_space=614400
+
+# ASX Playlists for Windows Media Player
+# 0 == do not create
+# 1 == create
+asx_playlist=0
