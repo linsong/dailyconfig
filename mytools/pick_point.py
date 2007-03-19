@@ -24,6 +24,10 @@ if __name__=="__main__":
         result = link_match_pat.search(source)
         if result and result.groups():
             next_page_url = result.groups()[0]
+        else:
+            next_page_url = None
+            break
+
         f = file(TMP_HTML_FILE, "w")
         f.write(source)
         f.close()
@@ -40,6 +44,7 @@ if __name__=="__main__":
             if start:
                 print line
             line = txt.readline()
+    print "Done. Exiting ... "
 
 
 
