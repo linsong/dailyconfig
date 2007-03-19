@@ -219,9 +219,9 @@ statusbar = {
         window = { };
         window_empty = { };
         lag = { priority = "-1"; };
-        act = { priority = "10"; };
         more = { priority = "-1"; alignment = "right"; };
         barend = { priority = "100"; alignment = "right"; };
+        chanact = { };
       };
     };
 
@@ -290,6 +290,11 @@ settings = {
   "fe-text" = { autostick_split_windows = "no"; };
   "fe-common/irc" = { show_away_once = "no"; };
   "irc/core" = { alternate_nick = "vincent@china"; };
+  "perl/core/scripts" = {
+    chanact_show_all = "yes";
+    chanact_separator = " ";
+    chanact_show_alias = "yes";
+  };
 };
 keyboard = (
   { key = "^F"; id = "forward_character"; data = ""; },
@@ -298,7 +303,14 @@ keyboard = (
   { key = "window-^C"; id = "command"; data = "WINDOW NEW SPLIT"; },
   { key = "window-^K"; id = "command"; data = "WINDOW UP"; },
   { key = "window-^J"; id = "command"; data = "WINDOW DOWN"; },
-  { key = "^X"; id = "active_window"; data = ""; }
+  { key = "^X"; id = "active_window"; data = ""; },
+  { key = "meta-d"; id = "change_window"; data = "2"; },
+  { key = "meta-l"; id = "change_window"; data = "3"; },
+  { key = "meta-b"; id = "change_window"; data = "5"; },
+  { key = "meta-e"; id = "change_window"; data = "4"; },
+  { key = "meta-i"; id = "change_window"; data = "7"; },
+  { key = "meta-h"; id = "change_window"; data = "6"; },
+  { key = "meta-s"; id = "change_window"; data = "1"; }
 );
 hilights = (
   {
