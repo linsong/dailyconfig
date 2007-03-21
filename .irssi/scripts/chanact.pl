@@ -4,14 +4,14 @@ use Irssi::TextUI;
 
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "0.5.5";
+$VERSION = "0.5.7";
 %IRSSI = (
     authors     => 'BC-bd, Veli',
     contact     => 'bd@bc-bd.org, veli@piipiip.net',
     name        => 'chanact',
     description => 'Adds new powerful and customizable [Act: ...] item (chanelnames,modes,alias). Lets you give alias characters to windows so that you can select those with meta-<char>',
     license     => 'GNU GPLv2 or later',
-    url         => 'http://bc-bd.org/software.php3#irssi'
+    url         => 'https://bc-bd.org/svn/repos/irssi/trunk/'
 );
 
 # Adds new powerful and customizable [Act: ...] item (chanelnames,modes,alias).
@@ -111,7 +111,7 @@ $VERSION = "0.5.5";
 #		* ON  : show the aliase instead of the refnum
 #		* OFF : shot the refnum
 #
-# /set chanact_separator <str>
+# /set chanact_header <str>
 # 	* <str> : Characters to be displayed at the start of the item.
 # 	          Defaults to: "Act: "
 #
@@ -129,8 +129,19 @@ $VERSION = "0.5.5";
 # /set chanact_renumber_start <int>
 # 		* <int> : Move the window to first available slot after this
 # 		          num when "chanact_autorenumber" is ON.
-# 		
-# 
+#
+# /set chanact_remove_hash <ON|OFF>
+# 		* ON  : Remove &#+!= from channel names
+# 		* OFF : Don't touch channel names
+#
+# /set chanact_remove_prefix <string>
+# 		* <string> : Regular expression used to remove from the
+# 		             beginning of the channel name.
+# 		* example  :
+# 		    To shorten a lot of debian channels:
+# 		    
+# 			/set chanact_remove_prefix deb(ian.(devel-)?)?
+#
 #########
 # HINTS
 #########
@@ -176,6 +187,8 @@ sub remake() {
 	my ($afternumber,$finish,$hilight,$mode,$number,$display);
 	my $separator = Irssi::settings_get_str('chanact_separator'); 
 	my $abbrev = Irssi::settings_get_int('chanact_abbreviate_names');
+	my $remove_prefix = Irssi::settings_get_str('chanact_remove_prefix');
+	my $remove_hash = Irssi::settings_get_bool('chanact_remove_hash');
 	
 	$actString = "";
 	foreach my $win (sort { ($a->{refnum}) <=> ($b->{refnum})} Irssi::windows) {
@@ -231,12 +244,18 @@ sub remake() {
 			}
 		}
 
+		if ($remove_prefix) {
+			$name =~ s/^([&#+!=]?)$remove_prefix/$1/;
+		}
 		if ($abbrev) {
 			if ($name =~ /^[&#+!=]/) {
-				$name = substr($name, 0, $abbrev + 1);
+				$name = substr($name, 1, $abbrev + 1);
 			} else {
 				$name = substr($name, 0, $abbrev);
 			}
+		}
+		if ($remove_hash) {
+			$name =~ s/^[&#+!=]//;
 		}
 
 		if (Irssi::settings_get_bool('chanact_show_alias') == 1 && 
@@ -379,6 +398,8 @@ Irssi::settings_add_int('chanact', 'chanact_abbreviate_names', 0);
 Irssi::settings_add_bool('chanact', 'chanact_show_alias', 1);
 Irssi::settings_add_str('chanact', 'chanact_separator', " ");
 Irssi::settings_add_bool('chanact', 'chanact_autorenumber', 0);
+Irssi::settings_add_bool('chanact', 'chanact_remove_hash', 0);
+Irssi::settings_add_str('chanact', 'chanact_remove_prefix', "");
 Irssi::settings_add_int('chanact', 'chanact_renumber_start', 50);
 Irssi::settings_add_str('chanact', 'chanact_header', "Act: ");
 Irssi::settings_add_bool('chanact', 'chanact_chop_status', 1);
@@ -402,6 +423,11 @@ Irssi::signal_add_last('window refnum changed', 'refnum_changed');
 ###
 #
 # Changelog
+# 0.5.7
+# - integrated remove patch by Christoph Berg <myon@debian.org>
+#
+# 0.5.6
+# - fixed a bug (#1) reported by Wouter Coekaert
 # 
 # 0.5.5
 # - some speedups from David Leadbeater <dgl@dgl.cx>
