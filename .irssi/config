@@ -278,6 +278,7 @@ settings = {
     nick = "vincent";
     recode_fallback = "utf-8";
     recode_out_default_charset = "utf-8";
+    timestamp_format = "%H:%M";
   };
   "fe-common/core" = {
     print_active_channel = "no";
@@ -291,9 +292,12 @@ settings = {
   "fe-common/irc" = { show_away_once = "no"; };
   "irc/core" = { alternate_nick = "vincent@china"; };
   "perl/core/scripts" = {
-    chanact_show_all = "yes";
+    chanact_show_all = "no";
     chanact_separator = " ";
     chanact_show_alias = "yes";
+    mail_show_message = "yes";
+    mail_mailboxes = "2=~/sshfs/Mail/exoweb/work,";
+    chanact_abbreviate_names = "0";
   };
 };
 keyboard = (
@@ -382,7 +386,9 @@ windows = {
     sticky = "yes";
     parent = "3";
   };
-  6 = { name = "hilight"; };
+  6 = { 
+    name = "hilight"; 
+  };
   5 = {
     items = (
       {

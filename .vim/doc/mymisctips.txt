@@ -26,6 +26,9 @@ Last change: 10/12/2004 Tue
           netcat                            |my-network-netcat|
       DataBase                              |database|
           sql                               |database-sql|
+      Mac                                   |Mac|
+          mplayer                           |Mac-mplayer|
+
 
 *tips*
 ===============================================================================
@@ -889,6 +892,15 @@ in ubuntu and Debian, install mplayer package first, then we can install w32code
 tar-ball or the "essential*" tar-ball. all these three package(w32codecs, "all-codecs*", "essential*") are almost the same, except "all-codecs*" includes all codecs; w32codecs includes most of the codecs; "essential*" includes the most essential codecs; 
 
 mplayer is very powerful, it can not only play movies, but also convert media between different codecs; 
+
+===============================================================================
+
+*Mac* 
+
+*Mac-mplayer* 
+===============================================================================
+# to play file from network, use following command to make it more smooth:
+  mplayer -vo macosx -cache 8192 FILE
 
 -------------------------------------------------------------------------------
 NOTE: You need the noreadonly and modifiable keywords in the vim modeline above. help files are by default regarded as readonly and nomodifiable files by vim.
