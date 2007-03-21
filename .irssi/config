@@ -386,9 +386,7 @@ windows = {
     sticky = "yes";
     parent = "3";
   };
-  6 = { 
-    name = "hilight"; 
-  };
+  6 = { name = "hilight"; };
   5 = {
     items = (
       {
