@@ -1,5 +1,5 @@
 #Triggers file version 1.0
 -privmsgs -regexp '[Tt][hH][Aa][Nn][Kk]|(3\s*[qQ])' -command 'say $N: You are welcome ' 
--publics -nocase -regexp '^vincen.*:.*(thank|(3\s*q)|xie\s*xie|duo\s*xie|xie\s*le|gan\s*xie)\s*.?\s*$' -command 'say $N: You are welcome!' 
+-publics -nocase -regexp '^vincen.*:.*[[:print:]]*(thank[s]?|(3\s*q)|xie\s*xie|duo\s*xie|xie\s*le|gan\s*xie)[[:punct:]]*.*$' -command 'say $N: You are welcome!' 
 -all -regexp '\n' -replace '    ' 
--publics -nocase -regexp '^vincen.*:.*(谢谢|多谢|非常感谢|感谢|万分感谢|谢了)(你)?(!|！|.|。|，|,)?\s*$' -command 'say $N: 别客气 :)' 
+-publics -nocase -regexp '^vincen.*:.*[[:print:]]*(谢谢|多谢|非常感谢|感谢|万分感谢|谢了)(你)?[\p{IsPunct}]*.*$' -command 'say $N: 别客气 :)' 
