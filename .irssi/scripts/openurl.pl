@@ -22,8 +22,9 @@ use Irssi 20020324;
 use Irssi::TextUI;
 use Irssi::UI;
 
-use vars qw(@urls %urltypes $recent);
+use vars qw(@urls %urltypes $recent $mynickname);
 $recent = 1;
+$mynickname = "vincent";
 
 # RegExp & defaultcommands
 %urltypes = ( http => { regexp => qr#((?:https?://[^\s<>"]+|www\.[-a-z0-9.]+)[^\s.,;<">\):])#, cmd => 'w3m "$1"' },
@@ -76,7 +77,7 @@ sub list_urls {
 	$text =~ s/%/%%/g;
 	$text =~ s/\Q$url/%U$url%U/;
 	if ($recent-1 == $i) {
-	    $string .= '%B»%n';
+	    $string .= '%B?%n';
 	} else {
 	    $string .= ' ';
 	}
@@ -97,6 +98,14 @@ sub event_private_message {
 sub event_public_message {
     my ($server, $text, $nick, $address, $target) = @_;
     process_line($server, $target, $nick, $text);
+}
+sub event_ownpublic_message {
+    my ($server, $text, $target) = @_;
+    process_line($server, $target, $mynickname, $text);
+}
+sub event_ownprivate_message {
+    my ($server, $text, $target, $orig_target) = @_;
+    process_line($server, $mynickname, $mynickname, $text);
 }
 sub event_topic_changed {
     my ($channel) = @_;
@@ -257,6 +266,8 @@ Irssi::settings_add_bool($IRSSI{'name'}, 'openurl_display_context', 1);
 Irssi::signal_add_last("message private", "event_private_message");
 Irssi::signal_add_last("message public", "event_public_message");
 Irssi::signal_add_last("channel topic changed", "event_topic_changed");
+Irssi::signal_add_last("message own_public", "event_ownpublic_message");
+Irssi::signal_add_last("message own_private", "event_ownprivate_message");
 
 #Irssi::signal_add('open url', \&launch_url);
 
