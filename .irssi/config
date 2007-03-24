@@ -158,6 +158,8 @@ aliases = {
   wl = "window last ";
   split3 = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick";
   mklayout = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick 1 on; window stick 3 on; window stick 7 on; window 2; window stick 2 on; window stick 4 on; window stick 5 on; window 6; window stick 6 on;";
+  cs = "msg chanserv op $C";
+  google = "say http://www.google.com/search?hl=en&q=$0&btnG=Google+Search";
 };
 
 statusbar = {
@@ -269,6 +271,13 @@ statusbar = {
         topicbarend = { priority = "100"; alignment = "right"; };
       };
     };
+    awl_0 = {
+      items = {
+        barstart = { priority = "100"; };
+        awl_0 = { };
+        barend = { priority = "100"; alignment = "right"; };
+      };
+    };
   };
 };
 settings = {
@@ -298,6 +307,8 @@ settings = {
     mail_show_message = "yes";
     mail_mailboxes = "2=~/sshfs/Mail/exoweb/work,";
     chanact_abbreviate_names = "0";
+    openurl_app_ftp = "= screen lftp \"$1\"";
+    openurl_watch_mail = "no";
   };
 };
 keyboard = (
