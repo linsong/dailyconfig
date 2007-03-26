@@ -5,8 +5,8 @@
 # Only one daemon process is permitted per user
 set daemon 60
 
-poll pop.gmail.com proto POP3 uidl and no dns:
-    user 'linsong.qizi' is 'vincent' here 
+poll pop.gmail.com proto POP3 port 995 uidl and no dns:
+    user 'linsong.qizi@gmail.com' is 'vincent' here 
     # we don't need to put password here, since 
     # fetchmail will ask if it can not find.
     # but it does not work well under daemon mode
