@@ -117,6 +117,7 @@ fi
  alias ll='ls -lS'
  alias lh='ls -lh'
  alias la='ls -A'
+ alias sl='ls -lt'
  alias l='ls -CF'
  alias c='clear'
  alias j='jobs'
