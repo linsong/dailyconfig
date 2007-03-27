@@ -52,11 +52,11 @@ if __name__ == '__main__':
     for mf in args:
         new_mail_infos[mf] = {'mailboxsize':0,
                                'new_mails':[]}
-
     while True:
         for mf in new_mail_infos:
             if check_mail(mf):
                 print "Found new mails in %s. " % mf
+                print "Send new mail notification to %s" % options.host
                 netgrowl.send_notify_by_growl(name="Mail",
                     message="You got a new mail in %s." % mf,
                                              sticky=True,

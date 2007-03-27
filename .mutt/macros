@@ -8,14 +8,16 @@ macro generic "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<e
 macro generic ,sm ":source $HOME/.mutt/muttrc\r"
 
 # Macros for use in the index.
-macro index ",v"    "<pipe-message>vim -<enter>"                          # View the message in less.
+macro index ",v"     "<pipe-message>vim -<enter>"                         # View the message in less.
+macro index ",N"     "<tag-pattern>~N<enter><tag-prefix>N<tag-prefix>t"    # make all new mails as old
 macro index "\'"     "<clear-flag>r"                                      # Mark as un-replied
 macro index "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
 macro index "<esc>v"    "<pipe-message>urlview<enter>"                       # URL viewer.
 macro index "<esc>1" "<change-folder> =vincent<enter>"
 macro index "<esc>2" "<change-folder> =exoweb/work<enter>"
-macro index "<esc>3" "<change-folder> =maillists/<tab><tab>"
-macro index "<esc>4" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
+macro index "<esc>3" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
+macro index "<esc>9" "<change-folder> =maillists/<tab><tab>"
+macro index "<esc>0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
 #macro index "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.
 #macro index "<esc>h"    "<pipe-message>mailhops<enter>"                      # View the path of the mail.
 #macro index "<esc>f"    "<pipe-message>view-x-face<enter>"                   # View the X-Face (if there is one).
