@@ -1,0 +1,7 @@
+auto-center = yes
+wide-cursor = yes
+enable-colors = yes
+
+set-xterm-title = yes
+xterm-title-format = "[%file%]"
+#xterm-title-format = "[[%artist% - ]%title%]|[%file%]"

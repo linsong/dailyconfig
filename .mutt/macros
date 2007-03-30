@@ -16,6 +16,7 @@ macro index "<esc>v"    "<pipe-message>urlview<enter>"                       # U
 macro index "<esc>1" "<change-folder> =vincent<enter>"
 macro index "<esc>2" "<change-folder> =exoweb/work<enter>"
 macro index "<esc>3" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
+macro index "<esc>4" "<change-folder> =maillists/vim@vim.org<enter>"
 macro index "<esc>9" "<change-folder> =maillists/<tab><tab>"
 macro index "<esc>0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
 #macro index "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.

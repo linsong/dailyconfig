@@ -1,0 +1,243 @@
+# MPD CONFIG FILE
+# For a full description of all config parameters,
+# Check the mpd man page, "man mpd".
+
+##################### REQUIRED ###########################
+
+# You can put symlinks in here, if you like.  Make sure
+# user that mpd runs as (see the 'user' config parameter)
+# can read the files in this directory
+
+# You can put symlinks in here, if you like.  Make sure
+# user that mpd runs as (see the 'user' config parameter)
+# can read the files in this directory
+music_directory		"/home/vincent/download/mp3"
+playlist_directory	"/home/vincent/download/playlists"
+
+db_file			"/var/lib/mpd/tag_cache"
+log_file		"/var/log/mpd/mpd.log"
+error_file		"/var/log/mpd/errors.log"
+pid_file		"/var/run/mpd/pid"
+##########################################################
+
+##########################################################
+# EVERYTHING ELSE IS OPTIONAL
+##########################################################
+
+################## AUDIO OUTPUT ##########################
+#
+# use this if you want to use OSS audio output
+#audio_output {
+#	type		"oss"
+#	name		"my OSS sound card"
+#	device		"/dev/dsp" # optional
+#	format		"44100:16:2" #optional
+#}
+#
+# use this if you want to use ALSA audio output
+#audio_output {
+#	type		"alsa"
+#	name		"my ALSA device"
+#	device		"hw:0,0" # optional
+#	format		"44100:16:2" #optional
+#}
+#
+# as a last resort, try using libao
+#audio_output {
+#	type		"ao"
+#	name		"default ao output"
+#}
+#
+#
+# Set this if you have problems
+# playing audio files.
+# This will resample your music so
+# that it comes out at the set rate.
+#
+#audio_output_format	"44100:16:2"
+#
+##########################################################
+
+
+################### VOLUME MIXER #########################
+#
+# Examples:
+# ALSA Mixer
+#mixer_type		"alsa"
+#mixer_device		"default"
+#mixer_control		"PCM"
+#
+# OSS Mixer
+#mixer_type		"oss"
+#mixer_device		"/dev/mixer"
+#mixer_control		"PCM"
+#
+# Software Mixer
+#mixer_type		"software"
+#
+##########################################################
+
+
+################# SHOUT STREAMING ########################
+#
+# Set this to allow mpd to stream its output to icecast2
+# (i.e. mpd is a icecast2 source)
+#
+#audio_output {
+#	type		"shout"
+#	name		"my cool stream"
+#	host		"hostname"
+#	port		"8000"
+#	mount		"/mpd.ogg"
+#	password	"hackme"
+#	quality		"5.0"
+#	bitrate		"128"
+#	format		"44100:16:1"
+#
+# Optional Paramters
+#	user		"source"
+#	description	"here's my long descriptiion"
+#       genre		"jazz"
+#} # end of audio_output
+#
+##########################################################
+
+
+################# FILESYSTEM SETTINGS ####################
+#
+# If the names of files or directories are
+# not correctly displayed then set the
+# following to the filesystem coding.
+#
+#	Usually this is either:
+#	ISO-8859-1 or UTF-8
+#
+# After changing the filesystem_charset
+# you will need to recreate the db:
+#	mpd --create-db
+#
+#filesystem_charset "ISO-8859-1"
+filesystem_charset "UTF-8"
+#
+##########################################################
+
+
+#################### OPTIONAL FILES ######################
+#
+# The state file (if set) will be a file
+# for storing all current information
+# (playlist, playing/paused, etc...) from
+# the last MPD session. This will be used
+# to recreate your last MPD session after
+# restart.
+#
+state_file         "/var/lib/mpd/state"
+
+#
+##########################################################
+
+
+################# REPLAYGAIN #############################
+#
+# Use Replay Gain (album or title)
+#	http://www.replaygain.org
+#
+#replaygain		"album"
+#
+# Sets the pre-amp used for files that have replaygain
+# info.  Valid values are between -15 to 15 (in dB).
+#
+#replaygain_preamp	"0"
+#
+##########################################################
+
+
+################ OUTPUT BUFFER SETTINGS ##################
+#
+# You should not need to mess with this
+# unless you know what you're doing.
+#
+#audio_buffer_size	"2048"
+#
+# This means exactly what it says, it will
+# buffer your file up to the percentage of
+# the buffer before it begins playing.
+#
+#buffer_before_play	"25%"
+#
+##########################################################
+
+
+################### HTTP PROXY ###########################
+#
+# http_proxy_host	"proxy.isp.com"
+# http_proxy_port	"8080"
+# http_proxy_user	"user"
+# http_proxy_password	"password"
+#
+##########################################################
+
+
+################# SECURITY SETTINGS ######################
+#
+# It is encouraged to run MPD as
+# non-superuser.  If you start mpd as root
+# (for example, in an init script), set
+# this value, then  mpd will drop root priveleges
+# and runs as the user specified.
+#
+user               "mpd"
+#
+# Set this value if you only have one
+# address you want to allow connection to.
+#
+bind_to_address	"localhost"
+#
+# If you want to setup MPD to use
+# passwords set them here
+#
+#password		"password1@read,add,control,admin"
+#password		"password2@read"
+#
+# Specify permissions used by default when no password is
+# given by for a connection/client.
+#
+#default_permissions	"read,add,control,admin"
+#
+##########################################
+
+
+################ MISCELLANEOUS OPTIONS ###################
+#
+#port	"6600"
+#
+# This sets the metadata mpd will use, to disable all metadata, set to "none"
+# NOTE: comments are disabled by default
+#
+#metadata_to_use "artist,album,title,genre,date,track,composer,performer,comment"
+#
+# This setting exists as precaution against attacks.
+#
+#max_playlist_length	"16384"
+#
+# Valid options are "default", "secure" or "verbose".
+#log_level		"default"
+#
+#connection_timeout	"60"
+#
+# This should be fine for 2-3 people using clients
+# at the same time.
+#
+#max_connections	"5"
+#
+# No need to change these unless you know better.
+#
+#max_command_list_size	"2048"
+#max_output_buffer_size "8192"
+#
+# This will make playlists compatible with normal music
+# players.
+#
+#save_absolute_paths_in_playlists "no"
+#
+##########################################################

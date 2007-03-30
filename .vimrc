@@ -306,7 +306,7 @@
     " it can copy texts to last edited place continuously
     :vmap gy y:call CopyToLastEditPos()<CR>
 
-    function CopyToLastEditPos()
+    function! CopyToLastEditPos()
         let cmd = 'gigp'
         if visualmode()==# 'V'
             let cmd = cmd . 'k'

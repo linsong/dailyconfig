@@ -30,7 +30,7 @@
 
 " Variable Definations: {{{1
 " options, change them as you like:
-let g:completekey="<tab>"   "hotkey
+let g:completekey="<C-T>"   "hotkey
 let s:rs='`<'    "region start
 let s:re='>`'    "region stop
 
