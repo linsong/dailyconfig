@@ -10,7 +10,7 @@
 " Please email me problems
 
 if exists('g:sco_plugin_loaded')
-    finish
+   finish
 endif
 
 let g:sco_plugin_loaded = 1
@@ -595,6 +595,28 @@ function! <SID>SetCaption(...) "{{{
     call setline(line('.'), line)
 endfunction "}}}
 
+function! s:SetFileNameCaption()
+    let line = getline('.')
+
+    if line !~ s:smart_mark_pattern_without_comment && line !~ s:smart_mark_pattern_comment
+	call <SID>ErrorMsg('Captions only on smart marks')
+	return
+    endif
+
+    let caption = "NoFileName?"
+    if line =~ s:smart_mark_pattern
+        let caption = <SID>EscapePattern(substitute(line, s:smart_mark_pattern, '\1', ''))
+    endif
+
+    if line =~ s:smart_mark_pattern_comment
+	let line = substitute(line, s:smart_mark_pattern_comment, <SID>CreateCommentCaption(caption),'')
+    else
+	let line = line.<SID>CreateCommentCaption(caption)
+    endif
+
+    call setline(line('.'), line)
+endfunction
+
 " return how many times search pattern match (from the beginig of file)
 function! <SID>Search(line_number) "{{{
 	let l:pattern = getline(a:line_number)
@@ -809,6 +831,10 @@ function! s:SCOSelectPreviousBuffer()
         let buffer_number = s:SCOPreviousBuffer( bufnr('$'), 0 )
     endif
 
+    if buffer_number == 0
+        let buffer_number = s:last_sco_buffer
+    endif
+
     exec 'buffer '.buffer_number
 endfunction
 
@@ -816,6 +842,10 @@ function! s:SCOSelectNextBuffer()
     let buffer_number = s:SCONextBuffer( bufnr('') )
     if buffer_number == 0
         let buffer_number = s:SCONextBuffer( 1 )
+    endif
+
+    if buffer_number == 0
+        let buffer_number = s:last_sco_buffer
     endif
 
     exec 'buffer '.buffer_number
@@ -1160,6 +1190,31 @@ function! <SID>AddSmartMark() "{{{
 	call <SID>AllignResultNewMarks(line_number+1, line('$'))
 endfunction "}}}
 
+function! <SID>IsScoBuffer()
+    if (bufname("%") =~ '\.sco$')
+        return 1
+    endif
+
+    return 0
+endfunction
+
+function! <SID>RemarkWithSmartMark()
+        if <SID>IsScoBuffer()
+            return
+        endif
+
+	let line = getline('.')
+	let file_name = expand('%:p')
+	let jumps_count = <SID>Search(line('.'))
+
+	if ! <SID>GoToLastScoBuffer()
+		return
+	endif
+
+        let smart_mark_line = s:CreateSmartMarkLine(file_name, line, jumps_count, line)
+	call setline(line('.'), smart_mark_line)
+endfunction
+
 " make small addition to smart mark as comment
 function! <SID>CreateCommentCaption(text) "{{{
     return ' ```'.a:text.'>>><<<'
@@ -1343,6 +1398,7 @@ function! <SID>AddHelpLines() "{{{
 	call add(l:help_lines, 'c<Space>b - Open last sco buffer')
 	call add(l:help_lines, 'c<Space>m - Mark current line')
 	call add(l:help_lines, 'c<Space>n - Mark smart current line')
+	call add(l:help_lines, 'c<Space>r - ReMark: Change current line in sco file to smart mark')
 	call add(l:help_lines, '/Commands local to this buffer:/')
 	call add(l:help_lines, ":Delete 'pattern' - delete all rows which match 'pattern' inside folded result")
 	call add(l:help_lines, ":Leave 'pattern' - leave only rows which match 'pattern' inside folded result")
@@ -1351,6 +1407,7 @@ function! <SID>AddHelpLines() "{{{
 	call add(l:help_lines, ':AllignFold - allign lines inside  > > >   < < <')
 	call add(l:help_lines, ':[range]AllignRange - allign lines in range')
 	call add(l:help_lines, ":Caption ['new_caption'] - change or set caption of smart marks")
+	call add(l:help_lines, ":FileNameCaption - change caption of smart marks to file name where marks are point")
 	call add(l:help_lines, "\:[range]Wrap ['fold comment'] - wrap range of lines with  > > >   < < < ")
 	call add(l:help_lines, '/Global commands:/')
 	call add(l:help_lines, ":SCOClassInfo 'class[struct|enum]name' - add information about class(struct, enum). Tested on c++. (Using tags. Tags must be builded with ctags --fields=fks (default settings))")
@@ -1367,6 +1424,7 @@ function! <SID>AddHelpLines() "{{{
 	call add(l:help_lines, ":SCOBuffer - go to last sco buffer")
 	call add(l:help_lines, ":SCOMark - mark current line")
 	call add(l:help_lines, ":SCOMarkSmart - mark smart current line")
+	call add(l:help_lines, ":SCOReMark - ReMark: Change current line in sco file to smart mark")
 	call add(l:help_lines, ":SCOUp - go to the previous mark ( or resultant line ) from last sco")
 	call add(l:help_lines, ":SCODown - go to the next mark ( or resultant line ) from last sco")
 	call add(l:help_lines, ":SCOPrevious - open previous sco buffer")
@@ -1465,6 +1523,7 @@ function! <SID>Prepare_sco_settings() "{{{
 	command! SCOBuffer call <SID>GoToLastScoBuffer()
 	command! SCOMark call <SID>AddMark()
 	command! SCOMarkSmart call <SID>AddSmartMark()
+	command! SCOReMark call <SID>RemarkWithSmartMark()
         command! SCODown call s:SCODown()
         command! SCOUp call s:SCOUp()
         command! SCOPrevious call s:SCOSelectPreviousBuffer()
@@ -1473,6 +1532,7 @@ function! <SID>Prepare_sco_settings() "{{{
 	command! -buffer AllignFold call <SID>AllignFoldResult()
 	command! -buffer -range AllignRange call <SID>AllignAllInRange(<line1>, <line2>)
 	command! -buffer Caption call <SID>SetCaption('')
+	command! -buffer FileNameCaption call <SID>SetFileNameCaption()
 	command! -buffer -nargs=* -range Wrap call <SID>FoldWrap(<line1>, <line2>, <args>)
 	command! -buffer -nargs=* -range MO call s:MultiOpenRange(<line1>, <line2>)
 	command! -buffer -nargs=* Caption call <SID>SetCaption(<args>)
@@ -1496,6 +1556,7 @@ function! <SID>Prepare_sco_settings() "{{{
 	nnoremap c<Space>b :SCOBuffer<CR>
 	nnoremap c<Space>m :SCOMark<CR>
 	nnoremap c<Space>n :SCOMarkSmart<CR>
+	nnoremap c<Space>r :SCOReMark<CR>
 
 	syn match sco_header /^% cscope_db: / nextgroup=sco_header_param
 	syn match sco_header /^% cscope_exe: / nextgroup=sco_header_param
@@ -1515,6 +1576,18 @@ function! <SID>Prepare_sco_settings() "{{{
 	syn match mark2 /\s\S\+/ nextgroup=mark3 contained skipwhite
 	syn match mark3 /\s\S\+/ nextgroup=mark4 contained skipwhite
 	syn region mark4 start='\s' end='$' contained 
+
+        syn match tags_header /^\s*tags:/ nextgroup=tags_list
+        syn match tags_header_header /^header:/ nextgroup=tags_header_text
+        syn match tags_header_text /.*/ contained
+        syn match tags_list /\s*\w\+\s*/ nextgroup=tags_separator contained
+        syn match tags_separator /,/ nextgroup=tags_list contained
+
+        hi link tags_header         TODO
+        hi link tags_header_header  TODO
+        hi link tags_header_text  Comment
+        hi link tags_list       Special
+        hi link tags_separator  Comment
 
 	hi link sco_header	Define
 	hi link sco_header_param   Identifier

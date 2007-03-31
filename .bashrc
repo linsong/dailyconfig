@@ -131,6 +131,9 @@ fi
  alias cr='colorize.py'
  alias tip='gvim ~/tips/tips.txt &'
 
+ alias radio="mplayer -playlist $HOME/playlist/radio.pls"
+ alias tv="nmplayer -playlist $HOME/playlist/tv.pls"
+
  if [ `uname` = 'Darwin' ]; then 
     alias ls='ls -FG'  
  else

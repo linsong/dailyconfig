@@ -114,4 +114,5 @@ screen -t misc 4
 screen -t ipython 5 ipython 
 screen -t w3m 6 w3m www.google.com
 screen -t irssi 7 /bin/bash -c 'if [ $(uname) = "Darwin" ]; then irssi; fi'
+utf8 on # use utf-8 encoding in irssi window 
 

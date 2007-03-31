@@ -160,6 +160,7 @@ aliases = {
   mklayout = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick 1 on; window stick 3 on; window stick 7 on; window 2; window stick 2 on; window stick 4 on; window stick 5 on; window 6; window stick 6 on;";
   cs = "msg chanserv op $C";
   google = "say http://www.google.com/search?hl=en&q=$0&btnG=Google+Search";
+  l = "lastlog -regex ";
 };
 
 statusbar = {
@@ -296,6 +297,7 @@ settings = {
     window_history = "yes";
     autocreate_split_windows = "no";
     expand_escapes = "yes";
+    hilight_nick_matches = "yes";
   };
   "fe-text" = { autostick_split_windows = "no"; };
   "fe-common/irc" = { show_away_once = "no"; };
@@ -336,7 +338,7 @@ hilights = (
     word = "yes";
   },
   {
-    text = "vincent[^ @]?";
+    text = "vincent[^@]";
     color = "%R%4";
     act_color = "%R";
     nick = "no";

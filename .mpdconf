@@ -3,21 +3,16 @@
 # Check the mpd man page, "man mpd".
 
 ##################### REQUIRED ###########################
-
 # You can put symlinks in here, if you like.  Make sure
 # user that mpd runs as (see the 'user' config parameter)
 # can read the files in this directory
+music_directory		"~/download/mp3"
+playlist_directory	"~/download/playlists"
 
-# You can put symlinks in here, if you like.  Make sure
-# user that mpd runs as (see the 'user' config parameter)
-# can read the files in this directory
-music_directory		"/home/vincent/download/mp3"
-playlist_directory	"/home/vincent/download/playlists"
-
-db_file			"/var/lib/mpd/tag_cache"
-log_file		"/var/log/mpd/mpd.log"
-error_file		"/var/log/mpd/errors.log"
-pid_file		"/var/run/mpd/pid"
+db_file			"~/.mpd/tag_cache"
+log_file		"~/.mpd/mpd.log"
+error_file		"~/.mpd/errors.log"
+pid_file		"~/.mpd/mpd/pid"
 ##########################################################
 
 ##########################################################
@@ -119,6 +114,9 @@ pid_file		"/var/run/mpd/pid"
 #filesystem_charset "ISO-8859-1"
 filesystem_charset "UTF-8"
 #
+#id3v1_encoding                  "ISO-8859-1"
+id3v1_encoding                  "UTF-8"
+
 ##########################################################
 
 
@@ -131,7 +129,7 @@ filesystem_charset "UTF-8"
 # to recreate your last MPD session after
 # restart.
 #
-state_file         "/var/lib/mpd/state"
+state_file         "~/.mpd/state"
 
 #
 ##########################################################
