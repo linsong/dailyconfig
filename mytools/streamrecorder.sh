@@ -1,4 +1,13 @@
 #!/bin/bash
+################################################################################
+### my crontab for streamrecorder to record studio classroom 
+# # Weird! cron treat '%' as new line character, unless escaped with backslash (\)
+# # m h  dom mon dow   command
+#   29 21  *   *   1-6  /home/vincent/mytools/streamrecorder.sh -t 31 /home/vincent/download/mp3/studio_classroom/studio_classroom_$(date +\%Y-\%m-\%d-\%H-\%M-\%S).mp3
+#   29 21  *   *   7    /home/vincent/mytools/streamrecorder.sh -t 31 /home/vincent/download/mp3/studio_classroom/advance_english_$(date +\%Y-\%m-\%d-\%H-\%M-\%S).mp3
+#   0  2   *   *   6     podget
+#   0 22   *   *   *     sudo shutdown -P +15
+
 set -x 
 cmdname=$( echo $0 | sed s:.*/:: )
 #TIME_LENGTH=1 # in minute
