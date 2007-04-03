@@ -1,4 +1,5 @@
 #! /usr/bin/python 
+# vim: set fileencoding=utf-8
 
 import sys
 import os

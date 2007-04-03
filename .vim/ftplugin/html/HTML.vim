@@ -2,16 +2,16 @@
 "
 " Author:      Christian J. Robinson <infynity@onewest.net>
 " URL:         http://www.infynity.spodzone.com/vim/HTML/
-" Last Change: November 13, 2006
-" Version:     0.22.1
+" Last Change: March 24, 2007
+" Version:     0.25.5
+" Original Concept: Doug Renze
 "
-" Original Author: Doug Renze  (See below.)
 "
-" I am going to assume I can put this entirely under the GPL, as the original
-" author used the phrase "freely-distributable and freely-modifiable".
+" The original Copyright goes to Doug Renze, although nearly all of his
+" efforts have been modified in this implementation.  My changes and additions
+" are Copyrighted by me, on the dates marked in the ChangeLog.
 "
-" Original Copyright should probably go to Doug Renze, my changes and
-" additions are Copyrighted by me, on the dates marked in the ChangeLog.
+" (Doug Renze has authorized me to place the original "code" under the GPL.)
 "
 " ----------------------------------------------------------------------------
 "
@@ -24,10 +24,6 @@
 " ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 " FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 " more details.
-"
-" Comments, questions or bug reports can be sent to infynity@onewest.net
-" Make sure to say that your message is regarding the HTML.vim macros.  Also,
-" I wouldn't mind knowing how you got a copy.
 "
 " ---- Original Author's Notes: ----------------------------------------------
 "
@@ -43,20 +39,15 @@
 "        Jones for their excellent book "Web Weaving" which was
 "        my primary source.
 "
-"        The home-page for this set of macros is currently
-"        located at: http://www.avalon.net/~drenze/vi/HTML-macros.html
-"
 "        Doug Renze
-"        http://www.avalon.net/~drenze/
-"        mailto:drenze@avalon.net
 "
 " ---- TODO: ------------------------------------------------------------ {{{1
 " - Under Win32, make a mapping call the user's default browser instead of
 "   just ;ie? (:silent!!start rundll32 url.dll,FileProtocolHandler <URL/File>)
 " - ;ns mapping for Win32 with "start netscape ..." ?
+" ---- RCS Information: ------------------------------------------------- {{{1
+" $Id: HTML.vim,v 1.136 2007/03/25 01:32:12 infynity Exp $
 " ----------------------------------------------------------------------- }}}1
-" RCS Information: 
-" $Id: HTML.vim,v 1.119 2006/11/13 22:58:53 infynity Exp $
 
 " ---- Initialization: -------------------------------------------------- {{{1
 
@@ -75,6 +66,8 @@ let b:did_html_mappings = 1
 
 setlocal matchpairs+=<:>
 
+" SetIfUnset()  {{{2
+"
 " Set a global variable if it's not already set.
 " Arguments:
 "  1 - String:  The variable name.
@@ -97,25 +90,27 @@ function! SetIfUnset(var,val)
     return 1
   endif
   return 0
-endfunction
+endfunction  "}}}2
 
 command! -nargs=+ SetIfUnset call SetIfUnset(<f-args>)
 
-SetIfUnset html_bgcolor     #FFFFFF
-SetIfUnset html_textcolor   #000000
-SetIfUnset html_linkcolor   #0000EE
-SetIfUnset html_alinkcolor  #FF0000
-SetIfUnset html_vlinkcolor  #990066
-SetIfUnset html_tag_case    uppercase
-SetIfUnset html_map_leader  ;
-call SetIfUnset('b:html_tag_case', g:html_tag_case)
+SetIfUnset g:html_bgcolor         #FFFFFF
+SetIfUnset g:html_textcolor       #000000
+SetIfUnset g:html_linkcolor       #0000EE
+SetIfUnset g:html_alinkcolor      #FF0000
+SetIfUnset g:html_vlinkcolor      #990066
+SetIfUnset g:html_tag_case        uppercase
+SetIfUnset g:html_map_leader      ;
+SetIfUnset g:html_default_charset iso-8859-1
 " No way to know sensible defaults here so just make sure the
 " variables are set:
-SetIfUnset html_authorname  -
-SetIfUnset html_authoremail -
+SetIfUnset g:html_authorname  -
+SetIfUnset g:html_authoremail -
 
 "call input(&filetype)
-if &filetype ==? "xhtml" || (exists('g:do_xhtml_mappings') && g:do_xhtml_mappings != 0)
+if &filetype ==? "xhtml" 
+      \ || (exists('g:do_xhtml_mappings') && g:do_xhtml_mappings != 0) 
+      \ || (exists('b:do_xhtml_mappings') && b:do_xhtml_mappings != 0)
   let b:do_xhtml_mappings = 1
 else
   let b:do_xhtml_mappings = 0
@@ -124,6 +119,8 @@ endif
 if b:do_xhtml_mappings != 0
   let b:html_tag_case = 'lowercase'
 endif
+
+call SetIfUnset('b:html_tag_case', g:html_tag_case)
 " ----------------------------------------------------------------------------
 
 
@@ -134,17 +131,32 @@ endif
 " Encode the characters in a string into their HTML &#...; representations.
 " Arguments:
 "  1 - String:  The string to encode.
+"  2 - String:  Optional, whether to decode rather than encode the string:
+"                d/decode: Decode the &#...; elements of the provided string
+"                anything else: Encode the string (default)
 " Return value:
 "  String:  The encoded string.
-function! HTMLencodeString(string)
+function! HTMLencodeString(string, ...)
   let out = ''
-  let c   = 0
-  let len = strlen(a:string)
 
-  while c < len
-    let out = out . '&#' . char2nr(a:string[c]) . ';'
-    let c = c + 1
-  endwhile
+  if a:0 > 0 && a:1 =~? '^d\(ecode\)\=$'
+    let out = substitute(a:string, '&#\(\d\+\);', '\=nr2char(submatch(1))', 'g')
+    return out
+  endif
+
+  if v:version >= 700
+    let string = split(a:string, '\zs')
+    for c in string
+      let out = out . '&#' . char2nr(c) . ';'
+    endfor
+  else
+    let len = strlen(a:string)
+    let c = 0
+    while c < len
+      let out = out . '&#' . char2nr(a:string[c]) . ';'
+      let c = c + 1
+    endwhile
+  endif
 
   return out
 endfunction
@@ -171,7 +183,7 @@ function! HTMLmap(cmd, map, arg, ...)
     let arg = substitute(arg, ' />', '>', 'g')
   endif
 
-  let map = substitute(a:map, "^<lead>", g:html_map_leader, '')
+  let map = substitute(a:map, "^<lead>\\c", g:html_map_leader, '')
 
   if a:cmd =~ '^v'
     if a:0 >= 1 && a:1 < 0
@@ -322,45 +334,76 @@ endfunction
 "
 " Position the cursor at the next point in the file that needs data.
 " Arguments:
-"  1 - Character: The mode the function is being called from. 'n' for normal,
-"                 'i' for insert.
+"  1 - Character: Optional, the mode the function is being called from. 'n'
+"                 for normal, 'i' for insert.  If 'i' is used the function
+"                 enables an extra feature where if the cursor is on the start
+"                 of a closing tag it places the cursor after the tag.
+"                 Default is 'n'.
 " Return value:
 "  None.
-function! HTMLnextInsertPoint(mode)
+" Known problems:
+"  Due to the necessity of running the search twice (why doesn't Vim support
+"  cursor offset positioning in search()?) this function
+"    a) won't ever position the cursor on an "empty" tag that starts on the
+"       first character of the first line of the buffer
+"    b) won't let the cursor "escape" from an "empty" tag that it can match on
+"       the first line of the buffer when the cursor is on the first line and
+"       tab is successively pressed
+function! HTMLnextInsertPoint(...)
   let saveerrmsg = v:errmsg
   let v:errmsg = ""
-  let byteoffset = line2byte(line(".")) + col(".") - 1
+  let byteoffset = line2byte(line('.')) + col('.') - 1
 
   " Tab in insert mode on the beginning of a closing tag jumps us to
   " after the tag:
-  if a:mode == "i" && strpart(getline(line(".")), col(".") - 1, 2) == "</"
-    normal %
-    if col('.') == col('$') - 1
-      startinsert!
+  if a:0 >= 1 && a:1 == 'i' 
+    if strpart(getline(line('.')), col('.') - 1, 2) == '</'
+      normal %
+      let done = 1
+    elseif strpart(getline(line('.')), col('.') - 1, 4) =~ ' *-->'
+      normal f>
+      let done = 1
     else
-      normal l
+      let done = 0
     endif
 
-    return
+    if done == 1
+      if col('.') == col('$') - 1
+        startinsert!
+      else
+        normal l
+      endif
+
+      return
+    endif
   endif
+
 
   normal 0
 
   " Running the search twice is inefficient, but it squelches error
   " messages and the second search puts my cursor where it's needed...
-  if search("<\\([^ <>]\\+\\)\\_[^<>]*>\\(\\n *\\)\\{0,2}<\\/\\1>\\|<\\_[^<>]*\"\"\\_[^<>]*>","w") == 0
+  if search('<\([^ <>]\+\)\_[^<>]*>\( \|\n *\)\{0,2}<\/\1>\|<\_[^<>]*""\_[^<>]*>\|<!--\( \|\n *\)\{0,2}-->', 'w') == 0
     if byteoffset == -1
       go 1
     else
-      execute ":go " . byteoffset
+      execute ':go ' . byteoffset
     endif
   else
     normal 0
-    exe 'silent normal! /<\([^ <>]\+\)\_[^<>]*>\(\n *\)\{0,2}<\/\1>\|<\_[^<>]*""\_[^<>]*>/;/>\(\n *\)\{0,2}<\|""/e' . "\<CR>"
+    silent! execute ':go ' . line2byte(line('.')) + col('.') - 2
+    exe 'silent normal! /<\([^ <>]\+\)\_[^<>]*>\(\n *\)\{0,2}<\/\1>\|<\_[^<>]*""\_[^<>]*>\|<!--\( \|\n *\)\{0,2}-->/;/>\(\n *\)\{0,2}<\|""\|<!--\( \|\n *\)\{0,2}-->/e' . "\<CR>"
 
-    " Since matching open/close tags that spans lines is possible, it
-    " might be necessary to position the cursor on a blank line:
-    if getline('.') =~ "^ *<\\/[^<>]\\+>" && getline(line('.')-1) =~ "^ *$"
+    " Handle cursor positioning for comments and/or open+close tags spanning
+    " multiple lines:
+    if getline('.') =~ '<!-- \+-->'
+      exe "normal F\<space>"
+    elseif getline('.') =~ '^ *-->' && getline(line('.')-1) =~ '<!-- *$'
+      normal 0
+      normal t-
+    elseif getline('.') =~ '^ *-->' && getline(line('.')-1) =~ '^ *$'
+      normal k$
+    elseif getline('.') =~ '^ *<\/[^<>]\+>' && getline(line('.')-1) =~ '^ *$'
       normal k$
     endif
 
@@ -406,7 +449,7 @@ let s:HTMLtags{'strong'}{'i'}{'c'} = "<[{/STRONG><STRONG}]>\<ESC>bhi"
 let s:HTMLtags{'strong'}{'v'}{'o'} = "`>a</[{STRONG}]>\<C-O>`<<[{STRONG}]>"
 let s:HTMLtags{'strong'}{'v'}{'c'} = "`>a<[{STRONG}]>\<C-O>`<</[{STRONG}]>"
 function! s:tag(tag, mode)
-  let attr=synIDattr(synID(line("."), col(".") - 1, 1), "name")
+  let attr=synIDattr(synID(line('.'), col('.') - 1, 1), "name")
   if ( a:tag == 'i' && attr =~? 'italic' )
         \ || ( a:tag == 'b' && attr =~? 'bold' )
         \ || ( a:tag == 'strong' && attr =~? 'bold' )
@@ -417,6 +460,51 @@ function! s:tag(tag, mode)
     let ret=s:HTMLconvertCase(s:HTMLtags{a:tag}{a:mode}{'o'})
   endif
   return ret
+endfunction
+
+" s:HTMLdetectCharset()  {{{2
+" 
+" Detects the HTTP-EQUIV Content-Type charset based on Vim's current
+" encoding/fileencoding.
+"
+" Arguments:
+"  None
+" Return value:
+"  The value for the Content-Type charset based on 'fileencoding' or
+"  'encoding'.
+function! s:HTMLdetectCharset()
+
+  if exists("g:html_charset")
+    return g:html_charset
+  endif
+
+  " TODO: This table needs to be expanded:
+  let charsets{'latin1'}    = 'iso-8859-1'
+  let charsets{'utf_8'}     = 'UTF-8'
+  let charsets{'utf_16'}    = 'UTF-16'
+  let charsets{'shift_jis'} = 'Shift_JIS'
+  let charsets{'euc_jp'}    = 'EUC-JP'
+  let charsets{'cp950'}     = 'Big5'
+  let charsets{'big5'}      = 'Big5'
+
+  if &fileencoding != ''
+    let enc=tolower(&fileencoding)
+  else
+    let enc=tolower(&encoding)
+  endif
+
+  " The iso-8859-* encodings are valid for the Content-Type charset header:
+  if enc =~? '^iso-8859-'
+    return enc
+  endif
+
+  let enc=substitute(enc, '\W', '_', 'g')
+
+  if charsets{enc} != ''
+    return charsets{enc}
+  endif
+
+  return g:html_default_charset 
 endfunction
 
 " }}}2
@@ -432,13 +520,23 @@ if g:html_map_leader == ';'
   call HTMLmap("vnoremap", ";;", ";", -1)
   call HTMLmap("nnoremap", ";;", ";")
 endif
-" Allow hard tabs to be inserted:
-call HTMLmap("inoremap", "<lead><tab>", "<tab>")
+" ...Make it easy to insert a & in insert mode:
+call HTMLmap("inoremap", "<lead>&", "&")
 
-" Tab takes us to a (hopefully) reasonable next insert point:
-"call HTMLmap("inoremap", "<TAB>", "<C-O>:call HTMLnextInsertPoint('i')<CR>")
-"call HTMLmap("nnoremap", "<TAB>", ":call HTMLnextInsertPoint('n')<CR>")
-"call HTMLmap("vnoremap", "<TAB>", "<C-C>:call HTMLnextInsertPoint('n')<CR>", -1)
+if ! exists('g:no_html_tab_mapping')
+  " Allow hard tabs to be inserted:
+  call HTMLmap("inoremap", "<lead><tab>", "<tab>")
+  call HTMLmap("nnoremap", "<lead><tab>", "<tab>")
+
+  " Tab takes us to a (hopefully) reasonable next insert point:
+  call HTMLmap("inoremap", "<tab>", "<C-O>:call HTMLnextInsertPoint('i')<CR>")
+  call HTMLmap("nnoremap", "<tab>", ":call HTMLnextInsertPoint('n')<CR>")
+  call HTMLmap("vnoremap", "<tab>", "<C-C>:call HTMLnextInsertPoint('n')<CR>", -1)
+else
+  call HTMLmap("inoremap", "<lead><tab>", "<C-O>:call HTMLnextInsertPoint('i')<CR>")
+  call HTMLmap("nnoremap", "<lead><tab>", ":call HTMLnextInsertPoint('n')<CR>")
+  call HTMLmap("vnoremap", "<lead><tab>", "<C-C>:call HTMLnextInsertPoint('n')<CR>", -1)
+endif
 
 " Update an image tag's WIDTH & HEIGHT attributes (experimental!):
 runtime! MangleImageTag.vim 
@@ -530,18 +628,26 @@ function! s:HTMLtemplate2()
     let g:html_authoremail_encoded = ''
   endif
 
-  if (! exists('g:html_template')) || g:html_template == ""
-      0put =b:internal_html_template
-  else
-    if filereadable(expand(g:html_template))
-      execute "0read " . g:html_template
+  let template = ''
+
+  if (exists('b:html_template') && b:html_template != '')
+    let template = b:html_template
+  elseif (exists('g:html_template') && g:html_template != '')
+    let template = g:html_template
+  endif
+
+  if template != ''
+    if filereadable(expand(template))
+      silent execute "0read " . template
     else
       echohl ErrorMsg
-      echomsg "Unable to insert template file: " . g:html_template
+      echomsg "Unable to insert template file: " . template
       echomsg "Either it doesn't exist or it isn't readable."
       echohl None
       return 0
     endif
+  else
+    0put =b:internal_html_template
   endif
 
   if getline('$') =~ '^\s*$'
@@ -557,6 +663,12 @@ function! s:HTMLtemplate2()
   silent! %s/\C%alinkcolor%/\=g:html_alinkcolor/g
   silent! %s/\C%vlinkcolor%/\=g:html_vlinkcolor/g
   silent! %s/\C%date%/\=strftime('%B %d, %Y')/g
+  "silent! %s/\C%date\s*\([^%]\{-}\)\s*%/\=strftime(substitute(submatch(1),'\\\@<!!','%','g'))/g
+  silent! %s/\C%date\s*\(\%(\\%\|[^%]\)\{-}\)\s*%/\=strftime(substitute(substitute(submatch(1),'\\%','%%','g'),'\\\@<!!','%','g'))/g
+  silent! %s/\C%time%/\=strftime('%r %Z')/g
+  silent! %s/\C%time12%/\=strftime('%r %Z')/g
+  silent! %s/\C%time24%/\=strftime('%T')/g
+  silent! %s/\C%charset%/\=<SID>HTMLdetectCharset()/g
 
   go 1
 
@@ -577,15 +689,23 @@ endfunction  " }}}2
 "       SGML Doctype Command
 "call HTMLmap("nnoremap", "<lead>4", "1GO<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\"><ESC>``")
 
-"       SGML Doctype Command -- Transitional (Looser)
+"       SGML Doctype Command
 if b:do_xhtml_mappings == 0
-  call HTMLmap("nnoremap", "<lead>4", ":call append(0, '<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"') \\\| call append(1, ' \"http://www.w3.org/TR/html4/loose.dtd\">')<CR>")
+  " Transitional HTML (Looser):
+  call HTMLmap("nnoremap", "<lead>4", ":call append(0, '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"') \\\| call append(1, ' \"http://www.w3.org/TR/html4/loose.dtd\">')<CR>")
+  " Strict HTML:
+  call HTMLmap("nnoremap", "<lead>s4", ":call append(0, '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"') \\\| call append(1, ' \"http://www.w3.org/TR/html4/strict.dtd\">')<CR>")
 else
+  " Transitional XHTML (Looser):
   call HTMLmap("nnoremap", "<lead>4", ":call append(0, '<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"') \\\| call append(1, ' \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">')<CR>")
+  " Strict XHTML:
+  call HTMLmap("nnoremap", "<lead>s4", ":call append(0, '<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"') \\\| call append(1, ' \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">')<CR>")
 endif
+call HTMLmap("imap", "<lead>4", "<C-O>" . g:html_map_leader . "4")
+call HTMLmap("imap", "<lead>s4", "<C-O>" . g:html_map_leader . "s4")
 
-"       Content Type META tag
-call HTMLmap("inoremap", "<lead>ct", "<[{META HTTP-EQUIV}]=\"Content-Type\" [{CONTENT}]=\"text/html; charset=iso-8859-1\" />")
+"       Content-Type META tag
+call HTMLmap("inoremap", "<lead>ct", "<[{META HTTP-EQUIV}]=\"Content-Type\" [{CONTENT}]=\"text/html; charset=<C-R>=<SID>HTMLdetectCharset()<CR>\" />")
 
 "       Comment Tag
 call HTMLmap("inoremap", "<lead>cm", "<C-R>=<SID>tag('comment','i')<CR>")
@@ -835,8 +955,10 @@ call HTMLmapo('<lead>it', 0)
 call HTMLmap("inoremap", "<lead>im", "<[{IMG SRC=\"\" ALT}]=\"\" /><ESC>3F\"i")
 " Visual mapping:
 call HTMLmap("vnoremap", "<lead>im", "<ESC>`>a\" /><C-O>`<<[{IMG SRC=\"\" ALT}]=\"<C-O>2F\"", 0)
+call HTMLmap("vnoremap", "<lead>iM", "<ESC>`>a\" [{ALT}]=\"\" /><C-O>`<<[{IMG SRC}]=\"<C-O>3f\"", 0)
 " Motion mapping:
 call HTMLmapo('<lead>im', 1)
+call HTMLmapo('<lead>iM', 1)
 
 "       INS     Inserted Text           HTML 3.0
 call HTMLmap("inoremap", "<lead>in", "<lt>[{INS></INS}]><ESC>bhhi")
@@ -880,7 +1002,7 @@ call HTMLmapo('<lead>lh', 0)
 "imap ;mu <MENU><CR></MENU><ESC>O
 
 "       META    Meta Information        HTML 2.0        HEADER
-call HTMLmap("inoremap", "<lead>me", "<[{META NAME=\"\" CONTENT}]=\"\" /><ESC>F\"i")
+call HTMLmap("inoremap", "<lead>me", "<[{META NAME=\"\" CONTENT}]=\"\" /><ESC>3F\"i")
 " Visual mappings:
 call HTMLmap("vnoremap", "<lead>me", "<ESC>`>a\" [{CONTENT}]=\"\" /><C-O>`<<[{META NAME}]=\"<C-O>3f\"", 0)
 call HTMLmap("vnoremap", "<lead>mE", "<ESC>`>a\" /><C-O>`<<[{META NAME=\"\" CONTENT}]=\"<C-O>2F\"", 0)
@@ -1010,14 +1132,17 @@ call HTMLmap("vnoremap", "<lead>va", "<ESC>`>a</[{VAR}]><C-O>`<<[{VAR}]><ESC>", 
 " Motion mapping:
 call HTMLmapo('<lead>va', 0)
 
-"       JavaScript
+"       Embedded JavaScript
 call HTMLmap("inoremap", "<lead>js", "<[{SCRIPT TYPE}]=\"text/javascript\" [{LANGUAGE}]=\"javascript\"><CR><!--<CR>// --><CR></[{SCRIPT}]><ESC>kO")
 
+"       Sourced JavaScript
+call HTMLmap("inoremap", "<lead>sj", "<[{SCRIPT SRC}]=\"\" [{TYPE}]=\"text/javascript\" [{LANGUAGE}]=\"javascript\"></[{SCRIPT}]><C-O>5F\"")
+
 "       EMBED
-call HTMLmap("inoremap", "<lead>eb", "<[{EMBED SRC=\"\" WIDTH=\"\" HEIGHT}]=\"\" /><CR><[{NOEMBED></NOEMBED}]><ESC>k0f\"li")
+call HTMLmap("inoremap", "<lead>eb", "<[{EMBED SRC=\"\" WIDTH=\"\" HEIGHT}]=\"\" /><CR><[{NOEMBED></NOEMBED}]><ESC>k$5F\"i")
 
 "       OBJECT
-call HTMLmap("inoremap", "<lead>ob", "<[{OBJECT DATA=\"\" WIDTH=\"\" HEIGHT}]=\"\"><CR></[{OBJECT}]><ESC>k0f\"li")
+call HTMLmap("inoremap", "<lead>ob", "<[{OBJECT DATA=\"\" WIDTH=\"\" HEIGHT}]=\"\"><CR></[{OBJECT}]><ESC>k$5F\"i")
 
 " Table stuff:
 call HTMLmap("inoremap", "<lead>ca", "<[{CAPTION></CAPTION}]><ESC>bhhi")
@@ -1042,7 +1167,7 @@ call HTMLmapo("<lead>th", 0)
 call HTMLmap("nnoremap", "<lead>tA", ":call HTMLgenerateTable()<CR>")
 
 function! HTMLgenerateTable()
-    let byteoffset = line2byte(line(".")) + col(".") - 1
+    let byteoffset = line2byte(line('.')) + col('.') - 1
 
     let rows    = inputdialog("Number of rows: ") + 0
     let columns = inputdialog("Number of columns: ") + 0
@@ -1095,7 +1220,7 @@ call HTMLmap("inoremap", "<lead>fs", "<[{FRAMESET ROWS=\"\" COLS}]=\"\"><CR></[{
 call HTMLmap("inoremap", "<lead>fr", "<[{FRAME SRC}]=\"\" /><ESC>F\"i")
 call HTMLmap("inoremap", "<lead>nf", "<[{NOFRAMES}]><CR></[{NOFRAMES}]><ESC>O")
 " Visual mappings:
-call HTMLmap("vnoremap", "<lead>fs", "<ESC>`>a<CR></[{FRAMESET}]><C-O>`<<[{FRAMESET ROWS=\"\" COLS}]=\"\"><CR><ESC>k0f\"l")
+call HTMLmap("vnoremap", "<lead>fs", "<ESC>`>a<CR></[{FRAMESET}]><C-O>`<<[{FRAMESET ROWS=\"\" COLS}]=\"\"><CR><ESC>k$3F\"")
 call HTMLmap("vnoremap", "<lead>fr", "<ESC>`>a\" /><C-O>`<<[{FRAME SRC=\"<ESC>")
 call HTMLmap("vnoremap", "<lead>nf", "<ESC>`>a<CR></[{NOFRAMES}]><C-O>`<<[{NOFRAMES}]><CR><ESC>", 1)
 " Motion mappings:
@@ -1106,38 +1231,41 @@ call HTMLmapo("<lead>nf", 0)
 "       IFRAME  Inline Frame            HTML 4.0
 call HTMLmap("inoremap", "<lead>if", "<[{IFRAME SRC}]=\"\"><CR></[{IFRAME}]><ESC>Bblli")
 " Visual mapping:
-call HTMLmap("vnoremap", "<lead>if", "<ESC>`>a<CR></[{IFRAME}]><C-O>`<<[{IFRAME SRC}]=\"\"><CR><ESC>k0f\"l")
+call HTMLmap("vnoremap", "<lead>if", "<ESC>`>a<CR></[{IFRAME}]><C-O>`<<[{IFRAME SRC}]=\"\"><CR><ESC>k$F\"")
 " Motion mapping:
 call HTMLmapo('<lead>if', 0)
 
 " Forms stuff:
-call HTMLmap("inoremap", "<lead>fm", "<[{FORM ACTION}]=\"\"><CR></[{FORM}]><ESC>k0f\"li")
+call HTMLmap("inoremap", "<lead>fm", "<[{FORM ACTION}]=\"\"><CR></[{FORM}]><ESC>k$F\"i")
 call HTMLmap("inoremap", "<lead>bu", "<[{INPUT TYPE=\"BUTTON\" NAME=\"\" VALUE}]=\"\" /><ESC>3F\"i")
 call HTMLmap("inoremap", "<lead>ch", "<[{INPUT TYPE=\"CHECKBOX\" NAME=\"\" VALUE}]=\"\" /><ESC>3F\"i")
 call HTMLmap("inoremap", "<lead>ra", "<[{INPUT TYPE=\"RADIO\" NAME=\"\" VALUE}]=\"\" /><ESC>3F\"i")
 call HTMLmap("inoremap", "<lead>hi", "<[{INPUT TYPE=\"HIDDEN\" NAME=\"\" VALUE}]=\"\" /><ESC>3F\"i")
-call HTMLmap("inoremap", "<lead>pa", "<[{INPUT TYPE=\"PASSWORD\" NAME=\"\" SIZE}]=20 /><ESC>F\"i")
-call HTMLmap("inoremap", "<lead>te", "<[{INPUT TYPE=\"TEXT\" NAME=\"\" VALUE=\"\" SIZE}]=20 /><ESC>3F\"i")
-call HTMLmap("inoremap", "<lead>fi", "<[{INPUT TYPE=\"FILE\" NAME=\"\" VALUE=\"\" SIZE}]=20 /><ESC>3F\"i")
+call HTMLmap("inoremap", "<lead>pa", "<[{INPUT TYPE=\"PASSWORD\" NAME=\"\" VALUE=\"\" SIZE}]=\"20\" /><ESC>5F\"i")
+call HTMLmap("inoremap", "<lead>te", "<[{INPUT TYPE=\"TEXT\" NAME=\"\" VALUE=\"\" SIZE}]=\"20\" /><ESC>5F\"i")
+call HTMLmap("inoremap", "<lead>fi", "<[{INPUT TYPE=\"FILE\" NAME=\"\" VALUE=\"\" SIZE}]=\"20\" /><ESC>5F\"i")
 call HTMLmap("inoremap", "<lead>se", "<[{SELECT NAME}]=\"\"><CR></[{SELECT}]><ESC>O")
 call HTMLmap("inoremap", "<lead>ms", "<[{SELECT NAME=\"\" MULTIPLE}]><CR></[{SELECT}]><ESC>O")
-call HTMLmap("inoremap", "<lead>op", "<[{OPTION}] />")
-call HTMLmap("inoremap", "<lead>og", "<[{OPTGROUP LABEL}]=\"\"><CR></[{OPTGROUP}]><ESC>k0f\"li")
-call HTMLmap("inoremap", "<lead>tx", "<[{TEXTAREA NAME=\"\" ROWS=\"10\" COLS}]=\"50\"><CR></[{TEXTAREA}]><ESC>k0f\"li")
+call HTMLmap("inoremap", "<lead>op", "<[{OPTION></OPTION}]><ESC>F<i")
+call HTMLmap("inoremap", "<lead>og", "<[{OPTGROUP LABEL}]=\"\"><CR></[{OPTGROUP}]><ESC>k$F\"i")
+call HTMLmap("inoremap", "<lead>tx", "<[{TEXTAREA NAME=\"\" ROWS=\"10\" COLS}]=\"50\"><CR></[{TEXTAREA}]><ESC>k$5F\"i")
 call HTMLmap("inoremap", "<lead>su", "<[{INPUT TYPE=\"SUBMIT\" VALUE}]=\"Submit\" />")
 call HTMLmap("inoremap", "<lead>re", "<[{INPUT TYPE=\"RESET\" VALUE}]=\"Reset\" />")
 call HTMLmap("inoremap", "<lead>la", "<[{LABEL FOR=\"\"></LABEL}]><C-O>F\"")
 " Visual mappings:
-call HTMLmap("vnoremap", "<lead>fm", "<ESC>`>a<CR></[{FORM}]><C-O>`<<[{FORM ACTION}]=\"\"><CR><ESC>k0f\"l", 1)
+call HTMLmap("vnoremap", "<lead>fm", "<ESC>`>a<CR></[{FORM}]><C-O>`<<[{FORM ACTION}]=\"\"><CR><ESC>k$F\"", 1)
 call HTMLmap("vnoremap", "<lead>bu", "<ESC>`>a\" /><C-O>`<<[{INPUT TYPE=\"BUTTON\" NAME=\"\" VALUE}]=\"<C-O>2F\"", 0)
 call HTMLmap("vnoremap", "<lead>ch", "<ESC>`>a\" /><C-O>`<<[{INPUT TYPE=\"CHECKBOX\" NAME=\"\" VALUE}]=\"<C-O>2F\"", 0)
 call HTMLmap("vnoremap", "<lead>ra", "<ESC>`>a\" /><C-O>`<<[{INPUT TYPE=\"RADIO\" NAME=\"\" VALUE}]=\"<C-O>2F\"", 0)
 call HTMLmap("vnoremap", "<lead>hi", "<ESC>`>a\" /><C-O>`<<[{INPUT TYPE=\"HIDDEN\" NAME=\"\" VALUE}]=\"<C-O>2F\"", 0)
+call HTMLmap("vnoremap", "<lead>pa", "<ESC>`>a\" [{SIZE}]=\"20\" /><C-O>`<<[{INPUT TYPE=\"PASSWORD\" NAME=\"\" VALUE}]=\"<C-O>2F\"", 0)
 call HTMLmap("vnoremap", "<lead>te", "<ESC>`>a\" [{SIZE}]=\"20\" /><C-O>`<<[{INPUT TYPE=\"TEXT\" NAME=\"\" VALUE}]=\"<C-O>2F\"", 0)
-call HTMLmap("vnoremap", "<lead>se", "<ESC>`>a<CR></[{SELECT}]><C-O>`<<[{SELECT NAME}]=\"\"><CR><ESC>k0f\"l", 1)
-call HTMLmap("vnoremap", "<lead>ms", "<ESC>`>a<CR></[{SELECT}]><C-O>`<<[{SELECT NAME=\"\" MULTIPLE}]><CR><ESC>k0f\"l", 1)
-call HTMLmap("vnoremap", "<lead>og", "<ESC>`>a<CR></[{OPTGROUP}]><C-O>`<<[{OPTGROUP LABEL}]=\"\"><CR><ESC>k0f\"l", 1)
-call HTMLmap("vnoremap", "<lead>tx", "<ESC>`>a<CR></[{TEXTAREA}]><C-O>`<<[{TEXTAREA NAME=\"\" ROWS=\"10\" COLS}]=\"50\"><CR><ESC>k0f\"l", 1)
+call HTMLmap("vnoremap", "<lead>fi", "<ESC>`>a\" [{SIZE}]=\"20\" /><C-O>`<<[{INPUT TYPE=\"FILE\" NAME=\"\" VALUE}]=\"<C-O>2F\"", 0)
+call HTMLmap("vnoremap", "<lead>se", "<ESC>`>a<CR></[{SELECT}]><C-O>`<<[{SELECT NAME}]=\"\"><CR><ESC>k$F\"", 1)
+call HTMLmap("vnoremap", "<lead>ms", "<ESC>`>a<CR></[{SELECT}]><C-O>`<<[{SELECT NAME=\"\" MULTIPLE}]><CR><ESC>k$F\"", 1)
+call HTMLmap("vnoremap", "<lead>op", "<ESC>`>a</[{OPTION}]><C-O>`<<[{OPTION}]><ESC>", 2)
+call HTMLmap("vnoremap", "<lead>og", "<ESC>`>a<CR></[{OPTGROUP}]><C-O>`<<[{OPTGROUP LABEL}]=\"\"><CR><ESC>k$F\"", 1)
+call HTMLmap("vnoremap", "<lead>tx", "<ESC>`>a<CR></[{TEXTAREA}]><C-O>`<<[{TEXTAREA NAME=\"\" ROWS=\"10\" COLS}]=\"50\"><CR><ESC>k$5F\"", 1)
 call HTMLmap("vnoremap", "<lead>la", "<ESC>`>a</[{LABEL}]><C-O>`<<[{LABEL FOR}]=\"\"><C-O>F\"", 0)
 call HTMLmap("vnoremap", "<lead>lA", "<ESC>`>a\"></[{LABEL}]><C-O>`<<[{LABEL FOR}]=\"<C-O>f<", 0)
 " Motion mappings:
@@ -1146,9 +1274,12 @@ call HTMLmapo("<lead>bu", 1)
 call HTMLmapo("<lead>ch", 1)
 call HTMLmapo("<lead>ra", 1)
 call HTMLmapo("<lead>hi", 1)
+call HTMLmapo("<lead>pa", 1)
 call HTMLmapo("<lead>te", 1)
+call HTMLmapo("<lead>fi", 1)
 call HTMLmapo("<lead>se", 0)
 call HTMLmapo("<lead>ms", 0)
+call HTMLmapo("<lead>op", 0)
 call HTMLmapo("<lead>og", 0)
 call HTMLmapo("<lead>tx", 0)
 call HTMLmapo("<lead>la", 1)
@@ -1163,6 +1294,8 @@ call HTMLmapo("<lead>lA", 1)
 " HTML entities:
 call HTMLmap("nnoremap", "<lead>&", "s<C-R>=HTMLencodeString(@\")<CR><Esc>")
 call HTMLmap("vnoremap", "<lead>&", "s<C-R>=HTMLencodeString(@\")<CR><Esc>")
+call HTMLmap("vnoremap", "<lead>^", "s<C-R>=HTMLencodeString(@\", 'd')<CR><Esc>")
+call HTMLmapo("<lead>^", 0)
 
 call HTMLmap("inoremap", "&&", "&amp;")
 call HTMLmap("inoremap", "&cO", "&copy;")
@@ -1322,7 +1455,9 @@ elseif exists("did_html_menus")
   if &filetype ==? "html" || &filetype ==? "xhtml"
     amenu enable HTML
     amenu enable HTML.*
-    amenu enable ToolBar.*
+    if exists('g:did_html_toolbar')
+      amenu enable ToolBar.*
+    endif
   endif
 else
 
@@ -1477,8 +1612,8 @@ if (! exists('g:no_html_toolbar')) && (has("toolbar") || has("win32") || has("gu
     endif
 
     if s:browsers =~ 'l'
-      HTMLtmenu Lynx     1.530 ToolBar.Lynx     Launch\ Lynx\ on\ Current\ File
-      exe 'amenu         1.530 ToolBar.Lynx'    g:html_map_leader . 'ly'
+      HTMLtmenu Lynx     1.530 ToolBar.Lynx      Launch\ Lynx\ on\ Current\ File
+      exe 'amenu         1.530 ToolBar.Lynx'     g:html_map_leader . 'ly'
     endif
 
   elseif maparg(g:html_map_leader . 'ie', 'n') != ""
@@ -1488,9 +1623,9 @@ if (! exists('g:no_html_toolbar')) && (has("toolbar") || has("win32") || has("gu
     exe 'amenu 1.510 ToolBar.IE' g:html_map_leader . 'ie'
   endif
 
-  amenu 1.998 ToolBar.-sep99-   <nul>
-  tmenu 1.999 ToolBar.Help      HTML Help
-  amenu 1.999 ToolBar.Help      :help HTML<CR>
+  amenu 1.998 ToolBar.-sep99- <nul>
+  tmenu 1.999 ToolBar.Help    HTML Help
+  amenu 1.999 ToolBar.Help    :help HTML<CR>
 
   delcommand HTMLtmenu
   delfunction HTMLtmenu
@@ -1523,7 +1658,9 @@ autocmd BufEnter,BufWinEnter *
  \ if &filetype ==? "html" || &filetype ==? "xhtml" |
    \ amenu enable HTML |
    \ amenu enable HTML.* |
+   \ if exists('g:did_html_toolbar') |
    \ amenu enable ToolBar.* |
+   \ endif |
  \ endif
 augroup END
 
@@ -2348,4 +2485,4 @@ let &cpoptions = s:savecpo
 unlet s:savecpo
 
 " vim:ts=2:sw=2:expandtab:tw=78:fo=croq2:comments=b\:\":
-" vim600:fdm=marker:fdc=3:cms=\ "\ %s:fileencoding=iso8859:
+" vim600:fdm=marker:fdc=3:cms=\ "\ %s:

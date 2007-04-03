@@ -22,8 +22,11 @@
 " Place - Suite 330, Boston, MA 02111-1307, USA.
 "
 " RCS info: ---------------------------------------------------------------{{{
-" $Id: MangleImageTag.vim,v 1.6 2006/09/22 06:25:14 infynity Exp $
+" $Id: MangleImageTag.vim,v 1.7 2007/01/04 04:29:55 infynity Exp $
 " $Log: MangleImageTag.vim,v $
+" Revision 1.7  2007/01/04 04:29:55  infynity
+" Enclose the values of the width/height in quotes by default
+"
 " Revision 1.6  2006/09/22 06:25:14  infynity
 " Search for the image file in the current directory and the buffer's directory.
 "
@@ -131,7 +134,7 @@ function! MangleImageTag() "{{{1
 	else
 		let tag = substitute(tag,
 			\ "\\csrc=\\([\"']\\)\\(.\\{-}\\|.\\{-}\\)\\1",
-			\ '\0 ' . (case ? 'HEIGHT' : 'height') . '=' . height, '')
+			\ '\0 ' . (case ? 'HEIGHT' : 'height') . '="' . height, '"')
 	endif
 
 	if tag =~? "width=\\(\"\\d\\+\"\\|'\\d\\+\'\\|\\d\\+\\)"
@@ -141,7 +144,7 @@ function! MangleImageTag() "{{{1
 	else
 		let tag = substitute(tag,
 			\ "\\csrc=\\([\"']\\)\\(.\\{-}\\|.\\{-}\\)\\1",
-			\ '\0 ' . (case ? 'WIDTH' : 'width') . '=' . width, '')
+			\ '\0 ' . (case ? 'WIDTH' : 'width') . '="' . width, '"')
 	endif
 
 	let line = savestart . tag . saveend

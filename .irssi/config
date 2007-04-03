@@ -311,6 +311,8 @@ settings = {
     chanact_abbreviate_names = "0";
     openurl_app_ftp = "= screen lftp \"$1\"";
     openurl_watch_mail = "no";
+    trackbar_string = "-";
+    trackbar_style = "%r";
   };
 };
 keyboard = (

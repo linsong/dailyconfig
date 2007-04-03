@@ -80,7 +80,7 @@ if v:shell_error != 0
 		let s:NetscapeRemoteCmd = s:FirefoxPath
 	elseif exists('s:MozillaPath')
 		let s:NetscapeRemoteCmd = s:MozillaPath
-	elseif exists('s:NetscapeRemoteCmd')
+	elseif exists('s:NetscapePath')
 		let s:NetscapeRemoteCmd = s:NetscapePath
 	else
 		"echohl ErrorMsg
