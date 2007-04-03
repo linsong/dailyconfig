@@ -577,7 +577,7 @@ characters into your HTML document.  These are known as characters entities.
 	highlighted character.  For example, "foo bar" would become
 	"&#102;&#111;&#111;&#32;&#98;&#97;&#114;".  (See |i_;&|)
 
-							*n_;^* *v_;&*
+							*n_;^* *v_;^*
 ;^	This mapping will decode the &#...; elements of the provided string
 	into their actual characters.  The normal mode version of this macro
 	works differently from |;&| in that it requires a motion operator.

@@ -974,8 +974,8 @@ endif " has("autocmd")
 
     "### setting for NERD_comments.vim {{{2let g:pyljpost_path = "/usr/local/bin/pyljpost.py"
     " make NERD_comments silent 
-    let g:NERD_shut_up=1
-    let g:NERD_mapleader = ',c'
+    let g:NERDShutUp=1
+    let g:NERDMapleader = ',c'
 
     "### }}}2   
 
