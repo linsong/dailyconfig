@@ -101,6 +101,10 @@ fi
 # source ~/laszlorc
 #fi
 
+if [ -e $HOME/mytools/fehviewer ]; then
+    ln -s $(which feh) $HOME/mytools/fehviewer
+then
+
 ###########################################################################
 ###
 ###            ALIAS defines
