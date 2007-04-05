@@ -25,20 +25,20 @@ mono indicator reverse
 
 # Colours for items in the reader
 color header    magenta      black '^(status|lines|date|received|sender|references):'
-#color header    magenta      brightblack '^(pr|mime|x-|user|return|content-)[^:]*:'
-#color header    brightyellow brightblack '^content-type:'
-#color header    magenta      brightblack '^content-type: *text/plain'
-#color header    brightcyan   brightblack '^(message-id|in-reply-to):'
-#color header    brightgreen  brightblack '^list-[^:]*:'
-#color header    yellow       brightblack '^from '
-#color header    brightcyan   brightblack '^(disposition)'
-#color header    green        brightblack '^(mail-)?followup'
-#color header    white        brightblack '^reply'
-#color header    brightwhite  brightblack '^(resent)'
-#color header    default      brightblack '^from:'
-#color header    cyan         brightblack '^(to|cc|bcc):'
-#color header    green        brightblack '^(subject):.*$'
-#mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Virus-hagbard):"
+color header    magenta      brightblack '^(pr|mime|x-|user|return|content-)[^:]*:'
+color header    brightyellow brightblack '^content-type:'
+color header    magenta      brightblack '^content-type: *text/plain'
+color header    brightcyan   brightblack '^(message-id|in-reply-to):'
+color header    brightgreen  brightblack '^list-[^:]*:'
+color header    yellow       brightblack '^from '
+color header    brightcyan   brightblack '^(disposition)'
+color header    green        brightblack '^(mail-)?followup'
+color header    white        brightblack '^reply'
+color header    brightwhite  brightblack '^(resent)'
+color header    default      brightblack '^from:'
+color header    cyan         brightblack '^(to|cc|bcc):'
+color header    green        brightblack '^(subject):.*$'
+mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Virus-hagbard):"
 
 # Colours for items in the index
 color index brightgreen  black ~N
