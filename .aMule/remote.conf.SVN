@@ -1,0 +1,12 @@
+Locale=
+[EC]
+Host=localhost
+Port=4712
+Password=$$$echo -n amule | md5sum | cut -d ' ' -f 1$$$
+[Webserver]
+Port=-1
+Template=php-default
+UseGzip=0
+AllowGuest=0
+AdminPassword=$$$echo -n amule | md5sum | cut -d ' ' -f 1$$$
+GuestPassword=$$$echo -n amule | md5sum | cut -d ' ' -f 1$$$
