@@ -1,0 +1,91 @@
+#vim: ft=apache
+# This config file will config all web service on ubuntu webserver
+
+NameVirtualHost *:443
+<VirtualHost *:443>
+	ServerAdmin webmaster@localhost
+	
+	DocumentRoot /var/www-home
+    ServerName linsong2.gnway.net
+
+    # enable SSL support 
+    SSLEngine On
+    SSLCertificateFile /etc/apache2/ssl.crt/homesite.crt
+    SSLCertificateKeyFile /etc/apache2/ssl.key/homesite.key
+
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www-home/>
+		Options Indexes FollowSymLinks MultiViews 
+		AllowOverride None
+		Order allow,deny
+		allow from all
+		# Uncomment this directive is you want to see apache2's
+		# default start page (in /apache2-default) when you go to /
+		#RedirectMatch ^/$ /apache2-default/
+	</Directory>
+
+	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+	<Directory "/usr/lib/cgi-bin">
+		AllowOverride None
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog /var/log/apache2/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog /var/log/apache2/access.log combined
+	ServerSigNature On
+
+    Alias /doc/ "/usr/share/doc/"
+    <Directory "/usr/share/doc/">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/255.0.0.0 ::1/128
+    </Directory>
+
+    Alias /motion "/tmp/motion"
+    <Directory "/tmp/motion">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride AuthConfig
+        Order allow,deny
+        Allow from all
+        # enable authority(ask password to access) support 
+        AuthType Basic
+        AuthName "Motion Access Authority"
+        AuthUserFile /etc/apache2/password/home-passwords
+        Require valid-user
+    </Directory>
+
+    # settings for proxied urls 
+    ProxyRequests Off
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+    </Proxy>
+
+    ProxyPass /motion/live http://localhost:18000
+    ProxyPassReverse /motion/live http://localhost:18000
+
+    <Location /amule/>
+        ProxyPass  http://localhost:4711/
+        ProxyPassReverse http://localhost:4711/
+    </Location>
+
+    # enable Rewrite Engine
+    #RewriteEngine On
+
+    # rewrite /motion/live to homesite:18000
+    #RewriteRule ^/motion/live http://localhost:18000 [P]
+    #RewriteRule ^/motion/control http://192.168.0.101:18080    [P]
+   
+</VirtualHost>
