@@ -9,16 +9,18 @@ macro generic ,sm ":source $HOME/.mutt/muttrc\r"
 
 # Macros for use in the index.
 macro index ",v"     "<pipe-message>vim -<enter>"                         # View the message in less.
-macro index ",N"     "<tag-pattern>~N<enter><tag-prefix>N<tag-prefix>t"    # make all new mails as old
+macro index ",R"     "<tag-pattern>~N<enter><tag-prefix>N<tag-prefix>t"   # make all new mails as Read
+macro index ",N"     "<limit>~N<enter>"                             # filter out all New mails
+macro index ",U"     "<limit>~U<enter>"                             # filter out all Unread mails
 macro index "\'"     "<clear-flag>r"                                      # Mark as un-replied
 macro index "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
 macro index "<esc>v"    "<pipe-message>urlview<enter>"                       # URL viewer.
-macro index "<esc>1" "<change-folder> =vincent<enter>"
-macro index "<esc>2" "<change-folder> =exoweb/work<enter>"
-macro index "<esc>3" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
-macro index "<esc>4" "<change-folder> =maillists/vim@vim.org<enter>"
-macro index "<esc>9" "<change-folder> =maillists/<tab><tab>"
-macro index "<esc>0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
+macro index ",1" "<change-folder> =vincent<enter>"
+macro index ",2" "<change-folder> =exoweb/work<enter>"
+macro index ",3" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
+macro index ",4" "<change-folder> =maillists/vim@vim.org<enter>"
+macro index ",9" "<change-folder> =maillists/<tab><tab>"
+macro index ",0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
 #macro index "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.
 #macro index "<esc>h"    "<pipe-message>mailhops<enter>"                      # View the path of the mail.
 #macro index "<esc>f"    "<pipe-message>view-x-face<enter>"                   # View the X-Face (if there is one).
@@ -29,6 +31,12 @@ macro index "<esc>0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
 macro pager ",v"    "<pipe-message>vim -<enter>"                          # View the message in less.
 macro pager "w"      "<enter-command>set invsmart_wrap invmarkers<enter>" # Toggle wrap stuff
 macro pager "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
+macro pager ",1" "<change-folder> =vincent<enter>"
+macro pager ",2" "<change-folder> =exoweb/work<enter>"
+macro pager ",3" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
+macro pager ",4" "<change-folder> =maillists/vim@vim.org<enter>"
+macro pager ",9" "<change-folder> =maillists/<tab><tab>"
+macro pager ",0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
 macro pager "<esc>0"    "<enter-command>set pager_index_lines=0<enter>"      # Change PIL size
 macro pager "<esc>1"    "<enter-command>set pager_index_lines=2<enter>"      # Change PIL size
 macro pager "<esc>2"    "<enter-command>set pager_index_lines=4<enter>"      # Change PIL size
