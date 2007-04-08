@@ -1,0 +1,61 @@
+#! /bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/amuled
+WEB=/usr/bin/amuleweb
+NAME=amuled
+DESC=amuled
+RUNAMULE=no
+USER=vincent
+
+
+test -x $DAEMON || exit 0
+
+
+# Include amule defaults if available
+if [ -f /etc/default/amule ] ; then
+    . /etc/default/amule
+fi
+
+if [ "$RUNAMULE" != "yes" ];then
+    echo "Amule not to be started. Edit /etc/default/amule first."
+    exit 1
+fi
+
+
+set -xe
+
+
+case "$1" in
+  start)
+    echo -n "Starting $DESC: "
+       su $USER -c "$DAEMON -f"
+       sleep 20
+       su $USER -c "$WEB --quiet &"
+    echo "$NAME."
+    ;;
+  stop)
+    echo -n "Stopping $DESC: "
+       killall --quiet --ignore-case $WEB
+       killall --quiet --ignore-case $DAEMON
+    echo "$NAME."
+    ;;
+  restart|force-reload)
+    echo -n "Restarting $DESC: "
+       killall --quiet --ignore-case $WEB
+       killall --quiet --ignore-case $DAEMON
+    sleep 1
+       su $USER -c "$DAEMON -f"
+       sleep 20
+       su $USER -c "$WEB --quiet &"
+    echo "$NAME."
+    ;;
+  *)
+    N=/etc/init.d/$NAME
+    echo "Usage: $N {start|stop|restart|force-reload}" >&2
+    exit 1
+    ;;
+esac
+
+
+exit 0
+
