@@ -21,13 +21,14 @@ def perms(list):
 
 def check_data_validity(init_data, row_index):
     for j in range(len(init_data[row_index])):
-        column = [init_data[i][j] for i in range(row_index+1)]
-        if len(Set(column))!=row_index+1:
+        column = [init_data[i][j] for i in range(len(init_data))
+                  if init_data[i][j]!=0]
+        if len(Set(column))!=len(column):
             return False
 
+    base_i = row_index/3
     for base_j in range(0, len(init_data[row_index]), 3):
         #check data within a square
-        base_i = row_index/3
         square_data = []
         for i in range(row_index%3 + 1):
             for j in range(3):
