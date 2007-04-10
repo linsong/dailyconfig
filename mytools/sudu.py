@@ -2,6 +2,7 @@
 import copy
 from sets import Set
 
+g_row_index = None
 def permutations(L):
     if len(L) == 1:
         yield [L[0]]
@@ -55,12 +56,17 @@ def merge_data(fill_data, init_data, row_index):
     return check_data_validity(init_data, row_index)
 
 def do_row(init_data, row_index):
+    global g_row_index
+    if row_index != g_row_index:
+        print "process row: %s"%row_index
+        g_row_index = row_index
+
+    #if row_index == 5:
+        #import pdb; pdb.set_trace()
+
     if row_index >= len(init_data):
         return True
-    #import pdb; pdb.set_trace()
-    #if init_data[0] == [5,4,1,2,6,7,3,8,9] \
-    #and init_data[1] == [9, 7, 8, 3,4,5, 2,6,1]:
-        #import pdb; pdb.set_trace()
+
     orig_row = copy.deepcopy(init_data[row_index])
     expected_row = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     expected_set = Set(expected_row)
