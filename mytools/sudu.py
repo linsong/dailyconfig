@@ -3,14 +3,16 @@ import copy
 from sets import Set
 
 g_row_index = None
-def permutations(L):
-    if len(L) == 1:
-        yield [L[0]]
-    elif len(L) >= 2:
-        (a, b) = (L[0:1], L[1:])
-        for p in permutations(b):
-            for i in range(len(p)+1):
-                yield b[:i] + a + b[i:]
+
+# not work correctly
+#def permutations(L):
+    #if len(L) == 1:
+        #yield [L[0]]
+    #elif len(L) >= 2:
+        #(a, b) = (L[0:1], L[1:])
+        #for p in permutations(b):
+            #for i in range(len(p)+1):
+                #yield b[:i] + a + b[i:]
 
 def perms(list):
    if list == []:
@@ -27,14 +29,15 @@ def check_data_validity(init_data, row_index):
         if len(Set(column))!=len(column):
             return False
 
-    base_i = row_index/3
+    base_i = (row_index/3)*3
     for base_j in range(0, len(init_data[row_index]), 3):
         #check data within a square
         square_data = []
-        for i in range(row_index%3 + 1):
+        for i in range(3):
             for j in range(3):
-                square_data.append(init_data[base_i+i][base_j+j])
-        if len(Set(square_data))!=(row_index%3+1)*3:
+                if init_data[base_i+i][base_j+j]!=0:
+                    square_data.append(init_data[base_i+i][base_j+j])
+        if len(Set(square_data))!=len(square_data):
             #print "square check failed"
             return False
     return True
@@ -58,11 +61,8 @@ def merge_data(fill_data, init_data, row_index):
 def do_row(init_data, row_index):
     global g_row_index
     if row_index != g_row_index:
-        print "process row: %s"%row_index
+        #print "process row: %s"%row_index
         g_row_index = row_index
-
-    #if row_index == 5:
-        #import pdb; pdb.set_trace()
 
     if row_index >= len(init_data):
         return True
@@ -89,8 +89,10 @@ def do_row(init_data, row_index):
     return False
 
 def start(init_data):
+    print "="*50
     if do_row(init_data, 0):
-        print init_data
+        for i in range(len(init_data)):
+            print "  %d:" % (i+1), init_data[i]
     else:
         print "Can not find the answer. :("
         print init_data
@@ -129,5 +131,7 @@ if __name__=="__main__":
     init_data2[7] = [0, 8, 0, 0, 7, 6, 0, 0, 0]
     init_data2[8] = [0, 6, 9, 0, 5, 0, 0, 1, 0]
 
+    start(init_data);
     start(init_data1);
+    start(init_data2);
 
