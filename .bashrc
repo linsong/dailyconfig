@@ -79,7 +79,7 @@ elif [ $(hostname) == 'Tiger.local' ]; then
 
 elif [ $(hostname) == 'ubuntu' ]; then
 	PS1='
-\[\033[36;44m\]\u@\h \[\033[36;44m\]\w\[\033[0m\]
+\[\033[33m\]\u@\h \[\033[33m\]\w\[\033[0m\]
 \[[30;47m\][\!]\[[m\] $ '
 else
 	PS1='
