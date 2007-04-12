@@ -68,11 +68,19 @@ export VISUAL='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
 
 # set prompt string: user@host and current_directory
 # set different prompt basedd on different host 
-if [ `hostname` != 'lithetech' ]; then
+if [ `hostname` == 'vincent' ]; then
 	PS1='
 \[\033[32m\]\u@\h \[\033[33m\]\w\[\033[0m\]
 \[[30;47m\][\!]\[[m\] $ '
-#elif
+elif [ $(hostname) == 'Tiger.local' ]; then
+	PS1='
+\[\033[36m\]\u@\h \[\033[36m\]\w\[\033[0m\]
+\[[30;47m\][\!]\[[m\] $ '
+
+elif [ $(hostname) == 'ubuntu' ]; then
+	PS1='
+\[\033[36;44m\]\u@\h \[\033[36;44m\]\w\[\033[0m\]
+\[[30;47m\][\!]\[[m\] $ '
 else
 	PS1='
 \[\033[36;40m\]\u@\h \[\033[36;40m\]\w\[\033[0m\]
