@@ -1,0 +1,3 @@
+if [ -z $(ps auxww | grep -i [s]tock_fetcher]) ]; then 
+    stock_fetcher.py &
+fi

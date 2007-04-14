@@ -64,7 +64,8 @@ export LANG=en_US.UTF-8
 set -o vi
 
 export EDITOR='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
-export VISUAL='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
+#export VISUAL='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
+export VISUAL='/usr/bin/vim'
 
 # set prompt string: user@host and current_directory
 # set different prompt basedd on different host 
@@ -151,6 +152,8 @@ fi
 
  alias radio="mplayer -playlist $HOME/playlist/radio.pls"
  alias tv="nmplayer -playlist $HOME/playlist/tv.pls"
+ 
+ alias myip='wget www.whatismyip.org -qO -'
 
  if [ `uname` = 'Darwin' ]; then 
     alias ls='ls -FG'  
