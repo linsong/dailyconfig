@@ -1,6 +1,7 @@
 defaults
 logfile ~/.msmtplog
 
+# account for my gmail
 account gmail
 host smtp.gmail.com
 from linsong.qizi@gmail.com
@@ -8,11 +9,28 @@ tls on
 auth on
 port 587
 user linsong.qizi@gmail.com
+#password <the year I met my lover ;)>
 
+# account used within exoweb's office
 account exoweb
 host smtp.exoweb.net
 from vincent@exoweb.net
 port  25 
 user vincent@exoweb.net
 
-account default: exoweb
+# account that should be used when off campus
+account exoweb_external
+host smtp.exoweb.net
+from vincent@exoweb.net
+tls on
+auth on
+port  587
+user exoweb
+password exoweb4u
+
+# account for send mails of gmail through external smtp server of exoweb
+account gmail_by_exoweb : exoweb_external
+from linsong.qizi@gmail.com
+
+account default: exoweb_external
+
