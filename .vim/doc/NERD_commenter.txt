@@ -1,4 +1,4 @@
-*NERD_commenter.txt*         Plugin for commenting code            v200
+*NERD_commenter.txt*         Plugin for commenting code            v202
 
 
                         NERD COMMENTER REFERENCE MANUAL~
@@ -30,6 +30,7 @@ CONTENTS                                             *NERD_commenter-contents*
             2.2.14 Uncomment line map.........|NERD_com-uncomment-line|
         2.3 Supported filetypes...............|NERD_com-filetypes|
         2.4 Sexy Comments.....................|NERD_com_sexy_comments|
+        2.5 The NERDComment function..........|NERD_com_NERDComment|
     3.Customisation...........................|NERD_com-customisation|
         3.1 Customisation summary.............|NERD_com-cust-summary|
         3.2 Customisation details.............|NERD_com-cust-details|
@@ -45,16 +46,12 @@ CONTENTS                                             *NERD_commenter-contents*
 ==============================================================================
 1. Intro                                                      *NERD_commenter*
 
-The NERD commenter provides a set of handy key mappings for commenting code.
-These mappings are consistent across all supported filetypes. 
+The NERD commenter provides many different commenting operations and styles
+which may be invoked via key mappings and a commenting menu. These operations
+are available for most filetypes.
 
-When writing the NERD commenter I have tried to give it as many
-features/options as possible while keeping it so that the plugin can still be
-used with little or no knowledge of these. The average user need only know
-about a few key mappings to use the NERD commenter while there are plenty of
-other features for the l33t nerd take advantage of.
-
-Enjoy :D
+There are also options available that allow you to tweak the commenting engine
+to you taste.
 
 ==============================================================================
 2. Functionality provided                             *NERD_com-functionality*
@@ -341,17 +338,17 @@ ist jam java javascript jess jgraph jproperties jproperties jsp kconfig kix
 kscript lace lex lftp lifelines lilo lisp lite lotos lout lprolog lscript lss
 lua lynx m4 mail make maple masm master matlab mel mf mib mma model moduala.
 modula2 modula3 monk mush muttrc named nasm nastran natural ncf netdict netrw
-nqc nsis ocaml omlet omnimark openroad opl ora ox pascal passwd pcap pccts perl
-pfmain php phtml pic pike pilrc pine plaintex plm plsql po postscr pov povini
-ppd ppwiz procmail progress prolog psf ptcap python python qf radiance
-ratpoison r rc readline rebol registry remind rexx robots rpl rtf ruby sa samba
-sas sather scheme scilab screen scsh sdl sed selectbuf sgml sgmldecl sgmllnx
-sicad simula sinda skill slang sl slrnrc sm smil smith sml snnsnet snnspat
-snnsres snobol4 spec specman spice sql sqlforms sqlj sqr squid st stp strace
-svn tads taglist tags tak tasm tcl terminfo tex plaintex texinfo texmf tf tidy
-tli trasys tsalt tsscl tssgm uc uil vb verilog vgrindefs vhdl vim viminfo
-virata vrml vsejcl webmacro wget winbatch wml [^w]*sh wvdial xdefaults xf86conf
-xhtml xkb xmath xml xmodmap xpm2 xpm xslt yacc yaml z8a
+nqc nsis ocaml occam omlet omnimark openroad opl ora ox pascal passwd pcap
+pccts perl pfmain php phtml pic pike pilrc pine plaintex plm plsql po postscr
+pov povini ppd ppwiz procmail progress prolog psf ptcap python python qf
+radiance ratpoison r rc readline rebol registry remind rexx robots rpl rtf
+ruby sa samba sas sather scheme scilab screen scsh sdl sed selectbuf sgml
+sgmldecl sgmllnx sicad simula sinda skill slang sl slrnrc sm smil smith sml
+snnsnet snnspat snnsres snobol4 spec specman spice sql sqlforms sqlj sqr squid
+st stp strace svn tads taglist tags tak tasm tcl terminfo tex plaintex texinfo
+texmf tf tidy tli trasys tsalt tsscl tssgm uc uil vb verilog vgrindefs vhdl
+vim viminfo virata vrml vsejcl webmacro wget winbatch wml [^w]*sh wvdial
+xdefaults xf86conf xhtml xkb xmath xml xmodmap xpm2 xpm xslt yacc yaml z8a
 
 If a language is not in the list of hardcoded supported filetypes then the
 &commentstring vim option is used.
@@ -374,6 +371,30 @@ Here the multipart delimiters are /* and */ and the marker is *. The NERD
 commenter is capable of adding and removing comments of this type.
 
 
+------------------------------------------------------------------------------
+2.5 The NERDComment function                            *NERD_com_NERDComment*
+
+All of the NERD commenter mappings and menu items invoke a single function
+which delegates the commenting work to other functions. This function is
+public and has the prototype: >
+    function! NERDComment(isVisual, type) 
+<
+The arguments to this function are simple: 
+    - isVisual: if you wish to do any kind of visual comment then set this to
+      1 and the function will use the '< and '> marks to find the comment
+      boundries. If set to 0 then the function will operate on the current
+      line.
+    - type: is used to specify what type of commenting operation is to be
+      performed, and it can be one of the following: 'sexy', 'invert',
+      'minimal', 'toggle', 'alignLeft', 'alignRight', 'alignBoth', 'norm',
+      'nested', 'toEOL', 'prepend', 'append', 'insert', 'uncomment'
+
+For example, if you typed >
+    :call NERDComment(1, 'sexy')
+<
+then the script would do a sexy comment on the last visual selection.
+ 
+
 ==============================================================================
 3. Customisation                                      *NERD_com-customisation*
 
@@ -389,9 +410,8 @@ commenter is capable of adding and removing comments of this type.
 |NERDCommentWholeLinesInVMode|        Changes behaviour of visual comments.
 |NERDDefaultNesting|                  Tells the script to use nested comments
                                       by default.
-|NERDMenuMode|                        Determines if a NERD comment menu will
-                                      be made and whether the menu will have a
-                                      keyboard shortcut.
+|NERDMenuMode|                        Specifies how the NERD commenter menu
+                                      will appear (if at all).
 |NERDLPlace|                          Specifies what to use as the left
                                       delimiter placeholder when nesting
                                       comments.
@@ -639,13 +659,14 @@ manually (see |NERD_com-cust-keys|).
 
 ------------------------------------------------------------------------------
                                                                 *NERDMenuMode*
-Values: 0, 1 or 2.
-Default: 2
+Values: 0, 1, 2, 3.
+Default: 3
 
-This option can take 3 values:
-    "0": Turns the NERD commenter menu off completely.
-    "1": Turns the NERD commenter menu on with no menu shortcut.
-    "2": Turns the NERD commenter menu on with <alt>-c as the menu shortcut.
+This option can take 4 values:
+    "0": Turns the menu off.
+    "1": Turns the 'comment' menu on with no menu shortcut.
+    "2": Turns the 'comment 'menu on with <alt>-c as the shortcut.
+    "3": Turns the 'Plugin -> comment' menu on with <alt>-c as the shortcut.
     
 ------------------------------------------------------------------------------
                                                          *NERDUsePlaceHolders*
@@ -808,6 +829,18 @@ to get illegal syntax when uncommenting them.
 ==============================================================================
 6. Changelog                                              *NERD_com-changelog*
 
+2.0.2:
+    - Minor bug fix that was stopping nested comments from working
+
+2.0.1:
+    - Fixed the visual bell for the |NERDComToEOLMap| map.
+    - Added another possible value to the NERDMenuMode option which causes the
+      menu to be displayed under 'Plugin -> Comment'. See :h NERDMenuMode.
+      This new menu mode is now the default.
+    - Added support for the occam filetype (thanks to Anders for emailing me)
+    - Made the main commenting function (NERDComment) available outside the
+      script.
+    - bug fixes and refactoring
 
 2.0.0:
     - NOTE: renamed the script to  NERD_commenter.vim. When you install this
@@ -955,7 +988,8 @@ spaces were being eaten.
 Thanks to John O'Shea for emailing me about the RTF filetype.
 
 Thanks to Anders for emailing me a patch to help get rid of all the visual
-bells and screen scrolling.
+bells and screen scrolling, and for sending me the delimiters for the occam
+filetype.
 
 Thanks to Anders and Markus Klinik for emailing me about the screen scrolling
 issues and finally getting me off my ass about them :P

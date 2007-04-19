@@ -9,8 +9,16 @@ servers = (
   },
   {
     address = "localhost";
-    chatnet = "BitlBeeIRCnet";
+    chatnet = "WorkIRCnet";
     port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  },
+  {
+    address = "localhost";
+    chatnet = "BitlBeeIRCnet";
+    port = "16667";
     use_ssl = "no";
     ssl_verify = "no";
     autoconnect = "yes";

@@ -63,10 +63,6 @@ fi
 #    fetchmail --nodetach >/dev/null 
 #fi
 
-if [ -f /opt/local/sbin/bitlbee ] ; then 
-    /opt/local/sbin/bitlbee -c $HOME/.bitlbee/bitlbee.conf 
-fi
-
 if [ $(uname) == 'Darwin' ]; then
     if [ -e ~/.macrc ]; then
         source ~/.macrc

@@ -1,3 +1,13 @@
-if [ -z $(ps auxww | grep -i [s]tock_fetcher]) ]; then 
-    stock_fetcher.py &
+# vim: ft=sh
+#if [ -z "$( ps auxww | grep -i '[s]tock_fetcher' )" ]; then 
+    #stock_fetcher.py &
+#fi
+
+if [ -f /opt/local/sbin/bitlbee ] ; then 
+    /opt/local/sbin/bitlbee -c $HOME/.bitlbee/bitlbee.conf 
 fi
+
+if [ -f /opt/local/bin/esd ]; then 
+    /opt/local/bin/esd >/dev/null 2>&1 &
+fi
+
