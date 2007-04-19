@@ -11,6 +11,10 @@ poll pop.gmail.com proto POP3 port 995 uidl and no dns:
     # fetchmail will ask if it can not find.
     # but it does not work well under daemon mode
     #password 'xxxxxxxxxxxxxxxx'
+    #
+    # use run_fetchmail.py script to replace the password 
+    # placeholder with read password
+    password '$linsong.qizi@gmail.com$'
     mda "/usr/bin/procmail -d %T" 
     keep
     ssl 
@@ -24,6 +28,10 @@ poll imap.exoweb.net proto IMAP:
     # fetchmail will ask if it can not find.
     # but it does not work well under daemon mode
     #password "xxxxxxxxxxx"
+    #
+    # use run_fetchmail.py script to replace the password 
+    # placeholder with read password
+    password "$vincent@exoweb.net$"
     mda "/usr/bin/procmail -d %T"
     keep
     ssl
