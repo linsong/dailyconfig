@@ -27,6 +27,11 @@ if __name__=='__main__':
             line = replacement_pat.sub(passwd, line)
         config_lines.append(line)
 
+    print "configs: "
+    print config_lines
+    print "stop running fetchmail ..."
+    os.system("fetchmail -q")
+
     print "launching fetchmail ..."
     fetchmail_app = os.popen("fetchmail -f -", "w")
     fetchmail_app.write("".join(config_lines))

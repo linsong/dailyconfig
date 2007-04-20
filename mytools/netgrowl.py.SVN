@@ -187,7 +187,9 @@ if __name__ == '__main__':
     if not args and not options:
         unit_test()
     else:
-        send_notify_by_growl(options.name, options.message, options.password,
+        send_notify_by_growl(options.name or "NetGrowl",
+                             options.message or "Nortification",
+                             options.password,
                              options.host, options.port, options.quiet,
                              options.sticky)
         play_sound_effect(options.sound, options.host)
