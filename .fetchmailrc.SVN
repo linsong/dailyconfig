@@ -5,6 +5,8 @@
 # Only one daemon process is permitted per user
 set daemon 60
 
+set logfile ~/fetchmail.log
+
 poll pop.gmail.com proto POP3 port 995 uidl and no dns:
     user 'linsong.qizi@gmail.com' is 'vincent' here 
     # we don't need to put password here, since 
