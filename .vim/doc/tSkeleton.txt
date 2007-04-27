@@ -1,0 +1,331 @@
+*tSkeleton.txt*              tSkeleton -- File Templates and Code Skeletons
+
+Author: Thomas Link, samul AT web.de
+
+-----------------------------------------------------------------------
+                                                    *tSkeleton-install*
+Install~
+
+Extract tSkeleton.zip (or copy the contained files) to your local 
+vimfiles directory (see also |add-global-plugin|). The files 
+"bits.samples" and "map.samples" must be copied to their proper places 
+in order to become accessible:
+
+    skeletons/
+        FILE TEMPLATES ...
+        map/
+            MAP FILES FOR CONDITIONAL EXPANSION
+        menu/
+            AUTO-GENERATED MENU CACHE
+        bits/
+            &filetype.txt (single line templates)
+            general/
+                GENERAL CODE SKELETONS ...
+            &filetype/
+                FILETYPE SPECIFIC CODE SKELETONS: ONE SKELETON PER FILE ...
+
+If you re-use skeletons from version 1.0 with a later version, you have 
+to update the |tSkeleton-place-holder| markup.
+
+Then run >
+
+(Linux etc.) >
+    :helptags $HOME/.vim/doc
+
+(Windows) >
+    :helptags $VIM/vimfiles/doc
+
+You might want to use imaps.vim's (vimscript #244 or vimscript #475) place 
+holders in conjunction with template bits.
+
+If you don't use imaps.vim, you can :call TSkeletonMapGoToNextTag(). 
+This will map <c-j> to a function that makes the cursor jump to the next 
+tag.
+
+
+-----------------------------------------------------------------------
+                                                    *tSkeleton-usage*
+File templates~
+
+The file skeletons are stored in the skeletons subdirectory. Filling in 
+a skeleton when creating a new file is controlled by |:autocmd|. This 
+provides greater flexibility than a &filetype based approach.
+
+Currently, the following file types are supported by default:
+
+   - batch.bat
+   - deplate.txt
+   - latex.tex
+   - php.inc.php
+   - php.php
+   - plugin.vim
+   - ruby.rb
+   - shell.sh
+   - text.txt
+
+In order to add a new mode, save a skeleton file to 
+~/.vim/skeletons/file.suffix and add something like this to your .vimrc 
+file: >
+
+    autocmd BufNewFile *.suffix       TSkeletonSetup template.suffix
+    autocmd BufNewFile /here/*.suffix TSkeletonSetup othertemplate.suffix
+
+                                                    *tSkeleton-place-holder*
+In skeleton files, you can use the following tags:
+
+    <+FILE NAME ROOT+> :: the file name root
+    <+FILE NAME+>      :: the file name
+    <+FILE SUFFIX+>    :: the file suffix
+    <+FILE DIRNAME+>   :: the file's directory
+    <+NOTE+>           :: a note
+    <+DATE+>           :: the current date (the format is controlled via 
+                          g:tskelDateFormat)
+    <+AUTHOR+>         :: the author's name (g:tskelUserName)
+    <+EMAIL+>          :: the author's e-mail (g:tskelUserEmail)
+    <+WEBSITE+>        :: the author's homepage (g:tskelUserWWW)
+    <+LICENSE+>        :: the name of the license this file is released 
+                          under (g:tskelLicense)
+                          
+In order to define your own tag, you have to define a function called 
+TSkeleton_TAGNAME() that returns the text to be filled in.
+
+tSkeleton also supports the following pseudo-tags:
+
+    <+CURSOR+>         :: where to place the cursor after insertion
+    <+&NAME+>          :: a vim option
+    <+g:NAME+>         :: a global variable
+    <+b:NAME+>         :: a buffer local variable
+    <+?QUERY?+>        :: query the user[1]
+    <+?VAR|QUERY?+>    :: query the user and propose some choices from 
+                          the variable ${VAR}[1]
+    <+bit:BIT>, <+bit:BIT|"DEFAULT">, <+bit:BIT|COMMANDS> :: insert a 
+                          bit; if the bit isn't defined for the current 
+                          filetype, use DEFAULT; if DEFAULT matches ".*" 
+                          insert it as a string; otherwise interpret it 
+                          as a command sequence to be fed to normal
+    <+tskel:TSKELETON> ... :: same as the above
+    <+call:FUNCTION(ARGS)+> :: insert the result value of some function
+
+[1] If the query ends with a colon, the second question mark will be 
+removed. Up to verson 2.4 VAR is a string, separating the items by an 
+"\n". From 3.0 on, VAR is a list.
+
+Check out the "test_tSkeleton" skeleton for examples.
+
+
+                                                    *tSkeleton-modifiers*
+Tags can be modified using modifiers, like in: >
+
+    <+TAG NAME:MODIFIER+>
+
+Known modifiers:
+
+    l          :: lower case
+    u          :: upper case
+    c          :: capitalize
+    C          :: transform to CamelCase
+    s/FROM/TO/ :: replace text (actually a s//g); this has to come last; 
+                  the pattern separator can be selected arbitrarily
+
+Example for a ruby class template: >
+
+    class <+FILE NAME ROOT:cs*\W*_*+>
+        <+CURSOR+>
+    end
+
+-----------------------------------------------------------------------
+                                                    *tSkeleton-code-skeletons*
+                                                    *tSkeleton-bits*
+Bits/Code Skeletons~
+
+Smaller skeleton bits are stored in SKELETONS/bits/FILETYPE/ or 
+SKELETONS/bits/general/. I.e., code skeletons can be filetype specific 
+or generally available.
+
+Skeleton bits can be filled in by typing: >
+
+    :TSkeletonBit NAME
+
+For this command, command line completion is implemented. Calling this 
+command will insert the contents of the respective file below the 
+current line.
+
+NOTE: Bit names should not contain ampersand (as these are interpreted 
+as menu accelerators) and periods (which are interpreted as the 
+separating submenu names from entry names). Other special characters can 
+be included by encoding them in hex form as %XX as it is done in URLs. 
+Example: "%5Csection" becomes "\section".
+
+                                                    *tSkeleton-key-bindings*
+The default key bindings for inserting code skeletons are:
+
+    <Leader>## ... Expand name under cursor
+    <Leader>#t ... Insert code skeleton via command line
+    <c-\><c-\> ... In insert mode, expand the bit before the cursor
+
+                                                    *g:tskelKeyword_{&filetype}*
+A bit name usually is the |word| under the cursor. If this doesn't fit 
+your needs, you can define g:tskelKeyword_{&filetype} to define what 
+makes up a skeleton name. Example: >
+
+    let g:tskelKeyword_viki = '\(#\|{\)\?[^#{[:blank:]]\{-}'
+
+
+                                                    *tSkeleton-embedded-code*
+Code skeletons may contain vim code that is evaluated before or after 
+expanding the tags. The before/after blocks are fed to |:exec| and must 
+not contain function definitions.
+
+                                                    *<tskel:msg>* *<tskel:before>* *<tskel:after>*
+                                                    *<tskel:here_before>* *<tskel:here_after>*
+These special regions must appear in the following order:
+        <tskel:msg> (An explantory message to be displayed after template expansion)
+        <tskel:before>
+        <tskel:after>
+        <tskel:here_before>
+        <tskel:here_after>
+
+BibTeX example: >
+
+    <tskel:before>
+        let b:tskelArticleID = input("ID of bibentry: ")
+        if b:tskelArticleID == "" | let b:tskelArticleID = "<+CURSOR+>" | endif
+    </tskel:before>
+    <tskel:after>
+        unlet b:tskelArticleID
+    </tskel:after>
+    @INCOLLECTION{<+b:tskelArticleID+>,
+        author   = {<+CURSOR+>},
+        title    = {<+ARTICLE TITLE+>},
+        crossref = {<+CROSSREF+>},
+        pages    = {<+PAGES+>},
+        abstract = {[[~/Projects/Sci/Abstracts/<+b:tskelArticleID+>.txt]]},
+    }
+    <++>
+
+In the above example, we query the user for an ID and insert this ID as 
+entry key and as an abstract's file name.
+
+The before/after blocks are evaluated in the destination buffer. The 
+variants here_before/here_after are evaluated in the scratch buffer for 
+the current code skeleton.
+
+                                                    *tSkeleton-groups*
+                                                    *g:tskelBitGroup_{&filetype}*
+Groups~
+
+Some filetype's bits might be of use for other filetypes too. You can 
+make them accessible by defining a g:tskelBitGroup_{&filetype} variable. 
+E.g., in php mode all html bits are made accessible by setting this 
+variable (the default): >
+
+    let g:tskelBitGroup_php = "php\nhtml"
+
+Bits of type "general" are always accessible.
+
+                                                    *tSkeleton-context*
+                                                    *tSkeleton-map*
+Maps -- Context-sensitive expansion~
+
+To some extent, tSkeleton is capable of offering the user only a small 
+selection of eligible bits for a specific context if a map file 
+($VIMFILES/skeletons/map/{&filetype}) is provided. Such a map file is made up 
+of regular expressions matching a specific context (before the cursor 
+only) and a blank-separated list of eligible bits. The regexp and the 
+list are separated by whitespace: >
+
+    REGEXP  BIT1 BIT2 ... BITn
+
+Example: >
+
+    <form\\([^>]\\|\\n\\)*	name= action= method=
+
+If an eligible bit is undefined, the name is inserted as such.
+
+
+                                                    *tSkeleton-minibits*
+Minibits~
+
+Mini bits are kept in the files:
+
+    - $PWD/.tskelmini
+    - $VIMFILES/skeletons/bits/{&filetype}.txt
+
+These files contain whitespace-separated pairs of bit names and their 
+expansions. These files are meant to keep expansions of accronyms and 
+abbreviations and the like. Example: >
+
+    IMHO    In my humble opinion
+    AFAIK   As far as I know
+
+Minibits are not displayed in the menu. (This will probably change.)
+
+
+                                                    *tSkeleton-menu*
+                                                    *g:tskelMenuPrefix*
+Menu~
+
+If g:tskelMenuPrefix is non-empty, tSkeleton will display a menu 
+containing all eligible bits for a certain filetype.
+
+The menu can be hierarchical and certain entries may have shortcuts by 
+properly naming the bits. Example: >
+
+    &Environment.&Quote
+    &Environment.Q&uotation
+
+This will create the submenu "Environment" that can be selected by 
+typing "e" (on Windows) and two entries, the first of which can be 
+selected by typing "q" and the second by typing "u".
+
+Be aware that the actual bit names are Quote and Quotation (i.e. the 
+submenu and the ampersand are stripped off).
+
+
+                                                    *g:tskelMapComplete*
+Insert-mode completion~
+
+If g:tskelMapComplete is true, 'completefunc' is set to 
+TSkeleton_complete so that the user will be presented with a selection 
+of elegible skeletons when pressing |i_CTRL-X_CTRL-U|.
+
+
+-----------------------------------------------------------------------
+                                                    *tSkeleton-commands*
+Commands~
+                                                    *:TSkeletonNewFile*
+:TSkeletonNewFile ?template, ?destDir, ?destFileName
+
+                                                    *:TSkeletonEdit*
+:TSkeletonEdit ?skelDir
+
+                                                    *:TSkeletonBit*
+:TSkeletonBit NAME
+
+
+-----------------------------------------------------------------------
+                                                    *tSkeleton-utilities*
+Utilities~
+
+                                                    *TSkeletonIncreaseRevisionNumber()*
+The function TSkeletonIncreaseRevisionNumber() provides a way to 
+automatically update a revision number in the form >
+
+    @Revision: 1.0.172
+
+In order to use this function, add something like this to your |vimrc| 
+file: >
+
+    autocmd BufWritePre * call TSkeletonIncreaseRevisionNumber()
+
+                                                    *:TSkeletonCleanUpBibEntry*
+The TSkeletonCleanUpBibEntry command can be used to purge the current bibtex 
+entry from expendable fields (i.e., lines matching <+.\{-}+>).
+
+For bibtex files, this command is bound to: <Leader>tc
+
+                                                    *TSkeletonMapGoToNextTag()*
+                                                    *TSkeletonGoToNextTag()*
+If you don't want to install imaps.vim, this function will map <c-j> to 
+TSkeletonGoToNextTag() in order to easily jump between tags.
+

@@ -1,5 +1,5 @@
 *HTML.txt*	Set of HTML/XHTML macros, menus and toolbar buttons.
-		Last change: 2007 Mar 24
+		Last change: 2007 Apr 21
 		Author: Christian J. Robinson
 
 
@@ -29,10 +29,10 @@ To start, you should familiarize yourself with Vim enough to know the
 terminology, and you should know HTML to some degree.
 
 The mappings are local to the buffer the script was sourced from, and the menu
-& toolbar are active only for buffers the script was sourced from.
+and toolbar are active only for buffers the script was sourced from.
 
-This help file follows the vim help file standards.  To see what modes a
-mapping works in, see the tags between the **'s.  For example, the ;; mapping
+This help file follows the Vim help file standards.  To see what modes a
+mapping works in see the tags between the **'s.  For example, the ;; mapping
 below works in normal, insert mode and visual mode.
 
 In the descriptions of the mappings I often use <CR> to mean a literal
@@ -41,27 +41,27 @@ newline.
 							*html-smart-tag*
 Noted tags are "smart"--if syntax highlighting is enabled it can be used to
 detect whether to close then open a tag instead of open then close the tag.
-For example, if your cursor is in italicized text and type ;it, it will insert
+For example, if the cursor is in italicized text and type ;it, it will insert
 </I><I> instead of <I></I>.  (This can not be done on most tags due to its
 dependence on the syntax highlighting.)
 
 							*;;* *i_;;* *v_;;*
 ;;	Most of the mappings start with ; so ;; is mapped to insert a single
 	; character in insert mode, behave like a single ; in normal mode,
-	etc.  (This mapping is undefined if |g:html_map_leader| is not set to
-	';'.)
+	etc.  (This mapping is not defined if |g:html_map_leader| is not set
+	to ';'.)
 
 							*;&* *i_;&*
 ;&	The HTML |character-entities| insert mode mappings start with &, so
 	typing ;& in insert mode will insert a literal & character.  (See
 	|n_;&|)
 
-				*html-<TAB>* *html-tab* *html-CTRL-I*
-				*i_html-<TAB>* *i_html-tab* *i_html-CTRL-I*
-				*v_html-<TAB>* *v_html-tab* *v_html-CTRL-I*
-<Tab>	If your cursor is on a closing tag the tab key jumps you after the
-	tag.  Otherwise the tab key will jump you to an unfilled tag somewhere
-	in the file.  For example, if you had the tag:
+				*html-<Tab>* *html-tab* *html-CTRL-I*
+				*i_html-<Tab>* *i_html-tab* *i_html-CTRL-I*
+				*v_html-<Tab>* *v_html-tab* *v_html-CTRL-I*
+<Tab>	If the cursor is on a closing tag the tab key jumps the cursor after
+	the tag.  Otherwise the tab key will jump the cursor to an unfilled
+	tag somewhere in the file.  For example, if you had the tag:
 >
 	 <A HREF=""></A>
 <
@@ -83,20 +83,33 @@ dependence on the syntax highlighting.)
 	[I think the use of tab is acceptable because I do not like the idea
 	of hard tabs or indentation greater than one or two spaces in HTML.]
 
-					*i_;<tab>* *i_;tab* *i_;CTRL-I*
-					*n_;<tab>* *n_;tab* *n_;CTRL-I*
-;<Tab>	If you want to insert a hard tab (; then the tab key).  If
-	|g:no_html_tab_mapping| is set this mapping replaces the normal
-	|html-tab| mapping instead.  (See |g:html_map_leader|)
-
-								*;html*
-;html	The ;html macro inserts a basic template at the top of the file.  If
-	you already have text in the file, you are asked if you want to
-	replace it or add the template anyway.
+					*i_;<Tab>* *i_;tab* *i_;CTRL-I*
+					*n_;<Tab>* *n_;tab* *n_;CTRL-I*
+;<Tab>	To insert a hard tab (; then the tab key).  If |g:no_html_tab_mapping|
+	is set this mapping replaces the normal |html-tab| mapping instead.
 	(See |g:html_map_leader|)
 
-	See |g:html_template| for information on how to customize your
+								*n_;html*
+;html	This macro inserts a basic template at the top of the file.  If the
+	buffer already contains some text you are asked if you want to replace
+	it or add the template anyway.  (See |g:html_map_leader|)
+
+	See |g:html_template| for information on how to customize the
 	template.
+
+	*disable-HTML-macros*	*HTML-macros-disable*	*HTML-disable-macros*
+	*disable-HTML-mappings*	*HTML-mappings-disable*	*HTML-disable-mappings*
+							*:HTMLmappings*
+:HTML[mappings] {disable/off/enable/on}
+	This command allows the HTML macros to be disabled and re-enabled.
+	This is useful for editing inline PHP, JavaScript, etc. where you
+	would want to be able to type literal ";", "&" and tab characters
+	without interference.  (Also see |;;|, |;&| and |;<Tab>|)
+
+	Note that all of the mappings defined by calling |HTMLmap()| or
+	|HTMLmapo()|--including all of the mappings defined by this
+	script--are disabled/enabled when this command is used, regardless of
+	what |g:html_map_leader| is set to.
 
 ==============================================================================
 2. Customization variables.		*html-variables* *html-configuration*
@@ -132,7 +145,7 @@ to your |mapleader| or |maplocalleader|.  e.g.: >
 
 *g:no_html_tab_mapping*
 Set this variable if you do not want the tab key to be mapped in normal,
-visual and insert mode, ;<tab> will be used instead.  See |html-tab| and
+visual and insert mode, ;<Tab> will be used instead.  See |html-tab| and
 |i_;tab|.  This variable must be set before HTML.vim is sourced for the
 current buffer.  The contents of this variable do not matter, as long as it is
 set.  e.g.: >
@@ -228,9 +241,13 @@ This is replaced with the output of strftime("%r %Z") (e.g.: 05:59:34 PM MST)
 This is replaced with the output of strftime("%T %Z") (e.g.: 17:59:34 MST)
 
 %charset%					*%charset%*
-This is replaced by a string that's automatically detected based on the
+This is replaced by a string that is automatically detected based on the
 'fileencoding' or 'encoding' option.  This can be overridden, see
 |g:html_default_charset| and |g:html_charset|.  (Also see |html-author-notes|)
+
+%vimversion%					*%vimversion%*
+The current version of Vim, based on |v:version|.  For example, if v:version
+was "700" the %vimversion% token would contain "7.0".
 
 So if you had the template: >
  <HTML>
@@ -282,12 +299,12 @@ another character of your preference.  See |g:html_map_leader|.
 ;4	Inserts >
 	<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	 "http://www.w3.org/TR/html4/loose.dtd">
-<	at the top of the file.  If you are editing XHTML, it will be >
+<	at the top of the file.  If the current buffer is XHTML, it will be >
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <       (See |g:do_xhtml_mappings|)
 							*n_;s4* *i_;s4*
-;s4	Does the same as ;4, but the document type is strict rather than
+;s4	Does the same as |;4|, but the document type is strict rather than
 	transitional.  (Note that these macros are meant for a transitional
 	document type, so be careful.)
 							*i_;ct*
@@ -299,39 +316,43 @@ another character of your preference.  See |g:html_map_leader|.
 	|g:html_default_charset| and |g:html_charset|.
 	(See |html-author-notes|)
 							*i_;cm* *v_;cm* *n_;cm*
-;cm	Comment tag (<!-- -->).  (|html-smart-tag|) (|n_;|)
+;cm	Comment tag (<!-- -->). (|html-smart-tag|) (|n_;|)
 							*i_;ah* *v_;ah* *n_;ah*
 ;ah	Anchor hyper link (<A HREF=""></A>).  Visual mode puts the visually
 	selected text <A HREF="">here</A> and positions the cursor on the
 	second ". (|n_;|)
-							*v_;aH* *n_;aH*
-;aH	Same as ;ah, but puts the visually selected text <A HREF="here"> and
-	places the cursor on the < of </A>. (|n_;|)
+							*i_;aH* *v_;aH* *n_;aH*
+;aH	Same as |;ah|, but puts the visually selected text <A HREF="here"> and
+	places the cursor on the < of </A>.  If this is used in insert mode
+	rather than visual mode, the contents of the |clipboard| are placed
+	between the quotes. (|n_;|)
 							*i_;at* *v_at* *n_;at*
-;at	Like ;ah but include TARGET="" in the tag. (|n_;|)
-							*v_;aT* *n_;aT*
-;aH	Like ;aH but include TARGET="" in the tag. (|n_;|)
+;at	Like |;ah| but include TARGET="" in the tag. (|n_;|)
+							*i_;aT* *v_;aT* *n_;aT*
+;aH	Like |;aH| but include TARGET="" in the tag. (|n_;|)
 							*i_;an* *v_;an* *n_;an*
-							*v_;aN* *n_;aN*
+							*i_;aN* *v_;aN* *n_;aN*
 ;an and ;aN
-	Same as the ;ah and ;aH mappings, but uses NAME instead of HREF.
+	Same as the |;ah| and |;aH| mappings, but uses NAME instead of HREF.
 	(|n_;|)
 							*i_;ab* *v_;ab* *n_;ab*
 ;ab	Abbreviation  (<ABBR TITLE=""></ABBR>).  Visual mode puts the visually
 	selected text <ABBR TITLE="">here</ABBR> and positions the cursor on
 	the second ". (|n_;|)
-							*v_;aB* *n_;aB*
-;aB	Same as ;ab, but puts the visually selected text <ABBR TITLE="here">
-	and places the cursor on the < of </ABBREV>. (|n_;|)
+							*i_;aB* *v_;aB* *n_;aB*
+;aB	Same as |;ab|, but puts the visually selected text <ABBR TITLE="here">
+	and places the cursor on the < of </ABBREV>.  If this is used in
+	insert mode rather than visual mode, the contents of the |clipboard| are
+	placed between the quotes. (|n_;|)
 							*i_;ac* *v_;ac* *n_;ac*
-							*v_;aC* *n_;aC*
+							*i_;aC* *v_;aC* *n_;aC*
 ;ac and ;aC
-	Acronym (<ACRONYM TITLE=""></ACRONYM>).  Similar to the ;ab and ;aB
-	mappings, but uses ACRONYM instead of ABBR. (|n_;|)
+	Acronym (<ACRONYM TITLE=""></ACRONYM>).  Similar to the |;ab| and
+	|;aB| mappings, but uses ACRONYM instead of ABBR. (|n_;|)
 							*i_;ad* *v_;ad* *n_;ad*
 ;ad	Address (<ADDRESS></ADDRESS>). (|n_;|)
 							*i_;bo* *v_;bo* *n_;bo*
-;bo	Boldfaced Text (<B></B>).  (|html-smart-tag|) (|n_;|)
+;bo	Boldfaced Text (<B></B>). (|html-smart-tag|) (|n_;|)
 							*i_;bh* *v_;bh* *n_;bh*
 ;bh	Base URL (<BASE HREF="">). (|n_;|)
 							*i_;bi* *v_;bi* *n_;bi*
@@ -400,25 +421,30 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;ii*
 ;ii	Identifies index (<ISINDEX>).
 							*i_;it* *v_;it* *n_;it*
-;it	Italicized text (<I></I>).  (|html-smart-tag|) (|n_;|)
+;it	Italicized text (<I></I>). (|html-smart-tag|) (|n_;|)
 							*i_;im* *v_;im* *n_;im*
 ;im	Image (<IMG SRC="" ALT="").  Places the cursor on the second " of the
 	SRC="".  In visual mode it puts the visually selected text <IMG SRC=""
 	ALT="here"> and places the cursor on the second " of the SRC="".
 	(|n_;|)
-							*v_;iM* *n_;iM*
-;iM	Same as ;im, but puts the visually selected text <IMG SRC NAME="HERE"
-	ALT=""> and places the cursor on the second " of ALT="".  (|n_;|)
+							*i_;iM* *v_;iM* *n_;iM*
+;iM	Same as |;im|, but puts the visually selected text <IMG SRC
+	NAME="HERE" ALT=""> and places the cursor on the second " of ALT="".
+	If this is used in insert mode rather than visual mode, the contents
+	of the |clipboard| are placed between the quotes.   (|n_;|)
 							*i_;in* *v_;in* *n_;in*
 ;in	Inserted text (<INS></INS>). (|n_;|)
 							*i_;js*
 ;js	<SCRIPT TYPE="text/javascript" LANGUAGE="javascript">
 	 <!--
+
 	 // -->
 	</SCRIPT>
 							*i_;sj*
-;sj
-	<SCRIPT SRC="" TYPE="text/javascript" LANGUAGE="javascript"></SCRIPT>
+;sj	<SCRIPT SRC="" TYPE="text/javascript" LANGUAGE="javascript"></SCRIPT>
+							*i_;nj* *v_;nj* *n_;nj*
+;nj     Alternate content for browsers with script handling turned off
+	(<NOSCRIPT><CR></NOSCRIPT>). (|n_;|)
 							*i_;li* *v_;li* *n_;li*
 ;li	List item (<LI></LI>) inside <UL> or <OL>. (|n_;|)
 							*i_;lk* *v_;lk* *n_;lk*
@@ -430,10 +456,11 @@ another character of your preference.  See |g:html_map_leader|.
 	second " of NAME="".  Visual mode puts the visually selected text
 	<META NAME="here" CONTENT=""> and places the cursor on the second " of
 	CONTENT="". (|n_;|)
-							*v_;mE* *n_;mE*
-;mE	Same as ;me, but puts the visually selected text <META NAME=""
-	CONTENT="here"> and places the cursor on the second " of NAME="".
-	(|n_;|)
+							*i_;mE* *v_;mE* *n_;mE*
+;mE	Same as |;me|, but puts the visually selected text <META NAME=""
+	CONTENT="here"> and places the cursor on the second " of NAME="".  If
+	this is used in insert mode rather than visual mode, the contents of
+	the |clipboard| are placed between the quotes. (|n_;|)
 							*n_;mi* *i_;mi*
 ;mi	Automatically add or update the WIDTH and HEIGHT attributes of an
 	<IMG> tag.
@@ -450,8 +477,8 @@ another character of your preference.  See |g:html_map_leader|.
 ;pp	Paragraph (<P><CR></P>). (|n_;|)
 							*i_;/p*
 ;/p	Like above, but inserts </P><CR><CR><P><CR>.  This is intended to be
-	used when your cursor is between <P> and </P> in insert mode and want
-	to start a new paragraph without having to move the cursor.
+	used when the cursor is between <P> and </P> in insert mode and you
+	want to start a new paragraph without having to move the cursor.
 							*i_;pr* *v_;pr* *n_;pr*
 ;pr	Preformatted text (<PRE><CR></PRE>). (|n_;|)
 							*i_;qu* *v_;qu* *n_;qu*
@@ -465,7 +492,7 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;sa* *v_;sa* *n_;sa*
 ;sa	Sample text (<SAMP></SAMP>). (|n_;|)
 							*i_;st* *v_;st* *n_;st*
-;st	Strong text (<STRONG></STRONG>).  (|html-smart-tag|) (|n_;|)
+;st	Strong text (<STRONG></STRONG>). (|html-smart-tag|) (|n_;|)
 							*i_;cs* *v_;cs* *n_;cs*
 ;cs	CSS Style (<STYLE TYPE="text/css"><CR><!--<CR><CR>--><CR></STYLE>).
 	(|n_;|)
@@ -481,7 +508,7 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;tt* *v_;tt* *n_;tt*
 ;tt	Teletype Text (monospaced) (<TT></TT>). (|n_;|)
 							*i_;un* *v_;un* *n_;un*
-;un	Underlined text (<U></U>).  (|html-smart-tag|) (|n_;|)
+;un	Underlined text (<U></U>). (|html-smart-tag|) (|n_;|)
 							*i_;ul* *v_;ul* *n_;ul*
 ;ul	Unordered list (<UL><CR></UL>). (|n_;|)
 
@@ -542,6 +569,11 @@ another character of your preference.  See |g:html_map_leader|.
 ;ms	Form multiple selection box (<SELECT NAME="" MULTIPLE><CR></SELECT>).
 	Visual mode puts the selected text
 	<SELECT NAME="" MULTIPLE><CR>here<CR></SELECT>. (|n_;|)
+							*i_;ob* *v_;ob* *n_;ob*
+;ob	Generic embedded object
+	(<OBJECT DATA="" WIDTH="" HEIGHT=""><CR></OBJECT>).  Visual mode puts
+	the selected text
+	<OBJECT DATA="" WIDTH="" HEIGHT=""><CR>here<CR></OBJECT>. (|n_;|)
 							*i_;op* *v_;op* *n_;op*
 ;op	Form selection option (<OPTION></OPTION>). (|n_;|)
 							*i_;og* *v_;og* *n_;og*
@@ -561,21 +593,21 @@ another character of your preference.  See |g:html_map_leader|.
 	visually selected text <LABEL FOR="">here</LABEL> and positions the
 	cursor on the second ". (|n_;|)
 							*v_;lA* *n_;lA*
-;lA	The same as ;la but puts the cursor <LABEL FOR="here"></LABEL> and
+;lA	The same as |;la| but puts the cursor <LABEL FOR="here"></LABEL> and
 	places the cursor on the < of </LABEL>. (|n_;|)
 
 ==============================================================================
 4. Mappings for &...; codes.		*character-codes* *character-entities*
 
-A number of mappings have been defined to allow you to insert special
-characters into your HTML document.  These are known as characters entities.
+A number of mappings have been defined to allow insertion of special
+characters into the HTML buffer.  These are known as characters entities.
 
 							*n_;&* *v_;&*
 ;&	This mapping converts the character under the cursor or the
 	highlighted text to its &#...; entity, where "..." is equivalent to
 	the ASCII decimal representation.  In visual mode it converts each
 	highlighted character.  For example, "foo bar" would become
-	"&#102;&#111;&#111;&#32;&#98;&#97;&#114;".  (See |i_;&|)
+	"&#102;&#111;&#111;&#32;&#98;&#97;&#114;". (See |i_;&|)
 
 							*n_;^* *v_;^*
 ;^	This mapping will decode the &#...; elements of the provided string
@@ -683,7 +715,7 @@ You can use a browser to preview your current HTML document.  (See
 
 
 For Windows:
-								*;ie*
+								*n_;ie*
 ;ie	Call Explorer on the current file.
 
 
@@ -692,41 +724,41 @@ For Unix:
 The following mappings are only defined if you have properly installed the
 browser_launcher.vim script, available with installation instructions here:
 http://www.infynity.spodzone.com/vim/HTML/
-								*;ff*
+								*n_;ff*
 ;mo	Make Firefox view the current file, starting Firefox if it is not
 	running.
-								*;nff*
-;nmo	Same as ;ff, but start a new browser window.
-								*;tff*
-;tmo	Same as ;nff, but open a new tab.
-								*;mo*
+								*n_;nff*
+;nmo	Same as |;ff|, but start a new browser window.
+								*n_;tff*
+;tmo	Same as |;nff|, but open a new tab.
+								*n_;mo*
 ;mo	Make Mozilla view the current file, starting Mozilla if it is not
 	running.
-								*;nmo*
-;nmo	Same as ;mo, but start a new browser window.
-								*;tmo*
-;tmo	Same as ;nmo, but open a new tab.
-								*;ns*
+								*n_;nmo*
+;nmo	Same as |;mo|, but start a new browser window.
+								*n_;tmo*
+;tmo	Same as |;nmo|, but open a new tab.
+								*n_;ns*
 ;ns	Make Netscape view the current file, starting Netscape if it is not
 	running.
-								*;nns*
-;nns	Same as ;ns, but start a new browser window.
+								*n_;nns*
+;nns	Same as |;ns|, but start a new browser window.
 
 Note: If both Mozilla and Netscape are running, these mappings may behave
 somewhat unexpectedly, due to the fact that both Mozilla and Netscape use
 the same remote protocol IDs.
-								*;oa*
+								*n_;oa*
 ;oa	Make Opera view the current file, starting Opera if it is not running.
-								*;noa*
-;noa	Same as ;oa, but start a new browser window.
-								*;toa*
-;toa	Same as ;noa, but open a new tab.
-								*;ly*
-;ly	Use lynx to view your document.  This behaves like ;nly if you are in
-	the Vim GUI.
-								*;nly*
-;nly	Same as ;ly, but in a new xterm.  This behaves like ;ly if there is no
-	DISPLAY environmental variable.
+								*n_;noa*
+;noa	Same as |;oa|, but start a new browser window.
+								*n_;toa*
+;toa	Same as |;noa|, but open a new tab.
+								*n_;ly*
+;ly	Use lynx to view the current file.  This behaves like |;nly| if the Vim
+	GUI is running.
+								*n_;nly*
+;nly	Same as |;ly|, but in a new xterm.  This behaves like |;ly| if there
+	is no DISPLAY environmental variable.
 
 
 ==============================================================================
@@ -742,8 +774,8 @@ Functions used by the HTML mappings:			*html-functions*
 
 HTMLencodeString({string} [, {decode}])			*HTMLencodeString()*
 	Returns {string} encoded into HTML entities.  This is primarily used
-	to help prevent email harvesting spiders from catching your email
-	address for spamming purposes.
+	to help prevent email harvesting spiders from catching email addresses
+	for spamming purposes.
 	Example: >
 		:echo HTMLencodeString('foo@bar.baz')
 <	Results in: >
@@ -757,7 +789,7 @@ HTMLencodeString({string} [, {decode}])			*HTMLencodeString()*
 
 HTMLgenerateTable()					*HTMLgenerateTable()*
 	This is normally called by the normal mapping |;ta|, but it works the
-	same if you call it any other way.
+	same if called any other way.
 
 HTMLmap({maptype}, {lhs}, {rhs} [, {re-indent}])	*HTMLmap()*
 	This function defines a mapping, local to the buffer and silent.
@@ -788,15 +820,15 @@ HTMLmapo({map}, {insert})					*HTMLmapo()*
 	that indicates whether to end in insert mode.
 
 HTMLnextInsertPoint([{mode}])				*HTMLnextInsertPoint()*
-	This is normally called by the |html-<TAB>| mapping, but it works the
-	same if you call it any other way.  The {mode} argument is either 'i'
-	or 'n' (default) which means |Insert| or |Normal|.  In insert mode, if
-	the cursor is on the start of a closing tag it places the cursor after
-	the tag.
+	This is normally called by the |;<Tab>| mapping, but it works the same
+	if called any other way.  The {mode} argument is either 'i' or 'n'
+	(default) which means |Insert| or |Normal|.  In insert mode, if the
+	cursor is on the start of a closing tag it places the cursor after the
+	tag.
 
 HTMLtemplate()						*HTMLtemplate()*
 	This is normally called by the normal mapping |;html|, but it works
-	the same if you call it any other way.
+	the same if called any other way.
 
 SetIfUnset({variable}, {value})				*SetIfUnset()*
 	This function sets {variable} to {value} if the variable is not
@@ -810,9 +842,9 @@ The Content-Type charset auto detection value based on the 'fileencoding' /
 'encoding' option has a very incomplete translation table from the possible
 values that Vim uses--I could use help with this.
 
-I want to finally release a 1.0 version, but I'm not willing to until I have
+I want to finally release a 1.0 version, but I am not willing to until I have
 browser control mappings for operating systems other than *nix.  Unfortunately
-I need substantial help to create them for Windows and MacOS since I don't
+I need substantial help to create them for Windows and MacOS since I do not
 have access to either OS.
 
 I will never include mappings for certain tags, such as <BLINK></BLINK> and
