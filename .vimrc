@@ -602,9 +602,6 @@ endif " has("autocmd")
     abbr widht width
     abbr rigth right
 
-    " abbreviation powered by snippetEnu.vim
-    "Iabbr <method name="
-
 "### }}}1
 
 "### HighLighting {{{1
