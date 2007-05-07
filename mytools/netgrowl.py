@@ -161,18 +161,17 @@ def _send_notify_by_notifydaemon(name, message, icon, time):
     os.system(cmd)
 
 def send_notify(options):
-    os_info = os.uname()
-    ostype = os_info[0].lower()
-    for entry in local_configs[ostype]:
+    config_name = local_configs['active']
+    for entry in local_configs[config_name]:
         if not hasattr(options, entry) or not getattr(options, entry):
-            setattr(options, entry, local_configs[ostype][entry])
+            setattr(options, entry, local_configs[config_name][entry])
 
-    if ostype=='linux':
+    if config_name=='linux':
         _send_notify_by_notifydaemon(options.name or "NetGrowl",
                                     options.message or "Nortification",
                                     options.icon,
                                     options.time)
-    elif ostype=='darwin':
+    elif config_name=='darwin':
         _send_notify_by_growl(options.name or "NetGrowl",
                              options.message or "Nortification",
                              options.password,
@@ -201,7 +200,7 @@ if __name__ == '__main__':
                       help='Sets the message to be used instead of using stdin')
     parser.add_option('-p', '--priority', dest='priority',
                        help='Specify an int or named key (default is 0)')
-    parser.add_option('-H', '--host', dest='host', default='localhost',
+    parser.add_option('-H', '--host', dest='host', default='',
                        help='Specify a hostname to which to send a remote \
                        notification.')
     parser.add_option('-P', '--password', dest='password', default="",
@@ -210,7 +209,7 @@ if __name__ == '__main__':
                       help = 'Port number for UDP notifications.')
     parser.add_option('-S', '--sound', dest='sound', default=False,
                       action='store_true', help="play sound effect file")
-    parser.add_option('-i', '--icon', dest='icon', default="gtk-dialog-info",
+    parser.add_option('-i', '--icon', dest='icon', default="",
                       help='specify an icon for notification message')
     parser.add_option('-t', '--time', dest='time', default=5000,
                       help='specify how long should the notification display')

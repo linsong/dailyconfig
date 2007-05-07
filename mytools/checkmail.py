@@ -63,6 +63,8 @@ if __name__ == '__main__':
                                              #host=options.host)
                 options.name = "Mail"
                 options.message="You got a new mail in %s." % mf
+                options.icon = \
+                        os.path.expanduser("~/image/mail-message-new.png")
                 netgrowl.send_notify(options)
                 #netgrowl.play_sound_effect(True, options.host)
         time.sleep(float(options.update_interval))
