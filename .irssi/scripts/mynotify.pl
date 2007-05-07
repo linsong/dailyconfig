@@ -40,21 +40,29 @@ sub notify($$$$)
     $title =~ s#'#''''#g;
     $data =~ s#'#''''#g;
 
-    my $tool_type = Irssi::settings_get_str('notify_notification_tool');
-    if ($tool_type =~ m/grow/i)
-    {
-        # for MacOSX
-        system("netgrowl.py -q -n '$title' -m '$data'");
-    }
-    elsif ($tool_type =~ m/notify_send/i)
-    {
-        #for linux
-        system("notify-send -i gtk-dialog-info -t 5000 '$title' '$data'");
-    }
-    else
-    {
-        Irssi::print('Error: value of notify_notification_tool is not correct');
-    }
+    # now, I hide the details of OS behind netgrowl.py 
+    system("netgrowl.py -q -n '$title' -m '$data'");
+
+    #my $tool_type = Irssi::settings_get_str('notify_notification_tool');
+    #if ($tool_type =~ m/growl/i)
+    #{
+        ## for MacOSX
+        #system("netgrowl.py -q -n '$title' -m '$data'");
+    #}
+    #elsif ($tool_type =~ m/notify_send/i)
+    #{
+        ##for linux
+        ## Make the message entity-safe
+        #$data =~ s/&/&amp;/g; # That could have been done better.
+        #$data =~ s/</&lt;/g;
+        #$data =~ s/>/&gt;/g;
+        #$data =~ s/'/&apos;/g;
+        #system("notify-send -i gtk-dialog-info -t 5000 '$title' '$data'");
+    #}
+    #else
+    #{
+        #Irssi::print('Error: value of notify_notification_tool is not correct');
+    #}
 }
 
 sub sig_message_private ($$$$) {
@@ -91,6 +99,14 @@ sub sig_notify_left ($$$$$$) {
 		"<$nick!$user\@$host>\nHas left $server->{chatnet}");	
 }
 
+sub sig_dcc_request_notify {
+    my ($dcc, $sendaddr) = @_;
+    my $server = $dcc->{server};
+
+    return if (!$dcc);
+    notify($AppName, $server, "DCC ".$dcc->{type}." request", $dcc->{nick});
+}
+
 
 Irssi::command_bind('mynotify', 'cmd_help');
 
@@ -98,6 +114,7 @@ Irssi::signal_add_last('message private', \&sig_message_private);
 Irssi::signal_add_last('print text', \&sig_print_text);
 Irssi::signal_add_last('notifylist joined', \&sig_notify_joined);
 Irssi::signal_add_last('notifylist left', \&sig_notify_left);
+Irssi::signal_add_last('dcc request', \&sig_dcc_request_notify);
 
 Irssi::settings_add_bool($IRSSI{'name'}, 'notify_show_privmsg', 1);
 Irssi::settings_add_bool($IRSSI{'name'}, 'notify_show_hilight', 1);

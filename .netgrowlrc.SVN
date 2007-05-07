@@ -1,0 +1,13 @@
+local_configs = {
+    'linux':{
+        'host' : 'localhost',
+        'password' : None
+        'icon' : 'gtk-dialog-info',
+        'time' : 5000,
+    },
+    'darwin':{
+        'host' : 'mac.linsong.org',
+        'password' : 'PASSWORD',
+        'sticky' : False,
+    }
+}

@@ -57,10 +57,13 @@ if __name__ == '__main__':
             if check_mail(mf):
                 print "Found new mails in %s. " % mf
                 print "Send new mail notification to %s" % options.host
-                netgrowl.send_notify_by_growl(name="Mail",
-                    message="You got a new mail in %s." % mf,
-                                             sticky=True,
-                                             host=options.host)
+                #netgrowl.send_notify_by_growl(name="Mail",
+                    #message="You got a new mail in %s." % mf,
+                                             #sticky=True,
+                                             #host=options.host)
+                options.name = "Mail"
+                options.message="You got a new mail in %s." % mf
+                netgrowl.send_notify(options)
                 #netgrowl.play_sound_effect(True, options.host)
         time.sleep(float(options.update_interval))
 
