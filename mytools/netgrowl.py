@@ -207,7 +207,7 @@ if __name__ == '__main__':
                       help = 'Password used for remote notifications.')
     parser.add_option('', '--port',  dest='port', default=GROWL_UDP_PORT,
                       help = 'Port number for UDP notifications.')
-    parser.add_option('-S', '--sound', dest='sound', default=False,
+    parser.add_option('-S', '--sound', dest='sound',
                       action='store_true', help="play sound effect file")
     parser.add_option('-i', '--icon', dest='icon', default="",
                       help='specify an icon for notification message')
@@ -217,9 +217,6 @@ if __name__ == '__main__':
                       action="store_true", help="don't print debug info")
 
     options, args = parser.parse_args()
-
-    #if not options.sound:
-        #options.sound = True
 
     if not args and not options:
         unit_test()
