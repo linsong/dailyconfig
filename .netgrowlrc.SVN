@@ -2,7 +2,7 @@ local_configs = {
     'active' : 'linux',
     'linux':{
         'host' : 'localhost',
-        'password' : None
+        'password' : None,
         'icon' : 'gtk-dialog-info',
         'time' : 5000,
         'sound' : True,
