@@ -1,0 +1,12 @@
+First, read the readme of sp-sc from sopcast.
+
+To see a movie: 
+  1) get channel url from http://www.sopcast.com/gchlxml , for example sop://broker.100vod.com:3912/80102
+  2) run sopcast client, the format of the command is: 
+        sp-sc SOP_URL INPUT_PORT OUTPUT_PORT 
+     for example:
+        sp-sc sop://broker.100vod.com:3912/80102 3908 8908 > /dev/null &
+     80102 is the id of channel. 3908 is the input port and 8908 is the output port, the input and output port can be changed     to any unused port number(get this from reading codes of gsopcast)
+  3) run mplayer or VLC to see the movie: mplayer http://localhost:8908/tv.asf
+
+
