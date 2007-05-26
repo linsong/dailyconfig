@@ -48,7 +48,10 @@ alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop a
  {
      OLDDIR=$PWD
      cd ${1:-$PWD}
+     echo "Generating tags ..."
      find . -type d \( -name lib -o -iname mgs_poker -o -iname scripts -o -iname selenium -o -iname zope -o -iname stress \) -prune -o -type f -iname "*.py" -print | ctags -a -L - 
+     echo "Generating cscope ..."
+     find . -type d \( -name lib -o -iname mgs_poker -o -iname scripts -o -iname selenium -o -iname zope -o -iname stress \) -prune -o -type f -iname "*.py" -print | cscope -b -i -  -R 
      cd $OLDDIR
  }
 # }}}

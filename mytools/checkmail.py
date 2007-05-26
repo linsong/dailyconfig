@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     if len(args)==0:
         print "You must specify a mail file to check!"
-        system.exit(1)
+        sys.exit(1)
 
     for mf in args:
         new_mail_infos[mf] = {'mailboxsize':0,
