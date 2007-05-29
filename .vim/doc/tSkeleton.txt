@@ -6,17 +6,25 @@ Author: Thomas Link, samul AT web.de
                                                     *tSkeleton-install*
 Install~
 
-Extract tSkeleton.zip (or copy the contained files) to your local 
-vimfiles directory (see also |add-global-plugin|). The files 
-"bits.samples" and "map.samples" must be copied to their proper places 
-in order to become accessible:
+Edit the vba file and type:
 
-    skeletons/
+    :so %
+
+See :help vimball for details.
+
+If you don't already have some skeletons, you may want to download 
+tSkeleton-Samples.zip from:
+
+    http://www.vim.org/scripts/script.php?script_id=1160
+
+Extract zip (or copy the contained files) to your local vimfiles 
+directory (see also |add-global-plugin|). The directory structure should 
+look like this:
+
+    ~/.vim/skeletons/
         FILE TEMPLATES ...
         map/
             MAP FILES FOR CONDITIONAL EXPANSION
-        menu/
-            AUTO-GENERATED MENU CACHE
         bits/
             &filetype.txt (single line templates)
             general/
@@ -24,32 +32,26 @@ in order to become accessible:
             &filetype/
                 FILETYPE SPECIFIC CODE SKELETONS: ONE SKELETON PER FILE ...
 
+                                                    *g:tskelDir*
 If you re-use skeletons from version 1.0 with a later version, you have 
-to update the |tSkeleton-place-holder| markup.
-
-Then run >
-
-(Linux etc.) >
-    :helptags $HOME/.vim/doc
-
-(Windows) >
-    :helptags $VIM/vimfiles/doc
+to update the |tSkeleton-place-holder| markup. Make sure the variable 
+g:tskelDir points to the right directory.
 
 You might want to use imaps.vim's (vimscript #244 or vimscript #475) place 
 holders in conjunction with template bits.
 
-If you don't use imaps.vim, you can :call TSkeletonMapGoToNextTag(). 
-This will map <c-j> to a function that makes the cursor jump to the next 
-tag.
+If you don't use imaps.vim, you can use |TSkeletonMapGoToNextTag()|.
 
 
 -----------------------------------------------------------------------
                                                     *tSkeleton-usage*
 File templates~
 
-The file skeletons are stored in the skeletons subdirectory. Filling in 
-a skeleton when creating a new file is controlled by |:autocmd|. This 
-provides greater flexibility than a &filetype based approach.
+The file skeletons are stored in the skeletons subdirectory. Which 
+template is used for which new file is controlled by |:autocmd|s. This 
+provides greater flexibility than a &filetype based approach as you can 
+select templates on the basis of a filename pattern or a specific 
+directory.
 
 Currently, the following file types are supported by default:
 
@@ -63,7 +65,7 @@ Currently, the following file types are supported by default:
    - shell.sh
    - text.txt
 
-In order to add a new mode, save a skeleton file to 
+In order to add support for a new filetype, save a skeleton file to 
 ~/.vim/skeletons/file.suffix and add something like this to your .vimrc 
 file: >
 
@@ -71,7 +73,11 @@ file: >
     autocmd BufNewFile /here/*.suffix TSkeletonSetup othertemplate.suffix
 
                                                     *tSkeleton-place-holder*
-In skeleton files, you can use the following tags:
+You can use tags to define cursor jump positions. tSkeleton also 
+supports some special tags that are expanded when inserting the 
+skeleton.
+
+A list of special tags:>
 
     <+FILE NAME ROOT+> :: the file name root
     <+FILE NAME+>      :: the file name
@@ -85,7 +91,7 @@ In skeleton files, you can use the following tags:
     <+WEBSITE+>        :: the author's homepage (g:tskelUserWWW)
     <+LICENSE+>        :: the name of the license this file is released 
                           under (g:tskelLicense)
-                          
+
 In order to define your own tag, you have to define a function called 
 TSkeleton_TAGNAME() that returns the text to be filled in.
 
@@ -110,6 +116,30 @@ tSkeleton also supports the following pseudo-tags:
 removed. Up to verson 2.4 VAR is a string, separating the items by an 
 "\n". From 3.0 on, VAR is a list.
 
+Unknown tags are kept in the expanded skeleton. These tags can be used 
+as cursor jump marks. This syntax was originally used by imap (vimscript 
+#244 or vimscript #475). If you don't want to install imap, you can also  
+use |TSkeletonMapGoToNextTag()|.
+
+Nameless tags (<++>) will disappear when they are selected.
+
+Example:>
+
+    case <+CURSOR+> in
+    <+PATTERN+>)
+        <+BODY+>
+        ;;
+    *)
+        <+DEFAULT+>
+        ;;
+    esac
+    <++>
+
+When you insert this skeleton, the cursor will be placed at 
+"<+CURSOR+>".  If you press <c-j>, the cursor will jump to "<+PATTERN+>" 
+(the tag will remain selected). If you press <c-j> three times, the 
+cursor will jump to "<++>" (the tag will be deleted).
+
 Check out the "test_tSkeleton" skeleton for examples.
 
 
@@ -124,14 +154,16 @@ Known modifiers:
     u          :: upper case
     c          :: capitalize
     C          :: transform to CamelCase
-    s/FROM/TO/ :: replace text (actually a s//g); this has to come last; 
-                  the pattern separator can be selected arbitrarily
+    s/FROM/TO/ :: replace text (actually a s//g); this has to be the 
+                  last modifier; the pattern separator can be selected 
+                  arbitrarily
 
 Example for a ruby class template: >
 
     class <+FILE NAME ROOT:cs*\W*_*+>
         <+CURSOR+>
     end
+    <++>
 
 -----------------------------------------------------------------------
                                                     *tSkeleton-code-skeletons*
@@ -151,17 +183,18 @@ command will insert the contents of the respective file below the
 current line.
 
 NOTE: Bit names should not contain ampersand (as these are interpreted 
-as menu accelerators) and periods (which are interpreted as the 
-separating submenu names from entry names). Other special characters can 
-be included by encoding them in hex form as %XX as it is done in URLs. 
-Example: "%5Csection" becomes "\section".
+as menu accelerators) and periods (which are used to construct 
+submenus). Other special characters can be included by encoding them in 
+hex form as %XX as it is done in URLs.  Example: "%5Csection" becomes 
+"\section".
 
                                                     *tSkeleton-key-bindings*
 The default key bindings for inserting code skeletons are:
 
     <Leader>## ... Expand name under cursor
     <Leader>#t ... Insert code skeleton via command line
-    <c-\><c-\> ... In insert mode, expand the bit before the cursor
+    <c-\><c-\> ... In insert mode, expand the bit before the cursor (on 
+                   a German keyboard this happens to be <c-#><c-#>)
 
                                                     *g:tskelKeyword_{&filetype}*
 A bit name usually is the |word| under the cursor. If this doesn't fit 
@@ -199,7 +232,7 @@ BibTeX example: >
         title    = {<+ARTICLE TITLE+>},
         crossref = {<+CROSSREF+>},
         pages    = {<+PAGES+>},
-        abstract = {[[~/Projects/Sci/Abstracts/<+b:tskelArticleID+>.txt]]},
+        abstract = {[[~/Docs/Abstracts/<+b:tskelArticleID+>.txt]]},
     }
     <++>
 
@@ -219,9 +252,9 @@ make them accessible by defining a g:tskelBitGroup_{&filetype} variable.
 E.g., in php mode all html bits are made accessible by setting this 
 variable (the default): >
 
-    let g:tskelBitGroup_php = "php\nhtml"
+    let g:tskelBitGroup_php = ['php', 'html']
 
-Bits of type "general" are always accessible.
+Bits of type "general" are always available.
 
                                                     *tSkeleton-context*
                                                     *tSkeleton-map*
@@ -240,7 +273,8 @@ Example: >
 
     <form\\([^>]\\|\\n\\)*	name= action= method=
 
-If an eligible bit is undefined, the name is inserted as such.
+If an eligible bit is undefined, the name is inserted as is. I.e. you 
+don't have to define skeletons for all these options and argument names.
 
 
                                                     *tSkeleton-minibits*
@@ -248,7 +282,7 @@ Minibits~
 
 Mini bits are kept in the files:
 
-    - $PWD/.tskelmini
+    - $CWD/.tskelmini
     - $VIMFILES/skeletons/bits/{&filetype}.txt
 
 These files contain whitespace-separated pairs of bit names and their 
@@ -257,9 +291,6 @@ abbreviations and the like. Example: >
 
     IMHO    In my humble opinion
     AFAIK   As far as I know
-
-Minibits are not displayed in the menu. (This will probably change.)
-
 
                                                     *tSkeleton-menu*
                                                     *g:tskelMenuPrefix*
@@ -311,7 +342,7 @@ Utilities~
 The function TSkeletonIncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.172
+    @Revision: 1.0.204
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
@@ -328,4 +359,14 @@ For bibtex files, this command is bound to: <Leader>tc
                                                     *TSkeletonGoToNextTag()*
 If you don't want to install imaps.vim, this function will map <c-j> to 
 TSkeletonGoToNextTag() in order to easily jump between tags.
+
+You can insert >
+
+    call TSkeletonMapGoToNextTag()
+
+in after/plugin/tSkeleton.vim to map TSkeletonGoToNextTag() to <c-j> 
+similar to imap.vim.
+
+This will map <c-j> to TSkeletonGoToNextTag() that makes the cursor jump 
+to the next tag.
 

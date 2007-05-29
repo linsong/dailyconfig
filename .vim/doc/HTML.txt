@@ -1,5 +1,5 @@
 *HTML.txt*	Set of HTML/XHTML macros, menus and toolbar buttons.
-		Last change: 2007 Apr 21
+		Last change: 2007 May 18
 		Author: Christian J. Robinson
 
 
@@ -449,8 +449,6 @@ another character of your preference.  See |g:html_map_leader|.
 ;li	List item (<LI></LI>) inside <UL> or <OL>. (|n_;|)
 							*i_;lk* *v_;lk* *n_;lk*
 ;lk	Link, inside the header (<LINK HREF="">). (|n_;|)
-							*i_;lh* *v_;lh* *n_;lh*
-;lh	List header (<LH></LH>) inside <UL> or <OL>. (|n_;|)
 							*i_;me* *v_;me* *n_;me*
 ;me	Meta information (<META NAME="" CONTENT="").  Places the cursor on the
 	second " of NAME="".  Visual mode puts the visually selected text

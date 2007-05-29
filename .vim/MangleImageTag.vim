@@ -22,8 +22,14 @@
 " Place - Suite 330, Boston, MA 02111-1307, USA.
 "
 " RCS info: ---------------------------------------------------------------{{{
-" $Id: MangleImageTag.vim,v 1.7 2007/01/04 04:29:55 infynity Exp $
+" $Id: MangleImageTag.vim,v 1.9 2007/05/04 02:03:42 infynity Exp $
 " $Log: MangleImageTag.vim,v $
+" Revision 1.9  2007/05/04 02:03:42  infynity
+" Computed sizes were very wrong when 'encoding' was set to UTF8 or similar
+"
+" Revision 1.8  2007/05/04 01:32:27  infynity
+" Missing quotes
+"
 " Revision 1.7  2007/01/04 04:29:55  infynity
 " Enclose the values of the width/height in quotes by default
 "
@@ -134,7 +140,7 @@ function! MangleImageTag() "{{{1
 	else
 		let tag = substitute(tag,
 			\ "\\csrc=\\([\"']\\)\\(.\\{-}\\|.\\{-}\\)\\1",
-			\ '\0 ' . (case ? 'HEIGHT' : 'height') . '="' . height, '"')
+			\ '\0 ' . (case ? 'HEIGHT' : 'height') . '="' . height . '"', '')
 	endif
 
 	if tag =~? "width=\\(\"\\d\\+\"\\|'\\d\\+\'\\|\\d\\+\\)"
@@ -144,7 +150,7 @@ function! MangleImageTag() "{{{1
 	else
 		let tag = substitute(tag,
 			\ "\\csrc=\\([\"']\\)\\(.\\{-}\\|.\\{-}\\)\\1",
-			\ '\0 ' . (case ? 'WIDTH' : 'width') . '="' . width, '"')
+			\ '\0 ' . (case ? 'WIDTH' : 'width') . '="' . width . '"', '')
 	endif
 
 	let line = savestart . tag . saveend
@@ -169,9 +175,11 @@ function! s:ImageSize(image) "{{{1
 
 	if filereadable(a:image)
 		let ldsave=&lazyredraw
+		let encsave=&encoding
 		set lazyredraw
+		set encoding=Latin1
 
-		new
+		new ++enc=Latin1
 		silent exe '$read ' . a:image
 		go
 
@@ -188,6 +196,7 @@ function! s:ImageSize(image) "{{{1
 		bwipe!
 
 		let &lazyredraw=ldsave
+		let &encoding=encsave
 	else
 		echohl ErrorMsg
 		echomsg "Can't read file: " . a:image

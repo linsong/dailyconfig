@@ -1,7 +1,7 @@
 " vim global plugin that provides easy code commenting for various file types
-" Last Change:  14 apr 2007
+" Last Change:  11 may 2007
 " Maintainer:   Martin Grenfell <martin_grenfell at msn.com>
-let s:NERD_commenter_version = 2.0.2
+let s:NERD_commenter_version = 2.0.4
 
 " For help documentation type :help NERD_commenter. If this fails, Restart vim
 " and try again. If it sill doesnt work... the help page is at the bottom 
@@ -198,6 +198,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimitersWithAlternative('//','', '/*','*/')
     elseif a:filetype == "ch" 
         call s:MapDelimitersWithAlternative('//','', '/*','*/')
+    elseif a:filetype == "changelog" 
+        call s:MapDelimiters('','')
     elseif a:filetype == "cl" 
         call s:MapDelimiters('#', '')
     elseif a:filetype == "clean" 
@@ -226,6 +228,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimiters('*', '')
     elseif a:filetype == "cupl" 
         call s:MapDelimiters('/*','*/')
+    elseif a:filetype == "csv" 
+        call s:MapDelimiters('','')
     elseif a:filetype == "cvs" 
         call s:MapDelimiters('CVS:','')
     elseif a:filetype == "dcl" 
@@ -265,7 +269,7 @@ function s:SetUpForNewFiletype(filetype)
     elseif a:filetype == "erlang" 
         call s:MapDelimiters('%', '')
     elseif a:filetype == "eruby" 
-        call s:MapDelimitersWithAlternative('#', '', '<!--', '-->')
+        call s:MapDelimitersWithAlternative('<%#', '-%>', '#', '')
     elseif a:filetype == "eterm" 
         call s:MapDelimiters('#', '')
     elseif a:filetype == "expect" 
@@ -284,6 +288,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimiters('!', '')
     elseif a:filetype == "foxpro" 
         call s:MapDelimiters('*', '')
+    elseif a:filetype == "fstab" 
+        call s:MapDelimiters('#', '')
     elseif a:filetype == "fvwm" 
         call s:MapDelimiters('#', '')
     elseif a:filetype == "fx" 
@@ -458,6 +464,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimiters("REM", "")
     elseif a:filetype == "ora" 
         call s:MapDelimiters('#', '')
+    elseif a:filetype == "otl" 
+        call s:MapDelimiters('', '')
     elseif a:filetype == "ox" 
         call s:MapDelimiters('//', '')
     elseif a:filetype == "pascal" 
@@ -588,6 +596,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimiters('%', '')
     elseif a:filetype == "sm" 
         call s:MapDelimiters('#', '')
+    elseif a:filetype == "smarty" 
+        call s:MapDelimiters('{*', '*}')
     elseif a:filetype == "smil" 
         call s:MapDelimiters('<!','>') 
     elseif a:filetype == "smith" 
@@ -626,6 +636,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimiters('/*','*/')
     elseif a:filetype == "svn" 
         call s:MapDelimiters('','')
+    elseif a:filetype == "systemverilog" 
+        call s:MapDelimitersWithAlternative('//','', '/*','*/')
     elseif a:filetype == "tads" 
         call s:MapDelimitersWithAlternative('//','', '/*','*/')
     elseif a:filetype == "taglist" 
@@ -670,6 +682,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimiters("'","") 
     elseif a:filetype == "verilog" 
         call s:MapDelimitersWithAlternative('//','', '/*','*/')
+    elseif a:filetype == "verilog_systemverilog" 
+        call s:MapDelimitersWithAlternative('//','', '/*','*/')
     elseif a:filetype == "vgrindefs" 
         call s:MapDelimiters('#', '')
     elseif a:filetype == "vhdl" 
@@ -680,6 +694,8 @@ function s:SetUpForNewFiletype(filetype)
         call s:MapDelimiters('','') 
     elseif a:filetype == "virata" 
         call s:MapDelimiters('%', '')
+    elseif a:filetype == "vo_base" 
+        call s:MapDelimiters('', '')
     elseif a:filetype == "vrml" 
         call s:MapDelimiters('#', '')
     elseif a:filetype == "vsejcl" 
@@ -4252,6 +4268,20 @@ to get illegal syntax when uncommenting them.
 ==============================================================================
 6. Changelog {{{2                                         *NERD_com-changelog*
 
+2.0.4
+    - Added support for verilog_systemverilog and systemverilog filetypes
+      (Thanks to Alexey for the email)
+    - Added support for fstab, thanks to Lizendir for the email.
+    - Added support for the smarty filetype.
+    - Improved the delimiters for eruby.
+    - Added dummy support for changelog filetype.
+
+2.0.3
+    - Added dummy support for the csv filetype (thx to Mark Woodward for the
+      email)
+    - Added dummy support for vo_base and otl filetypes (thanks to fREW for
+      the email)
+
 2.0.2:
     - Minor bug fix that was stopping nested comments from working
 
@@ -4416,6 +4446,16 @@ filetype.
 
 Thanks to Anders and Markus Klinik for emailing me about the screen scrolling
 issues and finally getting me off my ass about them :P
+
+Thanks to Mark Woodward for emailing me about the csv filetype.
+
+Thanks to fREW for emailing me with the /gentoo-package-(mask|keywords|use)/
+filetypes the vo_base filetype.
+
+Thanks to Alexey for emailing me about the verilog_systemverilog/systemverilog
+filetypes.
+
+Cheers to Lizendir for the email about the fstab filetype
 
 Cheers to myself for being the best looking man on Earth!
 === END_DOC
