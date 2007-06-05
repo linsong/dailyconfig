@@ -73,6 +73,13 @@ sub sig_message_private ($$$$) {
 	notify($AppName, "Message notification", "$nick", "$data");
 }
 
+sub sig_message_invite($$$$) {
+	return unless Irssi::settings_get_bool('notify_show_notify');
+	my ($server, $channel, $nick, $address) = @_;
+
+    notify($AppName, "Invitation", "$nick", "$address");
+}
+
 sub sig_print_text ($$$) {
 	return unless Irssi::settings_get_bool('notify_show_hilight');
 
@@ -111,6 +118,7 @@ sub sig_dcc_request_notify {
 Irssi::command_bind('mynotify', 'cmd_help');
 
 Irssi::signal_add_last('message private', \&sig_message_private);
+Irssi::signal_add_last('message invite', \&sig_message_invite);
 Irssi::signal_add_last('print text', \&sig_print_text);
 Irssi::signal_add_last('notifylist joined', \&sig_notify_joined);
 Irssi::signal_add_last('notifylist left', \&sig_notify_left);

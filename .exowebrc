@@ -1,4 +1,8 @@
 
+if [ -f /usr/sbin/bitlbee ] ; then 
+    /usr/sbin/bitlbee -c $HOME/.bitlbee/bitlbee.conf 
+fi
+
  ################### Alias for Exoweb's work #############################
 
  #alias gvim='gvim -geometry 156x55+1280+0'
@@ -54,4 +58,19 @@ alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop a
      find . -type d \( -name lib -o -iname mgs_poker -o -iname scripts -o -iname selenium -o -iname zope -o -iname stress \) -prune -o -type f -iname "*.py" -print | cscope -b -i -  -R 
      cd $OLDDIR
  }
+
+ function pyfind()
+ {
+     find . \( -type d -iname "lib" -prune \) -o \( -type d -iname "zope" -prune \) -o -type f -iname "*.py" 
+ }
+
+ if [ ! -e ~/.fetchmail.pid ]; then 
+    fetchmail
+ fi
+
+ if [ $(pgrep -c checkmail.py) = 0 ]; then 
+     ~/mytools/checkmail.py ~/Mail/exoweb/work &
+ fi
+
+
 # }}}

@@ -199,6 +199,7 @@ fi
  }
  alias tgvim='gvim --cmd ":tabnew" --cmd ":tabfirst"'
  alias vimplugin='cd ~/download/GNU_Tools/WorkPlatform/Vim/configure/download_vimscripts/MostUseful'
+ alias edclipbrd='vim +ClipBrd +only'
 ###########################################################################
 ###
 ###            Function defines

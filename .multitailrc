@@ -744,3 +744,11 @@ default_bufferwhat:f
 
 
 check_mail:0
+
+colorscheme:nordicbet_central_cache
+cs_re:magenta:^CentralCache
+cs_re:blue:^LocalCache
+cs_re:green:^FOCacheProxy
+cs_re:red:CRITICAL
+cs_re:yellow:DEBUG
+cs_re:red:[Ff]ail|[fF]ailure

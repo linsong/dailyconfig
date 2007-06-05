@@ -8,6 +8,12 @@ import netgrowl
 
 new_mail_infos = {}
 
+verbose = False
+
+def log(msg):
+    if verbose:
+        print msg
+
 def check_mail(mailbox_file):
     """
     check for new mails in mailbox
@@ -39,11 +45,16 @@ if __name__ == '__main__':
                                    version="%prog1.0")
     parser.add_option('-u', '--update', dest='update_interval', default=30.0,
                       help='how often(in second) to check new mail, default is 30 secs')
+    parser.add_option('-v', '--verbose', dest='verbose', default=False,
+                      action='store_true', help='print debug information')
     parser.add_option('-H', '--host', dest='host', default='localhost',
                        help='Specify a hostname to which to send a remote \
                        notification.')
 
     options, args = parser.parse_args()
+
+    #global verbose
+    #verbose = options.verbose
 
     if len(args)==0:
         print "You must specify a mail file to check!"
@@ -55,8 +66,8 @@ if __name__ == '__main__':
     while True:
         for mf in new_mail_infos:
             if check_mail(mf):
-                print "Found new mails in %s. " % mf
-                print "Send new mail notification to %s" % options.host
+                log("Found new mails in %s. " % mf)
+                log("Send new mail notification to %s" % options.host)
                 #netgrowl.send_notify_by_growl(name="Mail",
                     #message="You got a new mail in %s." % mf,
                                              #sticky=True,

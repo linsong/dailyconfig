@@ -157,18 +157,17 @@ aliases = {
   "MANUAL-WINDOWS" = "set use_status_window off;set autocreate_windows off;set autocreate_query_level none;set autoclose_windows off;set reuse_unused_windows on;save";
   EXEMPTLIST = "mode $C +e";
   ATAG = "WINDOW SERVER";
-  split2 = "window 3; window show 2; window size 20; window 3; window stick";
   unstickall = "window goto 1; window stick off; window goto 2;window stick off; window goto 3; window stick off; window goto 4; window stick off; window goto 5; window stick off; window goto 6; window stick off; window goto 7; window stick off; window goto 8; window stick off; window goto 9; window stick off; window goto 10; window stick off";
   single = "unstickall; window hide; window hide";
   fortune = "exec - -o fortune -s ";
   wu = "window up";
   wd = "window down ";
   wl = "window last ";
-  split3 = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick";
   mklayout = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick 1 on; window stick 3 on; window stick 7 on; window 2; window stick 2 on; window stick 4 on; window stick 5 on; window 6; window stick 6 on;";
   cs = "msg chanserv op $C";
   google = "say http://www.google.com/search?hl=en&q=$0&btnG=Google+Search";
   l = "lastlog -regex ";
+  resetlayout = "single; mklayout";
 };
 
 statusbar = {

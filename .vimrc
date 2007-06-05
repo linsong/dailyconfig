@@ -126,6 +126,9 @@
     " save screen estate as much as possible
     :set numberwidth=1
 
+    " set tags 
+    :set tags+=../tags,../../tags
+
 "### }}}1
 
 "### Encodings {{{1
@@ -1028,6 +1031,15 @@ endif " has("autocmd")
     "### setting for Decho.vim {{{2
     "let g:dechomode = 4
     "}}}2
+    
+    "### setting for SQLUtilities.vim {{{2
+     let g:sqlutil_keyword_case = '\U'
+    "}}}2
+    "
+    "### setting for tagselect.vim {{{2
+     let g:no_tagselect_maps = 1
+    "}}}2
+    
 "### }}}1
 
 "### {{{1 xterm colors defination 
