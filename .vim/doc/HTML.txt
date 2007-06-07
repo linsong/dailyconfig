@@ -1,5 +1,5 @@
 *HTML.txt*	Set of HTML/XHTML macros, menus and toolbar buttons.
-		Last change: 2007 May 18
+		Last change: 2007 Jun 06
 		Author: Christian J. Robinson
 
 
@@ -41,9 +41,15 @@ newline.
 							*html-smart-tag*
 Noted tags are "smart"--if syntax highlighting is enabled it can be used to
 detect whether to close then open a tag instead of open then close the tag.
-For example, if the cursor is in italicized text and type ;it, it will insert
-</I><I> instead of <I></I>.  (This can not be done on most tags due to its
-dependence on the syntax highlighting.)
+For example, if the cursor is in italicized text and you type ;it, it will
+insert </I><I> instead of <I></I>.
+
+This can not be done on most tags due to its dependence on the syntax
+highlighting.
+
+NOTE: Some tags are synonyms and Vim can't distinguish between them.  For
+example, if you're within <I></I> and type |;em| it will assume you want
+</EM><EM> rather than <EM></EM>.
 
 							*;;* *i_;;* *v_;;*
 ;;	Most of the mappings start with ; so ;; is mapped to insert a single
@@ -96,6 +102,7 @@ dependence on the syntax highlighting.)
 
 	See |g:html_template| for information on how to customize the
 	template.
+
 
 	*disable-HTML-macros*	*HTML-macros-disable*	*HTML-disable-macros*
 	*disable-HTML-mappings*	*HTML-mappings-disable*	*HTML-disable-mappings*
@@ -158,8 +165,23 @@ sourced.  The contents of the variable do not matter, as
 long as it is set.  e.g.: >
 	:let g:no_html_toolbar = 'yes'
 
+*g:no_html_menu*
+Set this variable if you don't want the menu items to be defined at all.  This
+implies that |g:no_html_toolbar| is set as well.  This variable must be set
+before HTML.vim is sourced.  The contents of the variable do not matter, as
+long as it is set.  e.g.: >
+	:let g:no_html_menu = 'yes'
+
+*g:force_html_menu*
+Set this variable if you want the menu items to be defined even if you're not
+in the GUI.  This is useful if you want to use the menus in the console (see
+|console-menus|).  This variable is ignored if |g:no_html_menu| is set.  This
+variable must be set before HTML.vim is sourced.  The contents of the variable
+do not matter, as long as it is set.  e.g.: >
+	:let g:force_html_menu = 'yes'
+
 *g:html_template* *b:html_template*
-Set this to the location of your template file to be used by the ;html
+Set this to the location of your template file to be used by the |;html|
 mapping.  You can also set this on a per-buffer basis by using b:html_template
 instead.  If unset, a basic internal template will be used.
 
@@ -387,7 +409,7 @@ another character of your preference.  See |g:html_map_leader|.
 ;eb	Embedded element, plus NOEMBED. (<EMBED SRC="" WIDTH="" HEIGHT=""><CR>
 	<NOEMBED></NOEMBED>)
 							*i_;em* *v_;em* *n_;em*
-;em	Emphasize (<EM></EM>). (|n_;|)
+;em	Emphasize (<EM></EM>). (|html-smart-tag|) (|n_;|)
 							*i_;fo* *v_;fo* *n_;fo*
 ;fo	Font size (<FONT SIZE=""></FONT>). (|n_;|)
 							*i_;fc* *v_;fc* *n_;fc*
@@ -442,8 +464,8 @@ another character of your preference.  See |g:html_map_leader|.
 	</SCRIPT>
 							*i_;sj*
 ;sj	<SCRIPT SRC="" TYPE="text/javascript" LANGUAGE="javascript"></SCRIPT>
-							*i_;nj* *v_;nj* *n_;nj*
-;nj     Alternate content for browsers with script handling turned off
+							*i_;ns* *v_;ns* *n_;ns*
+;ns     Alternate content for browsers with script handling turned off
 	(<NOSCRIPT><CR></NOSCRIPT>). (|n_;|)
 							*i_;li* *v_;li* *n_;li*
 ;li	List item (<LI></LI>) inside <UL> or <OL>. (|n_;|)
@@ -517,7 +539,7 @@ another character of your preference.  See |g:html_map_leader|.
 ;tA	Interactive table; you will be interactively prompted for the table
 	rows, columns, and border width.
 							*i_;ca* *v_;ca* *n_;ca*
-;ca	Caption (<CAPTION></CAPTION>). (|n_;|)
+;ca	Table caption (<CAPTION></CAPTION>). (|n_;|)
 							*i_;tr* *v_;tr* *n_;tr*
 ;tr	Table row (<TR><CR></TR>). (|n_;|)
 							*i_;td* *v_;td* *n_;td*
@@ -606,12 +628,20 @@ characters into the HTML buffer.  These are known as characters entities.
 	the ASCII decimal representation.  In visual mode it converts each
 	highlighted character.  For example, "foo bar" would become
 	"&#102;&#111;&#111;&#32;&#98;&#97;&#114;". (See |i_;&|)
+							*n_;%* *v_;%*
+;%	This mapping converts the character under the cursor or the
+	highlighted text to its %XX hexadecimal string for URIs  In visual
+	mode it converts each highlighted character.  For example, "foo bar"
+	would become "%66%6F%6F%20%62%61%72".
 
+	If you're using a version of Vim prior to 7, you need to have this
+	script sourced for this mapping to work:
+	http://www.infynity.spodzone.com/vim/ConvertBase.vim
 							*n_;^* *v_;^*
-;^	This mapping will decode the &#...; elements of the provided string
-	into their actual characters.  The normal mode version of this macro
-	works differently from |;&| in that it requires a motion operator.
-	(|n_;|)
+;^	This mapping will decode the &#...; and %XX elements of the provided
+	string into their actual characters.  The normal mode version of this
+	macro works differently from |;&| and |;%| in that it requires a
+	motion operator.  (|n_;|)
 
 
 The following mappings work in insert mode only.
@@ -736,15 +766,15 @@ http://www.infynity.spodzone.com/vim/HTML/
 ;nmo	Same as |;mo|, but start a new browser window.
 								*n_;tmo*
 ;tmo	Same as |;nmo|, but open a new tab.
-								*n_;ns*
-;ns	Make Netscape view the current file, starting Netscape if it is not
+								*n_;ne*
+;ne	Make Netscape view the current file, starting Netscape if it is not
 	running.
-								*n_;nns*
-;nns	Same as |;ns|, but start a new browser window.
+								*n_;nne*
+;nne	Same as |;ne|, but start a new browser window.
 
-Note: If both Mozilla and Netscape are running, these mappings may behave
-somewhat unexpectedly, due to the fact that both Mozilla and Netscape use
-the same remote protocol IDs.
+Note: If Firefox and/or Mozilla and/or Netscape are running, these mappings
+may behave somewhat unexpectedly, due to the fact that Firefox, Mozilla and
+Netscape use the same remote protocol IDs.
 								*n_;oa*
 ;oa	Make Opera view the current file, starting Opera if it is not running.
 								*n_;noa*
@@ -757,7 +787,12 @@ the same remote protocol IDs.
 								*n_;nly*
 ;nly	Same as |;ly|, but in a new xterm.  This behaves like |;ly| if there
 	is no DISPLAY environmental variable.
-
+								*n_;w3*
+;w3	Use w3m to view the current file.  This behaves like |;nw3| if the Vim
+	GUI is running.
+								*n_;nw3*
+;nw3	Same as |;w3|, but in a new xterm.  This behaves like |;w3| if there
+	is no DISPLAY environmental variable.
 
 ==============================================================================
 6. Miscellaneous extras.				*html-misc*
@@ -770,20 +805,23 @@ This calls |SetIfUnset()|.
 Functions used by the HTML mappings:			*html-functions*
 ------------------------------------
 
-HTMLencodeString({string} [, {decode}])			*HTMLencodeString()*
-	Returns {string} encoded into HTML entities.  This is primarily used
-	to help prevent email harvesting spiders from catching email addresses
-	for spamming purposes.
-	Example: >
-		:echo HTMLencodeString('foo@bar.baz')
-<	Results in: >
-		&#102;&#111;&#111;&#64;&#98;&#97;&#114;&#46;&#98;&#97;&#122;
-<	Note that there is no guarantee this will prevent all harvesting, but
-	it will likely stop most spam harvesters.
+HTMLencodeString({string} [, {...}])			*HTMLencodeString()*
+	Returns {string} encoded into HTML entities.
 
-	If the second argument is provided and is "d" or "decode" the &#...;
-	elements of the provided string will be decoded into their actual
-	characters.
+	If the second argument is "%" the string is encoded into %XX
+	hexadecimal string instead.
+
+	If the second argument is "d" or "decode" the &#...; and %XX elements
+	of the provided string will be decoded into their actual characters.
+
+	See |n_;&| and |n_;%| for examples.
+
+	If you're using a version of Vim prior to 7 you need to have this
+	script sourced for the string to %XX conversion to work:
+	http://www.infynity.spodzone.com/vim/ConvertBase.vim
+
+	Note that Unicode characters can not be safely converted to %XX hex
+	strings for URIs do to a limit in the specification.
 
 HTMLgenerateTable()					*HTMLgenerateTable()*
 	This is normally called by the normal mapping |;ta|, but it works the

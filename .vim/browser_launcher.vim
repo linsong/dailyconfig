@@ -9,15 +9,15 @@
 "  - Opera    (remote [new window / new tab] / launch)
 "  - Lynx     (Under the current TTY if not running the GUI, or a new xterm
 "              window if DISPLAY is set.)
+"  - w3m      (Under the current TTY if not running the GUI, or a new xterm
+"              window if DISPLAY is set.)
 "
 " TODO:
 "
 "  Support more browsers?
 "   - links  (text browser)
-"   - w3m    (text browser)
 "
-"  If I support multiple text browsers, defaulting to lynx if the the GUI
-"  isn't available may be undesirable.
+"  Defaulting to lynx if the the GUI isn't available may be undesirable.
 "
 "  Note: Various browsers such as galeon, nautilus, phoenix, &c use the
 "  same HTML rendering engine as mozilla/firefox, so supporting them isn't
@@ -73,6 +73,12 @@ if v:shell_error == 0
 else
 	unlet s:LynxPath
 endif
+let s:w3mPath = system("which w3m")
+if v:shell_error == 0
+	let s:BrowsersExist = s:BrowsersExist . 'w'
+else
+	unlet s:w3mPath
+endif
 
 let s:NetscapeRemoteCmd = system("which netscape-remote")
 if v:shell_error != 0
@@ -101,6 +107,7 @@ let s:NetscapeRemoteCmd = substitute(s:NetscapeRemoteCmd, "\n$", "", "")
 "      n - Netscape
 "      o - Opera
 "      l - Lynx
+"      w - w3m
 "    The second argument is whether to launch a new window:
 "      0 - No
 "      1 - Yes
@@ -158,6 +165,35 @@ function! LaunchBrowser(...)
 		return 1
 	endif
 
+
+	if (which ==? 'w')
+
+		if s:BrowsersExist !~? 'w'
+			echohl ErrorMsg | echomsg "w3m isn't found in $PATH." | echohl None
+			return 0
+		endif
+
+		echohl Todo | echo "Launching w3m..." | echohl None
+
+		if (has("gui_running") || new) && strlen($DISPLAY)
+			call system("xterm -T w3m -e w3m " . file . " &")
+
+			if shell_error
+				echohl ErrorMsg | echo "Unable to launch w3m in an xterm." | echohl None
+				return 0
+			endif
+		else
+			sleep 1
+			execute "!w3m " . file
+
+			if shell_error
+				echohl ErrorMsg | echo "Unable to launch w3m." | echohl None
+				return 0
+			endif
+		endif
+
+		return 1
+	endif
 
 	if (which ==? 'o')
 

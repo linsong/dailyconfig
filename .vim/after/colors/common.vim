@@ -18,5 +18,7 @@ hi PmenuSbar   guibg=Black
 hi PmenuThumb  guifg=SeaGreen	
 
 " for Cursor
-highlight Cursor     gui=none       guibg=DodgerBlue guifg=#ffffff
-highlight Cursor     ctermfg=Black	ctermbg=Green	 cterm=reverse
+"highlight Cursor     gui=none       guibg=DodgerBlue guifg=#ffffff
+highlight Cursor     gui=none       guibg=Red guifg=#ffffff
+"highlight Cursor     ctermfg=Black	ctermbg=Green	 cterm=reverse
+highlight Cursor     ctermfg=Black	ctermbg=Red	 cterm=reverse

@@ -2,8 +2,8 @@
 "
 " Author:      Christian J. Robinson <infynity@onewest.net>
 " URL:         http://www.infynity.spodzone.com/vim/HTML/
-" Last Change: May 18, 2007
-" Version:     0.26.8
+" Last Change: June 06, 2007
+" Version:     0.27.4
 " Original Concept: Doug Renze
 "
 "
@@ -44,9 +44,9 @@
 " ---- TODO: ------------------------------------------------------------ {{{1
 " - Under Win32, make a mapping call the user's default browser instead of
 "   just ;ie? (:silent!!start rundll32 url.dll,FileProtocolHandler <URL/File>)
-" - ;ns mapping for Win32 with "start netscape ..." ?
+" - ;ne mapping for Win32 with "start netscape ..." ?
 " ---- RCS Information: ------------------------------------------------- {{{1
-" $Id: HTML.vim,v 1.146 2007/05/18 17:29:01 infynity Exp $
+" $Id: HTML.vim,v 1.152 2007/06/06 14:16:06 infynity Exp $
 " ----------------------------------------------------------------------- }}}1
 
 " ---- Initialization: -------------------------------------------------- {{{1
@@ -143,9 +143,19 @@ let s:thisfile = expand("<sfile>:p")
 function! HTMLencodeString(string, ...)
   let out = ''
 
-  if a:0 > 0 && a:1 =~? '^d\(ecode\)\=$'
-    let out = substitute(a:string, '&#\(\d\+\);', '\=nr2char(submatch(1))', 'g')
-    return out
+  if a:0 > 0
+    if a:1 =~? '^d\(ecode\)\=$'
+      let out = substitute(a:string, '&#\(\d\+\);', '\=nr2char(submatch(1))', 'g')
+      let out = substitute(out, '%\(\x\{2}\)', '\=nr2char("0x".submatch(1))', 'g')
+      return out
+    elseif a:1 == '%'
+      if v:version >= 700
+        let out = substitute(a:string, '\(.\)', '\=printf("%%%02X", char2nr(submatch(1)))', 'g')
+      else
+        let out = substitute(a:string, '\(.\)', '\="%".ConvertToBase(char2nr(submatch(1)), 16)', 'g')
+      endif
+      return out
+    endif
   endif
 
   if v:version >= 700
@@ -488,6 +498,10 @@ let s:HTMLtags{'i'}{'i'}{'o'} = "<[{I></I}]>\<C-O>F<"
 let s:HTMLtags{'i'}{'i'}{'c'} = "<[{/I><I}]>\<C-O>F<"
 let s:HTMLtags{'i'}{'v'}{'o'} = "`>a</[{I}]>\<C-O>`<<[{I}]>"
 let s:HTMLtags{'i'}{'v'}{'c'} = "`>a<[{I}]>\<C-O>`<</[{I}]>"
+let s:HTMLtags{'em'}{'i'}{'o'} = "<[{EM></EM}]>\<C-O>F<"
+let s:HTMLtags{'em'}{'i'}{'c'} = "<[{/EM><EM}]>\<C-O>F<"
+let s:HTMLtags{'em'}{'v'}{'o'} = "`>a</[{EM}]>\<C-O>`<<[{EM}]>"
+let s:HTMLtags{'em'}{'v'}{'c'} = "`>a<[{EM}]>\<C-O>`<</[{EM}]>"
 let s:HTMLtags{'b'}{'i'}{'o'} = "<[{B></B}]>\<C-O>F<"
 let s:HTMLtags{'b'}{'i'}{'c'} = "<[{/B><B}]>\<C-O>F<"
 let s:HTMLtags{'b'}{'v'}{'o'} = "`>a</[{B}]>\<C-O>`<<[{B}]>"
@@ -508,6 +522,7 @@ let s:HTMLtags{'strong'}{'v'}{'c'} = "`>a<[{STRONG}]>\<C-O>`<</[{STRONG}]>"
 function! s:tag(tag, mode)
   let attr=synIDattr(synID(line('.'), col('.') - 1, 1), "name")
   if ( a:tag == 'i' && attr =~? 'italic' )
+        \ || ( a:tag == 'em' && attr =~? 'italic' )
         \ || ( a:tag == 'b' && attr =~? 'bold' )
         \ || ( a:tag == 'strong' && attr =~? 'bold' )
         \ || ( a:tag == 'u' && attr =~? 'underline' )
@@ -1099,9 +1114,9 @@ call HTMLmap("vnoremap", "<lead>sn", "<ESC>`>a</[{SPAN}]><C-O>`<<[{SPAN}]><ESC>"
 call HTMLmapo('<lead>sn', 0)
 
 "       EM      Emphasize               HTML 2.0
-call HTMLmap("inoremap", "<lead>em", "<[{EM></EM}]><C-O>F<")
+call HTMLmap("inoremap", "<lead>em", "<C-R>=<SID>tag('em','i')<CR>")
 " Visual mapping:
-call HTMLmap("vnoremap", "<lead>em", "<ESC>`>a</[{EM}]><C-O>`<<[{EM}]><ESC>", 2)
+call HTMLmap("vnoremap", "<lead>em", "<C-C>:execute \"normal \" . <SID>tag('em','v')<CR>", 2)
 " Motion mapping:
 call HTMLmapo('<lead>em', 0)
 
@@ -1364,9 +1379,9 @@ call HTMLmap("inoremap", "<lead>sj", "<[{SCRIPT SRC}]=\"\" [{TYPE}]=\"text/javas
 call HTMLmap("inoremap", "<lead>eb", "<[{EMBED SRC=\"\" WIDTH=\"\" HEIGHT}]=\"\" /><CR><[{NOEMBED></NOEMBED}]><ESC>k$5F\"i")
 
 "       NOSCRIPT
-call HTMLmap("inoremap", "<lead>nj", "<[{NOSCRIPT}]><CR></[{NOSCRIP}]T><C-O>O")
-call HTMLmap("vnoremap", "<lead>nj", "<ESC>`>a<CR></[{NOSCRIPT}]><C-O>`<<[{NOSCRIPT}]><CR><ESC>", 1)
-call HTMLmapo('<lead>nj', 0)
+call HTMLmap("inoremap", "<lead>ns", "<[{NOSCRIPT}]><CR></[{NOSCRIP}]T><C-O>O")
+call HTMLmap("vnoremap", "<lead>ns", "<ESC>`>a<CR></[{NOSCRIPT}]><C-O>`<<[{NOSCRIPT}]><CR><ESC>", 1)
+call HTMLmapo('<lead>ns', 0)
 
 "       OBJECT
 call HTMLmap("inoremap", "<lead>ob", "<[{OBJECT DATA=\"\" WIDTH=\"\" HEIGHT}]=\"\"><CR></[{OBJECT}]><ESC>k$5F\"i")
@@ -1474,8 +1489,15 @@ call HTMLmapo("<lead>lA", 1)
 " HTML entities:
 call HTMLmap("nnoremap", "<lead>&", "s<C-R>=HTMLencodeString(@\")<CR><Esc>")
 call HTMLmap("vnoremap", "<lead>&", "s<C-R>=HTMLencodeString(@\")<CR><Esc>")
-call HTMLmap("vnoremap", "<lead>^", "s<C-R>=HTMLencodeString(@\", 'd')<CR><Esc>")
 call HTMLmapo("<lead>^", 0)
+
+" Convert the character under the cursor or the highlighted string to a %XX
+" string:
+call HTMLmap("nnoremap", "<lead>%", "s<C-R>=HTMLencodeString(@\", '%')<CR><Esc>")
+call HTMLmap("vnoremap", "<lead>%", "s<C-R>=HTMLencodeString(@\", '%')<CR><Esc>")
+
+" Decode a &#...; or %XX encoded string:
+call HTMLmap("vnoremap", "<lead>^", "s<C-R>=HTMLencodeString(@\", 'd')<CR><Esc>")
 
 call HTMLmap("inoremap", "&&", "&amp;")
 call HTMLmap("inoremap", "&cO", "&copy;")
@@ -1569,19 +1591,17 @@ call HTMLmap("inoremap", "&3.", "&hellip;")
 
 " ---- Browser Remote Controls: ----------------------------------------- {{{1
 if has("unix")
-  if !exists("*LaunchBrowser")
-    runtime! browser_launcher.vim
-  endif
+  runtime! browser_launcher.vim
 
   if exists("*LaunchBrowser")
-    " Firefox: View current file, starting Netscape if it's not running:
+    " Firefox: View current file, starting Firefox if it's not running:
     call HTMLmap("nnoremap", "<lead>ff", ":call LaunchBrowser('f',0)<CR>")
     " Firefox: Open a new window, and view the current file:
     call HTMLmap("nnoremap", "<lead>nff", ":call LaunchBrowser('f',1)<CR>")
     " Firefox: Open a new tab, and view the current file:
     call HTMLmap("nnoremap", "<lead>tff", ":call LaunchBrowser('f',2)<CR>")
 
-    " Mozilla: View current file, starting Netscape if it's not running:
+    " Mozilla: View current file, starting Mozilla if it's not running:
     call HTMLmap("nnoremap", "<lead>mo", ":call LaunchBrowser('m',0)<CR>")
     " Mozilla: Open a new window, and view the current file:
     call HTMLmap("nnoremap", "<lead>nmo", ":call LaunchBrowser('m',1)<CR>")
@@ -1589,9 +1609,9 @@ if has("unix")
     call HTMLmap("nnoremap", "<lead>tmo", ":call LaunchBrowser('m',2)<CR>")
 
     " Netscape: View current file, starting Netscape if it's not running:
-    call HTMLmap("nnoremap", "<lead>ns", ":call LaunchBrowser('n',0)<CR>")
+    call HTMLmap("nnoremap", "<lead>ne", ":call LaunchBrowser('n',0)<CR>")
     " Netscape: Open a new window, and view the current file:
-    call HTMLmap("nnoremap", "<lead>nns", ":call LaunchBrowser('n',1)<CR>")
+    call HTMLmap("nnoremap", "<lead>nne", ":call LaunchBrowser('n',1)<CR>")
 
     " Opera: View current file, starting Opera if it's not running:
     call HTMLmap("nnoremap", "<lead>oa", ":call LaunchBrowser('o',0)<CR>")
@@ -1602,8 +1622,13 @@ if has("unix")
 
     " Lynx:  (This happens anyway if there's no DISPLAY environmental variable.)
     call HTMLmap("nnoremap","<lead>ly",":call LaunchBrowser('l',0)<CR>")
-    " Lynx in an xterm:      (This happens regardless if you're in the Vim GUI.)
+    " Lynx in an xterm:  (This happens regardless in the Vim GUI.)
     call HTMLmap("nnoremap", "<lead>nly", ":call LaunchBrowser('l',1)<CR>")
+
+    " w3m:
+    call HTMLmap("nnoremap","<lead>w3",":call LaunchBrowser('w',0)<CR>")
+    " w3m in an xterm:  (This happens regardless in the Vim GUI.)
+    call HTMLmap("nnoremap", "<lead>nw3", ":call LaunchBrowser('w',1)<CR>")
   endif
 elseif has("win32")
   " Internet Explorer:
@@ -1628,14 +1653,14 @@ endif " ! exists("b:did_html_mappings")
 
 
 " ---- ToolBar Buttons: ------------------------------------------------- {{{1
-if ! has("gui_running")
+if ! has("gui_running") && ! exists("g:force_html_menu")
   augroup HTMLplugin
   au!
   execute 'autocmd GUIEnter * source ' . expand('<sfile>:p <bar> autocmd! HTMLplugin GUIEnter *')
   augroup END
-elseif exists("did_html_menus")
+elseif exists("g:did_html_menus")
   call s:HTMLmenuControl()
-else
+elseif ! exists("g:no_html_menu")
 
 if (! exists('g:no_html_toolbar')) && (has("toolbar") || has("win32") || has("gui_gtk")
   \ || (v:version >= 600 && (has("gui_athena") || has("gui_motif") || has("gui_photon"))))
@@ -1779,7 +1804,7 @@ if (! exists('g:no_html_toolbar')) && (has("toolbar") || has("win32") || has("gu
       exe 'amenu         1.510 ToolBar.Mozilla'  g:html_map_leader . 'mo'
     elseif s:browsers =~ 'n'
       HTMLtmenu Netscape 1.510 ToolBar.Netscape  Launch\ Netscape\ on\ Current\ File
-      exe 'amenu         1.510 ToolBar.Netscape' g:html_map_leader . 'ns'
+      exe 'amenu         1.510 ToolBar.Netscape' g:html_map_leader . 'ne'
     endif
 
     if s:browsers =~ 'o'
@@ -1787,7 +1812,10 @@ if (! exists('g:no_html_toolbar')) && (has("toolbar") || has("win32") || has("gu
       exe 'amenu         1.520 ToolBar.Opera'    g:html_map_leader . 'oa'
     endif
 
-    if s:browsers =~ 'l'
+    if s:browsers =~ 'w'
+      HTMLtmenu w3m      1.530 ToolBar.w3m       Launch\ w3m\ on\ Current\ File
+      exe 'amenu         1.530 ToolBar.w3m'      g:html_map_leader . 'w3'
+    elseif s:browsers =~ 'l'
       HTMLtmenu Lynx     1.530 ToolBar.Lynx      Launch\ Lynx\ on\ Current\ File
       exe 'amenu         1.530 ToolBar.Lynx'     g:html_map_leader . 'ly'
     endif
@@ -1843,8 +1871,8 @@ if exists("*LaunchBrowser")
     amenu HTML.Preview.-sep2-                            <nop>
   endif
   if s:browsers =~ 'n'
-    exe 'amenu HTML.Preview.Netscape<tab>' . g:html_map_leader . 'ns' g:html_map_leader . 'ns'
-    exe 'amenu HTML.Preview.Netscape\ (New\ Window)<tab>' . g:html_map_leader . 'nns' g:html_map_leader . 'nns'
+    exe 'amenu HTML.Preview.Netscape<tab>' . g:html_map_leader . 'ne' g:html_map_leader . 'ne'
+    exe 'amenu HTML.Preview.Netscape\ (New\ Window)<tab>' . g:html_map_leader . 'nne' g:html_map_leader . 'nne'
     amenu HTML.Preview.-sep3-                            <nop>
   endif
   if s:browsers =~ 'o'
@@ -1855,6 +1883,9 @@ if exists("*LaunchBrowser")
   endif
   if s:browsers =~ 'l'
     exe 'amenu HTML.Preview.Lynx<tab>' . g:html_map_leader . 'ly' g:html_map_leader . 'ly'
+  endif
+  if s:browsers =~ 'w'
+    exe 'amenu HTML.Preview.w3m<tab>' . g:html_map_leader . 'w3' g:html_map_leader . 'w3'
   endif
 elseif maparg(g:html_map_leader . 'ie', 'n') != ""
   exe 'amenu HTML.Preview.Internet\ Explorer<tab>' . g:html_map_leader . 'ie' g:html_map_leader . 'ie'
@@ -1869,6 +1900,7 @@ let &encoding='latin1'
 
 nmenu HTML.Character\ Entities.Convert\ to\ Entity<tab>;\&         ;&
 vmenu HTML.Character\ Entities.Convert\ to\ Entity<tab>;\&         ;&
+vmenu HTML.Character\ Entities.Convert\ from\ Entities<tab>;^      ;^
  menu HTML.Character\ Entities.-sep0- <nul>
 imenu HTML.Character\ Entities.Ampersand<tab>\&\&                  &&
 imenu HTML.Character\ Entities.Greaterthan\ (>)<tab>\&>            &>
@@ -2466,9 +2498,6 @@ exe 'vmenu HTML.Lists.Unordered\ List<tab>' . g:html_map_leader . 'ul' g:html_ma
 exe 'nmenu HTML.Lists.Unordered\ List<tab>' . g:html_map_leader . 'ul' 'i' . g:html_map_leader . 'ul'
 exe 'imenu HTML.Lists.List\ Item<tab>' . g:html_map_leader . 'li' g:html_map_leader . 'li'
 exe 'nmenu HTML.Lists.List\ Item<tab>' . g:html_map_leader . 'li' 'i' . g:html_map_leader . 'li'
-exe 'imenu HTML.Lists.List\ Header<tab>' . g:html_map_leader . 'lh' g:html_map_leader . 'lh'
-exe 'vmenu HTML.Lists.List\ Header<tab>' . g:html_map_leader . 'lh' g:html_map_leader . 'lh'
-exe 'nmenu HTML.Lists.List\ Header<tab>' . g:html_map_leader . 'lh' 'i' . g:html_map_leader . 'lh'
  menu HTML.Lists.-sep1- <nul>
 exe 'imenu HTML.Lists.Definition\ List<tab>' . g:html_map_leader . 'dl' g:html_map_leader . 'dl'
 exe 'vmenu HTML.Lists.Definition\ List<tab>' . g:html_map_leader . 'dl' g:html_map_leader . 'dl'
@@ -2632,6 +2661,12 @@ exe 'nmenu HTML.More\.\.\..Linked\ CSS<tab>' . g:html_map_leader . 'ls' 'i' . g:
 exe 'imenu HTML.More\.\.\..META<tab>' . g:html_map_leader . 'me' g:html_map_leader . 'me'
 exe 'vmenu HTML.More\.\.\..META<tab>' . g:html_map_leader . 'me' g:html_map_leader . 'me'
 exe 'nmenu HTML.More\.\.\..META<tab>' . g:html_map_leader . 'me' 'i' . g:html_map_leader . 'me'
+exe 'imenu HTML.More\.\.\..NOSCRIPT<tab>' . g:html_map_leader . 'nj' g:html_map_leader . 'nj'
+exe 'vmenu HTML.More\.\.\..NOSCRIPT<tab>' . g:html_map_leader . 'nj' g:html_map_leader . 'nj'
+exe 'nmenu HTML.More\.\.\..NOSCRIPT<tab>' . g:html_map_leader . 'nj' 'i' . g:html_map_leader . 'nj'
+exe 'imenu HTML.More\.\.\..Generic\ Embedded\ Object<tab>' . g:html_map_leader . 'ob' g:html_map_leader . 'ob'
+exe 'vmenu HTML.More\.\.\..Generic\ Embedded\ Object<tab>' . g:html_map_leader . 'ob' g:html_map_leader . 'ob'
+exe 'nmenu HTML.More\.\.\..Generic\ Embedded\ Object<tab>' . g:html_map_leader . 'ob' 'i' . g:html_map_leader . 'ob'
 exe 'imenu HTML.More\.\.\..Quoted\ Text<tab>' . g:html_map_leader . 'qu' g:html_map_leader . 'qu'
 exe 'vmenu HTML.More\.\.\..Quoted\ Text<tab>' . g:html_map_leader . 'qu' g:html_map_leader . 'qu'
 exe 'nmenu HTML.More\.\.\..Quoted\ Text<tab>' . g:html_map_leader . 'qu' 'i' . g:html_map_leader . 'qu'
@@ -2642,7 +2677,7 @@ exe 'imenu HTML.More\.\.\..STYLE<tab>' . g:html_map_leader . 'cs' g:html_map_lea
 exe 'vmenu HTML.More\.\.\..STYLE<tab>' . g:html_map_leader . 'cs' g:html_map_leader . 'cs'
 exe 'nmenu HTML.More\.\.\..STYLE<tab>' . g:html_map_leader . 'cs' 'i' . g:html_map_leader . 'cs'
 
-let did_html_menus = 1
+let g:did_html_menus = 1
 endif  " ! has("gui_running"))
 " ---------------------------------------------------------------------------
 
