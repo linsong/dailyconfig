@@ -485,6 +485,16 @@ maillists/macports-users@lists.macosforge.org
 * ^TOlaszlo-dev@openlaszlo.org
 maillists/laszlo-dev@openlaszlo.org
 
+### start to dispatch rss mails from rss3email 
+:0:
+* ^From robg@macosxhints.com
+rss/macosxhints
+
+:0:
+* ^User-Agent: rss2email$
+rss/others
+### end
+
 :0:
 * ^TOlinsong.qizi@gmail.com
 vincent

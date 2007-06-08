@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 
+"""
+TODO: 
+    1. add config for which notify-client is used. options are:
+        gnome-osd-client, notify-send, growl  etc
+"""
+
 # URL for this script: http://the.taoofmac.com/space/Projects/netgrowl.py
 """Growl 0.6 Network Protocol Client for Python"""
 __version__ = "0.6" # will always match Growl version
 __author__ = "Rui Carmo (http://the.taoofmac.com)"
 __copyright__ = "(C) 2004 Rui Carmo. Code under BSD License."
 __contributors__ = "Ingmar J Stein (Growl Team)"
+
 
 import os
 import sys
@@ -157,7 +164,16 @@ def _send_notify_by_notifydaemon(name, message, icon, time):
     message = message.replace('>', '&gt;')
     message = message.replace("'", '&apos;')
 
-    cmd = "notify-send -i %s -t %s '%s' '%s'" % (icon, time, name, message)
+    #cmd = "notify-send -i %s -t %s '%s' '%s'" % (icon, time, name, message)
+
+    cmd = 'gnome-osd-client "(%s): %s"' % (name, message)
+
+    # the following command is very slow 
+    #cmd = """
+    #gnome-osd-client -f "<message id='notification' osd_fake_translucent_bg='on'
+    #hide_timeout='5000' osd_halignment='right'>From (%s): %s </message>"
+    #""" % (name, message)
+
     os.system(cmd)
 
 def send_notify(options):

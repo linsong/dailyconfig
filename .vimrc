@@ -129,6 +129,7 @@
     " set tags 
     :set tags+=../tags,../../tags
 
+    :set number
 "### }}}1
 
 "### Encodings {{{1
@@ -322,6 +323,34 @@
 
 "### }}}1
 
+"### general function defination {{{1
+    function! MyFoldText()
+      let line = getline(v:foldstart)
+      let nnum = nextnonblank(v:foldstart + 1)
+      let nextline = getline(nnum)
+      if nextline =~ '^\s\+"""$'
+        let line = line . getline(nnum + 1)
+      elseif nextline =~ '^\s\+"""'
+        let line = line . ' ' . matchstr(nextline, '"""\zs.\{-}\ze\("""\)\?$')
+      elseif nextline =~ '^\s\+"[^"]\+"$'
+        let line = line . ' ' . matchstr(nextline, '"\zs.*\ze"')
+      elseif nextline =~ '^\s\+pass\s*$'
+        let line = line . ' pass'
+      endif
+      let size = 1 + v:foldend - v:foldstart
+      if size < 10
+        let size = " " . size
+      endif
+      if size < 100
+        let size = " " . size
+      endif
+      if size < 1000
+        let size = " " . size
+      endif
+      return "[" . size . "] " . line
+    endfunction
+"}}}1
+    
 "### Platform dependent Setting {{{1
     "if has("vms")
       "set nobackup      " do not keep a backup file, use versions instead

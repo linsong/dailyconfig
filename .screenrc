@@ -50,7 +50,9 @@ bind O login off
 bind } history
 
 bind j focus down
+bind ^j focus down
 bind k focus up
+bind ^k focus up
 bind t focus top
 bind b focus bottom
 
