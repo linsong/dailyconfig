@@ -1323,6 +1323,14 @@ endif
     endif
 "### }}}1
 
+"" TODO: need to be extended for more languages and replace selected lines
+"python << EOL
+"import vim
+"def EvaluateCurrentRange():
+  "eval(compile('\n'.join(vim.current.range),'<string>','exec'),globals())
+"EOL
+"map H :py EvaluateCurrentRange()<CR>
+
 
 
 

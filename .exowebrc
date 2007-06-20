@@ -64,6 +64,17 @@ alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop a
      find . \( -type d -iname "lib" -prune \) -o \( -type d -iname "zope" -prune \) -o -type f -iname "*.py" 
  }
 
+ function base_start()
+ {
+     OLDDIR=$PWD
+     cd ${1:-$PWD}
+	 if [ -n "$(ls *.pid)" ]; then 
+		 ./nordicbetsite stop all 
+	 fi
+	 ./nordicbetsite start application_server && ./nordicbetsite start presentation_server && ./nordicbetsite start back_office_server
+     cd $OLDDIR 
+ }
+
  if [ ! -e ~/.fetchmail.pid ]; then 
     fetchmail
  fi

@@ -107,7 +107,9 @@ channels = (
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#livebet"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
   { name = "#dev"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
-  { name = "#exoweb"; chatnet = "WorkIRCnet"; autojoin = "yes"; }
+  { name = "#exoweb"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
+  { name = "#production"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
+  { name = "#postgresql"; chatnet = "IRCnet"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -163,7 +165,7 @@ aliases = {
   wu = "window up";
   wd = "window down ";
   wl = "window last ";
-  mklayout = "window 3; window show 2; window size 20; window show 6; window size 5; window 3; window stick 1 on; window stick 3 on; window stick 7 on; window 2; window stick 2 on; window stick 4 on; window stick 5 on; window 6; window stick 6 on;";
+  mklayout = "window 8; window show 2; window size 20; window show 6; window size 5; window 2; window stick 1 on; window stick 2 on; window stick 7 on; window 8; window stick 8 on; window stick 4 on; window stick 5 on; window 6; window stick 6 on;";
   cs = "msg chanserv op $C";
   google = "say http://www.google.com/search?hl=en&q=$0&btnG=Google+Search";
   l = "lastlog -regex ";
@@ -336,7 +338,8 @@ keyboard = (
   { key = "meta-e"; id = "change_window"; data = "4"; },
   { key = "meta-i"; id = "change_window"; data = "7"; },
   { key = "meta-h"; id = "change_window"; data = "6"; },
-  { key = "meta-s"; id = "change_window"; data = "1"; }
+  { key = "meta-s"; id = "change_window"; data = "1"; },
+  { key = "meta-p"; id = "change_window"; data = "8"; }
 );
 hilights = (
   {
@@ -366,16 +369,27 @@ ignores = (
   { mask = "*away*"; level = "NICKS"; }
 );
 logs = { };
+completions = {
+  sls = { value = "since last scrum:"; };
+  bns = { value = "before next scrum:"; };
+};
 windows = {
-  3 = {
+  8 = {
     items = (
       {
         type = "CHANNEL";
         chat_type = "IRC";
-        name = "#livebet";
+        name = "#production";
         tag = "WorkIRCnet";
       }
     );
+    sticky = "yes";
+  };
+  6 = { name = "hilight"; sticky = "yes"; };
+  1 = { 
+    immortal = "yes";
+    name = "(status)";
+    level = "ALL";
     sticky = "yes";
   };
   2 = {
@@ -388,38 +402,17 @@ windows = {
       }
     );
     sticky = "yes";
+    parent = "1";
   };
-  4 = {
+  3 = {
     items = (
       {
         type = "CHANNEL";
         chat_type = "IRC";
-        name = "#exoweb";
+        name = "#livebet";
         tag = "WorkIRCnet";
       }
     );
-    sticky = "yes";
-    parent = "2";
-  };
-  1 = {
-    immortal = "yes";
-    name = "(status)";
-    level = "ALL";
-    sticky = "yes";
-    parent = "3";
-  };
-  6 = { name = "hilight"; };
-  5 = {
-    items = (
-      {
-        type = "CHANNEL";
-        chat_type = "IRC";
-        name = "&bitlbee";
-        tag = "BitlBeeIRCnet";
-      }
-    );
-    sticky = "yes";
-    parent = "2";
   };
   7 = {
     items = (
@@ -431,15 +424,35 @@ windows = {
       }
     );
     sticky = "yes";
-    parent = "3";
+    parent = "1";
+  };
+  5 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "&bitlbee";
+        tag = "BitlBeeIRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "8";
+  };
+  4 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#exoweb";
+        tag = "WorkIRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "8";
   };
 };
 mainwindows = {
-  3 = { first_line = "22"; lines = "22"; };
-  2 = { first_line = "7"; lines = "15"; };
-  6 = { first_line = "1"; lines = "6"; };
-};
-completions = {
-  sls = { value = "since last scrum:"; };
-  bns = { value = "before next scrum:"; };
+  8 = { first_line = "27"; lines = "26"; };
+  1 = { first_line = "8"; lines = "19"; };
+  6 = { first_line = "1"; lines = "7"; };
 };

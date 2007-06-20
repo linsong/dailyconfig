@@ -36,7 +36,7 @@ $VERSION = '0.6ca';
 	                    q(wouter@coekaerts.be, jylefort@brutele.be),
 	authors          => q(Nei),
 	contact          => q(Nei@QuakeNet),
-	url              =>  "http://ai.onetrix.net/",
+	url              =>  "http://anti.teamidiot.de/",
 	name             => q(awl),
 	description      => q(Adds a permanent advanced window list on the right or ).
 	                    q(in a statusbar.),
