@@ -1,4 +1,4 @@
-*NERD_commenter.txt*         Plugin for commenting code            v204
+*NERD_commenter.txt*         Plugin for commenting code            v205
 
 
                         NERD COMMENTER REFERENCE MANUAL~
@@ -829,6 +829,16 @@ to get illegal syntax when uncommenting them.
 ==============================================================================
 6. Changelog                                              *NERD_com-changelog*
 
+2.0.5
+    - Added support for autoit, autohotkey and docbk filetypes (thanks to
+      Michael Böhler)
+    - Added support for cmake (thanks to Aaron Small)
+    - Added support for htmldjango and django filetypes (thanks to Ramiro
+      Morales)
+    - Improved the delimiters for eruby again
+    - Applied a patch from Seth Mason to fix some pathing issues with the help
+      file installation.
+
 2.0.4
     - Added support for verilog_systemverilog and systemverilog filetypes
       (Thanks to Alexey for the email)
@@ -1017,6 +1027,16 @@ Thanks to Alexey for emailing me about the verilog_systemverilog/systemverilog
 filetypes.
 
 Cheers to Lizendir for the email about the fstab filetype
+
+Thanks to Michael Böhler for emailing me with the autoit, autohotkey and docbk
+filetypes.
+
+Thanks to Aaron Small for emailing me about the cmake filetype.
+
+Thanks to Ramiro for emailing me about the htmldjango and django filetypes.
+
+Thanks to Seth Mason for sending me a patch to fix some pathing issues for the
+help doc installation.
 
 Cheers to myself for being the best looking man on Earth!
 
