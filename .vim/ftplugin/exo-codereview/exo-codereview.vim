@@ -53,7 +53,7 @@ if ! exists("g:exo_codereview")
 "            :call Decho("user name is empty.")
             return ''
         endif
-        let username_line = '=== ' . substitute(username, ".*", "\\u\\0", "") . ' ==='
+        let username_line = '== ' . substitute(username, ".*", "\\u\\0", "") . ' =='
         if search('^' . username_line, 'w') > 0
 "            :call Decho("You have edited this before")
             return 'Done'
