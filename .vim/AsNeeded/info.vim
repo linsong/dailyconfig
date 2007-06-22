@@ -26,6 +26,16 @@
 " POSSIBILITY OF SUCH DAMAGE.
 "
 " $Id: info.vim,v 1.7 2002/11/30 21:59:05 rnd Exp $
+"
+" LOCAL CHANGE HISTORY:
+"   Fri Jun 22 11:25:05 CST 2007: apply some patch from 
+"          http://www.webservertalk.com/archive295-2007-4-1871926.html, 
+"                                 that solves two bugs: 
+"                                    1. the attributes(including modifiable,
+"                                       noswapfile etc) of Info page buffer 
+"                                       is not set successfully
+"                                    2. the s:indexPatter is not right
+"                                       sometime 
 
 let s:infoCmd = 'info --output=-'
 if has('win32')
@@ -36,7 +46,8 @@ endif
 let s:dirPattern = '^\* [^:]*: \(([^)]*)\)'
 let s:menuPattern = '^\* \([^:]*\)::'
 let s:notePattern = '\*[Nn]ote\%(\s\|$\)'
-let s:indexPattern = '^\* [^:]*:\s*\([^.]*\)\.$'
+"let s:indexPattern = '^\* [^:]*:\s*\([^.]*\)\.$' "wrong, it forbids to examine certain nodes
+let s:indexPattern = '^\* [^:]*:\s*\([^.]*\)\.'
 let s:indexPatternHL = '^\* [^:]*:\s\+[^(]'
 
 " command! -nargs=* Info	call s:Info(<f-args>)
@@ -115,7 +126,12 @@ fun! s:InfoExec(file, node, ...)
 	else
 	    let command = 'new'
 	endif
-	silent! exe command "+exe'setlocal''modifiable''noswapfile''buftype=nofile''bufhidden=delete'" escape(bufname, '\ ')
+
+    """ messed up ++cmd (None of the options will be set).
+    "silent! exe command "+exe'setlocal''modifiable''noswapfile''buftype=nofile''bufhidden=delete'" escape(bufname, '\ ')
+    
+	silent! exe command '+setlocal\ modifiable\ noswapfile\ buftype=nofile\ bufhidden=delete' escape(bufname, '\ ')
+
 	setf info
 
 	let cmd = s:infoCmd." '".a:file.a:node."' 2>/dev/null"
