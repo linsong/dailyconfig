@@ -108,8 +108,6 @@ ignorecase on
 
 # Example of automatically running some programs in windows on screen startup.
 #
-utf8 on # use utf-8 encoding in irssi window 
-
 screen -t music 0 
 screen -t mail 1 /bin/bash -c 'if [ $(hostname) == "vincent" ]; then mutt; fi'
 screen -t work 2 
@@ -122,3 +120,4 @@ screen -t w3m 6 w3m www.google.com
 screen -t irssi 7 irssi
 screen -t psql psql NBET_vincent
 
+utf8 on # use utf-8 encoding in irssi window 
