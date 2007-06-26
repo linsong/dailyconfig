@@ -1068,6 +1068,10 @@ endif " has("autocmd")
     "### setting for tagselect.vim {{{2
      let g:no_tagselect_maps = 1
     "}}}2
+   
+    "### setting for lusty_explorer.vim {{{2
+     let g:LustyExplorerSuppressRubyWarning = 1
+    "}}}2
     
 "### }}}1
 

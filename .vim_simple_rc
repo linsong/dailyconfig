@@ -117,6 +117,7 @@ if !has("gui_running")
   endif
 endif 
 
-runtime mark.vim 
-runtime visualmark.vim
-runtime AsNeeded.vim
+runtime plugin/mark.vim 
+runtime plugin/visualmark.vim
+runtime plugin/AsNeeded.vim
+runtime plugin/ANcmds.vim
