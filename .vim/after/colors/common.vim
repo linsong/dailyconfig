@@ -22,3 +22,17 @@ hi PmenuThumb  guifg=SeaGreen
 highlight Cursor     gui=none       guibg=Red guifg=#ffffff
 "highlight Cursor     ctermfg=Black	ctermbg=Green	 cterm=reverse
 highlight Cursor     ctermfg=Black	ctermbg=Red	 cterm=reverse
+
+if v:version >= 700
+    "highlight CursorLine term=underline cterm=underline guibg=#000000 
+    "highlight CursorColumn term=underline cterm=underline guibg=#000000 
+    highlight CursorLine term=underline cterm=underline gui=none guibg=#003333
+    highlight CursorColumn term=underline cterm=underline gui=none guibg=#003333 
+
+    hi MarkWord1  ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA   guifg=DarkRed
+    hi MarkWord2  ctermbg=Green   ctermfg=Black guibg=#A4E57E   guifg=DarkRed
+    hi MarkWord3  ctermbg=Yellow  ctermfg=Black guibg=#FFDB72   guifg=DarkRed
+    hi MarkWord4  ctermbg=Red     ctermfg=Black guibg=#FF7272   guifg=DarkRed
+    hi MarkWord5  ctermbg=Magenta ctermfg=Black guibg=#FFB3FF   guifg=DarkRed
+    hi MarkWord6  ctermbg=Blue    ctermfg=Black guibg=#9999FF   guifg=DarkRed
+endif

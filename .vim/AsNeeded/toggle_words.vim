@@ -63,8 +63,6 @@ function! s:ToggleWord()
 endfunction
 
 command! ToggleWord :call <SID>ToggleWord() <CR>
-nmap ,t :call <SID>ToggleWord()<CR>
-vmap ,t <ESC>:call <SID>ToggleWord()<CR>
 
 let &cpo= s:keepcpo
 unlet s:keepcpo

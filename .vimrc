@@ -422,22 +422,6 @@
     " linux setting end 
     endif "}}}2
 
-    "### GUI mode setting {{{2
-
-        if has("gui_running")
-            :colorscheme mymud "mud desert zenburn ps_color elflord metacosm dusk
-
-            " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-            " let &guioptions = substitute(&guioptions, "t", "", "g")
-
-            " the following config to make gvim startup faster
-            set guioptions-=M
-            "set guioptions-=m
-            set guioptions-=T
-        endif
-
-    "### }}}2
-
     "### console mode setting {{{2
         "TODO: need to set wildmode, for more details, :help 'wildmode'
         " use menu in console mode 
@@ -483,29 +467,6 @@ if has("autocmd")
         " for now, I don't always need this
         ":au VimEnter * source ~/Session.vim
         ":au VimLeave * mksession! 
-        
-        if v:version >= 700
-            " automate set the cursorline and cursorcolumn highlight
-            " whenever the colorscheme is changed 
-
-            "autocmd ColorScheme * highlight CursorLine term=underline cterm=underline guibg=#000000 
-            "autocmd ColorScheme * highlight CursorColumn term=underline cterm=underline guibg=#000000 
-            autocmd ColorScheme * highlight CursorLine term=underline cterm=underline guibg=#333333
-            autocmd ColorScheme * highlight CursorColumn term=underline cterm=underline guibg=#333333 
-
-            autocmd ColorScheme * hi MarkWord1  ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA   guifg=DarkRed
-            autocmd ColorScheme * hi MarkWord2  ctermbg=Green   ctermfg=Black guibg=#A4E57E   guifg=DarkRed
-            autocmd ColorScheme * hi MarkWord3  ctermbg=Yellow  ctermfg=Black guibg=#FFDB72   guifg=DarkRed
-            autocmd ColorScheme * hi MarkWord4  ctermbg=Red     ctermfg=Black guibg=#FF7272   guifg=DarkRed
-            autocmd ColorScheme * hi MarkWord5  ctermbg=Magenta ctermfg=Black guibg=#FFB3FF   guifg=DarkRed
-            autocmd ColorScheme * hi MarkWord6  ctermbg=Blue    ctermfg=Black guibg=#9999FF   guifg=DarkRed
-        endif
-
-        " turn &cursorline on only in GUI && normal mode
-        if has("gui_running") && exists("&cursorline")
-            autocmd InsertLeave * set cursorline                    
-            autocmd InsertEnter * set nocursorline
-        endif
 
         " display the status line in different ways based on the current
         " editing mode
@@ -1073,6 +1034,11 @@ endif " has("autocmd")
      let g:LustyExplorerSuppressRubyWarning = 1
     "}}}2
     
+    "### setting for toggle_words.vim {{{2
+     nmap ,t :ToggleWord<CR>
+     vmap ,t <ESC>:ToggleWord<CR>
+    "}}}2
+    
 "### }}}1
 
 "### {{{1 xterm colors defination 
@@ -1327,6 +1293,8 @@ endif
     endif
 "### }}}1
 
+"### {{{1 Experiments 
+
 "" TODO: need to be extended for more languages and replace selected lines
 "python << EOL
 "import vim
@@ -1334,6 +1302,8 @@ endif
   "eval(compile('\n'.join(vim.current.range),'<string>','exec'),globals())
 "EOL
 "map H :py EvaluateCurrentRange()<CR>
+
+"### }}}1
 
 
 

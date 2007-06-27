@@ -25,7 +25,22 @@ endif
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 "
 
-:colorscheme mymud "mud desert zenburn ps_color
+:colorscheme desert "mymud zenburn ps_color elflord metacosm dusk
+
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+" let &guioptions = substitute(&guioptions, "t", "", "g")
+
+" the following config to make gvim startup faster
+set guioptions-=M
+"set guioptions-=m
+set guioptions-=T
+
+" turn &cursorline on only in GUI && normal mode
+if exists("&cursorline")
+    set cursorline
+    autocmd InsertLeave * set cursorline                    
+    autocmd InsertEnter * set nocursorline
+endif
 
 "mark.vim should be re-sourced after any changing to colors. For example, if you
 ":set background=dark  OR
@@ -39,7 +54,6 @@ if has('win32')
 else
 	:source $VIMCFG/plugin/mark.vim
 endif
-
 
 " following config to make gvim startup faster
 set guiheadroom=0
