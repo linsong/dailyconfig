@@ -19,6 +19,7 @@ import sys
 import optparse
 import struct
 import md5
+#import subprocess
 from socket import AF_INET, SOCK_DGRAM, socket
 
 GROWL_UDP_PORT=9887
@@ -163,10 +164,11 @@ def _send_notify_by_notifydaemon(name, message, icon, time):
     message = message.replace('<', '&lt;')
     message = message.replace('>', '&gt;')
     message = message.replace("'", '&apos;')
+    message = message.replace('"', '&quot;')
+    #message = message.replace('~', '&tilde;')
+    #message = message.replace('-', '&ndash;')
 
     #cmd = "notify-send -i %s -t %s '%s' '%s'" % (icon, time, name, message)
-
-    cmd = 'gnome-osd-client "(%s): %s"' % (name, message)
 
     # the following command is very slow 
     #cmd = """
@@ -174,6 +176,8 @@ def _send_notify_by_notifydaemon(name, message, icon, time):
     #hide_timeout='5000' osd_halignment='right'>From (%s): %s </message>"
     #""" % (name, message)
 
+    cmd = 'gnome-osd-client "(%s): %s"' % (name, message)
+    #os.popen(cmd)
     os.system(cmd)
 
 def send_notify(options):

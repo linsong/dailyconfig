@@ -37,11 +37,15 @@ sub notify($$$$)
 {
     my ($appname, $identifier, $title, $data) = @_;
 
+    # Make the message entity-safe
     $title =~ s#'#''''#g;
     $data =~ s#'#''''#g;
 
+    cmd_str = "netgrowl.py -q -n '$title' -m '$data'"
     # now, I hide the details of OS behind netgrowl.py 
-    system("netgrowl.py -q -n '$title' -m '$data'");
+    open(TEMP_HANDLER, '|' . cmd_str);
+    close(TEMP_HANDLER);
+    #system(cmd_str);
 
     #my $tool_type = Irssi::settings_get_str('notify_notification_tool');
     #if ($tool_type =~ m/growl/i)
