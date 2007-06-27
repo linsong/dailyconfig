@@ -431,7 +431,7 @@
             "else
                 ":colorscheme desert "torte bluegreen
             "endif
-            :colorscheme mymud
+            :colorscheme desert
             :source $VIMRUNTIME/menu.vim
             :set cpo-=<
             :set wcm=<C-Z>

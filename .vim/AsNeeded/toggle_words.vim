@@ -36,7 +36,7 @@ set cpo&vim
 
 let g:load_toggle_words = "1.0"
 
-let g:_toggle_words_dict = {'*': [['true', 'false'], ['on', 'off'], ['yes', 'no'], ['+', '-'], ['define', 'undef'], ['if', 'elseif', 'else', 'endif'], ['>', '<'], ['{', '}'], ['(', ')'], ['[', ']'], ['success', 'failure'], ['True', 'False'],  ],  }
+let g:_toggle_words_dict = {'*': [['true', 'false'], ['on', 'off'], ['yes', 'no'], ['+', '-'], ['define', 'undef'], ['if', 'elseif', 'else', 'endif'], ['>', '<'], ['{', '}'], ['(', ')'], ['[', ']'], ['==', '!='], ['success', 'failure'], ['start', 'stop'], ['up', 'down'], ['good', 'bad'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'novermber', 'december'], [],],  }
 
 if exists('g:toggle_words_dict')
     :call extend(g:_toggle_words_dict, g:toggle_words_dict)
@@ -50,11 +50,30 @@ function! s:ToggleWord()
         let words_candicates_array = g:_toggle_words_dict[cur_filetype] + g:_toggle_words_dict['*']
     endif
     let cur_word = expand("<cword>")
+    let word_attr = 0 " 0 - lowercase; 1 - Capital; 2 - uppercase
+
+    if toupper(cur_word)==#cur_word
+        let word_attr = 2
+    elseif cur_word ==# substitute(cur_word, '.*', '\u\0', '')
+        let word_attr = 1
+    else
+        let word_attr = 0
+    endif
+    let cur_word = tolower(cur_word)
+
     for words_candicates in words_candicates_array
         let index = index(words_candicates, cur_word)
         if index != -1
             let new_word_index = (index+1)%len(words_candicates)
             let new_word = words_candicates[new_word_index]
+            if word_attr==2
+                let new_word =toupper(new_word)
+            elseif word_attr==1
+                let new_word = substitute(new_word, '.*', '\u\0', '')
+            else
+                let new_word = tolower(new_word)
+            endif
+
             " use the new word to replace the old word
             exec "norm ciw" . new_word . ""
             break
