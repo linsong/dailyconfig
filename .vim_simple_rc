@@ -118,7 +118,7 @@
 "  endif
 "endif 
 
-source .vimrc
+source ~/.vimrc
 
 runtime plugin/mark.vim 
 runtime plugin/visualmark.vim
