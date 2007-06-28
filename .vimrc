@@ -451,6 +451,7 @@ if has("autocmd")
 
         " For all text files set 'textwidth' to 78 characters.
         autocmd FileType text setlocal textwidth=78
+        autocmd FileType svnlog :call FoldOnRegex('^r\d\{1,\}\>', -1) <CR>
 
         " When editing a file, always jump to the last known cursor position.
         " Don't do it when the position is invalid or when inside an event handler
@@ -818,7 +819,7 @@ endif " has("autocmd")
             if do_fold == 1
                 let b:FoldRegex = regex_string
                 if exists(":FoldMatching")!=2
-                    :runtime foldutils.vim
+                    :runtime plugin/foldutils.vim
                 endif
                 exec 'FoldMatching ' . regex_string . ' -1'
             endif
