@@ -101,6 +101,7 @@ nmap + 5<C-W>>
 " use enter to unhighlighted searched-for text
 nnoremap <C-CR> :noh<CR>
 nnoremap <leader>q :close<CR>
+nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
 " mappings for quickfix mode 
 nnoremap <F4>   :cnext <CR>
