@@ -126,10 +126,8 @@ fi
 ###########################################################################
 # alias {{{
 # Some example alias instructions
-# alias less='less -r'
-# alias rm='rm -i'
-# alias whence='type -a'
 
+ alias less='less -r'
  alias dir='ls --color=auto --format=vertical'
 # alias vdir='ls --color=auto --format=long'
  alias ll='ls -lS'
@@ -192,10 +190,6 @@ fi
 
  alias lsd='find . -type d -maxdepth 1'
 
- function v()
- {
-    /usr/bin/env vim -u $HOME/.vim_simple_rc -U NONE --noplugin --cmd ":setlocal buftype=nofile" "${@:--}"
- }
  alias tgvim='gvim --cmd ":tabnew" --cmd ":tabfirst"'
  alias vimplugin='cd ~/download/GNU_Tools/WorkPlatform/Vim/configure/download_vimscripts/MostUseful'
  alias edclipbrd='vim +ClipBrd +only'
@@ -375,5 +369,9 @@ __END
  #growl() { echo -e $'\e]9;'${1}'\007' ; return  ; }
  growl() { netgrowl.py -q -n "ShellNotification" -m "$*"; }
 
+ function v()
+ {
+    /usr/bin/env vim -u $HOME/.vim_simple_rc -U NONE --noplugin --cmd ":setlocal buftype=nofile" "${@:--}"
+ }
  # }}}
 

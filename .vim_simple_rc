@@ -121,3 +121,4 @@ runtime plugin/mark.vim
 runtime plugin/visualmark.vim
 runtime plugin/AsNeeded.vim
 runtime plugin/ANcmds.vim
+runtime plugin/foldutil.vim
