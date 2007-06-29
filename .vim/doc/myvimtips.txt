@@ -99,6 +99,11 @@ To use regular settings:
 ... "
   
 ===============================================================================
+# how to switch syntax on the fly:
+      :set syntax=BASENAME_OF_SYNTAX_FILE ~
+
+  For more details, :help :filetype
+===============================================================================
 -------------------------------------------------------------------------------
 NOTE: You need the noreadonly and modifiable keywords in the vim modeline above. help files are by default regarded as readonly and nomodifiable files by vim.
 -------------------------------------------------------------------------------

@@ -61,7 +61,7 @@ alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop a
 
  function pyfind()
  {
-     find . \( -type d -iname "lib" -prune \) -o \( -type d -iname "zope" -prune \) -o -type f -iname "*.py" 
+     find . \( -type d -iname "lib" -prune \) -o \( -type d -iname "zope" -prune \) -o -type f -iname "*.py"  | xargs grep $*
  }
 
  function base_start()

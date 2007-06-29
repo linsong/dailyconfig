@@ -251,7 +251,6 @@
     :nmap ,s :source $HOME/.vimrc \| source $HOME/.gvimrc<CR>
     :nmap ,v :e $HOME/.vimrc<CR> 
 
-
     " Make navigate tabs easier
     :nnoremap <silent> <M-.> gt
     :nnoremap <silent> <M-,> gT
@@ -320,6 +319,8 @@
     endfunction
 
     :map <F9> @q
+
+    nmap ,o :only<CR>
 
 "### }}}1
 
@@ -1036,6 +1037,7 @@ endif " has("autocmd")
     "}}}2
     
     "### setting for toggle_words.vim {{{2
+     let g:toggle_words_dict = {'python': [['if', 'elif', 'else']]}
      nmap ,t :ToggleWord<CR>
      vmap ,t <ESC>:ToggleWord<CR>
     "}}}2

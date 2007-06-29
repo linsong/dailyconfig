@@ -1,25 +1,34 @@
 " toggle_words.vim
 " Author: Vincent Wang (linsong dot qizi at gmail dot com)
-" Created:  Fri Oct 13 07:51:16 CST 2006
+" Created:  Fri Jun 29 18:06:29 CST 2007
 " Requires: Vim Ver7.0+ 
-" Version:  1.0
-" TODO: 
+" Version:  1.1
 "
 " Documentation: 
 "   The purpose of this plugin is very simple, it can toggle words among
-"   ['true', 'false'], ['on', 'off'], ['yes', 'no'], ['if', 'elseif', 'else',
-"   'endif'] etc . 
-"   To use it, move the cursor on some words like "true", "false", "yes", etc, 
-"   call command :ToggleWord<CR>(or just press ,t).
-"   It will search the candicates words to toggle based on
+"   'true'=>'false', 'True'=>'False', 'if'=>'elseif'=>'else'=>'endif' etc . 
+"
+"   To use it, move the cursor on some words like 'true', 'False', 'YES', etc, 
+"   call command 
+"     :ToggleWord
+"
+"   It will toggle 'true'=>'false', 'False'=>'True', 'YES'=>'NO' etc. Yes,
+"   this script will try to take the case into account when toggling words, so
+"   'True' will be toggled to 'False' instead of 'false'. Currently the way to
+"   check the case is very simple, but it works well for me.
+"
+"   You can define a map for 'ToggleWord' comand to make it easier: 
+"     nmap ,t :ToggleWord<CR>
+"
+"   This script can search the candicate words to toggle based on
 "   current filetype, for example, you can put the following configuration
 "   into your .vimrc to define some words for python:
-"      let g:toggle_words_dict = {'python': [['if', 'elif', 'else'], ['True',
-"      'False']]}
+"      let g:toggle_words_dict = {'python': [['if', 'elif', 'else']]}
 "   
 "   There are some default words for toggling predefined in the
 "   script(g:_toogle_words_dict) that will work for all filetypes.
 "   Any comment, suggestion, bug report are welcomed. 
+
 
 if v:version < 700
     "TODO: maybe I should make this script works under vim7.0
@@ -34,7 +43,7 @@ endif
 let s:keepcpo= &cpo
 set cpo&vim
 
-let g:load_toggle_words = "1.0"
+let g:load_toggle_words = "1.1"
 
 let g:_toggle_words_dict = {'*': [['true', 'false'], ['on', 'off'], ['yes', 'no'], ['+', '-'], ['define', 'undef'], ['if', 'elseif', 'else', 'endif'], ['>', '<'], ['{', '}'], ['(', ')'], ['[', ']'], ['==', '!='], ['success', 'failure'], ['start', 'stop'], ['up', 'down'], ['good', 'bad'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'novermber', 'december'], [],],  }
 

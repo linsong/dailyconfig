@@ -73,6 +73,9 @@ if exists("python_highlight_all") && python_highlight_all != 0
   if !exists("python_highlight_doctests")
     let python_highlight_doctests = 1
   endif
+  if !exists("python_pep8_enhancement")
+    let python_pep8_enhancement = 0
+  endif
 endif
 
 " Keywords
@@ -238,6 +241,53 @@ else
   syn sync maxlines=200
 endif
 
+if exists("python_pep8_enhancement") && python_pep8_enhancement != 0
+  syn keyword pythonError throw catch l O I <> elsif this
+
+  " when outside of parenthesis, = must have space on either side
+  syn match pythonUncontainedError "\>=\<" display
+  syn match pythonUncontainedError "=[^ =$\\]"me=e-1 display
+
+  " erroneous whitespace
+  syn match pythonWhiteSpaceError " $" display
+  syn match pythonWhiteSpaceError "[^ \t]  \+[^ #]"ms=s+2,me=e-1 display
+  " erroneous whitespace around operators
+  syn match pythonWhiteSpaceError "\.\zs " display
+  syn match pythonWhiteSpaceError " [:,]\@=" display
+  " missing whitespace after operator
+  syn match pythonWhiteSpaceError "[<>%]\ze[^ =$\\]" display
+  syn match pythonWhiteSpaceError "[<>!+*/%\-]=\ze[^ $\\]" display
+  "syn match pythonUncontainedError "[*]\ze[^ =$\\]e" display
+  " comma must be followed by a space
+  syn match pythonWhiteSpaceError ",\ze[^ )=$\\]" display
+  " missing whitespace before operator
+  syn match pythonWhiteSpaceError " \@<![<>%]" display
+  syn match pythonWhiteSpaceError " \@<![+\-*/=<>!]=" display
+  "syn match pythonUncontainedError " \@<![*]" display
+  "syn match pythonUncontainedError "[\]})]"
+  
+  " deprecated or invalid constructions
+  syn match pythonError "\<string\.\(join\|split\)" display
+  syn match pythonError "[!=]= \?\(None\|True\|False\|type\>\|dict\>\|list\>\|tuple\>\|str\>\|unicode\>\)" display
+
+  "syn cluster pythonContainers    contains=Parenthesis,CurlyParens
+  ""--contained in parenthesis-- 
+  "" TODO these two need to leave out the actual '='
+  "syn match pythonError " \ze=[^=]" contained containedin=@pythonContainers
+  "syn match pythonError "=\zs " contained containedin=@pythonContainers
+  "syn match ok " [!=+/\-*]= " contained containedin=@pythonContainers
+  "syn match pythonError "\\" contained containedin=@pythonContainers
+
+  " illegal characters
+  syn match pythonError "[@$?\t]" display
+  syn match pythonError ";\ze *$" display
+
+  syn match pythonError "\[\@<= "
+  syn match pythonError "(\@<= "
+  syn match pythonError "{\@<= "
+  "syn match pythonError " \ze[)\]}]"
+endif
+
 if version >= 508 || !exists("did_python_syn_inits")
   if version <= 508
     let did_python_syn_inits = 1
@@ -292,6 +342,11 @@ if version >= 508 || !exists("did_python_syn_inits")
   HiLink pythonBuiltinFunc	Function
 
   HiLink pythonExClass	Structure
+
+  if exists("python_pep8_enhancement") && python_pep8_enhancement != 0
+    HiLink pythonUncontainedError Error
+    HiLink pythonWhiteSpaceError  Error
+  endif
 
   delcommand HiLink
 endif

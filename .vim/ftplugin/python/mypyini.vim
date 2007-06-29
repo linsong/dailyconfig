@@ -132,3 +132,5 @@ else
     endif
 endif
 
+command! Pylint :call <SID>PythonGrep('pylint')<CR>
+command! Pychecker :call <SID>PythonGrep('pychecker')<CR>
