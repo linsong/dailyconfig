@@ -1,5 +1,5 @@
 *HTML.txt*	Set of HTML/XHTML macros, menus and toolbar buttons.
-		Last change: 2007 Jun 06
+		Last change: 2007 Jun 26
 		Author: Christian J. Robinson
 
 
@@ -32,7 +32,7 @@ The mappings are local to the buffer the script was sourced from, and the menu
 and toolbar are active only for buffers the script was sourced from.
 
 This help file follows the Vim help file standards.  To see what modes a
-mapping works in see the tags between the **'s.  For example, the ;; mapping
+mapping works in see the tags between the **'s.  For example, the |;;| mapping
 below works in normal, insert mode and visual mode.
 
 In the descriptions of the mappings I often use <CR> to mean a literal
@@ -51,13 +51,13 @@ NOTE: Some tags are synonyms and Vim can't distinguish between them.  For
 example, if you're within <I></I> and type |;em| it will assume you want
 </EM><EM> rather than <EM></EM>.
 
-							*;;* *i_;;* *v_;;*
+							*n_;;* *i_;;* *v_;;*
 ;;	Most of the mappings start with ; so ;; is mapped to insert a single
 	; character in insert mode, behave like a single ; in normal mode,
-	etc.  (This mapping is not defined if |g:html_map_leader| is not set
-	to ';'.)
+	etc.  (The semicolons in this mapping are changed to whatever
+	|g:html_map_leader| is set to.)
 
-							*;&* *i_;&*
+							*i_;&*
 ;&	The HTML |character-entities| insert mode mappings start with &, so
 	typing ;& in insert mode will insert a literal & character.  (See
 	|n_;&|)
@@ -132,7 +132,8 @@ Set this to a nonzero value if you prefer XHTML compatible tags to be defined.
 Setting this forces |b:html_tag_case| to "lowercase".  This is automatic if
 you are already editing a file that Vim detects as XHTML.  This variable must
 be set before HTML.vim is sourced for the current buffer.  You can also set
-this on a per-buffer basis by using b:do_xhtml_mappings instead.
+this on a per-buffer basis by using b:do_xhtml_mappings instead.  e.g.: >
+	:let g:do_xhtml_mappings = 'yes'
 
 *g:html_tag_case* *b:html_tag_case*
 This variable can be set to "l" / "lower" / "lowercase" or "u" / "upper" /
@@ -140,7 +141,8 @@ This variable can be set to "l" / "lower" / "lowercase" or "u" / "upper" /
 must be set before HTML.vim is sourced for the current buffer.  The default is
 "uppercase".  You can also set this on a per-buffer basis by using
 b:html_tag_case instead.  Note that this value is ignored when editing XHTML
-files (see |g:do_xhtml_mappings|).
+files (see |g:do_xhtml_mappings|).  e.g: >
+	:let g:html_tag_case = 'lowercase'
 
 *g:html_map_leader*
 This variable can be set to the character you want for the leader of the
@@ -223,7 +225,7 @@ be detected by the 'fileencoding' or 'encoding' options.  See |;ct| and
 *g:html_charset*
 If this variable is set it completely overrides the Content-Type charset
 detection for the |;ct| mapping and in the |html-tokens|.  Normally this
-should be left unset.  
+should be left unset.
 
 ------------------------------------------------------------------------------
 					*html-template-tokens* *html-tokens*
@@ -324,7 +326,7 @@ another character of your preference.  See |g:html_map_leader|.
 <	at the top of the file.  If the current buffer is XHTML, it will be >
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<       (See |g:do_xhtml_mappings|)
+<	(See |g:do_xhtml_mappings|)
 							*n_;s4* *i_;s4*
 ;s4	Does the same as |;4|, but the document type is strict rather than
 	transitional.  (Note that these macros are meant for a transitional
@@ -333,7 +335,7 @@ another character of your preference.  See |g:html_map_leader|.
 ;ct	Insert <META HTTP-EQUIV="Content-Type" CONTENT="text/html;
 	charset=iso-8859-1"> at the current cursor position.
 
-	The actual value of the charset is auto detected based on the
+	The actual value of the charset is automatically detected based on the
 	'fileencoding' or 'encoding' option.  This can be overridden--see
 	|g:html_default_charset| and |g:html_charset|.
 	(See |html-author-notes|)
@@ -348,7 +350,7 @@ another character of your preference.  See |g:html_map_leader|.
 	places the cursor on the < of </A>.  If this is used in insert mode
 	rather than visual mode, the contents of the |clipboard| are placed
 	between the quotes. (|n_;|)
-							*i_;at* *v_at* *n_;at*
+							*i_;at* *v_;at* *n_;at*
 ;at	Like |;ah| but include TARGET="" in the tag. (|n_;|)
 							*i_;aT* *v_;aT* *n_;aT*
 ;aH	Like |;aH| but include TARGET="" in the tag. (|n_;|)
@@ -395,10 +397,10 @@ another character of your preference.  See |g:html_map_leader|.
 						*html-definition-list*
 							*i_;dl* *v_;dl* *n_;dl*
 ;dl	Definition list (<DL><CR></DL>). (|n_;|)
-							*i_;dt*
-;dt	Definition term (<DT>).
-							*i_;dd*
-;dd	Definition body (<DD>).
+							*i_;dt* *v_;dt* *n_;dt*
+;dt	Definition term (<DT></DT>). (|n_;|)
+							*i_;dd* *v_;dd* *n_;dd*
+;dd	Definition body (<DD></DD>). (|n_;|)
 							*i_;de* *v_;de* *n_;de*
 ;de	Deleted text (<DEL></DEL>). (|n_;|)
 							*i_;df* *v_;df* *n_;df*
@@ -465,7 +467,7 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;sj*
 ;sj	<SCRIPT SRC="" TYPE="text/javascript" LANGUAGE="javascript"></SCRIPT>
 							*i_;ns* *v_;ns* *n_;ns*
-;ns     Alternate content for browsers with script handling turned off
+;ns	Alternate content for browsers with script handling turned off
 	(<NOSCRIPT><CR></NOSCRIPT>). (|n_;|)
 							*i_;li* *v_;li* *n_;li*
 ;li	List item (<LI></LI>) inside <UL> or <OL>. (|n_;|)
@@ -535,7 +537,7 @@ another character of your preference.  See |g:html_map_leader|.
 							*html-table*
 							*i_;ta* *v_;ta* *n_;ta*
 ;ta	Table (<TABLE><CR></TABLE>). (|n_;|)
-							*;tA*
+							*n_;tA*
 ;tA	Interactive table; you will be interactively prompted for the table
 	rows, columns, and border width.
 							*i_;ca* *v_;ca* *n_;ca*
@@ -646,7 +648,7 @@ characters into the HTML buffer.  These are known as characters entities.
 
 The following mappings work in insert mode only.
 
-Name:			HTML:		Macro:              ~
+Name:			HTML:		Macro:
 --------------------------------------------------------------------
 Ampersand (&)		&amp;		&&		*i_&&*
 Greater than (>)	&gt;		&>		*i_&>*
@@ -654,7 +656,7 @@ Less than (<)		&lt;		&<		*i_&<*
 					*i_&<space>* *i_&space* *i_;<space>*
 Space (non-breaking)	&nbsp;		&<space>/;<space>	*i_;space*
 Quotation mark (")	&quot;		&'		*i_&'*
-Cent			&cent;		&c|		*&cbar*
+Cent			&cent;		&c|		*i_&cbar*
 Pound			&pound;		&#		*i_&#*
 Yen			&yen;		&Y=		*i_&Y=*
 Left Angle Quote	&laquo;		&2<		*i_&2<*
@@ -673,9 +675,9 @@ Middle Dot		&middot;	&.		*i_&.*
 One Quarter		&frac14;	&14		*i_&14*
 One Half		&frac12;	&12		*i_&12*
 Three Quarters		&frac34;	&34		*i_&34*
-En dash                 &ndash;         &n-             *i_&n-*
-Em dash                 &mdash;         &m-/&--         *i_&m-* *i_&--*
-Ellipsis                &hellip;        &3.             *i_&3.*
+En dash			&ndash;		&n-		*i_&n-*
+Em dash			&mdash;		&m-/&--		*i_&m-* *i_&--*
+Ellipsis		&hellip;	&3.		*i_&3.*
 A-grave			&Agrave;	&A`		*i_&A`*
 a-grave			&agrave;	&a`		*i_&a`*
 E-grave			&Egrave;	&E`		*i_&E`*
@@ -743,6 +745,8 @@ You can use a browser to preview your current HTML document.  (See
 
 
 For Windows:
+								*n_;db*
+;db	Call the default browser on the current file.
 								*n_;ie*
 ;ie	Call Explorer on the current file.
 
@@ -816,8 +820,8 @@ HTMLencodeString({string} [, {...}])			*HTMLencodeString()*
 
 	See |n_;&| and |n_;%| for examples.
 
-	If you're using a version of Vim prior to 7 you need to have this
-	script sourced for the string to %XX conversion to work:
+	If you're using a version of Vim prior to 7 you must have this script
+	sourced for the string to %XX conversion to work:
 	http://www.infynity.spodzone.com/vim/ConvertBase.vim
 
 	Note that Unicode characters can not be safely converted to %XX hex
@@ -845,10 +849,13 @@ HTMLmap({maptype}, {lhs}, {rhs} [, {re-indent}])	*HTMLmap()*
 	insert mode.  If the value is 1, the visually selected area is
 	re-selected, plus one line below, and re-indented.  A value of 2 does
 	the same without moving down a line.
-	
+
 	The special cases of 0 means the visual mapping enters visual mode,
 	and -1 tells the function not to add any special extra code to the
 	visual mapping.
+
+	Note that more "magic" than what's documented here gets applied to the
+	mappings depending on their mode, the value of {re-indent} and so on.
 
 HTMLmapo({map}, {insert})					*HTMLmapo()*
 	Creates an operator-pending mapping wrapper for {map} that calls the
@@ -874,8 +881,8 @@ SetIfUnset({variable}, {value})				*SetIfUnset()*
 
 Author's notes:						*html-author-notes*
 ---------------
-The Content-Type charset auto detection value based on the 'fileencoding' /
-'encoding' option has a very incomplete translation table from the possible
+The Content-Type charset automatic detection value based on the 'fileencoding'
+/ 'encoding' option has a very incomplete translation table from the possible
 values that Vim uses--I could use help with this.
 
 I want to finally release a 1.0 version, but I am not willing to until I have

@@ -513,6 +513,10 @@ exoweb/work
 /dev/null
 
 :0:
+* ^Subject: Cron <vincent@vincent> /usr/bin/r2e run
+/dev/null
+
+:0:
 * .*
 vincent
 
