@@ -130,6 +130,8 @@
     :set tags+=../tags,../../tags
 
     :set number
+
+    :let g:mapleader='\'
 "### }}}1
 
 "### Encodings {{{1
