@@ -41,11 +41,10 @@ sub notify($$$$)
     $title =~ s#'#''''#g;
     $data =~ s#'#''''#g;
 
-    cmd_str = "netgrowl.py -q -n '$title' -m '$data'"
     # now, I hide the details of OS behind netgrowl.py 
-    open(TEMP_HANDLER, '|' . cmd_str);
+    #system("netgrowl.py -q -n '$title' -m '$data'");
+    open(TEMP_HANDLER, '|' . "netgrowl.py -q -n '" . $title . "' -m '" . $data . "'");
     close(TEMP_HANDLER);
-    #system(cmd_str);
 
     #my $tool_type = Irssi::settings_get_str('notify_notification_tool');
     #if ($tool_type =~ m/growl/i)
