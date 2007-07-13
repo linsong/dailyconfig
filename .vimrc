@@ -322,7 +322,11 @@
 
     :map <F9> @q
 
-    nmap ,o :only<CR>
+    :nmap ,o :only<CR>
+        
+    " I want to exchange the meaning of following shortcuts:
+    :noremap <C-]> g<C-]>
+    :noremap g<C-]> <C-]>
 
 "### }}}1
 

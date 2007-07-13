@@ -101,6 +101,7 @@ sub word_message
         my ($server, $message) = @_;
         foreach my $word (split(' ', $message))
         {
+        next if $word !~ /^[[:print:]]+/ ;
 		$word =~ s/([^a-zA-Z0-9åäöÅÄÖ])//g;
 		if (length($word) >= 4)
 		{
