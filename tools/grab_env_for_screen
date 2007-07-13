@@ -11,3 +11,5 @@ for x in ${SSHVARS} ; do
                                 s/$/"/
                                 s/^/export /'
 done 1>$HOME/tools/fix_screen_env
+
+echo "after attach to screen's session, run command 'source " $HOME/tools/fix_screen_env "'"
