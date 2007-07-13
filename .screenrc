@@ -75,17 +75,23 @@ bind - resize -3
 termcapinfo vt100 dl=5\E[M
 
 # turn sending of screen messages to hardstatus off
-hardstatus off
+hardstatus on
 # Set the hardstatus prop on gui terms to set the titlebar/icon title
 termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
 # use this for the hard status string
-hardstatus string "%h%? users: %u%?"
+#hardstatus string "%h%? users: %u%?"
 
 # An alternative hardstatus to display a bar at the bottom listing the
 # windownames and highlighting the current windowname in blue. (This is only
 # enabled if there is no hardstatus setting for your terminal)
 #
 #hardstatus lastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
+hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %=%Y/%m/%d %c:%s"
+
+# show caption only when there is more than one window
+caption splitonly
+# highlight caption when the window is active
+caption string "%?%F%{.y.}%?%3n %t%? [%h]%?"
 
 # set these terminals up to be 'optimal' instead of vt100
 termcapinfo xterm*|linux*|rxvt*|Eterm* OP
@@ -117,7 +123,7 @@ screen -t ipython 5 ipython
 screen -t w3m 6 w3m www.google.com
 ### the following config worked during the renovation of exoweb's office 
 #screen -t irssi 7 /bin/bash -c 'if [ $(uname) = "Darwin" ]; then irssi; fi'
-screen -t irssi 7 irssi
+#screen -t irssi 7 irssi
 screen -t psql psql NBET_vincent
 select work
 
