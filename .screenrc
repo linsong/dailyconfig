@@ -115,16 +115,11 @@ ignorecase on
 # Example of automatically running some programs in windows on screen startup.
 #
 screen -t music 0 
-screen -t mail 1 /bin/bash -c 'if [ $(hostname) == "vincent" ]; then mutt; fi'
 screen -t work 2 
 screen -t work2 3
 screen -t misc 4
-screen -t ipython 5 ipython 
-screen -t w3m 6 w3m www.google.com
-### the following config worked during the renovation of exoweb's office 
-#screen -t irssi 7 /bin/bash -c 'if [ $(uname) = "Darwin" ]; then irssi; fi'
-screen -t irssi 7 irssi
-screen -t psql psql NBET_vincent
-select mail
+
+# source local settings 
+source screenrc.local
 
 utf8 on # use utf-8 encoding in irssi window 
