@@ -119,5 +119,6 @@ screen -t w3m 6 w3m www.google.com
 #screen -t irssi 7 /bin/bash -c 'if [ $(uname) = "Darwin" ]; then irssi; fi'
 screen -t irssi 7 irssi
 screen -t psql psql NBET_vincent
+select work
 
 utf8 on # use utf-8 encoding in irssi window 
