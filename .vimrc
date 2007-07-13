@@ -970,11 +970,11 @@ endif " has("autocmd")
     let g:netrw_liststyle=3 "use tree list style
     "### }}}2   
 
-    "### setting for NERD_comments.vim {{{2let g:pyljpost_path = "/usr/local/bin/pyljpost.py"
+    "### setting for NERD_comments.vim {{{2
     " make NERD_comments silent 
     let g:NERDShutUp=1
     let g:NERDMapleader = ',c'
-
+    let g:NERDComLineToggleMap = g:NERDMapleader . 't'
     "### }}}2   
 
     "### setting for MRU.vim {{{2
