@@ -329,7 +329,7 @@ settings = {
     openurl_watch_mail = "no";
     trackbar_string = "-";
     trackbar_style = "%r";
-    wordcompletion_dsn = "DBI:Pg:dbname=vincent";
+    wordcompletion_dsn = "DBI:SQLite2:dbname=/home/vincent/data/irssi/completion.db";
     wordcompletion_pass = " ";
     wordcompletion_user = "vincent";
   };
