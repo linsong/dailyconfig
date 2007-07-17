@@ -1049,6 +1049,10 @@ endif " has("autocmd")
      vmap ,t <ESC>:ToggleWord<CR>
     "}}}2
     
+    "### setting for vimExplorer.vim {{{2
+     let g:VEConf_showHiddenFiles = 0 " don't show dot files by default
+    "}}}2
+    
 "### }}}1
 
 "### {{{1 xterm colors defination 
