@@ -78,11 +78,20 @@ bind - resize -3
 termcapinfo vt100 dl=5\E[M
 
 # turn sending of screen messages to hardstatus off
-hardstatus on
+hardstatus off
+
 # Set the hardstatus prop on gui terms to set the titlebar/icon title
-termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
-# use this for the hard status string
-#hardstatus string "%h%? users: %u%?"
+termcapinfo rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
+
+### the following configs try to turn 256 colors on in screen, 
+### but screen need to be compiled with "./configure --enable-colors256."
+# terminfo and termcap for nice 256 color terminal
+# allow bold colors - necessary for some reason
+attrcolor b ".I"
+# tell screen how to set colors. AB = background, AF=foreground
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+# erase background with current bg color
+defbce "on" 
 
 # An alternative hardstatus to display a bar at the bottom listing the
 # windownames and highlighting the current windowname in blue. (This is only

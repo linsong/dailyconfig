@@ -438,6 +438,7 @@
             "else
                 ":colorscheme desert "torte bluegreen
             "endif
+            :set t_Co=256 " enable 256 colors refs: http://vim.wikia.com/wiki/256_colors_in_vim
             :colorscheme desert
             :source $VIMRUNTIME/menu.vim
             :set cpo-=<
