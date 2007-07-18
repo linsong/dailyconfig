@@ -1034,7 +1034,7 @@ endif " has("autocmd")
     "### setting for SQLUtilities.vim {{{2
      let g:sqlutil_keyword_case = '\U'
     "}}}2
-    "
+    
     "### setting for tagselect.vim {{{2
      let g:no_tagselect_maps = 1
     "}}}2
@@ -1051,6 +1051,10 @@ endif " has("autocmd")
     
     "### setting for vimExplorer.vim {{{2
      let g:VEConf_showHiddenFiles = 0 " don't show dot files by default
+    "}}}2
+    
+    "### setting for vimExplorer.vim {{{2
+     autocmd BufNewFile *.py       TSkeletonSetup python.py
     "}}}2
     
 "### }}}1
