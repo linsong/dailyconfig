@@ -2,22 +2,15 @@
 " @Author:      Thomas Link (samul AT web.de)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 2007-05-18.
-" @Revision:    3.3.3324
+" @Last Change: 2007-07-17.
+" @Revision:    3.4.3500
 "
 " vimscript #1160
 " http://www.vim.org/scripts/script.php?script_id=1160
 "
 " TODO:
 " - :TSkeletonPurgeCache ... delete old cache files
-" - Check for tskel:after, tskel:before when first reading the skeleton 
-"   (not every time it is expanded)
-" - If g:tskelMenuPrefix == '', then the tskel isn't properly set up
-" - Minibits defined in map files insert a superfluous carriage return
 " - <form in php mode funktioniert nicht
-" - FIX: minibits are not included in the popup menu or offered for 
-"   completion
-" - CHANGE: Use expand("<cword>")
 " - FIX: No popup menu when nothing is selected in insert mode & cursor 
 "   at last position (bibtex mode)
 " - ADD: More latex & html bits
@@ -30,8 +23,8 @@
 if &cp || exists("loaded_tskeleton") "{{{2
     finish
 endif
-if !exists('loaded_tlib') || loaded_tlib < 4
-    echoerr "tSkeleton requires tlib >= 0.4"
+if !exists('loaded_tlib') || loaded_tlib < 9
+    echoerr "tSkeleton requires tlib >= 0.9"
     finish
 endif
 if !exists('loaded_genutils')
@@ -41,7 +34,7 @@ if !exists('loaded_genutils')
         finish
     endif
 endif
-let loaded_tskeleton = 303
+let loaded_tskeleton = 304
 
 if !exists(':TAssert') "{{{2
     command! -nargs=* -bang TAssert :
@@ -58,10 +51,10 @@ if !isdirectory(g:tskelDir) "{{{2
     echoerr 'tSkeleton: g:tskelDir ('. g:tskelDir .') isn''t readable. See :help tSkeleton-install for details!'
     finish
 endif
-let g:tskelDir = tlib#DirName(g:tskelDir)
+let g:tskelDir = tlib#dir#CanonicName(g:tskelDir)
 
 let g:tskelBitsDir = g:tskelDir .'bits/'
-call tlib#EnsureDirectoryExists(g:tskelBitsDir)
+call tlib#dir#Ensure(g:tskelBitsDir)
 
 if !exists('g:tskelLicense') "{{{2
     let g:tskelLicense = 'GPL (see http://www.gnu.org/licenses/gpl.txt)'
@@ -186,7 +179,17 @@ function! TSkeletonFillIn(bit, ...) "{{{3
                     let repl = s:Modify(repl, mod)
                     let repl = substitute(repl, "\<c-j>", "", "g")
                     " silent exec 's/\%'. col .'v'. s:tskelPattern .'/'. escape(repl, '/')
-                    silent exec 's/\%'. col .'c'. s:tskelPattern .'/'. escape(repl, '/&~')
+                    try
+                        " TLogVAR repl
+                        silent exec 's/\%'. col .'c'. s:tskelPattern .'/'. escape(repl, '\/&~')
+                    catch
+                        echohl error
+                        echom v:errmsg
+                        echom getline('.')
+                        echohl NONE
+                        " TLogStyle 'error', v:errmsg
+                        " TLogStyle 'error', getline('.')
+                    endtry
                 endif
             endif
             if s:tskelPostExpand != ''
@@ -359,7 +362,7 @@ function! s:Query(arg) "{{{3
             " TAssert IsList(val)
             let val = sort(copy(val))
             " TLogVAR val
-            let rv = tlib#InputList('s', 'Choices:', val)
+            let rv = tlib#input#List('s', 'Choices:', val)
             " TLogVAR rv
             if repl != '' && rv != ''
                 let rv = s:sprintf1(repl, rv)
@@ -411,7 +414,8 @@ function! s:EvalBitProcess(eval, global) "{{{3
 endf
 
 function! s:Modify(text, modifier) "{{{3
-    let rv = escape(a:text, '\&~')
+    " let rv = escape(a:text, '\&~')
+    let rv = a:text
     let premod = '^[:ulcs]\{-}'
     if a:modifier =~? premod.'u'
         let rv = toupper(rv)
@@ -454,7 +458,6 @@ function! s:Call(fn) "{{{3
     return TSkeletonEvalInDestBuffer(a:fn)
 endf
 
-" <+TBD+> Switch to minibits
 function! s:Expand(bit, ...) "{{{3
     " TLogVAR a:bit
     let ft = a:0 >= 1 && a:0 != '' ? a:1 : &filetype
@@ -610,9 +613,9 @@ if !exists('*TSkeleton_LICENSE') "{{{2
 endif
 
 function! TSkeletonSetup(template, ...) "{{{3
+    " TLogVAR a:template
     let anyway = a:0 >= 1 ? a:1 : 0
-    " TLogDBG "template=". a:template
-    " TLogDBG "anyway=". anyway
+    " TLogVAR anyway
     if anyway || !exists('b:tskelDidFillIn') || !b:tskelDidFillIn
         if filereadable(g:tskelDir . a:template)
             let tf = g:tskelDir . a:template
@@ -627,7 +630,7 @@ function! TSkeletonSetup(template, ...) "{{{3
         if g:tskelChangeDir
             let cd = substitute(expand('%:p:h'), '\', '/', 'g')
             let cd = substitute(cd, '//\+', '/', 'g')
-            exec 'cd '. tlib#ExArg(cd)
+            exec 'cd '. tlib#arg#Ex(cd)
         endif
         let b:tskelDidFillIn = 1
     endif
@@ -635,9 +638,11 @@ endf
 
 function! s:GetTemplates(aslist) "{{{3
     " let files = split(glob(g:tskelDir. '*'), '\n') + split(glob(g:tskelDir .'prefab/*'), '\n')
-    let files = split(glob(g:tskelDir. '*'), '\n')
+    let files = split(glob(g:tskelDir. '*'), '\n') + split(glob(g:tskelDir. 'templates/**'), '\n')
     call filter(files, '!isdirectory(v:val)')
-    call map(files, 'fnamemodify(v:val, ":t")')
+    " call map(files, 'fnamemodify(v:val, ":t")')
+    let fns = len(g:tskelDir)
+    call map(files, 'v:val[fns : -1]')
     if a:aslist
         return files
     else
@@ -658,7 +663,7 @@ function! TSkeletonEditBitCompletion(ArgLead, CmdLine, CursorPos) "{{{3
         return []
     elseif exists('b:tskelBitDefs')
         let bits  = filter(copy(b:tskelBitDefs), 'has_key(v:val, "bitfile")')
-        let bits  = map(bits, 'tlib#RelativeFilename(v:val["bitfile"], g:tskelBitsDir)')
+        let bits  = map(bits, 'tlib#file#Relative(v:val["bitfile"], g:tskelBitsDir)')
         let bvals = values(bits)
         if !empty(a:ArgLead)
             call filter(bvals, 'v:val =~ ''\V\^''. escape(a:ArgLead, ''\'')')
@@ -672,7 +677,7 @@ command! -nargs=* -complete=custom,TSkeletonSelectTemplate TSkeletonSetup
             \ call TSkeletonSetup(<f-args>)
 
 function! s:TSkeletonBrowse(save, title, initdir, default) "{{{3
-    let tpl = tlib#InputList('s', 'Select template', s:GetTemplates(1), [
+    let tpl = tlib#input#List('s', 'Select template', s:GetTemplates(1), [
                 \ {'display_format': 'filename'},
                 \ ])
     return tpl
@@ -682,7 +687,9 @@ endf
 function! TSkeletonEdit(...) "{{{3
     let tpl = a:0 >= 1 && !empty(a:1) ? a:1 : s:TSkeletonBrowse(0, "Template", g:tskelDir, "")
     if !empty(tpl)
-        exe 'edit '. tlib#ExArg(g:tskelDir . tpl)
+        let tf = tlib#arg#Ex(g:tskelDir . tpl)
+        " TLogVAR tf
+        exe 'edit '. tf
     end
 endf
 command! -nargs=? -complete=custom,TSkeletonSelectTemplate TSkeletonEdit 
@@ -690,7 +697,9 @@ command! -nargs=? -complete=custom,TSkeletonSelectTemplate TSkeletonEdit
 
 function! TSkeletonEditBit(bit) "{{{3
     if !empty(a:bit)
-        exe 'edit '. tlib#ExArg(g:tskelBitsDir. a:bit)
+        let tf = tlib#arg#Ex(g:tskelBitsDir. a:bit)
+        " TLogVAR tf
+        exe 'edit '. tf
     end
 endf
 command! -nargs=? -complete=customlist,TSkeletonEditBitCompletion TSkeletonEditBit 
@@ -724,6 +733,7 @@ function! TSkeletonNewFile(...) "{{{3
         endif
     endif
     if fn != "" && tpl != ""
+        " TLogVAR tpl
         exe 'edit '. tpl
         exe 'saveas '. fn
         call TSkeletonFillIn('', &filetype)
@@ -836,7 +846,7 @@ endf
 function! s:PurifyBit(bit) "{{{3
     let rv = a:bit
     let rv = substitute(rv, '^[^[:cntrl:]]\{-}[/.]\([^/.[:cntrl:]]\{-}\)$', '\1', 'g')
-    let rv = tlib#DecodeURL(rv)
+    let rv = tlib#url#Decode(rv)
     let rv = substitute(rv, '&', '', 'g')
     return rv
 endf
@@ -942,7 +952,7 @@ function! s:GetCacheFilename(type, what) "{{{3
         return ''
     endif
     let md = g:tskelDir . a:what .'/'
-    call tlib#EnsureDirectoryExists(md)
+    call tlib#dir#Ensure(md)
     return md . a:type
 endf
 
@@ -972,17 +982,17 @@ function! s:GetBufferCacheFilename(filetype, ...) "{{{3
         let create_dir = a:0 >= 1 ? a:1 : 0
         let dir = s:GetCacheFilename(a:filetype, 'cache_bbits')
         if !empty(dir)
-            let dir = tlib#FileJoin([
+            let dir = tlib#file#Join([
                         \ dir,
                         \ substitute(expand('%:p:h'), '[:&<>]\|//\+\|\\\\\+', '_', 'g')
                         \ ])
             " TLogVAR dir
             if create_dir
-                call tlib#EnsureDirectoryExists(dir)
+                call tlib#dir#Ensure(dir)
             endif
             " let fname = expand('%:t') .'.'. a:filetype
             let fname = expand('%:t')
-            return tlib#FileJoin([dir, fname])
+            return tlib#file#Join([dir, fname])
         endif
     endif
     return ''
@@ -1055,15 +1065,19 @@ endf
 " s:PrepareBits(?filetype=&ft, ?reset=0)
 function! s:PrepareBits(...) "{{{3
     let filetype = a:0 >= 1 && a:1 != '' ? a:1 : &filetype
-    if filetype == ''
-        let b:tskelFiletype = ''
-        return
-    endif
+    " if filetype == ''
+    "     let b:tskelFiletype = ''
+    "     return
+    " endif
     let explicit_reset = a:0 >= 2 ? a:2 : 0
     if explicit_reset
         for idx in range(1, s:tskelScratchMax)
-            exec 'bdelete! '. bufnr(s:tskelScratchNr{idx})
+            let ibn = bufnr(s:tskelScratchNr{idx})
+            if bufloaded(ibn)
+                exec 'bdelete! '. ibn
+            endif
         endfor
+        let s:tskelScratchMax = 0
         if g:tskelUseBufferCache
             call s:ResetBufferCacheForFiletype(filetype)
         endif
@@ -1114,7 +1128,7 @@ function! s:PrepareBits(...) "{{{3
         " TAssert IsList(b:tskelBitNames)
         " TAssert IsDictionary(b:tskelBitDefs)
         let b:tskelBitNames = keys(b:tskelBitDefs)
-        let b:tskelBitNames = tlib#Compact(tlib#Flatten(b:tskelBitNames))
+        let b:tskelBitNames = tlib#list#Compact(tlib#list#Flatten(b:tskelBitNames))
         if g:tskelPopupNumbered
             call map(b:tskelBitNames, "substitute(v:val, '&', '', 'g')")
         endif
@@ -1193,7 +1207,7 @@ function! TSkelFiletypeBits_skeleton(dict, type) "{{{3
     for f in bf
         " TLogVAR f
         if !isdirectory(f) && filereadable(f)
-            let bb = tlib#DecodeURL(fnamemodify(f, ":t"))
+            let bb = tlib#url#Decode(fnamemodify(f, ":t"))
             let bn = s:PurifyBit(bb)
             let bt = join(readfile(f), "\n")
             let [bt, meta] = s:ExtractMeta(bt)
@@ -1269,7 +1283,7 @@ function! TSkelBufferBits_tags(dict, filetype) "{{{3
                 redraw
             endif
             call extend(a:dict, tag_defs, 'keep')
-            let menu_prefix = tlib#GetValue('tskelMenuPrefix_tags', 'bg')
+            let menu_prefix = tlib#var#Get('tskelMenuPrefix_tags', 'bg')
             if !empty(menu_prefix)
                 let s:sort_tag_defs = tag_defs
                 let tagnames = sort(keys(tag_defs), 's:SortBySource')
@@ -1298,7 +1312,7 @@ function! TSkelProcessTag_functions_with_parentheses(dict, tag, restargs)
         endif
         let xname .= s:ReplacePrototypeArgs(args, a:restargs)
         let a:dict[bname] = {'text': xname, 'source': source}
-        let menu_prefix = tlib#GetValue('tskelMenuPrefix_tags', 'bg')
+        let menu_prefix = tlib#var#Get('tskelMenuPrefix_tags', 'bg')
         if !empty(menu_prefix)
             " let smenu  = join(map(split(source, '[\/]'), 'escape(v:val, ". ")'), '.')
             " let mname  = 'Tag.'. smenu .'.'. escape(bname, '. ')
@@ -1331,7 +1345,7 @@ function! TSkelBufferBits_mini(dict, filetype)
 endf
 
 function! s:CollectFunctions(pattern)
-    let types   = '\('. join(tlib#GetValue('tskelTypes', 'bg'), '\|') .'\)'
+    let types   = '\('. join(tlib#var#Get('tskelTypes', 'bg'), '\|') .'\)'
     let pattern = printf(a:pattern, types)
     redir => fns
     silent exec 'function /'. pattern
@@ -1358,15 +1372,17 @@ endf
 function! s:ReadSkeleton(filename) "{{{3
     let lines = readfile(a:filename)
     let [text, meta] = s:ExtractMeta(join(lines, "\n"))
-    call append(0, split(text, '\n'))
-    " norm! Gdd
+    let lines = split(text, '\n', 1)
+    " TLogVAR lines
+    call append(0, lines)
+    norm! Gdd
     return meta
 endf
 
 function! s:PrepareFiletypeMap(type, anyway) "{{{3
     if !exists('g:tskelBitMap_'. a:type) || a:anyway
         let md = g:tskelDir .'map/'
-        " call tlib#EnsureDirectoryExists(md)
+        " call tlib#dir#Ensure(md)
         let fn = md . a:type
         let c  = s:ReadFile(fn)
         if c =~ '\S'
@@ -1402,7 +1418,17 @@ function! s:ExtendBitDefs(dict, type) "{{{3
     endif
 endf
 
-command! -bar -nargs=? TSkeletonBitReset call s:PrepareBits(<q-args>, 1)
+function! s:ResetBits(filetype) "{{{3
+    let filetype =  empty(a:filetype) ? &filetype : a:filetype
+    for bn in range(1, bufnr('$'))
+        if bufloaded(bn) && (filetype == 'general' || getbufvar(bn, 'tskelFiletype') == filetype)
+            call setbufvar(bn, 'tskelFiletype', '')
+        endif
+    endfor
+    call s:PrepareBits(filetype, 1)
+endf
+
+command! -bar -nargs=? TSkeletonBitReset call s:ResetBits(<q-args>)
 
 function! TSkeletonSelectBit(ArgLead, CmdLine, CursorPos) "{{{3
     call s:PrepareBits()
@@ -1419,11 +1445,9 @@ function! s:UnsetLine() "{{{3
     let s:tskelCol  = 0
 endf
 
-" TBD: the format should be changed to use vim lists right away
 function! s:GetEligibleBits(type) "{{{3
     let pos = '\\%'. s:tskelLine .'l\\%'. s:tskelCol .'c'
     for pattern in keys(g:tskelBitMap_{a:type})
-        " <+TBD70+> Use printf()
         if search(pattern.pos, 'W')
             return g:tskelBitMap_{a:type}[pattern]
         endif
@@ -1444,7 +1468,7 @@ function! s:EligibleBits(type) "{{{3
     endif
     if exists('b:tskelBitNames')
         " TAssert IsList(b:tskelBitNames)
-        " TLogDBG 'b:tskelBitNames='. string(b:tskelBitNames)
+        " TLogVAR b:tskelBitNames
         return b:tskelBitNames
     else
         return []
@@ -1459,29 +1483,38 @@ function! s:EditScratchBuffer(filetype, ...) "{{{3
         let tsbnr = -1
     endif
     if tsbnr >= 0
+        " TLogVAR tsbnr
         silent exec "sbuffer ". tsbnr
     else
         silent split
-        silent exec "edit [TSkeletonScratch_". idx ."]"
+        " TLogVAR idx
+        " TLogDBG 'edit __TSkeletonScratch_'. idx .'__'
+        silent exec 'edit __TSkeletonScratch_'. idx .'__'
+        " TLogDBG 1
         let s:tskelScratchNr{idx} = bufnr("%")
         " let b:tskelScratchBuffer = 1
     endif
+    " TLogDBG 2
     setlocal buftype=nofile
     setlocal bufhidden=hide
     setlocal noswapfile
     setlocal nobuflisted
     setlocal foldlevel=99
+    setlocal foldmethod=manual
     silent norm! ggdG
     " TLogVAR a:filetype
+    " TLogDBG 3
     if !exists('b:tskelFiletype') || b:tskelFiletype != a:filetype
         if exists('b:tskelBitDefs')
             unlet b:tskelBitDefs
         endif
         call s:PrepareBits(a:filetype)
     endif
+    " TLogDBG 4
     if exists('*TSkelNewScratchHook_'. a:filetype)
         call TSkelNewScratchHook_{a:filetype}()
     endif
+    " TLogDBG 'exit'
 endf
 
 function! TSkelNewScratchHook_viki()
@@ -1489,8 +1522,8 @@ function! TSkelNewScratchHook_viki()
 endf
 
 function! s:IsScratchBuffer()
-    " return exists('b:tskelScratchBuffer') || bufname('%') =~ '\V[TSkeletonScratch_\d\+]'
-    return bufname('%') =~ '\V[TSkeletonScratch_\d\+]'
+    " return exists('b:tskelScratchBuffer') || bufname('%') =~ '\V__TSkeletonScratch_\d\+__'
+    return bufname('%') =~ '\V__TSkeletonScratch_\d\+__'
 endf
 
 " s:RetrieveBit(agent, bit, ?indent, ?filetype) => setCursor?; @t=expanded template bit
@@ -1512,6 +1545,7 @@ function! s:RetrieveBit(agent, bit, ...) "{{{3
         let s:tskelScratchNr{s:tskelScratchIdx} = -1
     endif
     let setCursor  = 0
+    let pos        = getpos('.')
     let processing = s:SetProcessing()
     try
         call s:EditScratchBuffer(ft)
@@ -1537,6 +1571,7 @@ function! s:RetrieveBit(agent, bit, ...) "{{{3
         else
             silent exec 'buffer '. s:tskelScratchNr{s:tskelScratchIdx}
         endif
+        call setpos('.', pos)
     endtry
     return setCursor
 endf
@@ -1566,8 +1601,11 @@ endf
 function! s:RetrieveAgent_text(bit) "{{{3
     " TLogVAR a:bit
     if s:IsDefined(a:bit)
-        let text = b:tskelBitDefs[a:bit]['text']
-        call append(0, split(text, '\n'))
+        let text  = b:tskelBitDefs[a:bit]['text']
+        " TLogVAR text
+        let lines = split(text, '\n', 1)
+        " TLogVAR lines
+        call append(0, lines)
     endif
     " norm! Gdd
     " TLogDBG string(getline(1, '$'))
@@ -1625,9 +1663,9 @@ endf
 function! s:CharRx(char) "{{{3
     let rv = '&\?'
     if a:char == '\\'
-        return rv .'\('. tlib#EncodeChar('\') .'\|\\\)'
+        return rv .'\('. tlib#url#EncodeChar('\') .'\|\\\)'
     elseif a:char =~ '[/*#<>|:"?{}~]'
-        return rv .'\('. tlib#EncodeChar(a:char) .'\|'. a:char .'\)'
+        return rv .'\('. tlib#url#EncodeChar(a:char) .'\|'. a:char .'\)'
     else
         return rv . a:char
     endif
@@ -1765,7 +1803,7 @@ function! s:BitMenuEligible(agent, bit, mode, ft) "{{{3
     let e = map(t, 's:BitMenuEligible_'. a:agent .'_cb(v:val, '. string(a:mode) .')')
     " TAssert IsList(e)
     " TLogDBG 'e='. string(e)
-    return tlib#Compact(e)
+    return tlib#list#Compact(e)
 endf
 
 function! s:BitMenuEligible_complete_cb(bit, mode) "{{{3
@@ -1790,7 +1828,7 @@ function! s:BitMenu_query(bit, mode, ft) "{{{3
 endf
 
 function! s:BitMenuEligible_query_cb(bit, mode) "{{{3
-    return tlib#DecodeURL(a:bit)
+    return tlib#url#Decode(a:bit)
 endf
 
 function! s:BitMenu_menu(bit, mode, ft) "{{{3
@@ -1967,8 +2005,9 @@ if !hasmapto("TSkeletonExpandBitUnderCursor") "{{{2
 endif
 
 function! s:TagSelect(chars, mode) "{{{3
-    " TLogDBG 'chars.='. a:chars .' mode='. a:mode
+    " TLogDBG 'chars='. a:chars .' mode='. a:mode
     let chars = &selection == 'exclusive' ? a:chars : a:chars - 1
+    " TLogVAR chars
     if a:mode == 'd'
         let cp = (col('.') + chars)
         " TLogDBG 'col.='. col('.') .' colp='. cp .' col$='. col('$')
@@ -1981,8 +2020,10 @@ function! s:TagSelect(chars, mode) "{{{3
         else
             let correction = ''
         endif
+        " TLogVAR correction
         exec 'norm! d'. chars .'l'.correction
     else
+        " TLogDBG 'norm! v'. chars .'l'
         exec 'norm! v'. chars .'l'
         if g:tskelSelectTagMode[0] == 's'
             exec "norm! \<c-g>"
@@ -1995,13 +2036,15 @@ function! TSkeletonGoToNextTag() "{{{3
     let x  = search(rx, 'c')
     if x > 0
         let lc = exists('b:tskelLastCol')  ? b:tskelLastCol : col('.')
+        " TLogVAR lc
         let l  = strpart(getline(x), lc - 1)
-        " TLogDBG 'l='. l .' lc='. lc
+        " TLogVAR l
         let ms = matchstr(l, rx)
+        " TLogVAR ms
         let ml = len(ms)
-        " TLogDBG 'ms='. ms .' ml='. ml
+        " TLogVAR ml
         if ms == '???' || ms == '+++' || ms == '###'
-            call s:TagSelect(ms, 'v')
+            call s:TagSelect(ml, 'v')
         else
             if ml == 4
                 call s:TagSelect(ml, 'd')
@@ -2018,15 +2061,23 @@ function! TSkeletonMapGoToNextTag() "{{{3
     inoremap <silent> <c-j> <c-\><c-o>:call TSkeletonGoToNextTag()<cr>
 endf
 
+function! TSkeletonCB_FILENAME() "{{{3
+    return input('File name: ', '', 'file')
+endf
 
+function! TSkeletonCB_DIRNAME() "{{{3
+    return input('Directory name: ', '', 'dir')
+endf
 
 function! TSkeletonLateExpand() "{{{3
     let rx = '<+.\{-}+>'
     let l  = getline('.')
     let lc = col('.') - 1
     while strpart(l, lc, 2) != '<+'
-        let lc = lc - 1
-        if lc <= 0 || strpart(l, lc - 1, 2) == '+>'
+        " TLogVAR lc
+        " TLogDBG strpart(l, lc, 2)
+        let lc -= 1
+        if lc <= -1 || strpart(l, lc, 2) == '+>'
             throw "TSkeleton: No tag under cursor"
         endif
     endwh
@@ -2115,14 +2166,29 @@ function! TSkeletonInsertTable(rows, cols, rowbeg, rowend, celljoin) "{{{3
 endf
 
 function! s:DefineAutoCmd(template) "{{{3
-    let sfx = fnamemodify(a:template, ':e')
+    " let sfx = fnamemodify(a:template, ':e')
     let tpl = fnamemodify(a:template, ':t')
-    exec 'autocmd BufNewFile *.'. sfx .' TSkeletonSetup '. tpl
+    let filetype = tlib#url#Decode(matchstr(tpl, '^\S\+'))
+    let pattern  = matchstr(tpl, ' \+\zs.*$')
+    if !empty(filetype) && !empty(pattern)
+        let pattern  = substitute(pattern, '#', '*', 'g')
+        let pattern  = tlib#url#Decode(pattern)
+        " TLogVAR pattern
+        exec 'autocmd BufNewFile '. escape(pattern, ' ') .' set ft='. escape(filetype, ' ') .' | TSkeletonSetup '. escape(a:template, ' ')
+    endif
 endf
 
 augroup tSkeleton
     autocmd!
     if !exists("g:tskelDontSetup") "{{{2
+        let s:cwd = getcwd()
+        exec 'cd '. tlib#arg#Ex(g:tskelDir)
+        try
+            call map(split(string(glob('templates/**')), '\n'), "s:DefineAutoCmd(v:val)")
+        finally
+            exec 'cd '. tlib#arg#Ex(s:cwd)
+            unlet s:cwd
+        endtry
         autocmd BufNewFile *.bat       TSkeletonSetup batch.bat
         autocmd BufNewFile *.tex       TSkeletonSetup latex.tex
         autocmd BufNewFile tc-*.rb     TSkeletonSetup tc-ruby.rb
@@ -2136,19 +2202,21 @@ augroup tSkeleton
         autocmd BufNewFile *.php       TSkeletonSetup php.php
         autocmd BufNewFile *.tpl       TSkeletonSetup smarty.tpl
         autocmd BufNewFile *.html      TSkeletonSetup html.html
-        let autotemplates = split(string(glob(g:tskelDir.'*#*')), '\n')
-        " call map(autotemplates, "s:DefineAutoCmd(v:val)")
     endif
 
-    autocmd BufNewFile,BufRead */skeletons/* if s:tskelSetFiletype | setf tskeleton | endif
+    " autocmd BufNewFile,BufRead */skeletons/* if s:tskelSetFiletype | set ft=tskeleton | endif
+    exec 'autocmd BufNewFile,BufRead '. escape(g:tskelDir, ' ') .'* if s:tskelSetFiletype | set ft=tskeleton | endif'
+    " exec 'autocmd BufEnter,BufNewFile,BufRead '. escape(g:tskelDir, ' ') .'* if s:tskelSetFiletype | set ft=tskeleton | endif'
+    " exec 'autocmd BufEnter '. escape(g:tskelDir, ' ') .'* if s:tskelSetFiletype | set ft=tskeleton | endif'
+    " exec 'autocmd BufWritePost '. escape(g:tskelBitsDir, ' ') .'* echom "TSkeletonBitReset ".expand("<afile>:p:h:t")'
+    exec 'autocmd BufWritePost '. escape(g:tskelBitsDir, ' ') .'* exec "TSkeletonBitReset ".expand("<afile>:p:h:t")'
     " autocmd BufEnter * if (g:tskelMenuCache != '' && !s:IsScratchBuffer()) | call s:BuildBufferMenu(1) | else | call s:PrepareBits('', 1) | endif
-    autocmd BufEnter * if (g:tskelMenuCache != '' && !s:IsScratchBuffer()) | call s:BuildBufferMenu(1) | endif
+    autocmd SessionLoadPost,BufEnter * if (g:tskelMenuCache != '' && !s:IsScratchBuffer()) | call s:BuildBufferMenu(1) | endif
     
     autocmd FileType bib if !hasmapto(":TSkeletonCleanUpBibEntry") | exec "noremap <buffer> ". g:tskelMapLeader ."c :TSkeletonCleanUpBibEntry<cr>" | endif
 augroup END
             
 call s:PrepareBits('general')
-
 
 finish
 -------------------------------------------------------------------
@@ -2344,4 +2412,26 @@ you'll have to move the templates, if any, to ~/.vim/skeletons
 3.3
 - New :TSkeletonEditBit command
 - FIX: Embedded <tskel> tags in file templates didn't work
+
+3.4
+- Automatically reset bits information after editing a bit.
+- Automatically define autocommands for templates with the form "NAME 
+PATTERN" (where "#" in the pattern is replaced with "*"), i.e. the 
+template file "text #%2ffoo%2f#.txt" will define a template for all new 
+files matching "*/foo/*.txt"; the filetype will be set to "text"
+- These "auto templates" must be located in 
+~/.vim/skeletons/templates/GROUP/
+- TSkeletonCB_FILENAME(), TSkeletonCB_DIRNAME()
+- FIX: TSkeletonGoToNextTag() didn't work properly with ### type of 
+markers.
+- FIX: TSkeletonLateExpand(): tag at first column
+- FIX: In templates, empty lines sometimes were not inserted in the 
+document
+- FIX: Build menu on SessionLoadPost event.
+- FIX: Protect against autocommands that move the cursor on a BufEnter 
+event
+- FIX: Some special characters in the skeleton bit expansion were escaped 
+twice with backslashes.
+- Require tlib 0.9
+- Make sure &foldmethod=manual in the scratch buffer
 

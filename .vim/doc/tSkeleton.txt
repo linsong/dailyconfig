@@ -2,6 +2,12 @@
 
 Author: Thomas Link, samul AT web.de
 
+tSkeleton provides file templates and code skeletons (snippets). These 
+templates may contain special tags that are replaced with some computed 
+value (e.g., variables, user input ...), vimscript code, or place 
+holders/jump positions (see |tSkeleton-jump-positions|).
+
+
 -----------------------------------------------------------------------
                                                     *tSkeleton-install*
 Install~
@@ -116,6 +122,7 @@ tSkeleton also supports the following pseudo-tags:
 removed. Up to verson 2.4 VAR is a string, separating the items by an 
 "\n". From 3.0 on, VAR is a list.
 
+                                                    *tSkeleton-jump-positions*
 Unknown tags are kept in the expanded skeleton. These tags can be used 
 as cursor jump marks. This syntax was originally used by imap (vimscript 
 #244 or vimscript #475). If you don't want to install imap, you can also  
@@ -212,14 +219,22 @@ not contain function definitions.
                                                     *<tskel:msg>* *<tskel:before>* *<tskel:after>*
                                                     *<tskel:here_before>* *<tskel:here_after>*
 These special regions must appear in the following order:
-        <tskel:msg> (An explantory message to be displayed after template expansion)
+        <tskel:msg>
+            Display an explanatory message after template expansion
         <tskel:before>
+            Execute code before template expansion in the target buffer
         <tskel:after>
+            Execute code after template expansion in the target buffer
         <tskel:here_before>
+            Execute code before template expansion in the template buffer
         <tskel:here_after>
+            Execute code after template expansion in the template buffer
 
 BibTeX example: >
 
+    <tskel:msg>
+        Insert a collection entry
+    </tskel:msg>
     <tskel:before>
         let b:tskelArticleID = input("ID of bibentry: ")
         if b:tskelArticleID == "" | let b:tskelArticleID = "<+CURSOR+>" | endif
@@ -342,7 +357,7 @@ Utilities~
 The function TSkeletonIncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.204
+    @Revision: 1.0.211
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
