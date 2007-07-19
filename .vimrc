@@ -979,7 +979,7 @@ endif " has("autocmd")
     "### }}}2   
 
     "### setting for MRU.vim {{{2
-    let MRU_Max_Entries = 20
+    let MRU_Max_Entries = 50
     let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'
     map <silent> ,m :MRU<CR>
     "### }}}2   
@@ -1053,8 +1053,10 @@ endif " has("autocmd")
      let g:VEConf_showHiddenFiles = 0 " don't show dot files by default
     "}}}2
     
-    "### setting for vimExplorer.vim {{{2
+    "### setting for tSkeleton.vim {{{2
      autocmd BufNewFile *.py       TSkeletonSetup python.py
+     "autocmd BufNewFile *.c        TSkeletonSetup c.c
+     "autocmd BufNewFile *.cpp      TSkeletonSetup c.c
     "}}}2
     
 "### }}}1

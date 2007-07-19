@@ -59,7 +59,15 @@ set nobeep                                # We don't need no beeping software.
 #set charset=gb2312                        # use gb2312 as the default charset 
 set charset="UTF-8"
 set send_charset="us-ascii:gbk:UTF-8"
+
+unset strict_mime               
 set assumed_charset="UTF-8"
+#set assumed_charset="gbk"       #上面两行是来解决gbk编码信件在mutt里乱码用的
+charset-hook !utf-8 gbk 
+charset-hook ^us-ascii$ gbk
+charset-hook ^iso-8859-1$ gbk
+charset-hook ^UTF-8$ UTF-8      #这一行是解决utf8编码在mutt里乱码用的
+charset-hook .* gbk
 set allow_8bit                            # allow 8bit otherwise it will damage the chinese characters
 
 #charset-hook ^us-ascii$ GB18030

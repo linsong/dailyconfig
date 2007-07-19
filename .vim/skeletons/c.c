@@ -1,0 +1,1 @@
+<+call:eval('findfile(expand("%:r:t").".h", ".;") != "" ? "\n#include \"".findfile(expand("%:r:t").".h", ".;")."\"\n" : ""')+><+call:eval('findfile(expand("%:r:t").".h", ".;") != "" ? "<+CURSOR+>".GenImpl(findfile(expand("%:r:t").".h", ".;")) : "\n<+CURSOR+>\n"')+>
