@@ -2,8 +2,8 @@
 " @Author:      Thomas Link (samul AT web.de)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 2007-07-17.
-" @Revision:    3.4.3500
+" @Last Change: 2007-07-18.
+" @Revision:    3.5.3511
 "
 " vimscript #1160
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -34,7 +34,7 @@ if !exists('loaded_genutils')
         finish
     endif
 endif
-let loaded_tskeleton = 304
+let loaded_tskeleton = 305
 
 if !exists(':TAssert') "{{{2
     command! -nargs=* -bang TAssert :
@@ -2166,14 +2166,19 @@ function! TSkeletonInsertTable(rows, cols, rowbeg, rowend, celljoin) "{{{3
 endf
 
 function! s:DefineAutoCmd(template) "{{{3
+    " TLogVAR a:template
     " let sfx = fnamemodify(a:template, ':e')
     let tpl = fnamemodify(a:template, ':t')
+    " TLogVAR tpl
     let filetype = tlib#url#Decode(matchstr(tpl, '^\S\+'))
     let pattern  = matchstr(tpl, ' \+\zs.*$')
     if !empty(filetype) && !empty(pattern)
+        " TLogVAR pattern
         let pattern  = substitute(pattern, '#', '*', 'g')
+        " TLogVAR pattern
         let pattern  = tlib#url#Decode(pattern)
         " TLogVAR pattern
+        " TLogDBG 'autocmd BufNewFile '. escape(pattern, ' ') .' set ft='. escape(filetype, ' ') .' | TSkeletonSetup '. escape(a:template, ' ')
         exec 'autocmd BufNewFile '. escape(pattern, ' ') .' set ft='. escape(filetype, ' ') .' | TSkeletonSetup '. escape(a:template, ' ')
     endif
 endf
@@ -2184,7 +2189,7 @@ augroup tSkeleton
         let s:cwd = getcwd()
         exec 'cd '. tlib#arg#Ex(g:tskelDir)
         try
-            call map(split(string(glob('templates/**')), '\n'), "s:DefineAutoCmd(v:val)")
+            call map(split(glob('templates/**'), '\n'), 's:DefineAutoCmd(v:val)')
         finally
             exec 'cd '. tlib#arg#Ex(s:cwd)
             unlet s:cwd
@@ -2434,4 +2439,7 @@ event
 twice with backslashes.
 - Require tlib 0.9
 - Make sure &foldmethod=manual in the scratch buffer
+
+3.5
+- FIX: Problem with auto-templates
 
