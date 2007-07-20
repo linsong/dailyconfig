@@ -88,7 +88,6 @@ setlocal foldcolumn=1		" turns on "+" at the begining of close folds
 setlocal tabstop=4			" tabstop and shiftwidth must match
 setlocal shiftwidth=4		" values from 2 to 8 work well
 setlocal foldmethod=expr
-setlocal foldexpr=MyFoldLevel(v:lnum)
 setlocal indentexpr=
 setlocal nocindent
 setlocal iskeyword=@,39,45,48-57,_,129-255
@@ -287,7 +286,7 @@ endfunction
 "}}}2
 " MyFoldText() {{{2
 " Create string used for folded text blocks
-function MyFoldText()
+function! MyFoldText()
 	let l:MySpaces = MakeSpaces(&sw)
 	let l:line = getline(v:foldstart)
 	let l:bodyTextFlag=0
@@ -519,6 +518,7 @@ function MyFoldLevel(line)
 		return l:myindent
 	endif
 endfunction
+setlocal foldexpr=MyFoldLevel(v:lnum)
 "}}}2
 " Spawn(line) {{{2
 " Execute an executable line
