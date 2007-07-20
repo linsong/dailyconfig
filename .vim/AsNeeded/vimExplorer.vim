@@ -409,6 +409,7 @@ endfunction
 " class VEPlatform {{{1
 "=============================
 let VEPlatform = {}
+let VEPlatform.path = ''
 
 "it's a static class, no constructor
 
@@ -601,6 +602,7 @@ function! VEPlatform.globpath(path)
 endfunction
 
 function! VEPlatform.cdToPath(path)
+    let self.path = a:path
     exec "lcd " . escape(a:path,'#')
 endfunction
 
@@ -1151,6 +1153,10 @@ function! s:VETreePanel.hide()
     endif
 endfunction
 
+function! s:VETreePanel.getPathUnderCursor(num)
+    return self.tree.content[a:num][1]
+endfunction
+
 function! s:VETreePanel.nodeClicked(num)
     if self.tree.content[a:num][1] == ""
         return
@@ -1187,7 +1193,7 @@ function! s:VETreePanel.createActions()
     exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.toUpperDir .     " :call VE_ToUpperDir()<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.switchPanel .    " <c-w><c-w>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.favorite .       " :call VE_GotoFavorite()<cr>"
-    exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.addToFavorite .  " :call VE_AddToFavorite()<cr>"
+    exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.addToFavorite .  " :call VE_AddToFavorite('treePanel')<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.browseHistory .  " :call VE_BrowseHistory()<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.gotoPath .       " :call VE_OpenPath()<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.treePanelHotkey.quitVE .         " :call VEDestroy()<cr>"
@@ -1879,7 +1885,7 @@ function! s:VEFilePanel.createActions()
     exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.newDirectory .   " :call VE_NewDirectory()<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.markViaRegexp .  " :call VE_MarkViaRegexp('')<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.favorite .       " :call VE_GotoFavorite()<cr>"
-    exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.addToFavorite .  " :call VE_AddToFavorite()<cr>"
+    exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.addToFavorite .  " :call VE_AddToFavorite('filePanel')<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.browseHistory .  " :call VE_BrowseHistory()<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.gotoPath .       " :call VE_OpenPath()<cr>"
     exec "nnoremap <silent> <buffer> " . g:VEConf.filePanelHotkey.diff2files .     " :call VE_Diff()<cr>"
@@ -1906,7 +1912,7 @@ function! s:VEFilePanel.createActions()
     " User defined map
     for i in keys(g:VEConf_normalHotKeys)
         exec "nnoremap <silent> <buffer> " . g:VEConf_normalHotKeys[i] .
-                    \" :call VE_normalAction(\"" . i . "\")<cr>"
+                    \" :call VE_NormalAction(\"" . i . "\")<cr>"
     endfor
     for i in keys(g:VEConf_singleFileHotKeys)
         exec "nnoremap <silent> <buffer> " . g:VEConf_singleFileHotKeys[i] .
@@ -1933,6 +1939,9 @@ function! s:VEFilePanel.createSyntax()
     call g:VEConf.filePanelSyntax()
 endfunction
 
+function! s:VEFilePanel.getPathUnderCursor(num)
+    return self.displayList[a:num][1]
+endfunction
 
 " class VEPreviewPanel {{{1
 "=============================
@@ -2151,6 +2160,24 @@ function! s:VEContainer.showClipboard()
     echohl None
 endfunction
 
+" Get path name under cursor
+function! VE_getPathUnderCursor(where)
+    let winName = matchstr(bufname("%"),'_[^_]*$')
+    let path = ''
+    if has_key(s:VEContainer,winName)
+        if a:where == 'treePanel'
+            let path = s:VEContainer[winName].treePanel.getPathUnderCursor(line(".")-1)
+        elseif a:where == 'filePanel'
+            let path = s:VEContainer[winName].filePanel.getPathUnderCursor(line(".")-1)
+        endif
+    endif
+
+    if !isdirectory(path)
+        return ''
+    else
+        return path
+    endif
+endfunction
 
 
 "Command handlers
@@ -2511,8 +2538,12 @@ function! VE_GotoFavorite()
     call VE_GotoPath(fav[result])
 endfunction
 
-function! VE_AddToFavorite()
-    let cwd = g:VEPlatform.getcwd()
+function! VE_AddToFavorite(where)
+    let cwd = VE_getPathUnderCursor(a:where)
+    if cwd == ''
+        " if no path name under cursor, use current working path
+        let cwd = g:VEPlatform.path
+    endif
     let fav_filename = g:VEPlatform.getHome() . g:VEConf.favorite
     let fav = []
     if findfile(fav_filename) != ''
