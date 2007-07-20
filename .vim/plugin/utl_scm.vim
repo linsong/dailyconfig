@@ -349,4 +349,10 @@ fu! Utl_AddressScheme_bt(auri)
     return  Utl_AddressScheme_http(ptUrl)
 endfu
 
+fu! Utl_AddressScheme_trac(auri)
+    let ticketId = UtlUri_unescape( UtlUri_opaque(a:auri) )
+    let tracUrl = 'https://nordictrac.dev.exoweb.net/trac/ticket/'.ticketId
+    return  Utl_AddressScheme_http(tracUrl)
+endfu
+
 let &cpo = s:save_cpo

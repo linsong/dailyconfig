@@ -46,7 +46,7 @@ if has("win32")
     "	    Windows XP (German)
     " let g:utl_rc_app_browser = 'silent !start C:\Programme\Internet Explorer\iexplore.exe %u' 
     "	    Windows XP
-    " let g:utl_rc_app_browser = 'silent !start C:\Program Files\Internet Explorer\iexplore.exe %u' 
+    let g:utl_rc_app_browser = 'silent !start C:\Program Files\Internet Explorer\iexplore.exe %u' 
     "
     "	Samples for other browsers are welcome!
 
@@ -64,11 +64,11 @@ elseif has("unix")
     "	Firefox.
     "	Check if an instance is already running, and if yes use it, else start firefox.
     "	See <URL:http://www.mozilla.org/unix/remote.html> for mozilla/firefox -remote control
-    "let g:utl_rc_app_browser = "silent !firefox -remote 'ping()' && firefox -remote 'openURL( %u )' || firefox '%u' &"
+    let g:utl_rc_app_browser = "silent !firefox -remote 'ping()' && firefox -remote 'openURL( %u )' || firefox '%u' &"
     "	Samples for other browsers are welcome!
 
     "	Elinks Browser.
-    let g:utl_rc_app_browser = "!xterm -fn 9x15 -geometry 125x44 -e elinks '%u' &"
+    "let g:utl_rc_app_browser = "!xterm -fn 9x15 -geometry 125x44 -e elinks '%u' &"
 endif
 
 
@@ -87,7 +87,7 @@ if has("win32")
 
 elseif has('unix')
 
-    "let g:utl_rc_app_mailer = "!xterm -e mutt '%u'" 
+    let g:utl_rc_app_mailer = "!xterm -e mutt '%u'" 
     "let g:utl_rc_app_mailer = "silent !kmail '%u' &"
 
 endif
@@ -142,11 +142,11 @@ if has("win32")
 elseif has("unix")
 
     " Linux/KDE
-    "let g:utl_mt_application_pdf =  ':silent !acroread %p &'
+    let g:utl_mt_application_pdf =  ':silent !acroread %p &'
     "
     "	Seem to need indirect call via xterm, otherwise no way to
     "	stop at every page
-    "let g:utl_mt_application_postscript = ':!xterm -e gs %p &'
+    let g:utl_mt_application_postscript = ':!xterm -e gs %p &'
     "
     "let g:utl_mt_audio_mpeg =	    ':silent !xmms %p &'
     "
