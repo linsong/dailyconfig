@@ -36,3 +36,10 @@ if v:version >= 700
     hi MarkWord5  ctermbg=Magenta ctermfg=Black guibg=#FFB3FF   guifg=DarkRed
     hi MarkWord6  ctermbg=Blue    ctermfg=Black guibg=#9999FF   guifg=DarkRed
 endif
+
+" highlight defination for visualmark.vim
+if &bg == "dark"
+    highlight SignColor ctermfg=white ctermbg=blue guifg=white guibg=RoyalBlue3
+else
+    highlight SignColor ctermbg=white ctermfg=blue guibg=grey guifg=RoyalBlue3
+endif

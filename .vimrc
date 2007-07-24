@@ -1051,6 +1051,7 @@ endif " has("autocmd")
     
     "### setting for vimExplorer.vim {{{2
      let g:VEConf_showHiddenFiles = 0 " don't show dot files by default
+     let g:VEConf_usingGnome = 1 "use Gnome desktop system. TODO: add support for Mac OSX
     "}}}2
     
     "### setting for tSkeleton.vim {{{2
