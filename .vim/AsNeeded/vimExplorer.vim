@@ -2,7 +2,7 @@
 " File:         VimExplorer.vim
 " Brief:        VE - the File Manager within Vim!
 " Authors:      Ming Bai <mbbill AT gmail DOT com>
-" Last Change:  2007-07-20 17:23:39
+" Last Change:  2007-07-25 00:50:24
 " Version:      0.97
 " Licence:      LGPL
 "
@@ -17,6 +17,13 @@ if v:version < 700
      finish
 endif
 
+" See if we are already loaded, thanks to Dennis Hostetler.
+if exists("loaded_vimExplorer")
+    finish
+else
+    let loaded_vimExplorer = 1
+endif
+"
 
 "Load config {{{1
 "#######################################################################
@@ -30,11 +37,11 @@ let VEConf = {}
 "==========================================
 
 "Important! It is used to do iconv() to the path when calling
-"sytem() function.  Mine is Simplified Chinese.
+"sytem() function.  Mine is Simplified Chinese (cp936).
 if exists("g:VEConf_systemEncoding")
     let VEConf.systemEncoding = g:VEConf_systemEncoding
 else
-    let VEConf.systemEncoding = 'cp936'
+    let VEConf.systemEncoding = ''
 endif
 
 "VimExplorer will check all the disks in this list at startup.
@@ -293,7 +300,6 @@ let VEConf.filePanelHotkey.tabView         = 'e'
 let VEConf.filePanelHotkey.openRenamer     = ';r'
 let VEConf.filePanelHotkey.startShell      = ';c'
 let VEConf.filePanelHotkey.startExplorer   = ';e'
-let VEConf.filePanelHotkey.openExternal    = ';o'
 
 if exists("g:VEConf_fileHotkey")
     if type(g:VEConf_fileHotkey) != type({})
@@ -370,17 +376,6 @@ function! VEConf_normalActions['startExplorer']()
     call g:VEPlatform.startExplorer()
 endfunction
 
-"open file with external tool
-"(let OS to decide using which tool)
-let VEConf_normalHotKeys['openExternal'] = VEConf.filePanelHotkey.openExternal
-function! VEConf_normalActions['openExternal']()
-    let winName = matchstr(bufname("%"),'_[^_]*$')
-    if has_key(s:VEContainer,winName)
-        let path = s:VEContainer[winName].filePanel.getPathUnderCursor(line(".")-1)
-        call g:VEPlatform.start(path)
-    endif
-endfunction
-
 "Delete multiple files.
 "Multiple file name are contained in the fileList.
 let VEConf_multiFileHotKeys['openMultiFilesWithVim'] = VEConf.filePanelHotkey.tabViewMulti
@@ -440,6 +435,7 @@ function! VEPlatform.haswin32()
         return 0
     endif
 endfunction
+
 "return a path always end with slash.
 function! VEPlatform.getcwd()
     let path = getcwd()
@@ -472,9 +468,17 @@ function! VEPlatform.getHome()
     endif
 endfunction
 
+function! VEPlatform.escape(path)
+    if g:VEPlatform.haswin32()
+        return escape(a:path,'%#')
+    else
+        return escape(a:path,' %#')
+    endif
+endfunction
+
 "start a program and then return to vim, no wait.
 function! VEPlatform.start(path)
-    let convPath = escape(a:path,'%#')
+    let convPath = self.escape(a:path)
     "escape() function will do iconv to the string, so call it
     "before iconv().
     if g:VEPlatform.haswin32()
@@ -496,7 +500,9 @@ function! VEPlatform.start(path)
 endfunction
 
 function! VEPlatform.system(cmd)
-    let convCmd = escape(a:cmd,'%#')
+    "can not escape here! example: 'rm -r blabla\ bbb'
+    "let convCmd = escape(a:cmd,' %#')
+    let convCmd = a:cmd
     if g:VEConf.systemEncoding != ''
         let convCmd = iconv(convCmd,&encoding,g:VEConf.systemEncoding)
     endif
@@ -554,8 +560,8 @@ function! VEPlatform.copyMultiFile(fileList,topath)
 endfunction
 
 function! VEPlatform.copyfile(filename,topath)
-    let filename = a:filename
-    let topath = a:topath
+    let filename = self.escape(a:filename)
+    let topath = self.escape(a:topath)
     if g:VEPlatform.haswin32()
         let filename = substitute(a:filename,'/',"\\",'g')
         let topath = substitute(a:topath,'/',"\\",'g')
@@ -581,7 +587,10 @@ endfunction
 function! VEPlatform.mkdir(path)
     if g:VEConf.systemEncoding != ''
         let convPath = iconv(a:path,&encoding,g:VEConf.systemEncoding)
+    else
+        let convPath = a:path
     endif
+    call confirm(convPath)
     return mkdir(convPath)
 endfunction
 
@@ -631,7 +640,12 @@ function! VEPlatform.globpath(path)
 endfunction
 
 function! VEPlatform.cdToPath(path)
-    exec "lcd " . escape(a:path,'%#')
+    try
+        "In win32, VE can create folder starts with space. So ...
+        exec "lcd " . escape(a:path,' %#')
+    catch
+        echohl ErrorMsg | echomsg "Can not cd to path: " . a:path | echohl None
+    endtry
 endfunction
 
 function! VEPlatform.startShell()
@@ -643,7 +657,7 @@ function! VEPlatform.startShell()
 endfunction
 
 function! VEPlatform.startExplorer()
-    let pwd = g:VEPlatform.getcwd()
+    let pwd = self.escape(g:VEPlatform.getcwd())
     if g:VEPlatform.haswin32()
         let pwd = substitute(pwd,'/',"\\",'g')
     endif
@@ -789,9 +803,9 @@ function! VEPlatform.delete(name)
     if isdirectory(a:name)
         "I have no idea how to judge if it is succeed :(
         if g:VEPlatform.haswin32()
-            call g:VEPlatform.system(" rmdir /S /Q \"" . a:name . "\"")
+            call g:VEPlatform.system(" rmdir /S /Q \"" . self.escape(a:name) . "\"")
         else
-            call g:VEPlatform.system("rm -r " . a:name)
+            call g:VEPlatform.system("rm -r " . self.escape(a:name))
         endif
         return 1
     else
@@ -813,7 +827,7 @@ function! VEPlatform.select(list,title)
         let selectList[i] = i . "  " . selectList[i]
     endfor
     let result = inputlist(selectList)
-    if result > len(selectList) || result <= 0
+    if result > len(a:list) || result <= 0
         return -1
     else
         return result-1
@@ -1142,7 +1156,7 @@ function! s:VETreePanel.show()
     if self.setFocus()
         return
     endif
-    let cmd = self.splitLocation . " " . self.splitMode . self.width . ' new ' . self.name
+    let cmd = self.splitLocation . " " . self.splitMode . ' ' . self.width . ' new ' . self.name
     silent! execute cmd
     let VETreeWinNr = bufwinnr(self.name)
     if VETreeWinNr != -1
@@ -1205,7 +1219,6 @@ function! s:VETreePanel.pathChanged(path)
     if self.path == a:path
         return
     endif
-    "exec "cd " . escape(a:path,'%#')
     call g:VEPlatform.cdToPath(a:path)
     let self.path = g:VEPlatform.getcwd()
     call self.tree.openPath(self.path)
@@ -1268,8 +1281,8 @@ function! s:VEFilePanel.show()
     if self.setFocus()
         return
     endif
-    let cmd = self.splitLocation . " " . self.splitMode . self.width . ' new ' . self.name
-    exec cmd
+    let cmd = self.splitLocation . " " . self.splitMode . ' ' . self.width . ' new ' . self.name
+    silent! exec cmd
     if !self.setFocus()
         echoerr "create file window failed!"
     endif
@@ -2979,9 +2992,9 @@ browse history. By default, if a directory has it's own child directories, |+|
 will be displayed before it's name, and It will cause a little performance
 lost.  If you don't need this feature ,set the following variable to zero can
 disable it.
-
+>
     let VEConf_showFolderStatus = 0
-
+<
 There are some differences between win32 and other platforms. In win32, there
 are several root nodes (such as C:\,D:\), but one root node (/) in other
 platforms.
@@ -3110,7 +3123,7 @@ Common Options~
                                     is different from '&encoding', set this
                                     value to system encoding.  Example: let
                                     g:VEConf_systemEncoding = 'utf-8'
-                                    ,Default: cp936 (for Simplified Chinese)
+                                    ,Default: '' (empty)
 
 |g:VEConf_win32Disks|               The default value is all 26 volumes. Set this
                                     value to fit your system can increase the
@@ -3228,7 +3241,7 @@ automatically.
     let VEConf_singleFileHotKeys = {}
     let VEConf_singleFileHotKeys['test2'] = 'T2'
     function! VEConf_singleFileActions['test2'](path)
-        call VEPlatform.system("notepad.exe " . a:path)
+        call VEPlatform.system("notepad.exe " . VEPlatform.escape(a:path))
     endfunction
 <
 Here, parameter "path" is the path of file under cursor.
@@ -3284,9 +3297,14 @@ P1.  Case sensitive in Win32
 
 0.97
     - Change the behaviour of hotkey 'F', now it adds the path under cursor to
-    favorite list. If no path under cursor, use current working path instead.
-    - Bug fix: escape '%#' for path.
-    - Add options |g:VEConf_usingKDE| and |g:VEConf_usingGnome|.
+        favorite list. If no path under cursor, use current working path
+        instead.(Thanks to Vincent Wang)
+    - Bug fix: escape ' %#' for path.
+    - Add options |g:VEConf_usingKDE| and |g:VEConf_usingGnome| for starting
+        program in *nix environment.
+    - Check if the script is already loaded, thanks to Dennis Hostetler.
+    - Change default g:VEConf_systemEncoding to '' (empty)
+    - Bug fix: favorite selection out of range.
 
 
 ==============================================================================
