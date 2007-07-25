@@ -300,6 +300,7 @@ let VEConf.filePanelHotkey.tabView         = 'e'
 let VEConf.filePanelHotkey.openRenamer     = ';r'
 let VEConf.filePanelHotkey.startShell      = ';c'
 let VEConf.filePanelHotkey.startExplorer   = ';e'
+let VEConf.filePanelHotkey.openExternal    = ';o'
 
 if exists("g:VEConf_fileHotkey")
     if type(g:VEConf_fileHotkey) != type({})
@@ -374,6 +375,15 @@ endfunction
 let VEConf_normalHotKeys['startExplorer'] = VEConf.filePanelHotkey.startExplorer
 function! VEConf_normalActions['startExplorer']()
     call g:VEPlatform.startExplorer()
+endfunction
+
+let VEConf_normalHotKeys['openExternal'] = VEConf.filePanelHotkey.openExternal
+function! VEConf_normalActions['openExternal']()
+    let winName = matchstr(bufname("%"),'_[^_]*$')
+    if has_key(s:VEContainer,winName)
+        let path = s:VEContainer[winName].filePanel.getPathUnderCursor(line(".")-1)
+        call g:VEPlatform.start(path)
+    endif
 endfunction
 
 "Delete multiple files.
