@@ -50,3 +50,5 @@ _nordicbetsite()
 
 }
 complete -F _nordicbetsite -o default nordicbetsite
+complete -F _nordicbetsite -o default startNor
+

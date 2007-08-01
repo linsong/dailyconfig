@@ -325,6 +325,8 @@ settings = {
     wordcompletion_dsn = "DBI:SQLite2:dbname=/home/vincent/data/irssi/completion.db";
     wordcompletion_pass = " ";
     wordcompletion_user = "vincent";
+    openurl_max_urls = "50";
+    openurl_app_http = "firefox -remote \"ping()\" && firefox -remote \"openURL( $1 )\" || firefox \"$1\" &";
   };
 };
 keyboard = (
