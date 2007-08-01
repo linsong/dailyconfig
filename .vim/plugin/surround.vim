@@ -1,7 +1,7 @@
 " surround.vim - Surroundings
 " Author:       Tim Pope <vimNOSPAM@tpope.info>
 " GetLatestVimScripts: 1697 1 :AutoInstall: surround.vim
-" $Id: surround.vim,v 1.23 2007/02/12 15:37:15 tpope Exp $
+" $Id: surround.vim,v 1.26 2007-07-31 14:20:47 tpope Exp $
 "
 " See surround.txt for help.  This can be accessed by doing
 "
@@ -134,7 +134,6 @@ function! s:process(string)
                 let insertion = repl_{char2nr(char)}
                 let subs = strpart(a:string,i+1,next-i-1)
                 let subs = matchstr(subs,'\r.*')
-                echo substitute(subs,'\r','R','g')
                 while subs =~ '^\r.*\r'
                     let sub = matchstr(subs,"^\r\\zs[^\r]*\r[^\r]*")
                     let subs = strpart(subs,strlen(sub)+1)
@@ -173,7 +172,10 @@ function! s:wrap(string,char,type,...)
         let extraspace = ' '
     endif
     let idx = stridx(pairs,newchar)
-    if exists("b:surround_".char2nr(newchar))
+    if newchar == ' '
+        let before = ''
+        let after  = ''
+    elseif exists("b:surround_".char2nr(newchar))
         let all    = s:process(b:surround_{char2nr(newchar)})
         let before = s:extractbefore(all)
         let after  =  s:extractafter(all)
@@ -185,17 +187,23 @@ function! s:wrap(string,char,type,...)
         let before = "\n"
         let after  = "\n\n"
     elseif newchar =~# "[tT\<C-T><,]"
-        "let dounmapr = 0
+        let dounmapp = 0
         let dounmapb = 0
-        "if !mapcheck("<CR>","c")
-            "let dounmapr = 1
-            "cnoremap <CR> ><CR>
-        "endif
-        if !mapcheck(">","c")
+        if !maparg(">","c")
             let dounmapb= 1
-            cnoremap > ><CR>
+            " Hide from AsNeeded
+            exe "cn"."oremap > <CR>"
+            exe "cn"."oremap % %<C-V>"
+            "cm ap > <C-R>=getcmdline() =~ '^[^%?].*[%?]$' ? "\026\076" : "\026\076\015"<CR>
         endif
         let default = ""
+        if !maparg("%","c")
+            " This is to help when typing things like
+            " <a href="/images/<%= @image.filename %>">
+            " The downside is it breaks backspace, so lets disable it for now
+            "let dounmapp= 1
+            "exe "cn"."oremap % %<C-V>"
+        endif
         if newchar ==# "T"
             if !exists("s:lastdel")
                 let s:lastdel = ""
@@ -210,10 +218,17 @@ function! s:wrap(string,char,type,...)
         if dounmapb
             silent! cunmap >
         endif
+        if dounmapp
+            silent! cunmap %
+        endif
         if tag != ""
             let tag = substitute(tag,'>*$','','')
-            let before = "<".tag.">"
-            let after  = "</".substitute(tag," .*",'','').">"
+            let before = '<'.tag.'>'
+            if tag =~ '/$'
+                let after = ''
+            else
+                let after  = '</'.substitute(tag,' .*','','').'>'
+            endif
             if newchar == "\<C-T>" || newchar == ","
                 if type ==# "v" || type ==# "V"
                     let before = before . "\n\t"
@@ -254,6 +269,9 @@ function! s:wrap(string,char,type,...)
         let idx = idx / 3 * 3
         let before = strpart(pairs,idx+1,1) . spc
         let after  = spc . strpart(pairs,idx+2,1)
+    elseif newchar == "\<C-[>" || newchar == "\<C-]>"
+        let before = "{\n\t"
+        let after  = "\n}"
     elseif newchar !~ '\a'
         let before = newchar
         let after  = newchar
@@ -272,6 +290,8 @@ function! s:wrap(string,char,type,...)
         endif
         if keeper !~ '\n$' && after !~ '^\n'
             let keeper = keeper . "\n"
+        elseif keeper =~ '\n$' && after =~ '^\n'
+            let after = strpart(after,1)
         endif
         if before !~ '\n\s*$'
             let before = before . "\n"
@@ -333,6 +353,13 @@ function! s:insert(...) " {{{1
     let reg_save = @@
     call setreg('"',"\r",'v')
     call s:wrapreg('"',char,linemode)
+    " If line mode is used and the surrounding consists solely of a suffix,
+    " remove the initial newline.  This fits a use case of mine but is a
+    " little inconsistent.  Is there anyone that would prefer the simpler
+    " behavior of just inserting the newline?
+    if linemode && matchstr(getreg('"'),'^\n\s*\zs.*') == 0
+        call setreg('"',matchstr(getreg('"'),'^\n\s*\zs.*'),getregtype('"'))
+    endif
     " This can be used to append a placeholder to the end
     if exists("g:surround_insert_tail")
         call setreg('"',g:surround_insert_tail,"a".getregtype('"'))
@@ -341,10 +368,14 @@ function! s:insert(...) " {{{1
         "call setreg('"',substitute(getreg('"'),'^\s\+','',''),'c')
     "endif
     if col('.') >= col('$')
-        norm! ""p`]
+        norm! ""p
     else
-        norm! ""P`]
+        norm! ""P
     endif
+    if linemode
+        call s:reindent()
+    endif
+    norm! `]
     call search('\r','bW')
     let @@ = reg_save
     let &clipboard = cb_save
@@ -352,7 +383,7 @@ function! s:insert(...) " {{{1
 endfunction " }}}1
 
 function! s:reindent() " {{{1
-    if (exists("b:surround_indent") || exists("g:surround_indent"))
+    if exists("b:surround_indent") ? b:surround_indent : (exists("g:surround_indent") && g:surround_indent)
         silent norm! '[=']
     endif
 endfunction " }}}1
@@ -388,7 +419,12 @@ function! s:dosurround(...) " {{{1
     let original = getreg('"')
     let otype = getregtype('"')
     call setreg('"',"")
-    exe 'norm d'.(scount==1 ? "": scount)."i".char
+    let strcount = (scount == 1 ? "" : scount)
+    if char == '/'
+        exe 'norm '.strcount.'[/d'.strcount.']/'
+    else
+        exe 'norm d'.strcount.'i'.char
+    endif
     "exe "norm vi".char."d"
     let keeper = getreg('"')
     let okeeper = keeper " for reindent below
@@ -409,6 +445,10 @@ function! s:dosurround(...) " {{{1
     elseif char =~ "[\"'`]"
         exe "norm! i \<Esc>d2i".char
         call setreg('"',substitute(getreg('"'),' ','',''))
+    elseif char == '/'
+        norm! "_x
+        call setreg('"','/**/',"c")
+        let keeper = substitute(substitute(keeper,'^/\*\s\=','',''),'\s\=\*$','','')
     else
         exe "norm! da".char
     endif
@@ -565,19 +605,19 @@ if !exists("g:surround_no_mappings") || ! g:surround_no_mappings
     nmap          ySS  <Plug>YSsurround
     if !hasmapto("<Plug>Vsurround","v")
         if exists(":xmap")
-            xmap      s    <Plug>Vsurround
+            xmap  s    <Plug>Vsurround
         else
-            vmap      s    <Plug>Vsurround
+            vmap  s    <Plug>Vsurround
         endif
     endif
     if !hasmapto("<Plug>VSurround","v")
         if exists(":xmap")
-            xmap      S    <Plug>VSurround
+            xmap  S    <Plug>VSurround
         else
-            vmap      S    <Plug>VSurround
+            vmap  S    <Plug>VSurround
         endif
     endif
-    if !hasmapto("<Plug>Isurround","i") && !mapcheck("<C-S>","i")
+    if !hasmapto("<Plug>Isurround","i") && "" == mapcheck("<C-S>","i")
         imap     <C-S> <Plug>Isurround
     endif
     imap        <C-G>s <Plug>Isurround

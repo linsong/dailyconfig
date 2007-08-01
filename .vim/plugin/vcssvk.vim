@@ -33,14 +33,19 @@
 "   This variable specifies the SVK executable.  If not set, it defaults to
 "   'svk' executed from the user's executable path.
 
+" Section: Plugin header {{{1
+
 if v:version < 700
+  echohl WarningMsg|echomsg 'VCSCommand requires at least VIM 7.0'|echohl None
   finish
 endif
 
+let s:save_cpo=&cpo
+set cpo&vim
+
 runtime plugin/vcscommand.vim
 
-call system(VCSCommandGetOption('VCSCommandSVKExec', 'svk') . ' --version')
-if v:shell_error
+if !executable(VCSCommandGetOption('VCSCommandSVKExec', 'svk'))
   " SVK is not installed
   finish
 endif
@@ -131,14 +136,9 @@ function! s:svkFunctions.Diff(argList)
   if len(a:argList) == 0
     let revOptions = [] 
     let caption = ''
-  elseif len(a:argList) <= 2 && a:argList[0] !~ '^-'
-    if len(a:argList) == 1
-      let revOptions = ['-r' . a:argList[0]]
-      let caption = '(' . a:argList[0] . ' : current)'
-    elseif len(a:argList) == 2
-      let revOptions = ['-r' . a:argList[0] . ':' . a:argList[1]]
-      let caption = '(' . a:argList[0] . ' : ' . a:argList[1] . ')'
-    endif
+  elseif len(a:argList) <= 2 && match(a:argList, '^-') == -1
+    let revOptions = ['-r' . join(a:argList, ':')]
+    let caption = '(' . a:argList[0] . ' : ' . get(a:argList, 1, 'current') . ')'
   else
     " Pass-through
     let caption = join(a:argList, ' ')
@@ -197,18 +197,18 @@ endfunction
 " Function: s:svkFunctions.Log() {{{2
 function! s:svkFunctions.Log(argList)
   if len(a:argList) == 0
-    let options = ''
+    let options = []
     let caption = ''
-  elseif len(a:argList) == 1 && a:argList[0] !~ "^-"
-    let options=' -r' . a:argList[0]
-    let caption = a:argList[0]
+  elseif len(a:argList) <= 2 && match(a:argList, '^-') == -1
+    let options = ['-r' . join(a:argList, ':')]
+    let caption = options[0]
   else
-    " Multiple options, or the option starts with '-'
+    " Pass-through
+    let options = a:argList
     let caption = join(a:argList, ' ')
-    let options = ' ' . caption
   endif
 
-  let resultBuffer = s:DoCommand('log -v' . options, 'log', caption)
+  let resultBuffer = s:DoCommand(join(['log', '-v'] + options), 'log', caption)
   return resultBuffer
 endfunction
 
@@ -254,3 +254,5 @@ endfunction
 
 " Section: Plugin Registration {{{1
 call VCSCommandRegisterModule('SVK', expand('<sfile>'), s:svkFunctions, [])
+
+let &cpo = s:save_cpo

@@ -40,14 +40,19 @@
 "   This variable, if set, determines the options passed to the svn diff
 "   command (such as 'u', 'w', or 'b').
 
+" Section: Plugin header {{{1
+
 if v:version < 700
+  echohl WarningMsg|echomsg 'VCSCommand requires at least VIM 7.0'|echohl None
   finish
 endif
 
+let s:save_cpo=&cpo
+set cpo&vim
+
 runtime plugin/vcscommand.vim
 
-call system(VCSCommandGetOption('VCSCommandSVNExec', 'svn') . ' --version')
-if v:shell_error
+if !executable(VCSCommandGetOption('VCSCommandSVNExec', 'svn'))
   " SVN is not installed
   finish
 endif
@@ -141,14 +146,9 @@ function! s:svnFunctions.Diff(argList)
   if len(a:argList) == 0
     let revOptions = [] 
     let caption = ''
-  elseif len(a:argList) <= 2 && a:argList[0] !~ '^-'
-    if len(a:argList) == 1
-      let revOptions = ['-r' . a:argList[0]]
-      let caption = '(' . a:argList[0] . ' : current)'
-    elseif len(a:argList) == 2
-      let revOptions = ['-r' . a:argList[0] . ':' . a:argList[1]]
-      let caption = '(' . a:argList[0] . ' : ' . a:argList[1] . ')'
-    endif
+  elseif len(a:argList) <= 2 && match(a:argList, '^-') == -1
+    let revOptions = ['-r' . join(a:argList, ':')]
+    let caption = '(' . a:argList[0] . ' : ' . get(a:argList, 1, 'current') . ')'
   else
     " Pass-through
     let caption = join(a:argList, ' ')
@@ -163,7 +163,6 @@ function! s:svnFunctions.Diff(argList)
   endif
 
   let svnDiffOpt = VCSCommandGetOption('VCSCommandSVNDiffOpt', '')
-
   if svnDiffOpt == ''
     let diffOptions = []
   else
@@ -224,18 +223,18 @@ endfunction
 " Function: s:svnFunctions.Log(argList) {{{2
 function! s:svnFunctions.Log(argList)
   if len(a:argList) == 0
-    let versionOption = ''
+    let options = []
     let caption = ''
-  elseif len(a:argList) == 1 && a:argList[0] !~ "^-"
-    let versionOption = ' -r' . a:argList[0]
-    let caption = a:argList[0]
+  elseif len(a:argList) <= 2 && match(a:argList, '^-') == -1
+    let options = ['-r' . join(a:argList, ':')]
+    let caption = options[0]
   else
-    " Multiple options, or the option starts with '-'
+    " Pass-through
+    let options = a:argList
     let caption = join(a:argList, ' ')
-    let versionOption = ' ' . caption
   endif
 
-  let resultBuffer = s:DoCommand('log -v' . versionOption, 'log', caption)
+  let resultBuffer = s:DoCommand(join(['log', '-v'] + options), 'log', caption)
   return resultBuffer
 endfunction
 
@@ -281,3 +280,5 @@ endfunction
 
 " Section: Plugin Registration {{{1
 call VCSCommandRegisterModule('SVN', expand('<sfile>'), s:svnFunctions, [])
+
+let &cpo = s:save_cpo
