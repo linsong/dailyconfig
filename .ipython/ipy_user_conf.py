@@ -24,20 +24,36 @@ ip = IPython.ipapi.get()
 # You probably want to uncomment this if you did %upgrade -nolegacy
 # import ipy_defaults    
 
+def flat_dir(self, arg):
+    '''
+    dir object members in flat list
+    '''
+    ip = self.api
+    ip.ex('print dir(%s)' % arg)
+
 def main():
     # Handy tab-completers for %cd, %run, import etc.
     # Try commenting this out if you have completion problems/slowness
     import ipy_stock_completers
-
+    
     # uncomment if you want to get ipython -p sh behaviour
     # without having to use command line switches
-
+    
     # import ipy_profile_sh
 
+    # import popular modules at startup
+    ip.ex('import os')
+    ip.ex('import sys')
+
+    # install custom magic command
+    ip.expose_magic('fdir', flat_dir)
+
+    # custom magic commands
+    ip.magic('alias ls ls -F --color=auto')
 
     o = ip.options
     # An example on how to set options
-    o.autocall = 1
+    #o.autocall = 1
     o.system_verbose = 0
 
 main()

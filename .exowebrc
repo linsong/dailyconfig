@@ -14,6 +14,11 @@ fi
  #PATH="${PATH}:~/mytools:~/win32tools:/usr/local/lps-3.1/bin:/usr/local/Adobe/Acrobat7.0/bin:~/bin/KeePassX-0.2.2"
  PATH="${PATH}:~/mytools:~/win32tools:/usr/local/lps-3.1/Server/lps-3.1/WEB-INF/lps/server/bin:/usr/local/Adobe/Acrobat7.0/bin:~/bin/KeePassX-0.2.2"
 
+ ### use privoxy as proxy locally
+ #http_proxy=http://127.0.0.1:8118/
+ #HTTP_PROXY=$http_proxy
+ #export http_proxy HTTP_PROXY
+
 alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop all && ./nordicbetsite start application_server && ./nordicbetsite start presentation_server && ./nordicbetsite start back_office_server && ./nordicbetsite start stats_server && ./nordicbetsite start livebet_bo && ./nordicbetsite start livebet_fo && cd -"
  alias lb="cd /home/vincent/work/livebet/src"
 
@@ -53,15 +58,10 @@ alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop a
      OLDDIR=$PWD
      cd ${1:-$PWD}
      echo "Generating tags ..."
-     find . -type d \( -name lib -o -iname mgs_poker -o -iname scripts -o -iname selenium -o -iname zope -o -iname stress \) -prune -o -type f -iname "*.py" -print | ctags -a -L - 
+     find . -type d \( -name lib -o -iname mgs_poker -o -iname scripts -o -iname selenium -o -iname zope -o -iname stress \) -prune -o -type f -iname "*.py" -print | sed -e 's#^\./##p' | ctags -L - 
      echo "Generating cscope ..."
-     find . -type d \( -name lib -o -iname mgs_poker -o -iname scripts -o -iname selenium -o -iname zope -o -iname stress \) -prune -o -type f -iname "*.py" -print | cscope -b -i -  -R 
+     find . -type d \( -name lib -o -iname mgs_poker -o -iname scripts -o -iname selenium -o -iname zope -o -iname stress \) -prune -o -type f -iname "*.py" -print | sed -e 's#^\./##p' |  cscope -b -i -  -R 
      cd $OLDDIR
- }
-
- function pyfind()
- {
-     find . \( -type d -iname "lib" -prune \) -o \( -type d -iname "zope" -prune \) -o -type f -iname "*.py"  | xargs grep $*
  }
 
  function startNor()

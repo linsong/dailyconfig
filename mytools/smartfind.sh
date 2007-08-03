@@ -11,7 +11,7 @@ EXT_NAME=${BASE_NAME/find/}
 
 if [ -n "${EXT_NAME}" ]; then 
     #find . \( -type d -iname "lib" -prune \) -o \( -type d -iname "zope" -prune \) -o -type f -iname "*.py"  | xargs grep $*
-    find . -type f -iname "*.$EXT_NAME"  | xargs grep $*
+    find . \( -type d -iname "lib" -prune \) -o \( -type d -iname "zope" -prune \) -o -type f -iname "*.$EXT_NAME"  | xargs grep $*
 fi
 
 # vi: 
