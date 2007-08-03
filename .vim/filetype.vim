@@ -9,8 +9,6 @@ augroup filetypedetect
   au! BufRead,BufNewFile *.lzx      setfiletype lzx
   au! BufRead,BufNewFile nordictrac.dev.exoweb.net_*.txt setfiletype exo-codereview
 
-  au! BufRead,BufNewFile *.otl		setfiletype vo_base
-  au! BufRead,BufNewFile *.oln		setfiletype xoutliner
   au! BufRead,BufNewFile *.mkd      setfiletype mkd
   au! BufRead,BufNewFile *.blogger  setfiletype blogger
 augroup END
