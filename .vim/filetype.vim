@@ -11,4 +11,6 @@ augroup filetypedetect
 
   au! BufRead,BufNewFile *.mkd      setfiletype mkd
   au! BufRead,BufNewFile *.blogger  setfiletype blogger
+
+  au! BufRead,BufNewFile *.viki  setfiletype viki
 augroup END
