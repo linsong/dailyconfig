@@ -1,19 +1,41 @@
 " File: grep.vim
 " Author: Yegappan Lakshmanan (yegappan AT yahoo DOT com)
-" Version: 1.6
-" Last Modified: August 10, 2005
+" Version: 1.8
+" Last Modified: March 11, 2007
 " 
 " Overview
 " --------
-" The grep.vim plugin script integrates the grep/fgrep/egrep/agrep tools with
-" Vim. To use this script, you need the grep, fgrep, egrep, agrep, find and
-" xargs utilities. These tools come with most of the Unix installations. For
-" MS-Windows systems, you can download these tools from the
-" http://unxutils.sourceforge.net or http://gnuwin32.sourceforge.net site.
+" The grep plugin integrates the grep, fgrep, egrep, and agrep tools with
+" Vim.
+"
+" To use this plugin, you need the grep, fgrep, egrep, agrep, find and
+" xargs utilities. These tools are present in most of the Unix installations.
+" For MS-Windows systems, you can download the GNU grep and find utilities
+" from the following sites:
+"
+"    http://gnuwin32.sourceforge.net/packages/grep.htm
+"    http://gnuwin32.sourceforge.net/packages/findutils.htm
+"
+" Installation
+" ------------
+" 1. Copy the grep.vim file to the $HOME/.vim/plugin or $HOME/vimfiles/plugin
+"    or $VIM/vimfiles/plugin directory. 
+"    Refer to the following Vim help topics for more information about Vim
+"    plugins:
+"       :help add-plugin
+"       :help add-global-plugin
+"       :help runtimepath
+" 2. If the grep utility is not already present in one of the directories
+"    in the PATH environment variable, then set the Grep_Path and other _Path
+"    variables to point to the location of the grep utilites in the .vimrc
+"    file.
+" 3. Restart Vim.
+" 4. You can now use the ":Grep" and other commands to search for patterns in
+"    files.
 "
 " Usage
 " -----
-" The grep.vim plugin script introduces the following commands:
+" The grep.vim plugin introduces the following Vim commands:
 "
 " :Grep        - Search for the specified pattern in the specified files
 " :Rgrep       - Run recursive grep
@@ -46,41 +68,40 @@
 "
 " You can specify grep options like -i (ignore case) or -w (search for a word)
 " to the above commands.  If the <grep_options> are not specified, then the
-" default grep options specified by the variable Grep_Default_Options will be
+" default grep options specified by the variable Grep_Default_Options is 
 " used.
 "
-" You can specify the grep pattern to search as argument to the above
+" You can specify the grep pattern to search as an argument to the above
 " commands.  If the <search_pattern> is not specified, then you will be
 " prompted to enter a search pattern. By default, the keyword under the cursor
-" will be displayed for the search pattern prompt. You can accept the default
-" or modify it.
+" is displayed for the search pattern prompt. You can accept the default or
+" modify it.
 "
 " The search pattern is automatically enclosed by the character specified in
 " the Grep_Shell_Quote_Char variable. You should not enclose the search
 " pattern with a shell escape character.
 "
 " If you want to specify a search pattern with space characters or a
-" multi-word pattern, then you should use the Grep command input prompt to
-" supply the pattern.
+" multi-word pattern, then you should use the Grep command pattern input
+" prompt to supply the pattern.
 "
 " You can specify one or more file names (or file patterns) to the above
 " commands.  If the <file_names> are not specified, then you will be prompted
 " to enter file names.  By default, the pattern specified by the
-" Grep_Default_Filelist variable will be used. To specify the file name(s) as
-" an argument to the above commands, you should specify the search pattern
-" also.
+" Grep_Default_Filelist variable is used. To specify the file name(s) as an
+" argument to the above commands, you have to specify the search pattern also.
 "
-" When you enter only the command name, you will be prompted to enter
-" the search pattern and the files in which to search for the pattern. By
-" default, the keyword under the cursor will be displayed for the search
-" pattern prompt.  Depending on the command, you may prompted for additional
-" parameters like the directories to search for the pattern.
+" When you enter only the command name, you will be prompted to enter the
+" search pattern and the files in which to search for the pattern. By default,
+" the keyword under the cursor is displayed for the search pattern prompt.
+" Depending on the command, you may prompted for additional parameters like
+" the directories to search for the pattern.
 "
 " You can retrieve previously entered values for the Grep prompts using the up
 " and down arrow keys. You can cancel the command by pressing the escape key.
 " You can use CTRL-U to erase the default shown for the prompt and CTRL-W to
 " erase the previous word in the prompt. For more information about editing
-" the prompt, read :help cmdline-editing
+" the prompt, read ':help cmdline-editing' Vim help topic.
 "
 " After invoking any of the grep commands, you can cancel the command, when
 " you are prompted for a search pattern or file names or a directory by
@@ -88,8 +109,8 @@
 " grep/fgrep/egrep/agrep commands after the external command is invoked.
 "
 " You can map a key to invoke any of the above commands. For example, the
-" following map will invoke the :Grep command to search for the keyword under
-" the cursor:
+" following map invokes the :Grep command to search for the keyword under the
+" cursor:
 "
 "       nnoremap <silent> <F3> :Grep<CR>
 "
@@ -107,10 +128,13 @@
 "
 " For more information about other quickfix commands read ":help quickfix"
 " 
+" When using GUI Vim, the Tools->Search menu item with a few sub-menu items is
+" created for few variations of the search command.
+"
 " Configuration
 " -------------
 " By changing the following variables you can configure the behavior of this
-" script. Set the following variables in your .vimrc file using the 'let'
+" plugin. Set the following variables in your .vimrc file using the 'let'
 " command.
 "
 " The 'Grep_Path' variable is used to locate the grep utility. By default,
@@ -180,10 +204,11 @@
 "
 " You can manually open the quickfix window using the :cwindow command.
 "
-" By default, for recursive searches, the find with the xargs utility is used.
-" If you don't have the xargs utility or don't want to use the xargs utility,
-" then you can set the 'Grep_Find_Use_Xargs' variable to zero. If this is set
-" to zero, then only the find utility will be used to do recursive searches:
+" By default, for recursive searches, the 'find' and 'xargs' utilities are
+" used.  If you don't have the 'xargs' utility or don't want to use the
+" 'xargs' utility, " then you can set the 'Grep_Find_Use_Xargs' variable to
+" zero. If this is set to zero, then only the 'find' utility is used for
+" recursive searches:
 "
 "       :let Grep_Find_Use_Xargs = 0
 " 
@@ -372,7 +397,7 @@ endfunction
 " Run specified grep command recursively
 function! s:RunGrepRecursive(cmd_name, grep_cmd, ...)
     if a:0 > 0 && (a:1 == "-?" || a:1 == "-h")
-        echo a:cmd_name . " [<grep_options>] [<search_pattern> " .
+        echo 'Usage: ' . a:cmd_name . " [<grep_options>] [<search_pattern> " .
                         \ "[<file_name(s)>]]"
         return
     endif
@@ -381,7 +406,7 @@ function! s:RunGrepRecursive(cmd_name, grep_cmd, ...)
     let pattern     = ""
     let filepattern = ""
 
-    let argcnt= 1
+    let argcnt = 1
     while argcnt <= a:0
         if a:{argcnt} =~ '^-'
             let grep_opt = grep_opt . " " . a:{argcnt}
@@ -396,6 +421,9 @@ function! s:RunGrepRecursive(cmd_name, grep_cmd, ...)
     if grep_opt == ""
         let grep_opt = g:Grep_Default_Options
     endif
+
+    " Don't display messages about non-existent files
+    let grep_opt = grep_opt . " -s"
 
     if a:grep_cmd == 'grep'
         let grep_path = g:Grep_Path
@@ -427,7 +455,11 @@ function! s:RunGrepRecursive(cmd_name, grep_cmd, ...)
     if g:Grep_Cygwin_Find == 1
         let cwd = substitute(cwd, "\\", "/", "g")
     endif
-    let startdir = input("Start searching from directory: ", cwd)
+    if v:version >= 700
+        let startdir = input("Start searching from directory: ", cwd, "dir")
+    else
+        let startdir = input("Start searching from directory: ", cwd)
+    endif
     if startdir == ""
         return
     endif
@@ -490,8 +522,8 @@ function! s:RunGrepRecursive(cmd_name, grep_cmd, ...)
         let cmd = cmd . " " . find_prune . " -prune -o"
         let cmd = cmd . " " . find_skip_files
         let cmd = cmd . " " . find_file_pattern
-        let cmd = cmd . " -print | " . g:Grep_Xargs_Path . " " . grep_path
-        let cmd = cmd . " " . grep_opt . " -n "
+        let cmd = cmd . " -print0 | " . g:Grep_Xargs_Path . " --null "
+        let cmd = cmd . grep_path . " " . grep_opt . " -n "
         let cmd = cmd . grep_expr_option . " " . pattern
         let cmd = cmd . ' ' . g:Grep_Null_Device 
     else
@@ -513,7 +545,7 @@ endfunction
 " argument list
 function! s:RunGrepSpecial(cmd_name, which, ...)
     if a:0 > 0 && (a:1 == "-?" || a:1 == "-h")
-        echo a:cmd_name . " [<grep_options>] [<search_pattern>]"
+        echo 'Usage: ' . a:cmd_name . " [<grep_options>] [<search_pattern>]"
         return
     endif
 
@@ -542,7 +574,7 @@ function! s:RunGrepSpecial(cmd_name, which, ...)
 
         if arg_cnt == 0
             echohl WarningMsg
-            echomsg "Error: No filenames specified in the argument list "
+            echomsg "Error: Argument list is empty"
             echohl None
             return
         endif
@@ -558,7 +590,7 @@ function! s:RunGrepSpecial(cmd_name, which, ...)
         " No arguments
         if filenames == ""
             echohl WarningMsg
-            echomsg "Error: No filenames specified in the argument list "
+            echomsg "Error: Argument list is empty"
             echohl None
             return
         endif
@@ -580,6 +612,9 @@ function! s:RunGrepSpecial(cmd_name, which, ...)
     if grep_opt == ""
         let grep_opt = g:Grep_Default_Options
     endif
+
+    " Don't display messages about non-existent files
+    let grep_opt = grep_opt . " -s"
 
     " The last argument specified by the user is the pattern
     if argcnt == a:0
@@ -609,7 +644,7 @@ endfunction
 " Run the specified grep command
 function! s:RunGrep(cmd_name, grep_cmd, ...)
     if a:0 > 0 && (a:1 == "-?" || a:1 == "-h")
-        echo a:cmd_name . " [<grep_options>] [<search_pattern> " .
+        echo 'Usage: ' . a:cmd_name . " [<grep_options>] [<search_pattern> " .
                         \ "[<file_name(s)>]]"
         return
     endif
@@ -639,6 +674,9 @@ function! s:RunGrep(cmd_name, grep_cmd, ...)
         let grep_opt = g:Grep_Default_Options
     endif
 
+    " Don't display messages about non-existent files
+    let grep_opt = grep_opt . " -s"
+
     if a:grep_cmd == 'grep'
         let grep_path = g:Grep_Path
         let grep_expr_option = '--'
@@ -666,7 +704,12 @@ function! s:RunGrep(cmd_name, grep_cmd, ...)
     endif
 
     if filenames == ""
-        let filenames = input("Search in files: ", g:Grep_Default_Filelist)
+        if v:version >= 700
+            let filenames = input("Search in files: ", g:Grep_Default_Filelist,
+                        \ "file")
+        else
+            let filenames = input("Search in files: ", g:Grep_Default_Filelist)
+        endif
         if filenames == ""
             return
         endif
@@ -685,23 +728,41 @@ function! s:RunGrep(cmd_name, grep_cmd, ...)
 endfunction
 
 " Define the set of grep commands
-command! -nargs=* Grep       call s:RunGrep('Grep', 'grep', <f-args>)
-command! -nargs=* Rgrep      call s:RunGrepRecursive('Rgrep', 'grep', <f-args>)
-command! -nargs=* GrepBuffer call s:RunGrepSpecial('GrepBuffer', 'buffer',
-                                                 \ <f-args>)
-command! -nargs=* Bgrep      call s:RunGrepSpecial('Bgrep', 'buffer', <f-args>)
-command! -nargs=* GrepArgs   call s:RunGrepSpecial('GrepArgs', 'args',
-                                                 \ <f-args>)
+command! -nargs=* -complete=file Grep
+            \ call s:RunGrep('Grep', 'grep', <f-args>)
+command! -nargs=* -complete=file Rgrep
+            \ call s:RunGrepRecursive('Rgrep', 'grep', <f-args>)
+command! -nargs=* GrepBuffer
+            \ call s:RunGrepSpecial('GrepBuffer', 'buffer', <f-args>)
+command! -nargs=* Bgrep
+            \ call s:RunGrepSpecial('Bgrep', 'buffer', <f-args>)
+command! -nargs=* GrepArgs
+            \ call s:RunGrepSpecial('GrepArgs', 'args', <f-args>)
 
-command! -nargs=* Fgrep      call s:RunGrep('Fgrep', 'fgrep', <f-args>)
-command! -nargs=* Rfgrep     call s:RunGrepRecursive('Rfgrep', 'fgrep',
-                                                   \ <f-args>)
-command! -nargs=* Egrep      call s:RunGrep('Egrep', 'egrep', <f-args>)
-command! -nargs=* Regrep     call s:RunGrepRecursive('Regrep', 'egrep',
-                                                   \ <f-args>)
-command! -nargs=* Agrep      call s:RunGrep('Agrep', 'agrep', <f-args>)
-command! -nargs=* Ragrep     call s:RunGrepRecursive('Ragrep', 'agrep',
-                                                   \ <f-args>)
+command! -nargs=* -complete=file Fgrep
+            \ call s:RunGrep('Fgrep', 'fgrep', <f-args>)
+command! -nargs=* -complete=file Rfgrep
+            \ call s:RunGrepRecursive('Rfgrep', 'fgrep', <f-args>)
+command! -nargs=* -complete=file Egrep
+            \ call s:RunGrep('Egrep', 'egrep', <f-args>)
+command! -nargs=* -complete=file Regrep
+            \ call s:RunGrepRecursive('Regrep', 'egrep', <f-args>)
+command! -nargs=* -complete=file Agrep
+            \ call s:RunGrep('Agrep', 'agrep', <f-args>)
+command! -nargs=* -complete=file Ragrep
+            \ call s:RunGrepRecursive('Ragrep', 'agrep', <f-args>)
+
+" Add the Tools->Search Files menu
+if has('gui_running')
+    anoremenu <silent> Tools.Search.Current\ Directory<Tab>:Grep
+                \ :Grep<CR>
+    anoremenu <silent> Tools.Search.Recursively<Tab>:Rgrep
+                \ :Rgrep<CR>
+    anoremenu <silent> Tools.Search.Buffer\ List<Tab>:Bgrep
+                \ :Bgrep<CR>
+    anoremenu <silent> Tools.Search.Argument\ List<Tab>:GrepArgs
+                \ :GrepArgs<CR>
+endif
 
 " restore 'cpo'
 let &cpo = s:cpo_save
