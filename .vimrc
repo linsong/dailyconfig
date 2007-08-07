@@ -235,11 +235,11 @@
     if exists('*pumvisible')
         "inoremap <Enter> <C-R>=pumvisible() ? "\<lt>C-y>" : "\<lt>Enter>"<CR>
         
-        :inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+        ":inoremap <expr> <cr>  pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 
         "** These two mappings are probably the most rare, yet most valuable: **
-        :inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\ <lt>cr>"
-        :inoremap <expr> <m-;> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
+        :inoremap <expr> <c-n>  pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\ <lt>cr>"
+        :inoremap <expr> <m-;>  pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
     endif
 
 
@@ -919,6 +919,9 @@ endif " has("autocmd")
 
     "### setting about grep.vim {{{2
     let Grep_Key = '<F12>'
+    let Grep_Default_Options = '-inH'
+    let Grep_Skip_Dirs = '.svn .cvs zope'
+    let Grep_Skip_Files = '*.bak *~ *.swp *.pyc *.swf *.exe'
     "### }}}2
 
     "### setting for a.vim {{{2
