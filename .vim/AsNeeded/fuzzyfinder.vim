@@ -113,7 +113,10 @@ if !exists('g:FuzzyFinder_ExcludeIndicator')
     let g:FuzzyFinder_ExcludeIndicator = '[u\-]'
 endif
 
-
+" In buffer and file mode, don't ignore match case
+if !exists('g:FuzzyFinder_IgnoreCase')
+    let g:FuzzyFinder_IgnoreCase = 0
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -250,9 +253,11 @@ function! FuzzyFinder_CompleteBuffer(findstart, base)
 
         if bufNr == s:bufID || bufInd =~ g:FuzzyFinder_ExcludeIndicator
             continue
-        elseif l:base == bufNr || l:base == bufName
+        elseif g:FuzzyFinder_IgnoreCase && (l:base ==? bufNr || l:base ==? bufName)
+         \ || !g:FuzzyFinder_IgnoreCase && (l:base == bufNr || l:base == bufName)
             call insert(res, {'word': bufName, 'abbr': bufActive, 'menu': line})
-        elseif bufName =~ pattern
+        elseif g:FuzzyFinder_IgnoreCase && (bufName =~? pattern)
+         \   || !g:FuzzyFinder_IgnoreCase && (bufName =~ pattern)
             call    add(res, {'word': bufName, 'abbr': bufActive, 'menu': line})
         endif
     endfor
@@ -370,10 +375,16 @@ function! <SID>MakeFuzzyPattern(str, forRegexp)
     let pattern = ''
 
     for char in split(a:str,'\zs')
-        if pattern =~ '[\*?]$' || char =~ '[\*?]'
-            let pattern .= char
+        if !a:forRegexp && g:FuzzyFinder_IgnoreCase
+            let char_item = '{' . toupper(char) . ',' . tolower(char) . '}'
         else
-            let pattern .= '*' . char
+            let char_item = char
+        endif
+
+        if pattern =~ '[\*?]$' || char =~ '[\*?]'
+            let pattern .= char_item
+        else
+            let pattern .= '*' . char_item
         endif
     endfor
 

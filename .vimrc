@@ -1082,7 +1082,8 @@ endif " has("autocmd")
     "### setting for fuzzyfinder.vim {{{2
     let g:FuzzyFinder_KeyToggleMode = '<C-t>' " disable this map
     let g:FuzzyFinder_WildIgnore = '*~,*.bak,*.swp,*.pyc,*.exe'
-    :noremap <C-f> :FuzzyFinderFile<CR>
+    let g:FuzzyFinder_IgnoreCase = 1
+    :noremap ,f :FuzzyFinderFile<CR>
     "}}}2
 "### }}}1
 
