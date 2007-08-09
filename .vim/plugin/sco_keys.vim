@@ -7,6 +7,7 @@ vnoremap <buffer> a :AllignRange<CR>
 vnoremap <buffer> o :MultiOpen<CR>
 
 nnoremap <buffer> <CR> :Enter<CR>
+nnoremap <buffer> <C-CR> :ForceEnter<CR>
 nnoremap <buffer> c<Space>p :Preview<CR>
 nnoremap <buffer> c<Space>a :Allign<CR>
 

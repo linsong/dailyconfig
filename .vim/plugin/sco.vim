@@ -477,7 +477,7 @@ function! s:AddTagInfo(tag_regexp)
     exec first_result_line+1
     normal zt
     exec first_result_line+2
-    call s:FoldEnter()
+    call s:FoldEnter(0)
     exec first_result_line+3
 
     let &tags = old_tags
@@ -725,6 +725,28 @@ function! <SID>DefaultSetting(name, value) "{{{
 	endif
 endfunction "}}}
 
+" execute commands before execute command
+function! s:ExecuteCommonCommand()
+    let line_number = 1
+    while line_number < line('$')
+        let line = getline(line_number)
+
+        if line =~ "^\s*$"
+            break
+        endif
+
+        if line =~ "^% command_setup:"
+            let command = s:FindCommand( line_number + 2 )
+            if command != ""
+                exec command
+            endif
+            return
+        endif
+
+        let line_number += 1
+    endwhile
+endfunction
+
 " set all sco settings 
 function! <SID>SetSettings() "{{{
 	call <SID>ParseSCOSettings()
@@ -911,7 +933,7 @@ function! s:SavePreviousSearchAsMarks()
     exec block_start - 1
     normal zt
     exec block_start + 1
-    call s:FoldEnter()
+    call s:FoldEnter(0)
     if match_number != -1
         exec block_start + 2 + match_number
     endif
@@ -926,7 +948,7 @@ endfunction
 
 function! s:EditFileInLine(line_number)
     exec ':'.a:line_number
-    return s:EditFile()
+    return s:EditFile(0)
 endfunction
 
 function! s:GoToScoBuffer( bufnumber )
@@ -1038,7 +1060,7 @@ function! <SID>CScopeResult(type, word) "{{{
 	exec ':'.(l:first_line-2)
         normal zt
 	exec ':'.(l:first_line-1)
-        call s:FoldEnter()
+        call s:FoldEnter(0)
 	exec ':'.(l:first_line)
 endfunction "}}}
 
@@ -1439,13 +1461,118 @@ function! s:MultiOpenRange(top, bottom)
     call s:MultiOpen(lines_numbers)
 endfunction
 
+
+" search 
+" [ vim expr ] 
+" line from given line number to up of file
+" return vim expr
+function! s:FindCommand( start_line_number )
+    let single_pattern = '^*\(.*\)$'
+    let multi_pattern = '>>>.*\n{\n\(\s\+.*\n\)*}\n<<<'
+    let line_number = a:start_line_number 
+
+    let save_cursor = getpos(".")
+
+    call cursor(line_number, 1)
+
+    let multi_result_line_number = search(multi_pattern, 'ncWb')
+    let single_result_line_number = search(single_pattern, 'ncWb')
+    let empty_result_line_number = search('^\s*$', 'ncWb')
+
+    if empty_result_line_number > multi_result_line_number && empty_result_line_number > single_result_line_number
+        call setpos('.', save_cursor)
+        return ''
+    endif
+
+    if single_result_line_number > multi_result_line_number 
+        call setpos('.', save_cursor)
+        return substitute(getline(single_result_line_number), single_pattern, '\1', '')
+    endif
+
+    if multi_result_line_number > single_result_line_number
+        let line_number = multi_result_line_number + 2
+        let result = ""
+        while line_number < line('$')
+            let line = getline(line_number)
+            if line =~ '^}'
+                break
+            endif
+
+            let result .= line."\n"
+            let line_number += 1 
+        endwhile
+
+
+        call setpos('.', save_cursor)
+        return result
+    endif
+
+    call setpos('.', save_cursor)
+    return ''
+endfunction
+
+" substitute in [ vim expr ] command
+" _pattern_ with search pattern of smart mark
+" _file_ with file name
+" _caption_ with caption of smart mark
+function! s:CommandSubstituteParamteres( command, smart_line )
+    let result = a:command
+
+    let pattern = s:smart_mark_pattern_without_comment
+    if a:smart_line =~ s:smart_mark_pattern
+        let pattern = s:smart_mark_pattern
+    endif
+
+    let file_name = substitute(a:smart_line, pattern, '\1', '')
+    let repeat_count = substitute(a:smart_line, pattern, '\2', '')
+    let search_pattern = substitute(a:smart_line, pattern, '\3', '')
+    let comment = substitute(a:smart_line, pattern, '\4', '')
+
+    let result = substitute(result, '_pattern_', search_pattern, 'g')
+    let result = substitute(result, '_file_', file_name, 'g')
+    let result = substitute(result, '_caption_', comment, 'g')
+
+    return result
+endfunction
+
 " select file to edit
-function! <SID>EditFile() "{{{
-	let l:current_line = getline('.')
+" if force_open then ignore command presence
+function! <SID>EditFile(force_open) "{{{
+        let line_number = line('.')
+	let l:current_line = getline(line_number)
 
 	" like help tag marks
 	if l:current_line =~ s:smart_mark_pattern
 	    call <SID>SaveBuffer()
+	    if s:preview
+		    exec 'pclose'
+	    endif
+
+            let command_to_exec = ""
+
+            " execute [vim expr] command if any
+            if a:force_open == 0
+                let command_to_exec = s:FindCommand(line_number)
+            endif
+
+"            echo command_to_exec
+            if command_to_exec != ""
+                call s:ExecuteCommonCommand()
+                let substituted_command = s:CommandSubstituteParamteres(command_to_exec, l:current_line)
+                let commands = split(substituted_command, '\n')
+
+                for one_command in commands
+                    try
+                        exec one_command
+                    catch /.*/
+                        echo "command: '".one_command."' failed"
+                    endtry
+                endfor
+                return 1
+            endif
+
+
+            " open smart mark
 	    let file_name = substitute(l:current_line, s:smart_mark_pattern, '\1', '')
 	    let jumps_count = substitute(l:current_line, s:smart_mark_pattern, '\2', '')
 	    if jumps_count == ''
@@ -1454,9 +1581,6 @@ function! <SID>EditFile() "{{{
 
 	    let pattern = substitute(l:current_line, s:smart_mark_pattern, '\3', '')
 
-	    if s:preview
-		    exec 'pclose'
-	    endif
 	    exec 'edit '.file_name
 	    call <SID>JumpToHard(pattern, jumps_count)
 	    return 1
@@ -1475,32 +1599,19 @@ function! <SID>EditFile() "{{{
 	    return 1
 	endif
 
-	let l:pattern = '^@\s\+\(\S\+\)\s\+\(\d\+\)\s\(.*\)$'
-	if l:current_line =~ l:pattern
-	    call <SID>SaveBuffer()
-	    let l:file_name = substitute(l:current_line, l:pattern, '\1','')
-	    let l:repeat_count = substitute(l:current_line, l:pattern, '\2','')
-	    let l:search_pattern = substitute(l:current_line, l:pattern, '\3','') 
-	    if s:preview
-		    exec 'pclose'
-	    endif
-	    exec 'edit '.l:file_name
-	    call <SID>JumpToHard(l:search_pattern, l:repeat_count)
-	    return 1
-	endif
-
         return 0
 endfunction "}}}
 
 " open fold or edit file
-function! <SID>FoldEnter() "{{{
+" if force_open then ignore command presence
+function! <SID>FoldEnter(force_open) "{{{
     let line = getline('.')
     if (matchstr(line, '^>>>') != '')
 	exec line('.').'foldopen'
 	return
     endif
 
-    call <SID>EditFile()
+    call <SID>EditFile(a:force_open)
 endfunction "}}}
 
 " cursor move handler
@@ -1567,6 +1678,7 @@ function! <SID>AddHelpLines() "{{{
 	call add(l:help_lines, ":Leave 'pattern' - leave only rows which match 'pattern' inside folded result")
 	call add(l:help_lines, ":Filter 'delete_pattern', 'leave_pattern' - leave only rows which match 'pattern' inside folded result and delete rows with 'delete_pattern'")
 	call add(l:help_lines, ':Preview - toggle preview mode')
+	call add(l:help_lines, ':Command - add multi line command pattern')
 	call add(l:help_lines, ':AllignFold - allign lines inside  > > >   < < <')
 	call add(l:help_lines, ':[range]AllignRange - allign lines in range')
 	call add(l:help_lines, ':[range]MultiOpen - open marks in ranger in splitted windows')
@@ -1644,18 +1756,32 @@ function! ScoFoldText() "{{{
     let comment_text = substitute(comment_text, '^\t\+', '', '')
     let comment_text = substitute(comment_text, '^\s\+', '', '')
 
+
     if (matchstr(line, '^>>>') != '')
+
 	let comment_text = substitute(comment_text, '^>>>', '', '')
+
+        let line_number = v:foldstart
+        let is_command = 0
+        " vim command
+        if getline(line_number + 1) =~ '{' 
+            let comment_text = "<command>:".comment_text
+            let is_command = 1
+        endif
+
 	let folded_lines_count = (v:foldend - v:foldstart) - 1
 	let count_info = ' ]'
 	if folded_lines_count > 1 
 	    let count_info = ' '.folded_lines_count.' ]'
 	endif
-	let comment_text = "[ +".count_info.comment_text
+        if is_command
+            let comment_text = "[ +".(folded_lines_count-2)." ] ".comment_text
+        else
+            let comment_text = "[ +".count_info.comment_text
+        endif
     else
 	let comment_text = "| ".comment_text. " |"
     endif
-
 
     let space_count = v:foldlevel
     while space_count > 1
@@ -1667,6 +1793,7 @@ endfunction "}}}
 
 " set highlight and commands - called when .sco file readed
 function! <SID>Prepare_sco_settings() "{{{
+        call s:ExecuteCommonCommand()
 	setlocal filetype=sco
 	setlocal cursorline
 
@@ -1696,7 +1823,8 @@ function! <SID>Prepare_sco_settings() "{{{
         command! SCOUp call s:SCOUp()
         command! SCOPrevious call s:SCOSelectPreviousBuffer()
         command! SCONext call s:SCOSelectNextBuffer()
-        command! -buffer Enter call <SID>FoldEnter()
+        command! -buffer Enter call <SID>FoldEnter(0)
+        command! -buffer ForceEnter call <SID>FoldEnter(1)
 	command! -buffer Preview call <SID>TogglePreview()
 	command! -buffer AllignFold call <SID>AllignFoldResult()
 	command! -buffer -range AllignRange call <SID>AllignAllInRange(<line1>, <line2>)
@@ -1710,6 +1838,7 @@ function! <SID>Prepare_sco_settings() "{{{
 	command! -buffer -nargs=1 Leave call <SID>FilterResult('.*', <args>)
 	command! -buffer -nargs=1 -nargs=1 -complete=tag Filter call <SID>FilterResult(<args>)
 	command! -buffer -nargs=* -range TransferToMarks call s:TransferRegionToSmartMarks(<line1>, <line2>)
+        command! -buffer Command call append(line('.') - 1, ['>>>', '{', '    echo "command"','}', '<<<'])
 
         let g:sco_include_key_mappings = 1
 
@@ -1721,9 +1850,11 @@ function! <SID>Prepare_sco_settings() "{{{
         endtry
 
 
+
 	syn match sco_header /^% cscope_db: / nextgroup=sco_header_param
 	syn match sco_header /^% cscope_exe: / nextgroup=sco_header_param
 	syn match sco_header /^% tags_db: / nextgroup=sco_header_param
+        syn match sco_header /^% command_setup:/ 
 	syn match sco_comment /^\/.\+\/$/
 
 	syn match sco_header_param /.*/ contained
@@ -1767,6 +1898,27 @@ function! <SID>Prepare_sco_settings() "{{{
 	hi link mark2	Statement
 	hi link mark3	Special
 	hi link mark4  	String
+
+        " command [ vim expr ]  highlight
+"        runtime! syntax/vim.vim
+"        unlet b:current_syntax
+        syn include @Vim syntax/vim.vim
+        syn keyword scoCommandVariable _file_ _pattern_ _caption_ contained
+        hi link scoCommandVariable Identifier
+
+        syn match scoCommand /^\*.*$/ contains=scoCommandVariable,@Vim
+        hi link scoCommand Identifier
+
+"        syn region scoCommandsSetup start='^>>> % command_setup\s*\n*{' end='}$' contains=@Vim,sco_header
+"        hi link scoCommandsSetup Define
+
+        syn match scoMultiLineCommandStart />>>.*\n{/ nextgroup=scoMultiLineCommand,scoMultiLineCommandEnd skipnl
+        syn match scoMultiLineCommand /\s\+.*$/ contains=scoCommandVariable,@Vim nextgroup=scoMultiLineCommand,scoMultiLineCommandEnd contained skipnl
+        syn match scoMultiLineCommandEnd /}\n<<<.*/ contained 
+
+        hi link scoMultiLineCommandStart Structure
+        hi link scoMultiLineCommandEnd Structure
+
 endfunction "}}}
 
 " set highlight and commands, put help - called when .sco file created
@@ -1774,6 +1926,22 @@ function! <SID>Prepare_sco_settings_new_file()
 	call <SID>Prepare_sco_settings()
         call s:SetSettings()
 	call <SID>AddHelpLines()
+
+        let sco_common_command = []
+        call add(sco_common_command, '% command_setup:')
+        call add(sco_common_command, '>>> common commands')
+        call add(sco_common_command, '{')
+        if ! exists('g:sco_default_common_command')
+            let g:sco_default_common_command = [ 'echo "put vim commands in % command_setup: section"',
+                        \ 'echo "it is the same as separate vimrc for everyproject and event more flexible"',
+                        \ 'echo "put |let g:sco_default_common_command = [\"command1\", \"command2\",..]| in your .vimrc file "' ]
+        endif
+        for one_command in g:sco_default_common_command
+            call add(sco_common_command, '    '.one_command)
+        endfor
+        call add(sco_common_command, '}')
+        call add(sco_common_command, '<<<')
+        call append(0, sco_common_command)
 endfunction
 
 augroup SourceCodeObedience

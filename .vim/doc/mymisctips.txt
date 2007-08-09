@@ -652,6 +652,11 @@ p'
       You need the "-print0" and "-0" to delimit things with zeros instead of spaces.
       You need "-n 1" to do them one at a time instead of as many as will fit in a command line.
       You need "-I %" to put the argument not at the end of the command,
+
+ * switch to another user(su) but keep my environmment
+      sudo su -p ANOTHER_USER ~
+   '-p' is the answer!
+
 ===============================================================================
 
 

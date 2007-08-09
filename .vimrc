@@ -1079,6 +1079,11 @@ endif " has("autocmd")
      "autocmd BufNewFile *.cpp      TSkeletonSetup c.c
     "}}}2
     
+    "### setting for fuzzyfinder.vim {{{2
+    let g:FuzzyFinder_KeyToggleMode = '<C-t>' " disable this map
+    let g:FuzzyFinder_WildIgnore = '*~,*.bak,*.swp,*.pyc,*.exe'
+    :noremap <C-f> :FuzzyFinderFile<CR>
+    "}}}2
 "### }}}1
 
 "### {{{1 xterm colors defination 
