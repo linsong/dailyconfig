@@ -136,6 +136,9 @@ if ! exists("g:exo_codereview")
     endfunction
 
     function! s:OpenSVNDiffFile(latest_version)
+        if exists('g:svn_workcopy_path') && !empty(g:svn_workcopy_path)
+            lcd g:svn_workcopy_path
+        endif
 "        :call Decho("opensvndifffile")
         let diff_file_name = "[ChangeSet@r" . a:latest_version . "]"
         :call s:OpenScratchWindow(diff_file_name)

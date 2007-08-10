@@ -7,7 +7,7 @@
 " Acknowledgements:
 " TODO: 
 "       1. add folding all diff chunks function 
-"       2. add some help 
+"       2. add some help docs
 "       3. make this script work under windows 
 "       4. make it more configurable
 "       
@@ -52,20 +52,14 @@ function! s:GetFlagChar(...)
 endfunction
 
 function! s:GetBaseDir()
-    if exists('g:vd_svn_workcopy_base_dir') && !empty(g:vd_svn_workcopy_base_dir)
-"        call Decho('g:vd_svn_workcopy_base_dir :' . g:vd_svn_workcopy_base_dir)
-        return g:vd_svn_workcopy_base_dir
-    else
-"        call Decho("g:vd_svn_workcopy_base_dir does not exist, try to get the current directory...")
-        :call s:UpdateDiffInfoVariable()
-        if t:cur_diff_info['buf_id'] != -1
-            let cur_dir = fnamemodify(bufname(t:cur_diff_info['buf_id']), ':p:h')
+    :call s:UpdateDiffInfoVariable()
+    if t:cur_diff_info['buf_id'] != -1
+        let cur_dir = fnamemodify(bufname(t:cur_diff_info['buf_id']), ':p:h')
 "            call Decho("current directory is: " . cur_dir)
-            return cur_dir
-        else
-            echo "Have you opend a diff file? "
-            return ''
-        endif
+        return cur_dir
+    else
+        echo "Have you opend a diff file? "
+        return ''
     endif
 endfunction
 

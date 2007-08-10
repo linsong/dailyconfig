@@ -95,8 +95,7 @@
     " useful, but keep it for now
     :set hidden
 
-    " display more info on statusline, but it seems like eat too much cpu 
-    "set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
+    set statusline=%<%f\ [%{&ff}]\ %h%m%r%=%-14.(%l,%c%V%)\ %P
 
     " setting for completion 
     if v:version >= 700
@@ -630,8 +629,6 @@ endif " has("autocmd")
 "### }}}1
 
 "### Global variable definations {{{1
-    let g:vd_svn_repo_prefix = 'https://nordicbet.dev.exoweb.net/svn/trunk/src'
-    let g:vd_svn_workcopy_base_dir = '/home/vincent/work/trunk/src'
 "}}}1
 
 "### Commands & Functions {{{1 
@@ -1044,6 +1041,7 @@ endif " has("autocmd")
     "### setting for exo-codereview.vim {{{2
     let g:codereview_username = "Vincent" 
     let g:svn_base_url = "https://nordicbet.dev.exoweb.net/svn/trunk/src"
+    let g:svn_workcopy_path = '/home/vincent/work/trunk/src'
     "}}}2
     
     "### setting for Decho.vim {{{2
@@ -1085,6 +1083,11 @@ endif " has("autocmd")
     let g:FuzzyFinder_IgnoreCase = 1
     :noremap ,f :FuzzyFinderFile<CR>
     "}}}2
+    
+    "### setting for view_diff.vim {{{2
+    let g:vd_svn_repo_prefix = 'https://nordicbet.dev.exoweb.net/svn/trunk/src'
+    "}}}2
+    
 "### }}}1
 
 "### {{{1 xterm colors defination 
