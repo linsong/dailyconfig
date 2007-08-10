@@ -118,6 +118,8 @@ if !exists('g:FuzzyFinder_IgnoreCase')
     let g:FuzzyFinder_IgnoreCase = 0
 endif
 
+" TODO: support smartcase like matching
+"    use 'aBc' =~# '[A-Z]' to check it 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 command! -narg=0 -bar FuzzyFinderBuffer call <SID>StartBufferMode()

@@ -37,7 +37,7 @@ ftp_proxy
 gopher_proxy 
 https_proxy https://127.0.0.1:8118/
 http_proxy http://127.0.0.1:8118/
-use_proxy 0
+use_proxy 1
 max_news 50
 nntpmode 
 nntpserver 
