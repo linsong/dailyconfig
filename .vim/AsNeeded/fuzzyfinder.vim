@@ -253,13 +253,14 @@ function! FuzzyFinder_CompleteBuffer(findstart, base)
         let bufName = matchstr(line, '"\zs[^"]*')
         let bufActive = (bufInd =~ 'a' ? '*' : ' ')
 
+        let bufNameBase = strpart(bufName, 0, strlen(l:base))
         if bufNr == s:bufID || bufInd =~ g:FuzzyFinder_ExcludeIndicator
             continue
-        elseif g:FuzzyFinder_IgnoreCase && (l:base ==? bufNr || l:base ==? bufName)
-         \ || !g:FuzzyFinder_IgnoreCase && (l:base == bufNr || l:base == bufName)
+        elseif g:FuzzyFinder_IgnoreCase && (l:base ==? bufNr || l:base ==? bufNameBase)
+         \ || !g:FuzzyFinder_IgnoreCase && (l:base ==# bufNr || l:base ==# bufNameBase)
             call insert(res, {'word': bufName, 'abbr': bufActive, 'menu': line})
-        elseif g:FuzzyFinder_IgnoreCase && (bufName =~? pattern)
-         \   || !g:FuzzyFinder_IgnoreCase && (bufName =~ pattern)
+        elseif g:FuzzyFinder_IgnoreCase && (bufName=~? pattern)
+         \   || !g:FuzzyFinder_IgnoreCase && (bufName=~# pattern)
             call    add(res, {'word': bufName, 'abbr': bufActive, 'menu': line})
         endif
     endfor
@@ -297,7 +298,9 @@ function! FuzzyFinder_CompleteFile(findstart, base)
         if isdirectory(path)
             let path = path . g:FuzzyFinder_PathSeparator
         endif
-        if l:base == path
+        let pathBase = strpart(path, 0, strlen(l:base))
+        if g:FuzzyFinder_IgnoreCase && l:base ==? pathBase
+         \ || !g:FuzzyFinder_IgnoreCase && l:base ==# pathBase
             call insert(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':p')})
         else
             call    add(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':p')})
