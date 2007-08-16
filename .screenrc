@@ -25,7 +25,8 @@ startup_message off
 
 #defflow on # will force screen to process ^S/^Q
 deflogin on
-#autodetach off
+
+autodetach on
 
 # turn visual bell off 
 vbell off 
@@ -128,7 +129,7 @@ idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
 
 # use blankerprg will make cursor missing, don't know the reason yet
 #blankerprg cmatrix -f -o -u 10
-#idle 420 blanker
+#idle 420
 
 
 # ------------------------------------------------------------------------------
@@ -144,3 +145,5 @@ screen -t misc 4
 
 # source local settings 
 source screenrc.local
+# maybe following line is smarter ;)
+#source ${HOME}/.screenrc-${HOST}
