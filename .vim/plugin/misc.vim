@@ -82,4 +82,24 @@ function! s:DiffWithSaved()
 	exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype 
 endfunction 
 com! Diff call s:DiffWithSaved() 
-		  
+
+function! PsqlExplainFoldLevel(line)
+    let l:strLine = getline(a:line)
+    let l:spaceCounter = 0
+    let index = 0
+    while index < strlen(l:strLine)
+        let l:char = strpart(l:strLine, index, 1)
+        if l:char == ' '
+            let l:spaceCounter = l:spaceCounter + 1
+        else
+            break
+        endif
+        let index = index + 1
+    endwhile
+    let temp = strpart(l:strLine, l:spaceCounter, 2)
+    if temp!='->'
+        return '='
+    else
+        return (l:spaceCounter-3)/6
+    endif
+endfunction

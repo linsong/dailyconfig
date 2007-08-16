@@ -1082,7 +1082,7 @@ endif " has("autocmd")
     let g:FuzzyFinder_KeyToggleMode = '<C-t>' " disable this map
     let g:FuzzyFinder_WildIgnore = '*~,*.bak,*.swp,*.pyc,*.exe'
     let g:FuzzyFinder_IgnoreCase = 1
-    :noremap ,f :FuzzyFinderFile<CR>
+    :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     "}}}2
     
@@ -1354,8 +1354,13 @@ endif
 "EOL
 "map H :py EvaluateCurrentRange()<CR>
 
+function! TabMessage(cmd) 
+  redir => message 
+  silent execute a:cmd 
+  redir END 
+  tabnew 
+  silent put=message 
+  set nomodified 
+endfunction 
+command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>) 
 "### }}}1
-
-
-
-
