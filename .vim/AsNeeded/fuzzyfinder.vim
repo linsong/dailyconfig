@@ -118,6 +118,12 @@ if !exists('g:FuzzyFinder_IgnoreCase')
     let g:FuzzyFinder_IgnoreCase = 0
 endif
 
+" Max star num in pattern, if we don't limit the number of '*' in pattern, it
+" will match many files and it takes very long time
+if !exists('g:MaxStarNum')
+    let g:MaxStarNum = 5
+endif
+
 " TODO: support smartcase like matching
 "    use 'aBc' =~# '[A-Z]' to check it 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -283,6 +289,7 @@ function! FuzzyFinder_CompleteFile(findstart, base)
         return []
     endif
     let l:base = a:base[1:]
+    let l:full_base = fnamemodify(l:base, ":p")
 
     let pathHead = matchstr(l:base, '.*[/\\]')
     let pathTail = matchstr(l:base, '[^/\\]*$')
@@ -296,14 +303,16 @@ function! FuzzyFinder_CompleteFile(findstart, base)
     let res = []
     for path in split(glob(pattern), "\n")
         if isdirectory(path)
-            let path = path . g:FuzzyFinder_PathSeparator
+            if strpart(path, strlen(path)-1, 1) != g:FuzzyFinder_PathSeparator
+                let path = path . g:FuzzyFinder_PathSeparator
+            endif
         endif
-        let pathBase = strpart(path, 0, strlen(l:base))
-        if g:FuzzyFinder_IgnoreCase && l:base ==? pathBase
-         \ || !g:FuzzyFinder_IgnoreCase && l:base ==# pathBase
-            call insert(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':p')})
+        let pathBase = strpart(path, 0, strlen(l:full_base))
+        if g:FuzzyFinder_IgnoreCase && l:full_base ==? pathBase
+         \ || !g:FuzzyFinder_IgnoreCase && l:full_base ==# pathBase
+            call insert(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':.')})
         else
-            call    add(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':p')})
+            call    add(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':.')})
         endif
     endfor
 
@@ -379,6 +388,7 @@ endfunction
 function! <SID>MakeFuzzyPattern(str, forRegexp)
     let pattern = ''
 
+    let star_count = 0
     for char in split(a:str,'\zs')
         if !a:forRegexp && g:FuzzyFinder_IgnoreCase
             let char_item = '{' . toupper(char) . ',' . tolower(char) . '}'
@@ -386,10 +396,11 @@ function! <SID>MakeFuzzyPattern(str, forRegexp)
             let char_item = char
         endif
 
-        if pattern =~ '[\*?]$' || char =~ '[\*?]'
+        if pattern =~ '[\*?]$' || char =~ '[\*?]' || star_count>g:MaxStarNum
             let pattern .= char_item
         else
             let pattern .= '*' . char_item
+            let star_count += 1
         endif
     endfor
 

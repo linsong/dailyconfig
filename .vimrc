@@ -1056,7 +1056,7 @@ endif " has("autocmd")
      let g:no_tagselect_maps = 1
     "}}}2
    
-    "### setting for lusty_explorer.vim {{{2
+    "### [NOTUSED] setting for lusty_explorer.vim {{{2
      let g:LustyExplorerSuppressRubyWarning = 1
     "}}}2
     
@@ -1082,6 +1082,7 @@ endif " has("autocmd")
     let g:FuzzyFinder_WildIgnore = '*~,*.bak,*.swp,*.pyc,*.exe'
     let g:FuzzyFinder_IgnoreCase = 1
     :noremap ,f :FuzzyFinderFile<CR>
+    :noremap ,fb :FuzzyFinderBuffer<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2

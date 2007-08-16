@@ -26,6 +26,8 @@ NO 2. The framework of Nordicbet:
 
 ===============================================================================
 NO 3. PostgreSQL: 
+   When run sqls like: update, delete etc, pay more attention to concurrent
+   update failure. Solution to this problem is retrying some times.
 
 ===============================================================================
 NO 4. The main third party libraries used by nordicbet:
@@ -54,6 +56,10 @@ NO 6. how to run a specific function/unit test of nordicbet
     and use the following command to run specific unit test
     $ ./nrodicbetsite test -D presentation -P previewmail_r_test.py
 
+===============================================================================
+# Lessons learned from Sportsbook project
+  * never trust data given by user
+  
 ===============================================================================
                                                           *food*
 # FOOD! 
