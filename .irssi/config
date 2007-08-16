@@ -1,5 +1,21 @@
 servers = (
   {
+    address = "irc.exoweb.net";
+    chatnet = "WorkIRCnet";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  },
+  {
+    address = "localhost";
+    chatnet = "WorkIRCnet";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  },
+  {
     address = "localhost";
     chatnet = "BitlBeeIRCnet";
     port = "16667";
@@ -24,14 +40,6 @@ servers = (
   {
     address = "irc.freenode.net";
     chatnet = "IRCnet";
-    port = "6667";
-    use_ssl = "no";
-    ssl_verify = "no";
-    autoconnect = "yes";
-  },
-  {
-    address = "irc.exoweb.net";
-    chatnet = "WorkIRCnet";
     port = "6667";
     use_ssl = "no";
     ssl_verify = "no";
