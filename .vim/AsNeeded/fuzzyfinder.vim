@@ -307,6 +307,9 @@ function! FuzzyFinder_CompleteBuffer(findstart, base)
             continue
         elseif bufInfo[1] == input[1] || bufInfo[3] == input[1]
             call insert(res, {'word': bufInfo[3], 'abbr': bufAbbr, 'menu': line})
+        elseif (&ignorecase && strpart(bufInfo[3], 0, strlen(input[1])) ==? input[1])
+          \ || (! &ignorecase && strpart(bufInfo[3], 0, strlen(input[1])) ==# input[1])
+            call insert(res, {'word': bufInfo[3], 'abbr': bufAbbr, 'menu': line})
         elseif bufInfo[3] =~ patternR
             call    add(res, {'word': bufInfo[3], 'abbr': bufAbbr, 'menu': line})
         endif
