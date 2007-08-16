@@ -919,6 +919,7 @@ endif " has("autocmd")
     let Grep_Default_Options = '-inH'
     let Grep_Skip_Dirs = '.svn .cvs zope'
     let Grep_Skip_Files = '*.bak *~ *.swp *.pyc *.swf *.exe'
+    map ,g :Rgrep<CR>
     "### }}}2
 
     "### setting for a.vim {{{2
