@@ -1,8 +1,8 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " fuzzyfinder.vim : Buffer and file explorer with the fuzzy pattern
-" Last Change:  08-Aug-2007.
+" Last Change:  11-Aug-2007.
 " Author:       Takeshi Nishida <ns9tks(at)ns9tks.net>
-" Version:      0.1, for Vim 7.0
+" Version:      0.3, for Vim 7.0
 " Licence:      MIT Licence
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -30,23 +30,26 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Installation:
 "     Drop this file in your plugin directory.  If you have installed
-"     autocomplpop.vim(), please update to the latest version to prevent
-"     interference.
+"     autocomplpop.vim (vimscript #1879), please update to the latest version
+"     to prevent interference.
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Usage:
 "     :FuzzyFinderBuffer opens a small window for a buffer explorer.
 "     :FuzzyFinderFile opens a small window for a file explorer.
 "
-"     It is recommended to map these. Personally, I map these to <C-Space> and
-"     <S-C-Space>.
+"     It is recommended to map these. Personally, I map these to <C-n> and
+"     <C-p>.
 "
 "     To switch between a buffer mode and a file mode without leaving a insert
-"     mode, use <C-Space> by default.
+"     mode, use <F12> by default.
+"
+"     If you want to temporarily change whether or not to ignore case, use
+"     <F11> by default.
 "
 "     The inputting pattern you typed is converted to the fuzzy pattern
 "     and buffers or files which match the pattern is shown in a completion
-"     menu. The fuzzy pattern is echoed.
+"     menu.
 "
 "     A completion menu is shown when you type at the end of the line and the
 "     length of inputting pattern is more than setting value. At the start of
@@ -69,13 +72,34 @@
 "     See a section setting global value below.
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Thanks:
+"     Vincent Wang
+"     Ingo Karkat
+"     Nikolay Golubev
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ChangeLog:
+"     0.3:
+"         - Added g:FuzzyFinder_IgnoreCase option.
+"         - Added g:FuzzyFinder_KeyToggleIgnoreCase option.
+"         - Added g:FuzzyFinder_EchoPattern option.
+"         - Changed the open command in a buffer mode from ":edit" to
+"         ":buffer" to avoid being reset cursor position.
+"         - Changed the default value of g:FuzzyFinder_KeyToggleMode from
+"         <C-Space> to <F12> because <C-Space> does not work on some CUI
+"         environments.
+"         - Changed to avoid being loaded by Vim before 7.0.
+"         - Fixed a bug with making a fuzzy pattern which has '\'.
+"
+"     0.2:
+"         - A bug it does not work on Linux is fixed.
+"
 "     0.1:
-"         First release.
+"         - First release.
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-if exists("loaded_fuzzyfinder")
+if exists("loaded_fuzzyfinder") || v:version < 700
     finish
 endif
 let loaded_fuzzyfinder = 1
@@ -85,10 +109,15 @@ let loaded_fuzzyfinder = 1
 
 " Map this to toggle buffer mode and file mode in insert mode.
 if !exists('g:FuzzyFinder_KeyToggleMode')
-    let g:FuzzyFinder_KeyToggleMode = '<C-Space>'
+    let g:FuzzyFinder_KeyToggleMode = '<F12>'
 endif
 
-" Path separator
+" Map this to temporarily toggle whether or not to ignore case.
+if !exists('g:FuzzyFinder_KeyToggleIgnoreCase')
+    let g:FuzzyFinder_KeyToggleIgnoreCase = '<F11>'
+endif
+
+" Path separator.
 if !exists('g:FuzzyFinder_PathSeparator')
     let g:FuzzyFinder_PathSeparator = (has('win32') ? '\' : '/')
 endif
@@ -103,6 +132,11 @@ if !exists('g:FuzzyFinder_MinLengthFile')
     let g:FuzzyFinder_MinLengthFile = 1
 endif
 
+" In buffer and file mode, ignore case in search patterns.
+if !exists('g:FuzzyFinder_IgnoreCase')
+    let g:FuzzyFinder_IgnoreCase = &ignorecase
+endif
+
 " In file mode, set this to 'wildignore'
 if !exists('g:FuzzyFinder_WildIgnore')
     let g:FuzzyFinder_WildIgnore = '*~,*.bak'
@@ -113,19 +147,14 @@ if !exists('g:FuzzyFinder_ExcludeIndicator')
     let g:FuzzyFinder_ExcludeIndicator = '[u\-]'
 endif
 
-" In buffer and file mode, don't ignore match case
-if !exists('g:FuzzyFinder_IgnoreCase')
-    let g:FuzzyFinder_IgnoreCase = 0
+" Echo the fuzzy pattern which is converted from the pattern what you are
+" typing.
+if !exists('g:FuzzyFinder_EchoPattern')
+    let g:FuzzyFinder_EchoPattern = 0
 endif
 
-" Max star num in pattern, if we don't limit the number of '*' in pattern, it
-" will match many files and it takes very long time
-if !exists('g:MaxStarNum')
-    let g:MaxStarNum = 5
-endif
 
-" TODO: support smartcase like matching
-"    use 'aBc' =~# '[A-Z]' to check it 
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 command! -narg=0 -bar FuzzyFinderBuffer call <SID>StartBufferMode()
@@ -133,8 +162,10 @@ command! -narg=0 -bar FuzzyFinderFile   call <SID>StartFileMode()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+let s:cmdPrompt = '>'
 let s:bufID = -1
 let s:isLastModeBuffer = 0
+let s:openCommand = 0
 let s:reserveToggleMode = 0
 
 
@@ -162,18 +193,30 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+function! <SID>ToggleIgnoreCase()
+    let &ignorecase = !&ignorecase
+    echo "ignorecase=" . &ignorecase
+    return ""
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 function! <SID>OpenInputWindow(isBufferMode)
 
+    " differences between modes
     if a:isBufferMode
+        let s:openCommand = ':buffer '
         let bufferName = '[FuzzyFinder - Buffer]'
         let completeFunc = 'FuzzyFinder_CompleteBuffer'
     else
+        let s:openCommand = ':edit '
         let bufferName = '[FuzzyFinder - File]'
         let completeFunc = 'FuzzyFinder_CompleteFile'
     endif
 
-    let s:lastInputLength = -1
     let s:isLastModeBuffer = a:isBufferMode
+    let s:lastInputLength = -1
 
     if s:bufID != -1
         " a buffer already created
@@ -185,12 +228,14 @@ function! <SID>OpenInputWindow(isBufferMode)
 
         " suspend autocomplpop.vim
         if exists(':AutoComplPopLock')
-           :AutoComplPopLock
+            :AutoComplPopLock
         endif
 
         " global setting
         let s:_completeopt = &completeopt
         set completeopt=menuone
+        let s:_ignorecase = &ignorecase
+        let &ignorecase = g:FuzzyFinder_IgnoreCase
         let s:_wildignore = &wildignore
         let &wildignore = g:FuzzyFinder_WildIgnore
 
@@ -204,7 +249,10 @@ function! <SID>OpenInputWindow(isBufferMode)
         " mapping
         inoremap <buffer> <silent> <expr> <CR> <SID>OnCR()
         inoremap <buffer> <silent> <expr> <BS> pumvisible() ? "\<C-E>\<BS>" : "\<BS>"
-        execute "inoremap <buffer> <silent> <expr> " . g:FuzzyFinder_KeyToggleMode . " <SID>ToggleMode()"
+        execute "inoremap <buffer> <silent> <expr> " . g:FuzzyFinder_KeyToggleMode .
+                    \ " <SID>ToggleMode()"
+        execute "inoremap <buffer> <silent> <expr> " . g:FuzzyFinder_KeyToggleIgnoreCase .
+                    \ " <SID>ToggleIgnoreCase()"
 
         " auto command
         augroup FuzzyFinder_AutoCommand
@@ -218,12 +266,11 @@ function! <SID>OpenInputWindow(isBufferMode)
 
     let &l:completefunc = completeFunc
 
-    execute('file ' . bufferName)
+    execute 'file ' . bufferName
 
-    " start insert mode. ">" makes CursorMovedI event now and forces a
-    " completion menu to update every typing.
-    call feedkeys("i>", 'n')
-    "call feedkeys("i \<C-H>", 'n')
+    " start insert mode. s:cmdPrompt makes CursorMovedI event now
+    " and forces a completion menu to update every typing.
+    call feedkeys('i' . s:cmdPrompt, 'n')
 
 endfunction
 
@@ -235,43 +282,40 @@ function! FuzzyFinder_CompleteBuffer(findstart, base)
         return 0
     endif
 
-    echo "a:base=" . a:base
-    if a:base !~ '^>'
-        return []
-    endif
-    let l:base = a:base[1:]
-    echo "l:base=" . l:base
+    let input = <SID>ExtractPromptedInput(a:base)
 
-    if strlen(l:base) < g:FuzzyFinder_MinLengthBuffer
+    if !input[0] || strlen(input[1]) < g:FuzzyFinder_MinLengthBuffer
         echo ""
         return []
     endif
 
-    let pattern = <SID>MakeFuzzyPattern(l:base, 1)
+    let patternW = <SID>MakeFuzzyPattern(input[1])
+    let patternR = <SID>ConvertWildcardToRegexp(patternW)
 
     " make a list of buffers
-    redir => l:lines | silent buffers! | redir END
+    redir => l:lines
+    silent buffers!
+    redir END
 
     let res = []
     for line in split(lines, "\n")
-        let bufNr   = matchstr(line, '^\s*\zs\d*')
-        let bufInd  = matchstr(line, '^\s*\d*\zs[^"]*')
-        let bufName = matchstr(line, '"\zs[^"]*')
-        let bufActive = (bufInd =~ 'a' ? '*' : ' ')
+        " bufInfo[1]: number,   bufInfo[2]: indicator,   bufInfo[3]: filename
+        let bufInfo = matchlist(line, '^\s*\(\d*\)\s*\([^"]*\)\s*"\([^"]*\)"')
+        let bufAbbr = (bufInfo[2] =~ 'a' ? '*' : ' ')
 
-        let bufNameBase = strpart(bufName, 0, strlen(l:base))
-        if bufNr == s:bufID || bufInd =~ g:FuzzyFinder_ExcludeIndicator
+        if bufInfo[1] == s:bufID || bufInfo[2] =~ g:FuzzyFinder_ExcludeIndicator
             continue
-        elseif g:FuzzyFinder_IgnoreCase && (l:base ==? bufNr || l:base ==? bufNameBase)
-         \ || !g:FuzzyFinder_IgnoreCase && (l:base ==# bufNr || l:base ==# bufNameBase)
-            call insert(res, {'word': bufName, 'abbr': bufActive, 'menu': line})
-        elseif g:FuzzyFinder_IgnoreCase && (bufName=~? pattern)
-         \   || !g:FuzzyFinder_IgnoreCase && (bufName=~# pattern)
-            call    add(res, {'word': bufName, 'abbr': bufActive, 'menu': line})
+        elseif bufInfo[1] == input[1] || bufInfo[3] == input[1]
+            call insert(res, {'word': bufInfo[3], 'abbr': bufAbbr, 'menu': line})
+        elseif bufInfo[3] =~ patternR
+            call    add(res, {'word': bufInfo[3], 'abbr': bufAbbr, 'menu': line})
         endif
     endfor
 
-    echo "pattern:" . pattern
+    if g:FuzzyFinder_EchoPattern
+        echo "pattern:" . patternW
+    endif
+
     call feedkeys(!empty(res) ? "\<C-P>\<Down>" : "\<C-E>", 'n')
 
     return res
@@ -285,38 +329,43 @@ function! FuzzyFinder_CompleteFile(findstart, base)
         return 0
     endif
 
-    if a:base !~ '^>'
-        return []
-    endif
-    let l:base = a:base[1:]
-    let l:full_base = fnamemodify(l:base, ":p")
+    let input = <SID>ExtractPromptedInput(a:base)
+    let pathHead = matchstr(input[1], '^.*[/\\]')
+    let pathTail = input[1][strlen(pathHead):]
 
-    let pathHead = matchstr(l:base, '.*[/\\]')
-    let pathTail = matchstr(l:base, '[^/\\]*$')
-    if strlen(pathTail) < g:FuzzyFinder_MinLengthFile
+    if !input[0] || strlen(pathTail) < g:FuzzyFinder_MinLengthFile
         echo ""
         return []
     endif
 
-    let pattern = pathHead . <SID>MakeFuzzyPattern(pathTail, 0)
+    let patternW = pathHead . <SID>MakeFuzzyPattern(pathTail)
+    let patternR = <SID>ConvertWildcardToRegexp(patternW)
+    if &ignorecase  && !has('win32')
+        let patternW = <SID>ExpandCase(patternW)
+    endif
+
+    let full_input_path = fnamemodify(input[1], ':p')
 
     let res = []
-    for path in split(glob(pattern), "\n")
+    for path in split(glob(patternW), "\n")
         if isdirectory(path)
-            if strpart(path, strlen(path)-1, 1) != g:FuzzyFinder_PathSeparator
-                let path = path . g:FuzzyFinder_PathSeparator
-            endif
+            let path = path . g:FuzzyFinder_PathSeparator
         endif
-        let pathBase = strpart(path, 0, strlen(l:full_base))
-        if g:FuzzyFinder_IgnoreCase && l:full_base ==? pathBase
-         \ || !g:FuzzyFinder_IgnoreCase && l:full_base ==# pathBase
-            call insert(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':.')})
-        else
-            call    add(res, {'word': path, 'menu': '| ' . fnamemodify(path, ':.')})
+        let full_path = fnamemodify(path, ':p')
+        if path == input[1]
+            call insert(res, {'word': path, 'menu': '| ' . full_path})
+        elseif (&ignorecase && strpart(full_path, 0, strlen(full_input_path)) ==? full_input_path)
+             \ || (! &ignorecase && strpart(full_path, 0, strlen(full_input_path)) ==# full_input_path)
+            call insert(res, {'word': path, 'menu': '| ' . full_path})
+        elseif &ignorecase || path =~ patternR
+            call    add(res, {'word': path, 'menu': '| ' . full_path})
         endif
     endfor
 
-    echo "pattern:" . pattern
+    if g:FuzzyFinder_EchoPattern
+        echo "pattern:" . patternW
+    endif
+
     call feedkeys(!empty(res) ? "\<C-P>\<Down>" : "\<C-E>", 'n')
 
     return res
@@ -333,13 +382,15 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! <SID>OnCursorMovedI()
-    " Fix
-    if line('.') != 1 
-        call feedkeys("\<Esc>:e " . getline('1') . "\<CR>", 'n')
+    let input = <SID>ExtractPromptedInput(getline('1'))
+    if line('.') != 1
+        " Fix
+        call feedkeys("\<Esc>" . s:openCommand . input[1] . "\<CR>", 'n')
+        "call feedkeys("\<Esc>:e " . input[1] . "\<CR>", 'n')
         return
-    endif
-    if getline('.') !~ '^>'
-        call feedkeys("\<Home>>\<End>", 'n')
+    elseif !input[0]
+        " a command prompt is removed
+        call feedkeys("\<Home>" . s:cmdPrompt . "\<End>", 'n')
         return
     endif
 
@@ -349,7 +400,6 @@ function! <SID>OnCursorMovedI()
     " if the line was changed and cursor is placed on the end of the line
     if deltaInputLength != 0 && col('.') > s:lastInputLength
         call feedkeys("\<C-X>\<C-U>", 'n')
-        "call feedkeys("\<C-X>\<C-U>\<C-R>=pumvisible()?\"\\<C-P>\\<Down>\":\"\\<C-E>\"\<CR>", 'n')
     endif
 endfunction
 
@@ -375,6 +425,7 @@ function! <SID>OnBufLeave()
     endif
 
     let &completeopt = s:_completeopt
+    let &ignorecase  = s:_ignorecase
     let &wildignore  = s:_wildignore
     let s:bufID = -1
 
@@ -385,38 +436,62 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " "str" -> "*s*t*r*" 
-function! <SID>MakeFuzzyPattern(str, forRegexp)
-    let pattern = ''
+function! <SID>MakeFuzzyPattern(in)
+    let out = ''
 
-    let star_count = 0
-    for char in split(a:str,'\zs')
-        if !a:forRegexp && g:FuzzyFinder_IgnoreCase
-            let char_item = '{' . toupper(char) . ',' . tolower(char) . '}'
+    for char in split(a:in,'\zs')
+        if out !~ '[*?]$' && char !~ '[*?]'
+            let out .= '*'. char
         else
-            let char_item = char
-        endif
-
-        if pattern =~ '[\*?]$' || char =~ '[\*?]' || star_count>g:MaxStarNum
-            let pattern .= char_item
-        else
-            let pattern .= '*' . char_item
-            let star_count += 1
+            let out .= char
         endif
     endfor
 
-    if pattern !~ '[\*?]$'
-        let pattern .= '*'
+    if out !~ '[*?]$'
+        return out . '*'
     endif
 
-    if a:forRegexp
-        let pattern = escape(pattern, '\')
-        let pattern = substitute(pattern, '*', '\\.\\*', 'g')
-        let pattern = substitute(pattern, '?', '\\.'  , 'g')
-        let pattern = '\V' . pattern
+    return out
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! <SID>ConvertWildcardToRegexp(in)
+    let out = escape(a:in, '\')
+    let out = substitute(out, '*', '\\.\\*', 'g')
+    let out = substitute(out, '?', '\\.'   , 'g')
+    let out = substitute(out, '[', '\\['   , 'g')
+    let out = '\V' . out
+    return out
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! <SID>ExpandCase(in)
+    let out = ''
+    for char in split(a:in,'\zs')
+        if char =~ '\a'
+            let out .= '[' . toupper(char) . tolower(char) . ']'
+        else
+            let out .= char
+        endif
+    endfor
+
+    return out
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! <SID>ExtractPromptedInput(in)
+    if strlen(a:in) < strlen(s:cmdPrompt) ||
+                \ a:in[:strlen(s:cmdPrompt) -1] !=# s:cmdPrompt
+        return [0, a:in]
     endif
 
-    return pattern
-
+    return [1, a:in[strlen(s:cmdPrompt):]]
 endfunction
 
 
