@@ -349,10 +349,28 @@ fu! Utl_AddressScheme_bt(auri)
     return  Utl_AddressScheme_http(ptUrl)
 endfu
 
+"-------------------------------------------------------------------------------
+" Schemes to make my life in exoweb.net eaiser
+" Trac related 
+" <trac:1122> link to ticket #1122
 fu! Utl_AddressScheme_trac(auri)
     let ticketId = UtlUri_unescape( UtlUri_opaque(a:auri) )
-    let tracUrl = 'https://nordictrac.dev.exoweb.net/trac/ticket/'.ticketId
+    let tracUrl = g:nordicbet_trac_base_url . '/ticket/' . ticketId
     return  Utl_AddressScheme_http(tracUrl)
+endfu
+
+" <trac_cs:12345> link to changeset of r12345
+fu! Utl_AddressScheme_trac_cs(auri)
+    let revision = UtlUri_unescape( UtlUri_opaque(a:auri) )
+    let changesetURL = g:nordicbet_trac_base_url . '/changeset/' . changeset_id
+    return  Utl_AddressScheme_http(changesetURL)
+endfu
+
+" <trac_cr:12345> link to code review page of r12345
+fu! Utl_AddressScheme_trac_cr(auri)
+    let revision = UtlUri_unescape( UtlUri_opaque(a:auri) )
+    let codereviewURL = g:nordicbet_trac_base_url . '/codereview/' . revision
+    return  Utl_AddressScheme_http(codereviewURL)
 endfu
 
 let &cpo = s:save_cpo

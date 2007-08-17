@@ -1,4 +1,4 @@
-*drawit.txt*	The DrawIt Tool				Apr 26, 2007
+*drawit.txt*	The DrawIt Tool				Jul 26, 2007
 
 Authors:  Charles E. Campbell, Jr.  <NdrchipO@ScampbellPfamily.AbizM> {{{1
           Sylvain Viart             <molo@multimania.com>
@@ -54,14 +54,14 @@ Copyright:    Copyright (C) 2004-2007 Charles E. Campbell, Jr. {{{1
  ||              | spaces, draw arrows by using the following characters or  ||
  ||              | keypad characters:                                        ||
  ||              +-----------------------------------------------------------++
- || <left>       | move and draw left                                        ||
+ || <left>       | move and draw left                       |drawit-drawing| ||
  || <right>      | move and draw right, inserting lines/space as needed      ||
  || <up>         | move and draw up, inserting lines/space as needed         ||
  || <down>       | move and draw down, inserting lines/space as needed       ||
- || <s-left>     | move left                                                 ||
- || <s-right>    | move right, inserting lines/space as needed               ||
- || <s-up>       | move up, inserting lines/space as needed                  ||
- || <s-down>     | move down, inserting lines/space as needed                ||
+ || <s-left>     | move cursor left                            |drawit-move| ||
+ || <s-right>    | move cursor right, inserting lines/space as needed        ||
+ || <s-up>       | move cursor up, inserting lines/space as needed           ||
+ || <s-down>     | move cursor down, inserting lines/space as needed         ||
  || <space>      | toggle into and out of erase mode                         ||
  || >            | insert a > and move right    (draw -> arrow)              ||
  || <            | insert a < and move left     (draw <- arrow)              ||
@@ -75,7 +75,8 @@ Copyright:    Copyright (C) 2004-2007 Charles E. Campbell, Jr. {{{1
  || \<           | insert a fat < and move left     (draw <- arrow)          ||
  || \^           | insert a fat ^ and move up       (draw ^  arrow)          ||
  || \v           | insert a fat v and move down     (draw v  arrow)          ||
- ||<s-leftmouse> | drag and draw with current brush                          ||
+ ||<s-leftmouse> | drag and draw with current brush          |drawit-brush|  ||
+ ||<c-leftmouse> | drag and move current brush               |drawit-brush|  ||
  ||              |                                                           ||
  ||==============+===========================================================++
  ||Visual Cmds   | Explanation                                               ||
@@ -84,24 +85,25 @@ Copyright:    Copyright (C) 2004-2007 Charles E. Campbell, Jr. {{{1
  ||              | select endpoints for lines, arrows, and ellipses. Bresen- ||
  ||              | ham and Bresenham-like algorithms are used for this.      ||
  ||              |                                                           ||
- ||              | These routines need a block of spaces, and so the "holer" ||
+ ||              | These routines need a block of spaces, and so the canvas  ||
  ||              | routine must first be used to create such a block.  The   ||
- ||              | holer routine will query the user for the number of lines ||
- ||              | to hold |'textwidth'| spaces.                             ||
+ ||              | canvas routine will query the user for the number of      ||
+ ||              | lines to hold |'textwidth'| spaces.                       ||
  ||              +-----------------------------------------------------------++
  || \a           | draw arrow from corners of visual-block selected region   ||
  || \b           | draw box on visual-block selected region                  ||
+ || \c           | the canvas routine (will query user, see above)           ||
  || \e           | draw an ellipse on visual-block selected region           ||
  || \f           | flood figure with a character (you will be prompted)      ||
- || \h           | the holer routine (will query user, see above)            ||
  || \l           | draw line from corners of visual-block selected region    ||
  || \s           | spacer: appends spaces up to the textwidth (default: 78)  ||
  ||              |                                                           ||
  ++==============+===========================================================++
  || Function and Explanation                                                 ||
  ++--------------+-----------------------------------------------------------++
- ||  :call SetDrawIt('vertical','horizontal','crossing','\','/','X')         ||
+ ||  :call SetDrawIt('vertical','horizontal','crossing','\','/','X','*')     ||
  ||            set drawing characters for motions for moving                 ||
+ ||            and for the ellipse drawing boundary                          ||
  ||  default   motion                                                        ||
  ||  |         up/down,                                                      ||
  ||  -         left/right,                                                   ||
@@ -176,14 +178,14 @@ CHANGING DRAWING CHARACTERS				*drawit-setdrawit* {{{2
 The SetDrawIt() function is available for those who wish to change the
 characters that DrawIt uses. >
 
-    ex. :call SetDrawIt('*','*','*','*','*','*')
-    ex. :call SetDrawIt('-','|','-','\','/','/')
+    ex. :call SetDrawIt('*','*','*','*','*','*','*')
+    ex. :call SetDrawIt('-','|','-','\','/','/','*')
 <
 The first example shows how to change all the DrawIt drawing characters to
 asterisks, and the second shows how to give crossing priority to - and /.
 The default setting is equivalent to: >
 
-	:call SetDrawIt('|','-','+','\','/','X')
+	:call SetDrawIt('|','-','+','\','/','X','*')
 <
 where SetDrawit()'s arguments refer, in order, to the >
 
@@ -193,6 +195,7 @@ where SetDrawit()'s arguments refer, in order, to the >
     	down right			drawing character
     	down left			drawing character
     	diagonal crossing		drawing character
+	ellipse boundary                drawing character
 <
 
 MOVING					*drawit-move* *drawit-moving* {{{2
@@ -237,9 +240,9 @@ VISUAL BLOCK MODE FOR ARROWS LINES BOXES AND ELLIPSES	*drawit-visblock* {{{2
 
 \a : draw arrow from corners of visual-block selected region	*drawit-a*
 \b : draw box on visual-block selected region			*drawit-b*
+\c : the canvas routine (will query user, see above)		*drawit-c*
 \e : draw an ellipse on visual-block selected region		*drawit-e*
 \f : flood figure with a character (you will be prompted)	*drawit-f*
-\h : the holer routine (will query user, see above)		*drawit-h*
 \l : draw line from corners of visual-block selected region	*drawit-l*
 \s : spacer: appends spaces up to the textwidth (default: 78)	*drawit-s*
 
@@ -249,11 +252,11 @@ starting/ending point drawing of arrows (\a), lines (\l), and boxes (\b).
 Additionally I wrote an ellipse drawing function using visual block
 specification (|drawit-e|).
 
-One must have a block of spaces for these maps to operate in; the "holer"
-routine (\h) will help create such blocks.  First, the holer routine will
+One may create a block of spaces for these maps to operate in; the "canvas"
+routine (\c) will help create such blocks.  First, the s:Canvas() routine will
 query the user for the number of lines s/he wishes to have, and will then fill
-those lines with spaces out to the |'textwidth'| (or 78 spaces if that option
-hasn't been set).
+those lines with spaces out to the |'textwidth'| if user has specified it;
+otherwise, the display width will be used.
 
 The Sylvain Viart functions and the ellipse drawing function depend
 upon using visual block mode.  As a typical use: >
@@ -267,10 +270,11 @@ upon using visual block mode.  As a typical use: >
 		 * ctrl-v (move) \e
                    DrawIt then draws an ellipse
 <
-One first creates a number of blank-filled lines; the \h map (the "holer") is
-useful for this.  Select the first endpoint with ctrl-v and then move to the
-other endpoint.  One may then select \a for arrows, \b for boxes, \e for ellipses,
-or \l for lines.
+Select the first endpoint with ctrl-v and then move to the other endpoint.
+One may then select \a for arrows, \b for boxes, \e for ellipses, or \l for
+lines.  The internal s:AutoCanvas() will convert tabs to spaces and will
+extend with spaces as needed to support the visual block.  Note that when
+DrawIt is enabled, virtualedit is also enabled (to "all").
 >
         Examples:
 
@@ -296,15 +300,28 @@ BRUSHES							*drawit-brush* {{{2
 	Set the current brush to the given letter, and yank the visual
 	block to that named register).  Default brush: a
 >
+ <leftmouse>
+<
+	Select a visual-block region.  One may use "ay, for example,
+	to yank selected text to register a.
+>
  <shift-leftmouse>
 <
 	One may drag and draw with the current brush (default brush: a)
 	by holding down the shift key and the leftmouse button and moving
 	the mouse.  Blanks in the brush are considered to be transparent.
 >
+ <ctrl-leftmouse>
+<
+	One may drag and move a selection with <ctrl-leftmouse>.  First,
+	select the region using the <leftmouse>.  Release the mouse button,
+	then press ctrl and the <leftmouse> button; while continuing to press
+	the button, move the mouse.  The selected block of text will then
+	move along with the cursor.
+>
  \ra ... \rz
 <
-	Replace text with the given register.
+	Replace text with the given register's contents (ie. the brush).
 >
  \pa ... \pz
 <
@@ -317,11 +334,9 @@ BRUSHES							*drawit-brush* {{{2
 			---
 <		Then use ctrl-v, move, "ay to grab a copy into register a.
 		By default, the current brush uses register a (change brush
-		with :SetBrush [reg]).  Then create a "hole": >
-			\h
-			how many lines under the cursor? 20
-<		Hold the <shift> and <leftbutton> keys down and move the
-		mouse; as you move, a copy of the brush will be left behind.
+		with :SetBrush [reg]).  Hold the <shift> and <leftbutton>
+		keys down and move the mouse; as you move, a copy of the
+		brush will be left behind.
 	    
 
 DRAWIT MODES						*drawit-modes* {{{2
@@ -340,6 +355,15 @@ DRAWIT MODES						*drawit-modes* {{{2
 
 	8 Feb 12, 2007 * fixed a bug which prevented multi-character user
 	                 maps from being restored properly
+	  May 03, 2007 * Extended SetDrawIt() to handle b:di_ellipse, the
+	                 ellipse boundary drawing character
+		       * Changed "Holer" to "Canvas", and wrote AutoCanvas(),
+		         which allow one to use the visual-block drawing
+			 maps without creating a canvas first.
+		       * DrawIt now uses the ctrl-leftmouse to move a visual
+		         block selected region.
+		       * Floods can now be done inside an ellipse
+		       * DrawIt's maps are now all users of <buffer>
 	7 Feb 16, 2005 * now checks that "m" is in &go before attempting to
 	                 use menus
 	  Aug 17, 2005 * report option workaround
