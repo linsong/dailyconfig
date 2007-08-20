@@ -117,6 +117,11 @@ if !exists('g:FuzzyFinder_KeyToggleIgnoreCase')
     let g:FuzzyFinder_KeyToggleIgnoreCase = '<F11>'
 endif
 
+" Map this to temporarily toggle whether or not to split open.
+if !exists('g:FuzzyFinder_KeyToggleSplitOpen')
+    let g:FuzzyFinder_KeyToggleSplitOpen = '<F10>'
+endif
+
 " Path separator.
 if !exists('g:FuzzyFinder_PathSeparator')
     let g:FuzzyFinder_PathSeparator = (has('win32') ? '\' : '/')
@@ -153,7 +158,9 @@ if !exists('g:FuzzyFinder_EchoPattern')
     let g:FuzzyFinder_EchoPattern = 0
 endif
 
-
+if !exists('g:FuzzyFinder_SplitOpen')
+    let g:FuzzyFinder_SplitOpen = 1
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -202,15 +209,32 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+function! <SID>ToggleSplitOpen()
+    let g:FuzzyFinder_SplitOpen = !g:FuzzyFinder_SplitOpen
+    "echo "[FuzzyFinder] Split Open " . (g:FuzzyFinder_SplitOpen ? 'ON' : 'OFF')
+    return ""
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 function! <SID>OpenInputWindow(isBufferMode)
 
     " differences between modes
     if a:isBufferMode
-        let s:openCommand = ':buffer '
+        if g:FuzzyFinder_SplitOpen
+            let s:openCommand = ':sbuffer '
+        else
+            let s:openCommand = ':buffer '
+        endif
         let bufferName = '[FuzzyFinder - Buffer]'
         let completeFunc = 'FuzzyFinder_CompleteBuffer'
     else
-        let s:openCommand = ':edit '
+        if g:FuzzyFinder_SplitOpen
+            let s:openCommand = ':split '
+        else
+            let s:openCommand = ':edit '
+        endif
         let bufferName = '[FuzzyFinder - File]'
         let completeFunc = 'FuzzyFinder_CompleteFile'
     endif
@@ -253,6 +277,8 @@ function! <SID>OpenInputWindow(isBufferMode)
                     \ " <SID>ToggleMode()"
         execute "inoremap <buffer> <silent> <expr> " . g:FuzzyFinder_KeyToggleIgnoreCase .
                     \ " <SID>ToggleIgnoreCase()"
+        execute "inoremap <buffer> <silent> <expr> " . g:FuzzyFinder_KeyToggleSplitOpen .
+                    \ " <SID>ToggleSplitOpen()"
 
         " auto command
         augroup FuzzyFinder_AutoCommand
