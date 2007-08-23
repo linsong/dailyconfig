@@ -49,6 +49,15 @@ _nordicbetsite()
 
 
 }
+
+_startNor()
+{
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    cmdOpt1="all application_server presentation_server back_office_server batch_server docs_server livebet_bo livebet_fo --run_what_server --pid_file_app --pid_file_pr --pid_file_bo --pid_file_bat --pid_file_stats --pid_file_docs --pid_file_mgs --pid_file_wap --pid_file --run_what_server --pid_file_app --pid_file_pr --pid_file_bo --pid_file_bat --pid_file_stats --pid_file_docs --pid_file_mgs --pid_file_wap --pid_file --version --help -w -w "
+    COMPREPLY=( $( compgen -W "$cmdOpt1" -- $cur ) )
+    return 0
+}
 complete -F _nordicbetsite -o default nordicbetsite
-complete -F _nordicbetsite -o default startNor
+complete -F _startNor -o default startNor
 
