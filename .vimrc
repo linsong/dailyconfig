@@ -1080,14 +1080,21 @@ endif " has("autocmd")
     
     "### setting for fuzzyfinder.vim {{{2
     let g:FuzzyFinder_KeyToggleMode = '<C-t>' " disable this map
+    let g:FuzzyFinder_KeyToggleIgnoreCase = '<C-i>'
+    let g:FuzzyFinder_KeyToggleSplitOpen = '<C-s>'
     let g:FuzzyFinder_WildIgnore = '*~,*.bak,*.swp,*.pyc,*.exe'
     let g:FuzzyFinder_IgnoreCase = 1
+    let g:FuzzyFinder_SplitOpen = 1
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2
     let g:vd_svn_repo_prefix = 'https://nordicbet.dev.exoweb.net/svn/trunk/src'
+    "}}}2
+    
+    "### settings for utl.vim {{{2
+    let g:nordicbet_trac_base_url = 'https://nordictrac.dev.exoweb.net/trac'
     "}}}2
     
 "### }}}1

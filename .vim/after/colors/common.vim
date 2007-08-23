@@ -12,7 +12,7 @@ hi DiffDelete    cterm=bold ctermfg=4 ctermbg=6 gui=bold guifg=#0000ff guibg=#68
 hi DiffText      cterm=bold ctermbg=1 gui=bold,italic guifg=#000000 guibg=#980000
 
 " for omni completion
-hi Pmenu       guibg=grey30
+hi Pmenu       guibg=grey35
 hi PmenuSel    guifg=DarkBlue guibg=LightGreen
 hi PmenuSbar   guibg=Black 
 hi PmenuThumb  guifg=SeaGreen	
