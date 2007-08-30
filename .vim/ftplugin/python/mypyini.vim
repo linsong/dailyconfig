@@ -46,6 +46,14 @@ if ! exists("b:mypyini")
         setlocal path+=/usr/lib/python2.3/site-packages
     endif
 
+    """ This is not needed since python_match.vim defined these already
+    "if !exists("b:match_words")
+        "let b:match_ignorecase=0
+        "let b:match_words = 'if:elif:else,' .
+                    "\ 'try:except' .
+                    "\ 'from:import' .
+
+    "endif
 endif
 
 " prevent reloading twice for the same type of file 
