@@ -37,7 +37,7 @@ ftp_proxy
 gopher_proxy 
 https_proxy https://127.0.0.1:8118/
 http_proxy http://127.0.0.1:8118/
-use_proxy 1
+use_proxy 0
 max_news 50
 nntpmode 
 nntpserver 
@@ -79,7 +79,7 @@ fixed_wheel_scroll_count 5
 relative_wheel_scroll_ratio 30
 relative_wheel_scroll 0
 reverse_mouse 0
-use_mouse 0
+use_mouse 1
 migemo_command migemo -t egrep /usr/share/migemo/migemo-dict
 use_migemo 1
 ignorecase_search 1
