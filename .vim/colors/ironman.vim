@@ -1,8 +1,8 @@
 " Vim color file
 " Maintainer:  Michael Boehler
 " Mail:        michael@familie-boehler.de
-" Last Change: 2002-09-24
-" Version:     1.3
+" Last Change: 2005-11-16
+" Version:     2.0
 " This color scheme uses a light background.
 " GUI only
 
@@ -14,11 +14,11 @@ endif
 
 let colors_name = "ironman"
 
-hi Normal       guifg=#333333 guibg=NONE
+hi Normal       guifg=#222222 guibg=#fafafa
 
 " Search
-hi IncSearch    gui=NONE guifg=#303040 guibg=#ffff00
-hi Search       gui=NONE guifg=#303040 guibg=#ccff00
+hi IncSearch    gui=NONE guifg=#303040 guibg=#ccff00
+hi Search       gui=NONE guifg=#303040 guibg=#ffff00
 
 " Messages
 hi ErrorMsg     gui=NONE guifg=#FF0000 guibg=NONE    
@@ -28,8 +28,8 @@ hi MoreMsg      gui=NONE guifg=#a800ff guibg=NONE
 hi Question     gui=NONE guifg=#008050 guibg=NONE
 
 " Split area
-hi StatusLine   gui=NONE guifg=#fffacd guibg=#DF6A6A
-hi StatusLineNC gui=NONE guifg=#fffacd guibg=#b2bbcc
+hi StatusLine   gui=BOLD guifg=#fffacd guibg=#0080FF
+hi StatusLineNC gui=NONE guifg=#52627D guibg=#b2bbcc
 hi VertSplit    gui=NONE guifg=#fffacd guibg=#b2bbcc
 hi WildMenu     gui=NONE guifg=#ffffff guibg=#3399cc
 
@@ -50,7 +50,7 @@ hi FoldColumn   gui=NONE guifg=#3399ff guibg=#EAF5FF
 
 " Other
 hi Directory    gui=NONE guifg=#0000ff guibg=NONE
-hi LineNr       gui=NONE guifg=#cccccc guibg=NONE
+hi LineNr       gui=NONE guifg=#0033aa guibg=#ccdcff
 hi NonText      gui=NONE guifg=#cccccc guibg=NONE
 hi SpecialKey   gui=NONE guifg=#66cccc guibg=NONE
 hi Title        gui=NONE guifg=#004060 guibg=#c8f0f8
