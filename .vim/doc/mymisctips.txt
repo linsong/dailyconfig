@@ -22,6 +22,7 @@ Last change: 10/12/2004 Tue
           ctags                             |linux-ctags|
           files                             |linux-files|
           mplayer                           |linux-mplayer|
+          par                               |linux-par|
       Network                               |my-network|
           netcat                            |my-network-netcat|
       DataBase                              |database|
@@ -897,6 +898,12 @@ in ubuntu and Debian, install mplayer package first, then we can install w32code
 tar-ball or the "essential*" tar-ball. all these three package(w32codecs, "all-codecs*", "essential*") are almost the same, except "all-codecs*" includes all codecs; w32codecs includes most of the codecs; "essential*" includes the most essential codecs; 
 
 mplayer is very powerful, it can not only play movies, but also convert media between different codecs; 
+
+*linux-par*
+===============================================================================
+# use par to format paragraphs
+
+read par's manpage for more details.
 
 ===============================================================================
 
