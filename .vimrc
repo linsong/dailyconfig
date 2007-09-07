@@ -234,13 +234,12 @@
     if exists('*pumvisible')
         "inoremap <Enter> <C-R>=pumvisible() ? "\<lt>C-y>" : "\<lt>Enter>"<CR>
         
-        ":inoremap <expr> <cr>  pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+        :inoremap <expr> <cr>  pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 
         "** These two mappings are probably the most rare, yet most valuable: **
-        :inoremap <expr> <c-n>  pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\ <lt>cr>"
-        :inoremap <expr> <m-;>  pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
+        ":inoremap <expr> <c-n>  pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\ <lt>cr>"
+        ":inoremap <expr> <m-;>  pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
     endif
-
 
     " following key maps will make command mode's navigation easier
     " when input path name, use the '/' to stop a completion
@@ -394,7 +393,7 @@
         :nmap <LEADER>go :silent !c:/WINDOWS/COMMAND/start <cWORD><CR> 
         :vmap <LEADER>go y:silent !c:/WINDOWS/COMMAND/start <C-R>"<CR>
 
-        " let vim to use ctags to generate tags file"{{{
+        " let vim to use ctags to generate tags file"
         let Tlist_Ctags_Cmd = 'C:\unzipped\ctags\ctags552\ctags.exe'
 
         " grep use the UnixUtils that port to Win32 by GNU,this can be imply by set
@@ -418,7 +417,7 @@
          let $VIM_INTELLISNESE=expand('$VIM\Intellisense') 
 
         " settings for pydoc.vim to find pydoc command in windows
-         let g:pydoc_cmd = 'C:\Python24\Lib\pydoc.pyc'"}}}
+         let g:pydoc_cmd = 'C:\Python24\Lib\pydoc.pyc'"
 
         "the following option will always yank to * register
         "this is very helpful under Windows
@@ -428,7 +427,9 @@
     elseif has('macunix')
         set guifont=Monaco:h14
     else  " linux like platform specific setting {{{2
-
+        " put some untested or untrusted plugin into .vim-experiment folder,
+        " don't mess up .vim 
+        "set runtimepath+=~/.vim-experiment
         "setting about word complete
         :set complete+=U,k/usr/dict/*,k$VIM/vimfiles/dictionary/*
         ":set complete+=k/usr/dict/*,k$VIM/vimfiles/dictionary/*
@@ -532,26 +533,7 @@ if has("autocmd")
             "use pdftotext that comes cygwin
         endif
     augroup END
-
-    " Augroup LargeFile: for large files: turn undo off, etc (based on vim tip #611) come from Chip Campbell {{{2
-    let g:LargeFile= 10    " in megabytes
-    let g:LargeFile= g:LargeFile*1024*1024
-    augroup LargeFile
-     au BufReadPre *
-     \ let f=expand("<afile>") |
-     \  if getfsize(f) >= g:LargeFile |
-     \  let b:eikeep= &ei |
-     \  let b:ulkeep= &ul |
-     \  set ei=FileType |
-     \  setlocal noswf bh=unload |
-     \  let f=escape(substitute(f,'\','/','g'),' ') |
-     \  exe "au LargeFile BufEnter ".f." set ul=-1" |
-     \  exe "au LargeFile BufLeave ".f." let &ul=".b:ulkeep."|set ei=".b:eikeep |
-     \  exe "au LargeFile BufUnload ".f." au! LargeFile * ". f |
-     \  echomsg "***note*** handling a large file" |
-     \ endif
-    augroup END 
-    "}}}2
+    "}}}4
 
     " syntax omnicomplete {{{2
     if has("autocmd") && exists("+omnifunc")

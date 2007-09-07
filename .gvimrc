@@ -25,7 +25,10 @@ endif
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 "
 
-:colorscheme desert "mymud zenburn ps_color elflord metacosm dusk
+"set colorscheme randomly
+let colorscheme_list = ['blacksea', 'desert', 'mymud', 'dante']
+exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
+":colorscheme desert "mymud zenburn ps_color elflord metacosm dusk
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")

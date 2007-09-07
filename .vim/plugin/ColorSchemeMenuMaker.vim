@@ -1,9 +1,27 @@
 " theme.menu.vim:	Generates Vim themes menu and organizes themes based
 " 					upon background colors
 " Maintainer:		Erik Falor <rAjsBnFCybe@tzNnvy.Zpbz g?? - NOSPAM>
-" Date:				Aug 30, 2007
-" Version:			0.4
+" Date:				Sept 6, 2007
+" Version:			0.5
+" License:			If you copy this, just give me props.
 "
+" History:
+" 	Version 0.5:	Store the generated menu under the same directory
+" 					this file is located.  Thanks to Vincent Vandalon for
+" 					pointing out that not all folks have a ~/vimfiles
+" 					directory under WinXP.
+"
+" 	Version 0.4:	Switched to Unix line endings.  Look for rgb.txt under
+"					/usr/share/X11 to accomodate Gentoo Linux.
+"
+" 	Version 0.3:	Now works on Linux by looking for rgb.txt in
+"					/usr/X11R6/lib/X11 instead of $VIMRUNTIME.  If your
+"					rgb.txt is kept	somewhere else, store that absolute
+"					pathname in your .vimrc in a variable called g:rgbtxt.
+"
+" 	Version 0.2:	Menu categories include a count of contained items.	
+"
+" 	Version 0.1:	Initial upload
 
 " Initialization: {{{
 if exists("g:loaded_theme_menu") || &cp
@@ -15,7 +33,8 @@ set cpo&vim
 "}}}
 
 " Script Variables: {{{
-let s:menuFile = strpart(&rtp, 0, stridx(&rtp, ',')) . '/plugin/ColorSchemes.vim'
+"store the generated menu under the same path this file is found:
+let s:menuFile = expand('<sfile>:p:h') . '/ColorSchemes.vim'
 let s:menuName = '&ColorSchemes'
 let s:xdigit = '[0123456789ABCDEFabcdef]'
 let s:hexvals = { 0:0, 1:1, 2:2, 3:3,
