@@ -96,7 +96,8 @@ function! <SID>PythonGrep(tool)
     if a:tool == "pylint"
         let &grepprg = 'pylint --parseable=y --reports=n'
     elseif a:tool == "pychecker"
-        let &grepprg = 'pychecker --quiet -q'
+        " environment variables suitable for my Ubuntu at exoweb
+        let &grepprg = 'PYTHONPATH=$PYTHONPATH:/usr/share/python-support/pychecker PYTHONVER=2.3 pychecker --quiet -q'
     else
         echohl WarningMsg
         echo "PythonGrep Error: Unknown Tool"

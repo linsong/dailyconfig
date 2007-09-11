@@ -23,6 +23,7 @@ Last change: 10/12/2004 Tue
           files                             |linux-files|
           mplayer                           |linux-mplayer|
           par                               |linux-par|
+          wget                              |linux-wget|
       Network                               |my-network|
           netcat                            |my-network-netcat|
       DataBase                              |database|
@@ -905,8 +906,15 @@ mplayer is very powerful, it can not only play movies, but also convert media be
 
 read par's manpage for more details.
 
+*linux-wget*
 ===============================================================================
+# continue to download files 
+use wget -c URL to start downloading, if there is problem with download, just
+try to run it again with '-c' option, it will continue based on what has been
+downloaded.
 
+
+===============================================================================
 *Mac* 
 
 *Mac-mplayer* 

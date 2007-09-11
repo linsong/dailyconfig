@@ -38,10 +38,6 @@
 "--------------------------------------------------------------------------
 
 
-if exists("*LaunchBrowser")
-	finish
-endif
-
 let s:BrowsersExist = ''
 let s:FirefoxPath = system("which firefox")
 if v:shell_error == 0
@@ -99,8 +95,13 @@ endif
 let s:NetscapeRemoteCmd = substitute(s:NetscapeRemoteCmd, "\n$", "", "")
 
 
+if exists("*LaunchBrowser")
+	finish
+endif
+
+
 " Usage:
-"  :call LaunchBrowser({[nolmf]},{[012]})
+"  :call LaunchBrowser({[nolmf]},{[012]},[url])
 "    The first argument is which browser to launch:
 "      f - Firefox
 "      m - Mozilla
@@ -108,11 +109,15 @@ let s:NetscapeRemoteCmd = substitute(s:NetscapeRemoteCmd, "\n$", "", "")
 "      o - Opera
 "      l - Lynx
 "      w - w3m
+"
+"      default - This launches the first browser that was actually found.
 "    The second argument is whether to launch a new window:
 "      0 - No
 "      1 - Yes
 "      2 - New Tab (or new window if the browser doesn't provide a way to
 "                   open a new tab)
+"    The optional third argument is an URL to go to instead of loading the
+"    current file.
 "
 " Return value:
 "  0 - Failure (No browser was launched/controlled.)
@@ -122,19 +127,35 @@ let s:NetscapeRemoteCmd = substitute(s:NetscapeRemoteCmd, "\n$", "", "")
 " were found.
 function! LaunchBrowser(...)
 
+	let err = 0
+
 	if a:0 == 0
 		return s:BrowsersExist
-	elseif a:0 == 2
+	elseif a:0 >= 2
 		let which = a:1
 		let new = a:2
 	else
+		let err = 1
+	endif
+
+	let file = 'file://' . expand("%:p")
+
+	if a:0 == 3
+		let file = a:3
+	elseif a:0 > 3
+		let err = 1
+	endif
+
+	if err
 		echohl ErrorMsg
 		echomsg 'E119: Wrong number of arguments for function: LaunchBrowser'
 		echohl None
 		return 0
 	endif
 
-	let file = expand("%:p")
+	if which ==? 'default'
+		let which = strpart(s:BrowsersExist, 0, 1)
+	endif
 
 	if ((! strlen($DISPLAY)) || which ==? 'l' )
 
@@ -204,7 +225,7 @@ function! LaunchBrowser(...)
 
 		if new == 2
 			echohl Todo | echo "Opening new Opera tab..." | echohl None
-			call system("sh -c \"trap '' HUP; opera -remote 'openURL(file://" . file . ",new-page)' &\"")
+			call system("sh -c \"trap '' HUP; opera -remote 'openURL(" . file . ",new-page)' &\"")
 
 			if shell_error
 				echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -212,7 +233,7 @@ function! LaunchBrowser(...)
 			endif
 		elseif new
 			echohl Todo | echo "Opening new Opera window..." | echohl None
-			call system("sh -c \"trap '' HUP; opera -remote 'openURL(file://" . file . ",new-window)' &\"")
+			call system("sh -c \"trap '' HUP; opera -remote 'openURL(" . file . ",new-window)' &\"")
 
 			if shell_error
 				echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -266,7 +287,7 @@ function! LaunchBrowser(...)
 		else
 			if new == 2
 				echohl Todo | echo "Firefox is running, opening new tab..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ",new-tab)\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ",new-tab)\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -274,7 +295,7 @@ function! LaunchBrowser(...)
 				endif
 			elseif new
 				echohl Todo | echo "Firefox is running, opening new window..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ",new-window)\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ",new-window)\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -282,7 +303,7 @@ function! LaunchBrowser(...)
 				endif
 			else
 				echohl Todo | echo "Firefox is running, issuing remote command..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ")\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ")\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -312,7 +333,7 @@ function! LaunchBrowser(...)
 		else
 			if new == 2
 				echohl Todo | echo "Mozilla is running, opening new tab..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ",new-tab)\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ",new-tab)\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -320,7 +341,7 @@ function! LaunchBrowser(...)
 				endif
 			elseif new
 				echohl Todo | echo "Mozilla is running, opening new window..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ",new-window)\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ",new-window)\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -328,7 +349,7 @@ function! LaunchBrowser(...)
 				endif
 			else
 				echohl Todo | echo "Mozilla is running, issuing remote command..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ")\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ")\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -358,7 +379,7 @@ function! LaunchBrowser(...)
 		else
 			if new
 				echohl Todo | echo "Netscape is running, opening new window..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ",new-window)\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ",new-window)\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None
@@ -366,7 +387,7 @@ function! LaunchBrowser(...)
 				endif
 			else
 				echohl Todo | echo "Netscape is running, issuing remote command..." | echohl None
-				call system(s:NetscapeRemoteCmd . " -remote \"openURL(file://" . file . ")\"")
+				call system(s:NetscapeRemoteCmd . " -remote \"openURL(" . file . ")\"")
 
 				if shell_error
 					echohl ErrorMsg | echo "Unable to issue remote command." | echohl None

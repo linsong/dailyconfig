@@ -1,5 +1,5 @@
 *HTML.txt*	Set of HTML/XHTML macros, menus and toolbar buttons.
-		Last change: 2007 Jun 26
+		Last change: 2007 Jul 30
 		Author: Christian J. Robinson
 
 
@@ -128,11 +128,12 @@ macros.  It is recommended you set these variables in your .vimrc--some of
 them are only effecive if they are set before HTML.vim is sourced.
 
 *g:do_xhtml_mappings* *b:do_xhtml_mappings*
-Set this to a nonzero value if you prefer XHTML compatible tags to be defined.
-Setting this forces |b:html_tag_case| to "lowercase".  This is automatic if
-you are already editing a file that Vim detects as XHTML.  This variable must
-be set before HTML.vim is sourced for the current buffer.  You can also set
-this on a per-buffer basis by using b:do_xhtml_mappings instead.  e.g.: >
+Set this variable to a nonzero value if you prefer XHTML compatible tags to be
+defined.  Setting this forces |b:html_tag_case| to "lowercase".  This is
+automatic if you are already editing a file that Vim detects as XHTML.  This
+variable must be set before HTML.vim is sourced for the current buffer.  You
+can also set this on a per-buffer basis by using b:do_xhtml_mappings instead.
+e.g.: >
 	:let g:do_xhtml_mappings = 'yes'
 
 *g:html_tag_case* *b:html_tag_case*
@@ -140,9 +141,17 @@ This variable can be set to "l" / "lower" / "lowercase" or "u" / "upper" /
 "uppercase" to determine the case of the text in the HTML tags.  This variable
 must be set before HTML.vim is sourced for the current buffer.  The default is
 "uppercase".  You can also set this on a per-buffer basis by using
-b:html_tag_case instead.  Note that this value is ignored when editing XHTML
-files (see |g:do_xhtml_mappings|).  e.g: >
+b:html_tag_case instead.  This variable is ignored when editing XHTML files
+(see |g:do_xhtml_mappings|).  e.g: >
 	:let g:html_tag_case = 'lowercase'
+
+*g:html_tag_case_autodetect*
+Set this variable to a nonzero value if you want to automatically detect what
+the value of |b:html_tag_case| should be.  This is done by examining the file
+for both upper and lower case tags (tag attributes are not examined).  If only
+one type is found the tag case for the buffer is set to that value.  This
+variable is ignored if you have set |g:do_xhtml_mappings|.  e.g.: >
+	:let g:html_tag_case_autodetect = 'yes'
 
 *g:html_map_leader*
 This variable can be set to the character you want for the leader of the
@@ -153,39 +162,36 @@ to your |mapleader| or |maplocalleader|.  e.g.: >
 	:let g:html_map_leader = g:maplocalleader
 
 *g:no_html_tab_mapping*
-Set this variable if you do not want the tab key to be mapped in normal,
-visual and insert mode, ;<Tab> will be used instead.  See |html-tab| and
-|i_;tab|.  This variable must be set before HTML.vim is sourced for the
-current buffer.  The contents of this variable do not matter, as long as it is
-set.  e.g.: >
+Set this variable to a nonzero value if you do not want the tab key to be
+mapped in normal, visual and insert mode.  ;<Tab> will be used instead.  See
+|html-tab| and |i_;tab|.  This variable must be set before HTML.vim is sourced
+for the current buffer.  e.g.: >
 	:let g:no_html_tab_mapping = 'yes'
 
 *g:no_html_toolbar*
-Set this variable if you do not want this plugin to modify the Vim toolbar
-and add "T" to 'guioptions'.  This variable must be set before HTML.vim is
-sourced.  The contents of the variable do not matter, as
-long as it is set.  e.g.: >
+Set this variable to a nonzero value if you do not want this plugin to modify
+the Vim toolbar and add "T" to 'guioptions'.  This variable must be set before
+HTML.vim is sourced.  e.g.: >
 	:let g:no_html_toolbar = 'yes'
 
 *g:no_html_menu*
-Set this variable if you don't want the menu items to be defined at all.  This
-implies that |g:no_html_toolbar| is set as well.  This variable must be set
-before HTML.vim is sourced.  The contents of the variable do not matter, as
-long as it is set.  e.g.: >
+Set this variable to a nonzero value if you don't want the menu items to be
+defined at all.  This implies that |g:no_html_toolbar| is set as well.  This
+variable must be set before HTML.vim is sourced.  e.g.: >
 	:let g:no_html_menu = 'yes'
 
 *g:force_html_menu*
-Set this variable if you want the menu items to be defined even if you're not
-in the GUI.  This is useful if you want to use the menus in the console (see
-|console-menus|).  This variable is ignored if |g:no_html_menu| is set.  This
-variable must be set before HTML.vim is sourced.  The contents of the variable
-do not matter, as long as it is set.  e.g.: >
+Set this variable to a nonzero value if you want the menu items to be defined
+even if you're not in the GUI.  This is useful if you want to use the menus in
+the console (see |console-menus|).  This variable is ignored if
+|g:no_html_menu| is set.  This variable must be set before HTML.vim is
+sourced.  e.g.: >
 	:let g:force_html_menu = 'yes'
 
 *g:html_template* *b:html_template*
-Set this to the location of your template file to be used by the |;html|
-mapping.  You can also set this on a per-buffer basis by using b:html_template
-instead.  If unset, a basic internal template will be used.
+Set this variable to the location of your template file to be used by the
+|;html| mapping.  You can also set this on a per-buffer basis by using
+b:html_template instead.  If unset, a basic internal template will be used.
 
 See |html-template-tokens| for special tokens you can use within the template.
 
@@ -353,7 +359,7 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;at* *v_;at* *n_;at*
 ;at	Like |;ah| but include TARGET="" in the tag. (|n_;|)
 							*i_;aT* *v_;aT* *n_;aT*
-;aH	Like |;aH| but include TARGET="" in the tag. (|n_;|)
+;aT	Like |;aH| but include TARGET="" in the tag. (|n_;|)
 							*i_;an* *v_;an* *n_;an*
 							*i_;aN* *v_;aN* *n_;aN*
 ;an and ;aN
@@ -675,8 +681,8 @@ Middle Dot		&middot;	&.		*i_&.*
 One Quarter		&frac14;	&14		*i_&14*
 One Half		&frac12;	&12		*i_&12*
 Three Quarters		&frac34;	&34		*i_&34*
-En dash			&ndash;		&n-		*i_&n-*
-Em dash			&mdash;		&m-/&--		*i_&m-* *i_&--*
+En dash			&ndash;		&n-/&2-		*i_&n-* *i_&2-*
+Em dash			&mdash;		&m-/&--/&3-	*i_&m-* *i_&--* *i_3-*
 Ellipsis		&hellip;	&3.		*i_&3.*
 A-grave			&Agrave;	&A`		*i_&A`*
 a-grave			&agrave;	&a`		*i_&a`*
