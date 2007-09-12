@@ -980,7 +980,7 @@ endif " has("autocmd")
     "### }}}2   
 
     "### setting for MRU.vim {{{2
-    let MRU_Max_Entries = 50
+    let MRU_Max_Entries = 150
     let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'
     map <silent> ,m :MRU<CR>
     "### }}}2   
@@ -1065,10 +1065,15 @@ endif " has("autocmd")
     "### setting for fuzzyfinder.vim {{{2
     let g:FuzzyFinder_KeyToggleMode = '<C-t>' " disable this map
     let g:FuzzyFinder_KeyToggleIgnoreCase = '<C-i>'
-    let g:FuzzyFinder_KeyToggleSplitOpen = '<C-s>'
-    let g:FuzzyFinder_WildIgnore = '*~,*.bak,*.swp,*.pyc,*.exe'
+    let g:FuzzyFinder_ExcludePattern = '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$'
     let g:FuzzyFinder_IgnoreCase = 1
-    let g:FuzzyFinder_SplitOpen = 1
+
+    " Map this to select completion item or to finish input and open a
+    " buffer/file. 1st item is mapped to open in previous window. 2nd item is
+    " mapped to open in new window which is made from split previous window. 3rd
+    " item is mapped to open in new window which is made from split previous
+    " window vertically.
+    let g:FuzzyFinder_KeyOpen = ['<C-S>', '<CR>', '<C-V>']
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     "}}}2
