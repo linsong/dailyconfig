@@ -14,4 +14,8 @@ augroup filetypedetect
   au! BufRead,BufNewFile *.blogger  setfiletype blogger
 
   au! BufRead,BufNewFile *.viki  setfiletype viki
+
+  au  BufRead,BufNewFile ipython_edit*.py set paste
+  au  BufRead,BufNewFile svn-commit.tmp set paste
+  au  BufRead,BufNewFile mutt-vincent-* set paste
 augroup END
