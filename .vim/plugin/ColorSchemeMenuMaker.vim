@@ -1,11 +1,27 @@
-" theme.menu.vim:	Generates Vim themes menu and organizes themes based
-" 					upon background colors
+" ColorSchemeMenuMaker.vim:	Generates Vim ColorScheme menu and
+" 					organizes themes based upon background colors
 " Maintainer:		Erik Falor <rAjsBnFCybe@tzNnvy.Zpbz g?? - NOSPAM>
-" Date:				Sept 6, 2007
-" Version:			0.5
+" Date:				Sept 14, 2007
+" Version:			0.6
 " License:			If you copy this, just give me props.
 "
 " History:
+"   Version 0.6:	Created an SDK mode that creates an HTML page
+"   				which aids in tweaking the color selection algorithm.
+"   				To enable, define the variable g:ColorSchemeSDKMode
+"   				and install ColorSchemeSDK.vim in the autoload/
+"   				directory.
+"					Tweaked with IsYellow() and IsGreen() a bit... robinhood
+"					now shows up as green instead of yellow.
+"					Added IsPurple().
+"					I have forgotten to mention that if a colorscheme has more
+"					than one 'hi Normal ...' command its name will have a *
+"					prepended to it.  If such a theme shows up in the wrong
+"					color category, its because I guessed wrong at which
+"					Normal group is used.  It also means that you may be able
+"					to control the look and feel of the colorscheme by setting
+"					variables in your .vimrc file.
+"
 " 	Version 0.5:	Store the generated menu under the same directory
 " 					this file is located.  Thanks to Vincent Vandalon for
 " 					pointing out that not all folks have a ~/vimfiles
@@ -24,10 +40,10 @@
 " 	Version 0.1:	Initial upload
 
 " Initialization: {{{
-if exists("g:loaded_theme_menu") || &cp
+if exists("g:loaded_theme_menu") && !exists("g:ColorSchemeSDKMode")
 	finish
 endif
-let g:loaded_theme_menu= "0.4"
+let g:loaded_theme_menu= "0.6"
 let s:keepcpo      = &cpo
 set cpo&vim
 "}}}
@@ -50,6 +66,7 @@ function! <SID>RGBtoHSV(r, g, b) "{{{
 	let h = 0
 	let s = 0
 	let v = 0
+	"blue is greatest
 	if (a:b > a:g) && (a:b > a:r)
 		let v = a:b
 		if v != 0
@@ -76,6 +93,7 @@ function! <SID>RGBtoHSV(r, g, b) "{{{
 			let s = 0
 			let h = 0
 		endif
+	"green is greatest
 	elseif a:g > a:r
 		let v = a:g
 		if v != 0
@@ -100,6 +118,7 @@ function! <SID>RGBtoHSV(r, g, b) "{{{
 			let s = 0
 			let h = 0
 		endif
+	"red is greatest
 	else
 		let v = a:r
 		if v != 0
@@ -182,7 +201,7 @@ function! <SID>IsGrey(r, g, b, h, s, v) "{{{
 endfunction "}}}
 
 function! <SID>IsYellow(r, g, b, h, s, v) "{{{
-	if a:h > 30 && a:h <= 90
+	if a:h > 30 && a:h <= 69
 		return 1
 	else 
 		return 0
@@ -190,7 +209,7 @@ function! <SID>IsYellow(r, g, b, h, s, v) "{{{
 endfunction "}}}
 
 function! <SID>IsGreen(r, g, b, h, s, v) "{{{
-	if a:h > 90 && a:h <= 180
+	if a:h > 70 && a:h <= 180
 		return 1
 	else 
 		return 0
@@ -205,6 +224,13 @@ function! <SID>IsCyan(r, g, b, h, s, v) "{{{
 	else 
 		return 0
 	endif
+endfunction "}}}
+
+function! <SID>IsPurple(r, g, b, h, s, v) "{{{
+	if a:r >= a:g && a:b > a:g && a:r != 0 && a:g != 0
+		return 1
+	endif
+	return 0
 endfunction "}}}
 
 function! <SID>IsBlue(r, g, b, h, s, v) "{{{
@@ -304,6 +330,7 @@ function! <SID>RGB2BoyColor(rgb) "{{{
 	if <SID>IsYellow(r, g, b, h, s, v) == 1 | return 'yellow' | endif
 	if <SID>IsCyan(r, g, b, h, s, v) == 1 | return 'cyan' | endif
 	if <SID>IsGreen(r, g, b, h, s, v) == 1 | return 'green' | endif
+	if <SID>IsPurple(r, g, b, h, s, v) == 1 | return 'purple' | endif
 	if <SID>IsBlue(r, g, b, h, s, v) == 1 | return 'blue' | endif
 	if <SID>IsMagenta(r, g, b, h, s, v) == 1 | return 'magenta' | endif
 	if <SID>IsRed(r, g, b, h, s, v) == 1 | return 'red' | endif
@@ -315,7 +342,7 @@ function! <SID>GlobThemes() "{{{
 	return split(globpath(&rtp, 'colors/*.vim'), '\n')
 endfunction "}}}
 
-function! <SID>ScanThemeBackground() "{{{
+function! <SID>ScanThemeBackgrounds() "{{{
 	"Read each of the theme files and find out which color
 	"each theme 'basically' is.  Uses the last 'hi Normal' 
 	"group found to classify by color.  Notes those color
@@ -457,9 +484,10 @@ function! <SID>BuildMenu(dicts) "{{{
 endfunction "}}}
 
 function! WriteColorSchemeMenu() "{{{
-	"Builds the menu from the two dicts returned by ScanThemeBackground()
+	"Builds the menu from the two dicts returned by ScanThemeBackgrounds()
 	"Stores menu in first plugin dir specified by &rtp
-	let menu = <SID>BuildMenu(<SID>ScanThemeBackground())
+	let dicts = <SID>ScanThemeBackgrounds()
+	let menu = <SID>BuildMenu(dicts)
 	call writefile(menu, s:menuFile)
 endfunction "}}}
 
@@ -467,7 +495,65 @@ function! <SID>InitMenu() "{{{
 	call WriteColorSchemeMenu()
 	execute "source " . s:menuFile
 endfunction "}}}
+"}}}
 
+"{{{ SDK-Mode Section
+if exists("g:ColorSchemeSDKMode")
+	let g:mapping = 'map <F5> :so ' . g:ColorSchemeSDKMode . 
+		\'/autoload/ColorSchemeSDK.vim \| so ' .
+		\g:ColorSchemeSDKMode . '/plugin/ColorSchemeMenuMaker.vim ' .
+		\'\| call GenHTML() <CR>'
+	execute g:mapping
+
+	"get the script ID for functions in this script
+	function! <SID>SID() "{{{
+		return '<SNR>' . matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$') . '_'
+	endfunction "}}}
+
+	let s:sid = <SID>SID()
+
+	let s:CSMMfuncs = { 
+				\'RGBtoHSV'					: function(s:sid . "RGBtoHSV"),
+				\'IsBlack'					: function(s:sid . "IsBlack"),
+				\'IsWhite'					: function(s:sid . "IsWhite"),
+				\'IsDarkGrey'				: function(s:sid . "IsDarkGrey"),
+				\'IsOffWhite'				: function(s:sid . "IsOffWhite"),
+				\'IsGrey'					: function(s:sid . "IsGrey"),
+				\'IsYellow'					: function(s:sid . "IsYellow"),
+				\'IsGreen'					: function(s:sid . "IsGreen"),
+				\'IsCyan'					: function(s:sid . "IsCyan"),
+				\'IsBlue'					: function(s:sid . "IsBlue"),
+				\'IsMagenta'				: function(s:sid . "IsMagenta"),
+				\'IsOrange'					: function(s:sid . "IsOrange"),
+				\'IsRed'					: function(s:sid . "IsRed"),
+				\'RgbTxt2Hexes'				: function(s:sid . "RgbTxt2Hexes"),
+				\'RGBHexToHexes'			: function(s:sid . "RGBHexToHexes"),
+				\'RGBHexToInts'				: function(s:sid . "RGBHexToInts"),
+				\'Hex2Int'					: function(s:sid . "Hex2Int"),
+				\'RGB2BoyColor'				: function(s:sid . "RGB2BoyColor"),
+				\'GlobThemes'				: function(s:sid . "GlobThemes"),
+				\'ScanThemeBackgrounds'		: function(s:sid . "ScanThemeBackgrounds"),
+				\'BuildMenu'				: function(s:sid . "BuildMenu") }
+
+	"let g:CSMMfuncs = s:CSMMfuncs 
+
+	function! CallIt(key, ...) 
+		return ColorSchemeSDK#Invoke1(s:CSMMfuncs[a:key], a:1)
+	endfunction
+
+	"creates an html file named a:destfile that shows the background color
+	"along with the color guessed by this plugin
+	function! GenHTML(...)
+		if 0 == a:0 
+			let destfile = 'ColorScheme.html'
+		else
+			let destfile = a:1
+		endif
+		return ColorSchemeSDK#GenHTML(destfile, s:CSMMfuncs)
+	endfunction
+	echom "Using ColorSchemeMenuMaker in SDK mode!"
+	echom "unlet g:ColorSchemeSDKMode to disable"
+endif
 "}}}
 
 " Restore &cpo: {{{1
