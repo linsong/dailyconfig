@@ -11,13 +11,15 @@ Last change: 10/12/2004 Tue
             
 *exoweb*
 ===============================================================================
-NO 1. Nordicbet IDs:
-  back_office: jacob 123
-  front_office: vincent 111111
-
-
+# Lessons learned from Sportsbook project
+  * never trust data given by user
+  * twisted callLater is not thread safe 
+  * LoopingCall is not thread safe since it use callLater internally
+  * take care of concurrent update failure when updating/inserting data into
+    db
+  
 ===============================================================================
-NO 2. The framework of Nordicbet:
+# The framework of Nordicbet:
 
                 batch 
              presentation  
@@ -25,12 +27,12 @@ NO 2. The framework of Nordicbet:
                database
 
 ===============================================================================
-NO 3. PostgreSQL: 
+# PostgreSQL: 
    When run sqls like: update, delete etc, pay more attention to concurrent
    update failure. Solution to this problem is retrying some times.
 
 ===============================================================================
-NO 4. The main third party libraries used by nordicbet:
+# The main third party libraries used by nordicbet:
 
   Twisted library: a webserver written by python, it implements a very flexible event-driven website framework.
 
@@ -49,17 +51,13 @@ NO 4. The main third party libraries used by nordicbet:
  mechanize: a automatic web python lib 
 
 ===============================================================================
-NO 6. how to run a specific function/unit test of nordicbet
+# how to run a specific function/unit test of nordicbet
     in the trunk/src dir, use the following command to run functional test file of presentation/previewmail_r_ftest.py 
 
     $ ./nordicbetsite ftest -D presentation -P previewmail_r_ftest.py  
     and use the following command to run specific unit test
     $ ./nrodicbetsite test -D presentation -P previewmail_r_test.py
 
-===============================================================================
-# Lessons learned from Sportsbook project
-  * never trust data given by user
-  
 ===============================================================================
                                                           *food*
 # FOOD! 

@@ -1,6 +1,6 @@
 #Triggers file version 1.0
 -privmsgs -nocase -regexp '^.*[[:print:]]*(thank[s]?|(3\s*q)|xie\s*xie|duo\s*xie|xie\s*le|gan\s*xie)[[:punct:]]*.*$' -command '/timer stop trigger_$N ; /timer add trigger_$N 2 1 say You are welcome!' 
--publics -nocase -regexp '^vincen.*:.*[[:print:]]*(thank[s]?|(3\s*q)|xie\s*xie|duo\s*xie|xie\s*le|gan\s*xie)[[:punct:]]*.*$' -command '/timer stop trigger_$N ; /timer add trigger_$N 2 1 say $N: You are welcome!' 
+-publics -nocase -regexp '^vincen[^:]*:.{0,10}?(谢谢|多谢|非常感谢|感谢|万分感谢|谢了)(你)?[\p{IsPunct}]*.{0,10}?$' -command '/timer stop trigger_$N ; /timer stop trigger_$N;/timer add trigger_$N 2 1 say $N: 别客气 :)' 
 -all -regexp '\n' -replace '    ' 
 -publics -nocase -regexp '^vincen.*:.*[[:print:]]*(谢谢|多谢|非常感谢|感谢|万分感谢|谢了)(你)?[\p{IsPunct}]*.*$' -command '/timer stop trigger_$N ; /timer stop trigger_$N;/timer add trigger_$N 2 1 say $N: 别客气 :)' 
 -privmsgs -nocase -regexp '^.*[[:print:]]*(谢谢|多谢|非常感谢|感谢|万分感谢|谢了)(你)?[\p{IsPunct}]*.*$' -command '/timer stop trigger_$N ; /timer add trigger_$N 2 1 say 别客气 :)' 
