@@ -52,7 +52,7 @@ fun! s:Vm_place_sign()
 
   let ln = line(".")
 
-  exe 'sign define SignSymbol linehl=SignColor texthl=SignColor'
+  exe 'sign define SignSymbol text=>> linehl=SignColor texthl=SignColor'
   exe 'sign place ' . b:Vm_sign_number . ' line=' . ln . ' name=SignSymbol buffer=' . winbufnr(0)
 
   let vsn              = b:Vm_sign_number
