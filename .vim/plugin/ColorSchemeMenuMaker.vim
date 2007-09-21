@@ -1,11 +1,13 @@
 " ColorSchemeMenuMaker.vim:	Generates Vim ColorScheme menu and
 " 					organizes themes based upon background colors
 " Maintainer:		Erik Falor <rAjsBnFCybe@tzNnvy.Zpbz g?? - NOSPAM>
-" Date:				Sept 14, 2007
-" Version:			0.6
+" Date:				Sept 20, 2007
+" Version:			0.7
 " License:			If you copy this, just give me props.
 "
 " History:
+"   Version 0.7:	Fixed some bugs in SDK mode.  Tweaked IsDarkGrey().
+"
 "   Version 0.6:	Created an SDK mode that creates an HTML page
 "   				which aids in tweaking the color selection algorithm.
 "   				To enable, define the variable g:ColorSchemeSDKMode
@@ -38,6 +40,8 @@
 " 	Version 0.2:	Menu categories include a count of contained items.	
 "
 " 	Version 0.1:	Initial upload
+" GetLatestVimScripts: 2004 1 :AutoInstall: ColorSchemeMenuMaker.vba
+
 
 " Initialization: {{{
 if exists("g:loaded_theme_menu") && !exists("g:ColorSchemeSDKMode")
@@ -166,7 +170,7 @@ endfunction "IsWhite()}}}
 
 function! <SID>IsDarkGrey(r, g, b, h, s, v) "{{{
 	let diffRGB = max([a:r, a:g, a:b]) - min([a:r, a:g, a:b])
-	let darkGreyFuzz = 20
+	let darkGreyFuzz = 10
 	if diffRGB <= darkGreyFuzz
 		return 1
 	else 
@@ -267,7 +271,7 @@ function! <SID>IsRed(r, g, b, h, s, v) "{{{
 	endif
 endfunction "}}}
 
-function! <SID>RgbTxt2Hexes() "{{{
+function! <SID>FindRgbTxt() "{{{
 	"read rgb.txt, return dictionary mapping color names to hex triplet
 	if exists("g:rgbtxt") && filereadable(g:rgbtxt)
 		let rgbtxt = g:rgbtxt
@@ -280,6 +284,11 @@ function! <SID>RgbTxt2Hexes() "{{{
 			let rgbtxt = "/usr/share/X11/rgb.txt"
 		endif
 	endif
+	return rgbtxt
+endfunction "}}}
+
+function! <SID>RgbTxt2Hexes() "{{{
+	let rgbtxt = <SID>FindRgbTxt()
 	let rgbdict = {}
 	if filereadable(rgbtxt)
 		for line in readfile(rgbtxt)
@@ -523,9 +532,11 @@ if exists("g:ColorSchemeSDKMode")
 				\'IsGreen'					: function(s:sid . "IsGreen"),
 				\'IsCyan'					: function(s:sid . "IsCyan"),
 				\'IsBlue'					: function(s:sid . "IsBlue"),
+				\'IsPurple'					: function(s:sid . "IsPurple"),
 				\'IsMagenta'				: function(s:sid . "IsMagenta"),
 				\'IsOrange'					: function(s:sid . "IsOrange"),
 				\'IsRed'					: function(s:sid . "IsRed"),
+				\'FindRgbTxt'				: function(s:sid . "FindRgbTxt"),
 				\'RgbTxt2Hexes'				: function(s:sid . "RgbTxt2Hexes"),
 				\'RGBHexToHexes'			: function(s:sid . "RGBHexToHexes"),
 				\'RGBHexToInts'				: function(s:sid . "RGBHexToInts"),
