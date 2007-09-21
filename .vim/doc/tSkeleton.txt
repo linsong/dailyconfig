@@ -1,6 +1,6 @@
 *tSkeleton.txt*              tSkeleton -- File Templates and Code Skeletons
 
-Author: Thomas Link, samul AT web.de
+Author: Thomas Link, micathom AT gmail com?subject=vim
 
 tSkeleton provides file templates and code skeletons (snippets). These 
 templates may contain special tags that are replaced with some computed 
@@ -83,44 +83,175 @@ You can use tags to define cursor jump positions. tSkeleton also
 supports some special tags that are expanded when inserting the 
 skeleton.
 
-A list of special tags:>
-
-    <+FILE NAME ROOT+> :: the file name root
-    <+FILE NAME+>      :: the file name
-    <+FILE SUFFIX+>    :: the file suffix
-    <+FILE DIRNAME+>   :: the file's directory
-    <+NOTE+>           :: a note
-    <+DATE+>           :: the current date (the format is controlled via 
-                          g:tskelDateFormat)
-    <+AUTHOR+>         :: the author's name (g:tskelUserName)
-    <+EMAIL+>          :: the author's e-mail (g:tskelUserEmail)
-    <+WEBSITE+>        :: the author's homepage (g:tskelUserWWW)
-    <+LICENSE+>        :: the name of the license this file is released 
-                          under (g:tskelLicense)
+A list of special tags:
+                                                    *tSkeletion-<+FILE NAME ROOT+>*
+    <+FILE NAME ROOT+>
+        The file name root
+                                                    *tSkeletion-<+FILE NAME+>*
+    <+FILE NAME+>
+        The file name
+                                                    *tSkeletion-<+FILE SUFFIX+>*
+    <+FILE SUFFIX+>
+        The file suffix
+                                                    *tSkeletion-<+FILE DIRNAME+>*
+    <+FILE DIRNAME+>
+        The file's directory
+                                                    *tSkeletion-<+NOTE+>*
+    <+NOTE+>
+        A note
+                                                    *tSkeletion-<+DATE+>*
+    <+DATE+>
+        The current date (the format is controlled via 
+        g:tskelDateFormat)
+                                                    *tSkeletion-<+AUTHOR+>*
+    <+AUTHOR+>
+        The author's name (g:tskelUserName)
+                                                    *tSkeletion-<+EMAIL+>*
+    <+EMAIL+>
+        The author's e-mail (g:tskelUserEmail)
+                                                    *tSkeletion-<+WEBSITE+>*
+    <+WEBSITE+>
+        The author's homepage (g:tskelUserWWW)
+                                                    *tSkeletion-<+LICENSE+>*
+    <+LICENSE+>
+        The name of the license this file is released under 
+        (g:tskelLicense)
 
 In order to define your own tag, you have to define a function called 
 TSkeleton_TAGNAME() that returns the text to be filled in.
 
+                                                    *tSkeleton-tags*
 tSkeleton also supports the following pseudo-tags:
 
-    <+CURSOR+>         :: where to place the cursor after insertion
-    <+&NAME+>          :: a vim option
-    <+g:NAME+>         :: a global variable
-    <+b:NAME+>         :: a buffer local variable
-    <+?QUERY?+>        :: query the user[1]
-    <+?VAR|QUERY?+>    :: query the user and propose some choices from 
-                          the variable ${VAR}[1]
-    <+bit:BIT>, <+bit:BIT|"DEFAULT">, <+bit:BIT|COMMANDS> :: insert a 
-                          bit; if the bit isn't defined for the current 
-                          filetype, use DEFAULT; if DEFAULT matches ".*" 
-                          insert it as a string; otherwise interpret it 
-                          as a command sequence to be fed to normal
-    <+tskel:TSKELETON> ... :: same as the above
-    <+call:FUNCTION(ARGS)+> :: insert the result value of some function
+    <+CURSOR+>                                      *tSkeletion-<+CURSOR+>*
+        Where to place the cursor after insertion
+
+    <+&NAME+>                                       *tSkeletion-<+&+>*
+        A vim option
+
+    <+g:NAME+>                                      *tSkeletion-<+g:+>*
+        A global variable
+
+    <+b:NAME+>                                      *tSkeletion-<+b:+>*
+        A buffer local variable
+ 
+    <+?QUERY?+>                                     *tSkeletion-<+?+>*
+        Query[1] the user
+
+    <+?VAR|QUERY?+>
+        Query[1] the user and propose some choices from the variable VAR
+
+                                                    *tSkeletion-<+bit+>*
+    <+bit:BIT+>, <+bit:BIT|"DEFAULT"+>, <+bit:BIT|COMMANDS+>
+        Insert a bit; if the bit isn't defined for the current filetype, 
+        use DEFAULT; if DEFAULT matches ".*" insert it as a string; 
+        otherwise interpret it as a command sequence to be fed to normal
+
+    <+tskel:TSKELETON+>                             *tSkeletion-<+tskel+>*
+        Same as the above
+
+    <+call:FUNCTION(ARGS)+>                         *tSkeletion-<+call+>*
+        Insert the result value of some function
+
+    <+include(TSKELETON)+>                           *tSkeletion-<+include+>*
+        Another synonym for the above.
+
+    <+execute(EX COMMAND)+>                         *tSkeletion-<+execute+>*
+        Run a vim command.
 
 [1] If the query ends with a colon, the second question mark will be 
 removed. Up to verson 2.4 VAR is a string, separating the items by an 
 "\n". From 3.0 on, VAR is a list.
+
+NOTE: Flow control and loop tags are experimental and it's more than 
+just likely that the output doesn't meet your expectations.
+
+Flow control:                                       *tSkeletion-<+if+>*
+    <+if(CONDITION)+>
+    <+elseif(CONDITION)+>
+    <+else+>
+    <+endif+>
+
+Loops:                                              *tSkeletion-<+for+>*
+    <+for(VAR in LIST)+>
+    <+endfor+>, <+endfor(VAR)+>
+        If you nest for loops, you have to add the variable name to the 
+        endfor tag. And no, this isn't the most clever way to do this.
+
+Variables:                                          *tSkeletion-<+let+>*
+    <+let(VAR=VALUE)+>
+        The variable will be unset or restored to its original value 
+        after processing the current template.
+        VAR may have some modifiers attached:
+            VAR? ... Set only if undefined
+            VAR& ... Don't restore original variable
+
+Interaction:                                        *tSkeletion-<+input+>*
+    <+input(VAR, QUERY, [DEFAULT], [COMPLETION])+>
+        This will insert the user input and set the variable VAR (unless 
+        empty), which can be used throughout the template. The variable 
+        will be removed after finishing the current template. If the 
+        variable was previously defined, the original value will be 
+        restored.
+        If VAR ends with '!', no text will be inserted in the buffer. In 
+        this case any whitespace (including one newline) after the tag 
+        will be removed. See also the notes on |tSkeletion-<+input+>|.
+
+Other:                                              *tSkeletion-<+nl+>*
+    <+nl+>
+        Insert a newline
+                
+    <+joinline+>                                    *tSkeletion-<+joinline+>*
+        Join with next line. Delete any whitespace.
+            
+    <+nop+>                                         *tSkeletion-<+nop+>*
+        Insert nothing (could be necessary in conjunction with the "for" 
+        tag)
+
+A wiki like table could then be constructed using a skeleton like this: >
+
+    <tskel:before>
+    let s:my_rows = input('Rows: ')
+    let s:my_cols = input('Columns: ')
+    </tskel:before>
+    <tskel:after>
+    unlet! s:my_rows s:my_cols
+    </tskel:after>
+    <+CURSOR+><+for(i in range(s:my_rows))+>
+    |<+for(j in range(s:my_cols))+> <+CELL+> |<+endfor(j)+><+nop+>
+    <+endfor(i)+>
+
+or: >
+
+    <+input('s:my_rows?!', 'Rows: ')+>
+    <+input('s:my_cols?!', 'Cols: ')+>
+    <+for(i in range(s:my_rows))+>
+    |<+for(j in range(s:my_cols))+> <+CURSOR+> |<+endfor(j)+><+nop+>
+    <+endfor(i)+>
+
+NOTE: The <+nop+> is necessary in order to prevent the <+endfor+> tag to 
+"eat" the newline. If we include this bit from another bit that already 
+sets s:my_rows and/or s:my_cols, the user won't be queried again (because of 
+the "?" in the input statement). E.g. >
+
+    <+let(s:my_rows = 3)+>
+    <+let(s:my_cols = 3)+>
+    <+include(table)+>
+
+                                                    *tSkeletion-backslash*
+Any special tag can be preceded with a backslash in order to prevent 
+expansion. Examples: >
+
+    <+\if(foo=1)+>
+    
+surprisingly expands to >
+
+    <+if(foo=1)+>
+
+It's best to use global variables with "if" and "for" tags as the body 
+is most likely evaluated in a different buffer in a hypothetically 
+unknown context.
+
 
                                                     *tSkeleton-jump-positions*
 Unknown tags are kept in the expanded skeleton. These tags can be used 
@@ -177,6 +308,21 @@ Example for a ruby class template: >
                                                     *tSkeleton-bits*
 Bits/Code Skeletons~
 
+                                                    *tSkeleton-Types* *g:tskelTypes*
+                                                    *tskeleton#Initialize()*
+tSkeleton supports several types of code templates:
+
+    - skeleton (standard tSkeleton functionality)
+    - abbreviations (VIM abbreviations)
+    - functions (VIM script functions extracted from :function)
+    - mini ("mini" bits, one-liners etc.)
+    - tags (tags-based code templates, requires ctags, I presume)
+
+Not all types are enabled by default. User have to select, which types 
+they want to use, by setting the g:tskelTypes at start-up. When changing 
+the variable, users might have to call tskeleton#Initialize().
+
+                                                    *tSkeleton-Skeleton*
 Smaller skeleton bits are stored in SKELETONS/bits/FILETYPE/ or 
 SKELETONS/bits/general/. I.e., code skeletons can be filetype specific 
 or generally available.
@@ -216,19 +362,31 @@ Code skeletons may contain vim code that is evaluated before or after
 expanding the tags. The before/after blocks are fed to |:exec| and must 
 not contain function definitions.
 
-                                                    *<tskel:msg>* *<tskel:before>* *<tskel:after>*
-                                                    *<tskel:here_before>* *<tskel:here_after>*
-These special regions must appear in the following order:
-        <tskel:msg>
-            Display an explanatory message after template expansion
-        <tskel:before>
-            Execute code before template expansion in the target buffer
-        <tskel:after>
-            Execute code after template expansion in the target buffer
-        <tskel:here_before>
-            Execute code before template expansion in the template buffer
-        <tskel:here_after>
-            Execute code after template expansion in the template buffer
+NOTE: The "parser" is quite primitive. These tags have to start as 
+single statement in a line at column 1, and they have to appear in the 
+following order:
+
+    <tskel:msg>                                     *<tskel:msg>*
+        Display an explanatory message after template expansion
+
+    <tskel:before>                                  *<tskel:before>*
+        Execute code before template expansion in the target buffer
+
+    <tskel:after>                                   *<tskel:after>*
+        Execute code after template expansion in the target buffer
+
+    <tskel:here_before>                             *<tskel:here_before>*
+        Execute code before template expansion in the template buffer
+
+    <tskel:here_after>                              *<tskel:here_after>*
+        Execute code after template expansion in the template buffer
+
+    <tskel:abbrev>                                  *<tskel:abbrev>*
+        Make the bit available via |:abbreviate| under the enclosed name.
+
+    <tskel:condition>                               *<tskel:condition>*
+        An expression that checks whether a bit is eligible in the 
+        current context.
 
 BibTeX example: >
 
@@ -353,16 +511,16 @@ Commands~
                                                     *tSkeleton-utilities*
 Utilities~
 
-                                                    *TSkeletonIncreaseRevisionNumber()*
-The function TSkeletonIncreaseRevisionNumber() provides a way to 
+                                                    *tskeleton#IncreaseRevisionNumber()*
+The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.211
+    @Revision: 1.0.303
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
 
-    autocmd BufWritePre * call TSkeletonIncreaseRevisionNumber()
+    autocmd BufWritePre * call tskeleton#IncreaseRevisionNumber()
 
                                                     *:TSkeletonCleanUpBibEntry*
 The TSkeletonCleanUpBibEntry command can be used to purge the current bibtex 
@@ -371,17 +529,26 @@ entry from expendable fields (i.e., lines matching <+.\{-}+>).
 For bibtex files, this command is bound to: <Leader>tc
 
                                                     *TSkeletonMapGoToNextTag()*
-                                                    *TSkeletonGoToNextTag()*
+                                                    *tskeleton#GoToNextTag()*
 If you don't want to install imaps.vim, this function will map <c-j> to 
-TSkeletonGoToNextTag() in order to easily jump between tags.
+tskeleton#GoToNextTag() in order to easily jump between tags.
 
 You can insert >
 
     call TSkeletonMapGoToNextTag()
 
-in after/plugin/tSkeleton.vim to map TSkeletonGoToNextTag() to <c-j> 
+in after/plugin/tSkeleton.vim to map tskeleton#GoToNextTag() to <c-j> 
 similar to imap.vim.
 
-This will map <c-j> to TSkeletonGoToNextTag() that makes the cursor jump 
+This will map <c-j> to tskeleton#GoToNextTag() that makes the cursor jump 
 to the next tag.
+
+This function provides one or two extras over the version of imaps.vim. 
+An explanation:
+
+    - ###, +++, ???, !!! are used as markers too.
+    - If a marker is empty (e.g. <++>), the marker will be removed (as 
+      imaps.vim does).
+    - If a marker matches <+NAME/DEFAULT+>, the marker will be replaced 
+      with DEFAULT.
 
