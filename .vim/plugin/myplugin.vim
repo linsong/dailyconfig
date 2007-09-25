@@ -140,4 +140,37 @@ endfunction
 
 endif
 
+"  GetVisualSelectionEscaped function, borrowed from mark.vim {{{1
+function! s:GetVisualSelection()
+    let save_a = @a
+    silent normal! gv"ay
+    let res = @a
+    let @a = save_a
+    return res
+endfunction
+
+function! GetVisualSelectionEscaped(flags)
+    " flags:
+    "  "e" \  -> \\  
+    "  "n" \n -> \\n  for multi-lines visual selection
+    "  "N" \n removed
+    "  "V" \V added   for marking plain ^, $, etc.
+    let result = s:GetVisualSelection()
+    let i = 0
+    while i < strlen(a:flags)
+            if a:flags[i] ==# "e"
+                    let result = escape(result, '\')
+            elseif a:flags[i] ==# "n"
+                    let result = substitute(result, '\n', '\\n', 'g')
+            elseif a:flags[i] ==# "N"
+                    let result = substitute(result, '\n', '', 'g')
+            elseif a:flags[i] ==# "V"
+                    let result = '\V' . result
+            endif
+            let i = i + 1
+    endwhile
+    return result
+endfunction
+"  }}}1
+
 " vim:ft=vim foldmethod=marker
