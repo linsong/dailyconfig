@@ -1,0 +1,26 @@
+" settings
+set activate=quickmark,paste
+set nobeep
+set complete=sbhf
+set defsearch=google
+set guioptions=mTbs
+set maxhints=1000
+
+" may affect performance
+set preload 
+
+set showmode
+set showstatuslinks
+
+set wildmode=list:longest
+
+" key mappings
+map <A-n> :tabnew<cR>
+map <A-.> :tabnext<CR>
+map <A-,> :tabprev<CR>
+map <A-q> :tabclose<CR>
+
+
+echo .vimperatorrc sourced!
+
+" vim: ft=vimperator sw=2 sts=2
