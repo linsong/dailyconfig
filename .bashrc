@@ -39,6 +39,8 @@ export LANG=en_US.UTF-8
 #export LC_CTYPE="zh_CN"
 #LANGUAGE="en_US:en"
 #LC_CTYPE=zh_CN.UTF-8
+
+export PYTHONSTARTUP=~/.pythonrc
 # }}}
 
 ##########################################################################
