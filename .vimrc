@@ -247,7 +247,11 @@
     nnoremap <S-xF4> :cprev <CR>
 
     " MAKE IT EASY TO UPDATE/RELOAD_vimrc
-    :nmap ,s :source $HOME/.vimrc \| source $HOME/.gvimrc<CR>
+    if has("gui_running")
+        :nmap ,s :source $HOME/.vimrc \| source $HOME/.gvimrc<CR>
+    else
+        :nmap ,s :source $HOME/.vimrc<CR>
+    endif
     :nmap ,v :e $HOME/.vimrc<CR> 
 
     " Make navigate tabs easier
@@ -1117,10 +1121,13 @@ endif " has("autocmd")
     
     "### settings for dbext.vim {{{2
     let g:dbext_default_profile_pg_vincent = 'type=PGSQL:user=vincent:dbname=NBET_vincent:host=localhost'
+    let g:dbext_default_profile_pg_vincent_testdb = 'type=PGSQL:user=vincent:dbname=TESTDB_vincent:host=localhost'
     let g:dbext_default_profile = 'pg_vincent'
     let g:dbext_default_type = 'PGSQL'
     let g:dbext_default_user = 'vincent'
     let g:dbext_default_host = 'localhost'
+
+    let g:dbext_default_use_sep_result_buffer = 1
     "}}}2
 "### }}}1
 
