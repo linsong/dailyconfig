@@ -1106,7 +1106,7 @@ endif " has("autocmd")
     " mapped to open in new window which is made from split previous window. 3rd
     " item is mapped to open in new window which is made from split previous
     " window vertically.
-    let g:FuzzyFinder_KeyOpen = ['<C-S>', '<CR>', '<C-V>']
+    let g:FuzzyFinder_KeyOpen = ['<CR>', '<C-O>', '<C-V>']
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     "}}}2
