@@ -43,3 +43,5 @@ user_pref("keyconfig.version", 1);
 // middle mouse setting
 user_pref("middlemouse.contentLoadURL", true);
 
+// hit a hint extention setting
+user_pref("extensions.hah.keys.numbers", "asdfghjklqwertuiopvnm0123456789");
