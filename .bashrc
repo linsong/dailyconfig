@@ -375,5 +375,13 @@ __END
  {
     /usr/bin/env vim -u $HOME/.vim_simple_rc -U NONE --noplugin --cmd ":setlocal buftype=nofile" "${@:--}"
  }
+
+ function vv()
+ {
+     # following command use vim as a terminal command, just like sed, awk etc,
+     # it is suitable to use in a script or just command line
+     #/usr/bin/env vim -X -E -s -u NONE -c <add some useful command here> -c 'wq' "$@"
+     echo "Not Done Yet"
+ }
  # }}}
 

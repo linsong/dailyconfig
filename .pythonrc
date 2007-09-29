@@ -1,4 +1,4 @@
-def read_history_file():
+def init_history_file():
     import os
     histfile = os.path.join(os.environ["HOME"], ".pyhist")
     try:
@@ -16,6 +16,6 @@ except ImportError:
 else:
     import rlcompleter
     readline.parse_and_bind("tab: complete")
-    read_history_file()
+    init_history_file()
 
 # vim: ft=python
