@@ -1,1 +1,2 @@
-import pdb; pdb.set_trace()
+import pdb, readline; pdb.set_trace()
+import pdb, readline; pdb.set_trace()
