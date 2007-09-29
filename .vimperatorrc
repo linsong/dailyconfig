@@ -15,7 +15,7 @@ set showstatuslinks
 set wildmode=list:longest
 
 " key mappings
-map <A-n> :tabnew<cR>
+map <A-n> :tabnew<CR>
 map <A-.> :tabnext<CR>
 map <A-,> :tabprev<CR>
 map <A-q> :tabclose<CR>
