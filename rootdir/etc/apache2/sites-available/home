@@ -88,4 +88,13 @@ NameVirtualHost *:443
     #RewriteRule ^/motion/live http://localhost:18000 [P]
     #RewriteRule ^/motion/control http://192.168.0.101:18080    [P]
    
+    UserDir public_html
+    UserDir disabled root
+
+    <Directory /home/*/public_html>
+        AllowOverride FileInfo AuthConfig Limit
+        IndexOptions FancyIndexing NameWidth=*
+        Options Indexes SymLinksIfOwnerMatch IncludesNoExec FollowSymLinks
+    </Directory>
+
 </VirtualHost>
