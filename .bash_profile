@@ -67,5 +67,10 @@ if [ $(uname) == 'Darwin' ]; then
     if [ -e ~/.macrc ]; then
         source ~/.macrc
     fi
+else
+    if [ -e ~/.exowebrc ] ; then
+        source ~/.exowebrc
+    fi
 fi
+
 

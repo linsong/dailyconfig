@@ -109,14 +109,6 @@ elif [ -e /sw/etc/bash_completion ]; then
 	source /sw/etc/bash_completion
 fi
 
-if [ -e ~/.exowebrc ] ; then
- source ~/.exowebrc
-fi
-
-#if [ -e ~/laszlorc ] ; then
-# source ~/laszlorc
-#fi
-
 if [ ! -e $HOME/mytools/fehviewer ]; then
     ln -s $(which feh) $HOME/mytools/fehviewer
 fi
