@@ -1,0 +1,65 @@
+[general]
+mounse = 1
+
+# use some window manager
+wm = /usr/local/lib/gnt/irssi.so
+#wm = /usr/local/lib/gnt/s.so
+
+remember_position = 1
+
+[Workspace-1]
+name = blist
+
+# window-names specifies that windows with these semi-colon separated names are
+# placed into this workspace
+window-names = buddylist;debug-window
+
+
+[Workspace-2]
+name = IM
+window-names = conversation-window
+
+# window-titles specifies that windows with these semi-colon separated titles
+# are placed into this workspace. These  are  matched  as  substrings. Window
+# titles take precedence over names.
+window-titles = Preferences;Pounce
+
+[colors]
+# The RGB values range in [0, 1000]
+black = 0; 0; 0
+red = 1000; 0; 0
+green = 0; 1000; 0
+blue = 250; 250; 700
+white = 1000; 1000; 1000
+gray = 700; 700; 700
+darkgray = 256; 256; 256
+
+[colorpairs]
+normal = white; black
+highlight = white; blue
+highlightd = black; gray
+shadow = black; darkgray
+title = white; blue
+titled = white; gray
+text = white; blue
+disabled = gray; black
+urgent = green; black
+
+# key bindings 
+[GntEntry::binding]
+c-n = suggest-next
+c-p = suggest-prev
+
+[GntTree::binding]
+o = context-menu
+backspace = move-parent
+c-f = page-up
+c-b = page-down
+j = move-down
+k = move-up
+
+[GntWidget::binding]
+o = context-menu
+
+[GntWindow::binding]
+c-o = show-menu
