@@ -10,7 +10,7 @@
 "  for MS-DOS and Win32:  $VIM\_vimrc
 "       for OpenVMS:  sys$login:.vimrc
 
-"### General Setting {{{1
+"## General Setting {{{1
     " When started as "evim", evim.vim will already have done these settings.
     if v:progname =~? "evim"
       finish
@@ -127,9 +127,9 @@
     :set number
 
     :let g:mapleader='\'
-"### }}}1
+"## }}}1
 
-"### Encodings {{{1
+"## Encodings {{{1
     "for more details, read help usr_45.txt
     " encodings configure
     :let $LANG="en_US.UTF-8"
@@ -144,9 +144,9 @@
     :set encoding=utf-8
 
     :set fileencodings=ucs-bom,utf-8,gb2312,cp936
-"### }}}1
+"## }}}1
 
-"### General Mapping {{{1
+"## General Mapping {{{1
 
     " Don't use Ex mode, use Q for formatting
     map Q gq
@@ -310,9 +310,9 @@
     :noremap <C-]> g<C-]>
     :noremap g<C-]> <C-]>
 
-"### }}}1
+"## }}}1
 
-"### {{{1 mappings for vim keycodes
+"## Mappings for vim keycodes {{{1 
     " mappings for keycodes 
     " for more details about keycode mapping, read 
     "     http://groups.yahoo.com/group/vim/message/69148
@@ -361,9 +361,9 @@
         ":set term=builtin_ansi
     "endif
 
-"### }}}1
+"## }}}1
 
-"### general function defination {{{1
+"## General function defination {{{1
     function! MyFoldText()
       let line = getline(v:foldstart)
       let nnum = nextnonblank(v:foldstart + 1)
@@ -391,7 +391,7 @@
     endfunction
 "}}}1
     
-"### Platform dependent Setting {{{1
+"## Platform dependent Setting {{{1
     "if has("vms")
       "set nobackup      " do not keep a backup file, use versions instead
     "else
@@ -481,9 +481,9 @@
             :map <M-e> :emenu <C-Z>
         endif 
     "### }}}2
-"### }}}1
+"## }}}1
 
-"### Autocmds {{{1
+"## Autocmds {{{1
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
     " for details about how to define a augroup, :help augroup
@@ -611,30 +611,30 @@ if has("autocmd")
 
 
 endif " has("autocmd")
-"### }}}1
+"## }}}1
 
-"### Abbreviations {{{1
+"## Abbreviations {{{1
 
     "normal abbreviations
     abbr teh the
     abbr widht width
     abbr rigth right
 
-"### }}}1
+"## }}}1
 
-"### HighLighting {{{1
+"## HighLighting {{{1
     " highlight the leading and trailing whitespace 
     "highlight WhiteSpaceEOL ctermbg=darkgreen guibg=lightgreen
     "match WhiteSpaceEOL /^\s*\ \s*\|\s\+$/
     "autocmd WinEnter * match WhiteSpaceEOL /^\s*\ \s*\|\s\+$/
-"### }}}1
+"## }}}1
 
-"### Global variable definations {{{1
-"}}}1
+"## Global variable definations {{{1
+"## }}}1
 
-"### Commands & Functions {{{1 
+"## Commands & Functions {{{1 
 
-    " enhance the find command }}}2
+    " ### enhance the find command }}}2
     " with the following command, we can use :find ~/path/test*.py<TAB> to 
     " get the file name completion, it's really good!
     " NOTE: to use this command, we need genutils.vim
@@ -645,7 +645,7 @@ endif " has("autocmd")
     "endfunction
     " }}}2
 
-    " setting/command/function for diff {{{2
+    " ### setting/command/function for diff {{{2
     if exists(":diffoff")!=2
         command! DiffOff :call CleanDiffOptions()
     endif
@@ -777,7 +777,7 @@ endif " has("autocmd")
     endif
     " }}}2
 
-    " use python's math module in vim {{{2
+    " ### use python's math module in vim {{{2
     " this method is very interesting, we can invent more usages
     if has('python')
         :command! -nargs=+ Calc :py print <args>
@@ -785,7 +785,7 @@ endif " has("autocmd")
     endif
     " }}}2
     
-    "" remap f,F to be multi-line. Supports counter before f,F. {{{2
+    "### [NOTUSED] remap f,F to be multi-line. Supports counter before f,F. {{{2
     "" finds special chars properly. Yakov Lerner
     "noremap <silent>f :call OneCharSearch(1)<CR>
     "noremap <silent>F :call OneCharSearch(0)<cr>
@@ -807,7 +807,7 @@ endif " has("autocmd")
     "endfun 
     "" }}}2
 
-    " define abbreviation only works under command line, a very smart function {{{2
+    " ### define abbreviation only works under command line, a very smart function {{{2
     " this function comes from a comment of tip http://vim.sourceforge.net/tips/tip.php?tip_id=1285
         function! CommandCabbr( abbreviation, expansion ) 
             execute 'cabbr ' .  a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>' 
@@ -817,12 +817,12 @@ endif " has("autocmd")
         CommandCabbr ccab CommandCabbr
     " }}}2
     
-    " command to diff the modified file with original file {{{2 
+    "### command to diff the modified file with original file {{{2 
         command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis |
              \ wincmd p | diffthis
     " }}}2
    
-    " function that will fold file based on specified regex pattern {{{2
+    "### function that will fold file based on specified regex pattern {{{2
         function! FoldOnRegex(...)
             if a:0 >= 1
                 let regex_string = a:1
@@ -860,15 +860,16 @@ endif " has("autocmd")
             exec 'FoldMatching ' . regex_string . ' ' . context_line
         endfunction
         :command! -nargs=* LimitOnRegex call LimitOnRegex(<f-args>)
-        :noremap ,ll :LimitOnRegex 
+        " the usage of "<C-R>=" is very powerful! :)
+        :noremap ,ll :LimitOnRegex <C-R>=expand("<cword>")<CR>
         :vnoremap ,ll :call LimitOnRegex(GetVisualSelectionEscaped("enV"), -1)<CR>
     " }}}2
 
-"### }}}1
+"## }}}1
 
-"### Plugin related settings {{{1
+"## Plugin related settings {{{1
 
-    "### setting about winmanager.vim {{{2
+    "### setting for winmanager.vim {{{2
         ":let g:winManagerWindowLayout = "FileExplorer,TagsExplorer|BufExplorer"
         :let g:winManagerWindowLayout = "FileExplorer"
         :let g:explHideFiles = "^\.#,~$"
@@ -876,7 +877,8 @@ endif " has("autocmd")
         :map <c-w><c-t> :WMToggle<CR>
     "### }}}2
 
-    "### Remove the following mapping for MultipleSearch.vim since we don't use {{{2
+    "### [NOTUSED] setting for MultipleSearch.vim {{{2
+    "### Remove the following mapping for MultipleSearch.vim since we don't use
         " it and the mappings conflict with UTL.vim's default mapping 
         " setting about MultipleSearch.vim
         ":let g:MultipleSearchMaxColors=11
@@ -894,13 +896,13 @@ endif " has("autocmd")
         ":vmap <leader>gbi y:SearchBuffers <C-R>"<CR>
     "### }}}2
 
-    "### the following configuration about showmarks.vim {{{2
+    "### [NOTUSED] setting for showmarks.vim {{{2
         ":let g:showmarks_enable=0
         ":let g:showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'`"
         ":let g:showmarks_ignore_type="hmpqr"
     "### }}}2
 
-    "### vcscommand plugin setting {{{2
+    "### setting for vcscommand.vim {{{2
     nmap <Leader>add <Plug>CVSAdd
     nmap <Leader>va VCSAdd
     nmap <Leader>vn VCSAnnotate
@@ -929,11 +931,12 @@ endif " has("autocmd")
 
     "### }}}2
 
-    "### setting about grep.vim {{{2
+    "### setting for grep.vim {{{2
     let Grep_Key = '<F12>'
     let Grep_Default_Options = '-inH'
     let Grep_Skip_Dirs = '.svn .cvs zope'
     let Grep_Skip_Files = '*.bak *~ *.swp *.pyc *.swf *.exe'
+    let Grep_Default_Filelist = '*.py'
     map ,gr :Rgrep<CR>
     map ,gg :Grep<CR>
     map ,gf :Fgrep<CR>
@@ -943,7 +946,7 @@ endif " has("autocmd")
     let g:alternateNoDefaultAlternate = 1
     "### }}}2
 
-    "### {{{2 configuration for python editing 
+    "### setting for python editing {{{2
         " setting about python 
         " Now I use python.vim      
         " other python vim script are pylint, python_match,python_box etc,I will try
@@ -964,28 +967,21 @@ endif " has("autocmd")
     imap <F4> <C-o>:YRGetElem <CR>
     "### }}}2
 
-    "### settings for vimspell.vim checker {{{2
-    "let spell_executable = "aspell"
-    "let spell_root_menu   = '-'
-    "let spell_auto_type   = '' 
-    "let spell_insert_mode = 0
-    "### }}}2
-
-    "### setting about HTML plugin {{{2
+    "### setting for HTML.vim {{{2
     :let g:no_html_toolbar = 'yes'
     "### }}}2
 
-    "### setting about scratch plugin {{{2
+    "### setting for scratch.vim {{{2
     :let g:scratchBackupFile = '/tmp/scratch.txt'
     "### }}}2
 
-    "### a vimshell implement by python and vim script, {{{2
+    "### [NOTUSED] setting for vimshell.vim {{{2
     " it works but it can not  refresh by itself 
     " because of the lack of vim's timer mechanism  
     "nmap <leader>sh :so $VIMCFG/vimsh/vimsh.vim <CR>
     "}}}2
     
-    "### general maps for imaps.vim {{{2
+    "### setting for imaps.vim {{{2
     " example: 
     "  call IMAP("bit`", "\\begin{itemize}\<cr>\\item \<cr>\\end{itemize}<++>", "")
     " You can use the <C-r> command to insert dynamic elements such as dates.
@@ -995,7 +991,7 @@ endif " has("autocmd")
     imap <C-g>   <plug>IMAP_JumpForward
     "### }}}2   
 
-    "### setting for snippetEmu.vim {{{2
+    "### [NOTUSED] setting for snippetEmu.vim {{{2
     let g:snip_set_textmate_cp=0 
     "### }}}2
 
@@ -1022,7 +1018,7 @@ endif " has("autocmd")
     let g:proj_flags = "mstb"
     "### }}}2
    
-    "### setting for TagsParser.vim {{{2
+    "### [NOTUSED] setting for TagsParser.vim {{{2
 	let g:TagsParserOff = 1
 	"let g:TagsParserTagsPath = "/usr/local/lps-3.1/Server/lps-3.1/my-apps/sportbook-trunk/src/**"
 	"let g:TagsParserFileExcludePattern = g:TagsParserFileExcludePattern . '\|^.*\.\%(\cpyc\)$'
@@ -1129,9 +1125,9 @@ endif " has("autocmd")
 
     let g:dbext_default_use_sep_result_buffer = 1
     "}}}2
-"### }}}1
+"## }}}1
 
-"### {{{1 xterm colors defination 
+"## Xterm colors defination {{{1 
   if !has("gui_running") && $TERM == "xterm" 
     hi x016_Grey0                ctermfg=16  guifg=#000000
     hi x017_NavyBlue             ctermfg=17  guifg=#00005f
@@ -1375,15 +1371,15 @@ endif " has("autocmd")
     hi x255_Grey93               ctermfg=255 guifg=#eeeeee
 endif
     "
-"### }}}1
+"## }}}1
 
-"### {{{1 Load version related plugins 
+"## Load version related plugins {{{1
     if v:version < 700
         :source $HOME/.vim/vim6x/*
     endif
-"### }}}1
+"## }}}1
 
-"### {{{1 Experiments 
+"## Experiments {{{1 
 
 "" TODO: need to be extended for more languages and replace selected lines
 "python << EOL
@@ -1402,4 +1398,4 @@ function! TabMessage(cmd)
   set nomodified 
 endfunction 
 command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>) 
-"### }}}1
+"## }}}1
