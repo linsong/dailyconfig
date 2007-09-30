@@ -242,7 +242,10 @@ function! <SID>OpenInputWindow(mode)
         execute "inoremap <buffer> <silent> <expr> " . g:FuzzyFinder_KeyOpen[1]          . " <SID>OnCR(1)"
         execute "inoremap <buffer> <silent> <expr> " . g:FuzzyFinder_KeyOpen[2]          . " <SID>OnCR(2)"
         execute "inoremap <buffer> <silent> <expr> " . "<BS>"                            . " <SID>OnBS()"
-
+    
+        " modified by vincent
+        abbr <buffer> nb ~/work/trunk/src/
+        abbr <buffer> nbb ~/work/branches/
     endif
 
     let &l:completefunc = s:vars[a:mode].completeFunc
