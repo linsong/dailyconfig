@@ -1,4 +1,4 @@
-*NERD_commenter.txt*         Plugin for commenting code            v211
+*NERD_commenter.txt*         Plugin for commenting code            v214
 
 
                         NERD COMMENTER REFERENCE MANUAL~
@@ -861,6 +861,28 @@ to get illegal syntax when uncommenting them.
 ==============================================================================
 8. Changelog                                                *NERDComChangelog*
 
+2.1.4
+    - added support for the ahk filetype. Cheers to Don Hatlestad for the
+      email.
+    - added support for desktop and xsd filetypes. Thanks to Christophe Benz.
+    - added dummy support for Rails-log
+    - fixed a bunch of bugs in the comment delimiter setup process, thanks to
+      Cheng Fang for the email :D
+    - hardcore refactoring and removal of seldomly used, overly-complex
+      functionality.
+    - the script now requires vim 7
+2.1.3
+    - fixed numerous bugs that were causing tabs to permanently be converted
+      to spaces, even if noexpandtab was set. Thanks to Heptite on #vim for
+      working with me to track them down :)
+    - added dummy support for "lookupfile". Thanks to David Fishburn for the
+      email.
+    - added support for "rst", thanks to Niels Aan de Brugh for the email.
+
+2.1.2
+    - added support for the vera and ldif filetypes. Thanks to Normandie
+      Azucena and Florian Apolloner for the emails.
+
 2.1.1
     - added dummy support for SVNcommitlog and vcscommit. Thanks to John
       O'Shea for the email.
@@ -1117,6 +1139,23 @@ filetype changes.
 Thank to Rainer Müller for emailing me with the Objective C delimiters.
 
 Thanks to Jason Mills for emailing me the Groovy filetype.
+
+Thanks to Normandie Azucena for emailing me about the vera filetype.
+
+Thanks to Florian Apolloner for emailing me about the ldif filetype.
+
+Cheers to David Fishburn for emailing me with the lookupfile filetype.
+
+Thanks to Niels Aan de Brugh for emailing me with the rst filetype.
+
+Cheers to heptite on #vim for helping me track down some tab-space conversion
+bugs.
+
+Cheers to Don Hatlestad for telling me about the ahk filetype
+
+Thanks to Christophe Benz for emailing me with the Desktop and xsd filetypes.
+
+Cheers to Cheng Fang for the bug reports :D
 
 Cheers to myself for being the best looking man on Earth!
 
