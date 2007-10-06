@@ -1,9 +1,9 @@
 " viki.vim -- the viki syntax file
-" @Author:      Thomas Link (samul AT web.de)
+" @Author:      Thomas Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     30-Dez-2003.
-" @Last Change: 2007-06-30.
-" @Revision: 0.708
+" @Last Change: 2007-10-04.
+" @Revision: 0.832
 
 if !g:vikiEnabled
     finish
@@ -17,7 +17,7 @@ endif
 
 " This command sets up buffer variables and adds some basic highlighting.
 let b:vikiEnabled = 0
-call VikiDispatchOnFamily('VikiMinorMode', '', 2)
+call viki#DispatchOnFamily('MinorMode', '', 2)
 let b:vikiEnabled = 2
 
 " On slow machine the extended syntax highlighting can cause some major 
@@ -58,7 +58,8 @@ endif
 syn cluster vikiText contains=@vikiTextstyles,@vikiHyperLinks,vikiMarkers
 
 " exe 'syn match vikiComment /\V\^\[[:blank:]]\*'. escape(b:vikiCommentStart, '\/') .'\.\*/ contains=@vikiText'
-syn match vikiComment /^[[:blank:]]*%.*$/ contains=@vikiText
+" syn match vikiComment /^[[:blank:]]*%.*$/ contains=@vikiText
+syn match vikiComment /^[[:blank:]]*%.*$/ contains=@vikiHyperLinks,vikiMarkers,vikiEscapedChar
 
 " syn region vikiString start=+^[[:blank:]]\+"\|"+ end=+"[.?!]\?[[:blank:]]\+$\|"+ contains=@vikiText
 " syn region vikiString start=+^"\|\s"\|[({\[]\zs"+ end=+"+ contains=@vikiText
@@ -154,20 +155,42 @@ syn region vikiFilesRegion matchgroup=vikiMacroDelim
             \ end=/^[[:blank:]]*\z1[[:blank:]]*$/ 
             \ contains=vikiFiles
 
+" syn match vikiTexArgDelimiters /[{}\[\]]/ contained containedin=vikiTexMath
+syn match vikiTexCommand /\\[[:alnum:]]\+/ contained containedin=vikiTexMath
+syn match vikiTexMathFont /\\\(math[[:alnum:]]\+\|Bbb\|frak\)/ contained containedin=vikiTexMath
+syn match vikiTexMathWord /[[:alnum:].]\+/ contained containedin=vikiTexMath
+syn match vikiTexUnword /[^[:alnum:]${}()[\]^_\\]\+/ contained containedin=vikiTexMath
+syn match vikiTexPairs /\([<>()[\]]\|\\[lr]\(brace\|vert\|Vert\|angle\|ceil\|floor\|group\|moustache\)\)/ contained containedin=vikiTexMath
+syn match vikiTexSub /_/ contained containedin=vikiTexMath
+syn match vikiTexSup /\^/ contained containedin=vikiTexMath
+syn cluster vikiTex contains=vikiTexArgDelimiters,vikiTexCommand,vikiTexMathFont,vikiTexPairs,vikiTexUnword
+syn cluster vikiTexMath contains=@vikiTex,vikiTexMathWord,vikiTexSup,vikiTexSub
+syn region vikiTexArgDelimiters matchgroup=Delimiter
+            \ start=/{/ end=/}/ skip=/\\[{}]/
+            \ contained contains=@vikiTexMath
+
+if g:vikiHighlightMath == 'latex'
+    syn region vikiTexFormula matchgroup=Comment
+                \ start=/\$/ end=/\$/
+                \ contains=@vikiTexMath
+endif
+
+syn region vikiTexRegion matchgroup=vikiMacroDelim
+            \ start=/^[[:blank:]]*#Ltx\>\(\\\n\|.\)\{-}<<\z(.*\)$/ 
+            \ end=/^[[:blank:]]*\z1[[:blank:]]*$/ 
+            \ contains=@vikiTexMath
+syn region vikiTexMacro matchgroup=vikiMacroDelim
+            \ start=/{\(ltx\)\([^:{}]*:\)\?/ end=/}/ 
+            \ transparent contains=vikiMacroNames,@vikiTex
+syn region vikiTexMathMacro matchgroup=vikiMacroDelim
+            \ start=/{\(math\>\|\$\)\([^:{}]*:\)\?/ end=/}/ 
+            \ transparent contains=vikiMacroNames,@vikiTexMath
+
 
 syntax sync minlines=2
 " syntax sync maxlines=50
 " syntax sync match vikiParaBreak /^\s*$/
 " syntax sync linecont /\\$/
-
-" if g:vikiHighlightMath == 'latex'
-"     runtime! syntax/tex.vim
-"     unlet b:current_syntax
-"     highlight clear texOption
-"     highlight clear texSpecialChar
-"     " based on syntax/tex.vim
-"     syn region vikiMathZone matchgroup=Delimiter start="\$" skip="\\\\\|\\\$" matchgroup=Delimiter end="\$" end="%stopzone\>"	contains=@texMathZoneGroup
-" endif
 
 
 " Define the default highlighting.
@@ -291,12 +314,22 @@ if version >= 508 || !exists("did_viki_syntax_inits")
   HiLink vikiRegionNames Identifier
   HiLink vikiMacroNames Identifier
 
+  " Statement PreProc
+  HiLink vikiTexSup Type
+  HiLink vikiTexSub Type
+  " HiLink vikiTexArgDelimiters Comment
+  HiLink vikiTexCommand Statement
+  HiLink vikiTexMathFont Type
+  HiLink vikiTexMathWord Identifier
+  HiLink vikiTexUnword Constant
+  HiLink vikiTexPairs PreProc
+
   delcommand HiLink
 endif
 
 " if g:vikiMarkInexistent && !exists("b:vikiCheckInexistent")
 if g:vikiMarkInexistent
-    call VikiMarkInexistentInitial()
+    call viki#MarkInexistentInitial()
 endif
 
 let b:current_syntax = 'viki'

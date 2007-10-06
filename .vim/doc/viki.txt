@@ -1,7 +1,7 @@
 *viki.txt*              Viki - A Pseudo Local Wiki Tool
 
                         Viki MANUAL
-                        Thomas Link (samul AT web de)
+                        Thomas Link (micathom AT gmail com?subject=vim)
 
 
 ================================================================================
@@ -149,18 +149,18 @@ you could make viki to open references to pdf files right in VIM: >
             let b:convertedPDF = 1
         endif
     endf
-    let g:vikiOpenFileWith_pdf = 'call VikiOpenLink("%{FILE}", "", 1)|silent call ConvertPDF()'
+    let g:vikiOpenFileWith_pdf = 'call viki#OpenLink("%{FILE}", "", 1)|silent call ConvertPDF()'
 
 Later on, you probably want to define some intervikis. A |interviki| is a 
 shortcut to a different viki directory/namespace, so that you have to care 
 less about page names: >
 
-    call VikiDefine('SCI', $HOME."/Projects/Sci/Ideas", ".txt")
+    call viki#Define('SCI', $HOME."/Projects/Sci/Ideas", ".txt")
 
 This could then be accessed as SCI::ThisIdea, which would refer to the file 
 "~/Projects/Sci/Ideas/ThisIdea.txt".
 
-VikiDefine also defines a command (:SCI in this example) that opens a wiki's 
+viki#Define also defines a command (:SCI in this example) that opens a wiki's 
 index file (an optional 4th argument or "${g:vikiIndex}.${suffix}").
 
 Intervikis can also be defined as patterns or functions as in the following 
@@ -172,8 +172,8 @@ example: >
         return 'https://www.example.com/cgi/search.cgi?search='. surname .','. firstname
     endf
 
-    call VikiDefine('CONTACT', '*GetAddress("%s")')
-    call VikiDefine('INDEX', '%/foo/%s/index.html')
+    call viki#Define('CONTACT', '*GetAddress("%s")')
+    call viki#Define('INDEX', '%/foo/%s/index.html')
 
 CONTACT::JohnDoe would the refer to 
 https://www.example.com/cgi/search.cgi?search=Dow,John and [[INDEX::bar]] 
@@ -586,7 +586,7 @@ Backslashes~
                                                     *viki-key-bindings*
 Default Key Binding~
 
-<c-cr> ... |VikiMaybeFollowLink()|: Usually only works when the cursor is over 
+<c-cr> ... |viki#MaybeFollowLink()|: Usually only works when the cursor is over 
 a wiki syntax group -- if the second argument is 1 it tries to interpret the 
 text under the cursor as a wiki name anyway.
 
@@ -600,8 +600,8 @@ text under the cursor as a wiki name anyway.
 
 <LocalLeader>ve ... |:VikiEdit| edit a viki page
 
-<LocalLeader>vb <LocalLeader>v<left> ... |VikiGoBack()|
-<LocalLeader>v<bs> <LocalLeader>v<up> ... |VikiGoParent()|
+<LocalLeader>vb <LocalLeader>v<left> ... |viki#GoBack()|
+<LocalLeader>v<bs> <LocalLeader>v<up> ... |viki#GoParent()|
 
 <LocalLeader>vq ... |:VikiQuote| mark selected text a quoted viki name
 
@@ -609,8 +609,8 @@ text under the cursor as a wiki name anyway.
 <LocalLeader>vp ... |:VikiMarkInexistent| in the current paragraph
 
 If |g:vikiMapMouse| is true then these mappings are active, too:
-<m-leftmouse> ... |VikiMaybeFollowLink()|
-<m-leftmouse> ... |VikiGoBack()| (always jumps to the last known entry point)
+<m-leftmouse> ... |viki#MaybeFollowLink()|
+<m-leftmouse> ... |viki#GoBack()| (always jumps to the last known entry point)
 
 
 Additional Key Binding In Full Viki Mode
@@ -684,12 +684,10 @@ Commands~
 Functions~
 
 - VikiMinorMode(state)                              *VikiMinorMode()*
-- VikiMode(state)                                   *VikiMode()*
-    a:state:
-        +/-1 ... Minor mode (negative number ~ don't complain)
-        +/-2 ... Full mode (negative number ~ don't complain)
 
-- VikiMaybeFollowLink(oldmap, ignoreSyntax)         *VikiMaybeFollowLink()*
+- VikiMode(family)                                  *VikiMode()*
+
+- viki#MaybeFollowLink(oldmap, ignoreSyntax)         *viki#MaybeFollowLink()*
     oldmap: If there isn't a viki link under the cursor:
         ""       ... throw error 
         1        ... return \<c-cr>
@@ -698,14 +696,14 @@ Functions~
         0 ... no viki name found
         1 ... look if there is a viki name under cursor anyways
 
-- VikiFindAnchor(anchor)                            *VikiFindAnchor()*
+- viki#FindAnchor(anchor)                            *viki#FindAnchor()*
 
                                                     *b:vikiParent*
-- VikiGoParent()                                    *VikiGoParent()* 
+- viki#GoParent()                                    *viki#GoParent()* 
     If b:vikiParent is defined, open this viki name, otherwise use 
-    |VikiGoBack()|.
+    |viki#GoBack()|.
 
-- VikiGoBack()                                      *VikiGoBack()*
+- viki#GoBack()                                      *viki#GoBack()*
     Viki keeps record about the "source" files from where a viki page was 
     entered.  Calling this function jumps back to the "source" file (if only 
     one such back reference is known) or let's you select from a list of 
@@ -739,10 +737,6 @@ Functions~
     command. Under Windows, g:vikiOpenUrlWith_ANY defaults to "silent 
     !rundll32 url.dll ...".
     All protocol names are translated to lower case.
-
-- VikiDefineMarkup(mode)                            *VikiDefineMarkup()*
-
-- VikiDefineHighlighting(mode)                      *VikiDefineHighlighting()*
 
 
 ================================================================================
@@ -847,18 +841,18 @@ Markup:
 
 - g:vikiFamily, b:vikiFamily                        *vikiFamily*
     By defining this variable, family specific functions will be called for:
-        - VikiSetupBuffer{b:vikiFamily}(state)
-        - VikiDefineMarkup{b:vikiFamily}(state)
-        - VikiDefineHighlighting{b:vikiFamily}(state)
-        - VikiCompleteSimpleNameDef{b:vikiFamily}(def)
-        - VikiCompleteExtendedNameDef{b:vikiFamily}(def)
-        - VikiFindAnchor{b:vikiFamily}(anchor)
+        - viki#{b:vikiFamily}#SetupBuffer(state)
+        - viki#{b:vikiFamily}#DefineMarkup(state)
+        - viki#{b:vikiFamily}#DefineHighlighting(state)
+        - viki#{b:vikiFamily}#CompleteSimpleNameDef(def)
+        - viki#{b:vikiFamily}#CompleteExtendedNameDef(def)
+        - viki#{b:vikiFamily}#FindAnchor(anchor)
     If one of these functions is undefined for a "viki family", then the
     default one is called.
 
     Apart from the default behaviour the following families are defined:
-        - LaTeX (see |viki-latex|)
-        - AnyWord (see |viki-any-word|)
+        - latex (see |viki-latex|)
+        - anyword (see |viki-anyword|)
 
 
 Etc:
@@ -1086,15 +1080,15 @@ as simple viki names.)
 This plugin also highlights a hypothetical \viki[anchor]{name} command, which
 could be defined as: \newcommand{\viki}[2][]{#2}
 
-If b:vikiFamily is set to "LaTeX", then calling |:VikiMinorMode| will use 
+If b:vikiFamily is set to "latex", then calling |:VikiMinorMode| will use 
 these commands instead of normal viki names. This change can be made permanent 
 by adding this line to your |vimrc| file: >
 
-    au FileType tex let b:vikiFamily="LaTeX"
+    au FileType tex let b:vikiFamily="latex"
 <
                                                     *:VikiMinorModeLaTeX*
 LaTeX support is switched on with the command :VikiMinorModeLaTeX. This 
-command sets b:vikiFamily to "LaTeX" and calls |:VikiMinorMode|. This
+command sets b:vikiFamily to "latex" and calls |:VikiMinorMode|. This
 command relies on the external kpsewhich tool, which has to be installed on
 your computer.
 
@@ -1119,10 +1113,10 @@ simple minded example: >
 
 
 ================================================================================
-                                                    *viki-any-word*
+                                                    *viki-anyword*
 Viki Any Word~
 
-If b:vikiFamily or g:vikiFamily is set to "AnyWord", then any word becomes a 
+If b:vikiFamily or g:vikiFamily is set to "anyword", then any word becomes a 
 potential viki link.
 
 This feature conflicts with the highlighting of links to inexistent files. 

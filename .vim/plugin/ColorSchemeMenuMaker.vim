@@ -1,11 +1,13 @@
 " ColorSchemeMenuMaker.vim:	Generates Vim ColorScheme menu and
 " 					organizes themes based upon background colors
-" Maintainer:		Erik Falor <rAjsBnFCybe@tzNnvy.Zpbz g?? - NOSPAM>
-" Date:				Sept 20, 2007
-" Version:			0.7
+" Maintainer:		Erik Falor <ewfalor@gmail.com>
+" Date:				Oct 4, 2007
+" Version:			0.8
 " License:			If you copy this, just give me props.
 "
 " History:
+"   Version 0.8:	Avoid loading menu in console mode.
+"
 "   Version 0.7:	Fixed some bugs in SDK mode.  Tweaked IsDarkGrey().
 "
 "   Version 0.6:	Created an SDK mode that creates an HTML page
@@ -425,8 +427,10 @@ function! <SID>BuildMenu(dicts) "{{{
 	let menu = []
 	call add(menu, '"ColorScheme menu generated ' . strftime("%c", localtime()))
 	call add(menu, '')
-	call add(menu, '"Themes by color:')
+	call add(menu, '"Do not load this menu unless running in GUI mode')
+	call add(menu, 'if !has("gui_running") | finish | endif')
 	call add(menu, '')
+	call add(menu, '"Themes by color:')
 	"count number of themes categorized by color
 	let totThemes = 0
 	for i in keys(a:dicts[0])
@@ -573,7 +577,7 @@ unlet s:keepcpo
 "}}}1
 
 "Detect absence of ColorScheme menu, and generate a new one automatically
-if !filereadable(s:menuFile) "{{{
+if has("gui_running") && !filereadable(s:menuFile) "{{{
 	echomsg "Creating ColorScheme menu - Please Wait..."
 	call <SID>InitMenu()
 	echomsg "Done!"
