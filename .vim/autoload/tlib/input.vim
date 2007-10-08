@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-06-30.
-" @Last Change: 2007-09-16.
-" @Revision:    0.0.350
+" @Last Change: 2007-10-07.
+" @Revision:    0.0.352
 
 if &cp || exists("loaded_tlib_input_autoload")
     finish
@@ -152,7 +152,7 @@ function! tlib#input#ListW(world, ...) "{{{3
                             exec ea
                         else
                             let agent = get(handler, 'agent', '')
-                            let world = call(agent, [world])
+                            let world = call(agent, [world, world.GetSelectedItems(world.GetCurrentItem())])
                             call s:CheckAgentReturnValue(agent, world)
                         endif
                     endif
@@ -546,6 +546,7 @@ endf
 "
 " EXAMPLE: >
 "     exec 'norm! `'. matchstr(tlib#input#CommandSelect('marks'), '^ \+\zs.')
+"     exec 'norm i'. matchstr(tlib#input#CommandSelect('abbrev'), '^\S\+\s\+\zs\S\+')
 function! tlib#input#CommandSelect(command, ...) "{{{3
     TVarArg ['args', {}]
     if has_key(args, 'retrieve')
