@@ -1092,9 +1092,10 @@ endif " has("autocmd")
     "}}}2
     
     "### setting for fuzzyfinder.vim {{{2
-    let g:FuzzyFinder_KeyToggleMode = '<C-t>' " disable this map
-    let g:FuzzyFinder_KeyToggleIgnoreCase = '<C-i>'
-    let g:FuzzyFinder_ExcludePattern = '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$'
+    let g:FuzzyFinder_KeySwitchMode = '<C-t>'
+    let g:FuzzyFinder_KeySwitchIgnoreCase = '<C-i>'
+    let g:FuzzyFinder_FileModeVars = 
+                \ { 'excludePath' : '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$' }
     let g:FuzzyFinder_IgnoreCase = 1
 
     " Map this to select completion item or to finish input and open a
@@ -1105,6 +1106,7 @@ endif " has("autocmd")
     let g:FuzzyFinder_KeyOpen = ['<CR>', '<C-O>', '<C-V>']
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
+    :noremap ,fm :FuzzyFinderMru<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2
