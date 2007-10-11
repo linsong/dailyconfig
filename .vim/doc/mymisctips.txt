@@ -754,6 +754,11 @@ NO 1. how to change the keybindings under vi-insert mode of readline?
 # a useful ssh command 
 
   dd if=filename.gz | ssh -c blowfish root@deadhost "gunzip -c | dd of=/dev/hda1 bs=1k" ~
+ 
+# sshfs command
+  the options are needed if we must run sshfs as root user
+  sudo sshfs -o allow_other -o uid=1000 -o gid=1000 vincent@forge: forge ~
+
 ============================================================================== 
 
 
