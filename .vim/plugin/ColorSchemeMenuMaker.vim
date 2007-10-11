@@ -1,11 +1,13 @@
 " ColorSchemeMenuMaker.vim:	Generates Vim ColorScheme menu and
 " 					organizes themes based upon background colors
 " Maintainer:		Erik Falor <ewfalor@gmail.com>
-" Date:				Oct 4, 2007
-" Version:			0.8
+" Date:				Oct 10, 2007
+" Version:			0.8.1
 " License:			If you copy this, just give me props.
 "
 " History:
+"   Version 0.8.1:	Shuangshi Jie bugfix: changed to Unix line endings.
+"
 "   Version 0.8:	Avoid loading menu in console mode.
 "
 "   Version 0.7:	Fixed some bugs in SDK mode.  Tweaked IsDarkGrey().
