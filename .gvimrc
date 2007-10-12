@@ -38,7 +38,10 @@ exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 " the following config to make gvim startup faster
 set guioptions-=M
 "set guioptions-=m
-set guioptions-=T
+
+if ! has("gui_macvim")
+    set guioptions-=T
+endif
 
 " turn &cursorline on only in GUI && normal mode
 if exists("&cursorline")

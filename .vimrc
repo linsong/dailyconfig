@@ -127,6 +127,10 @@
     :set number
 
     :let g:mapleader='\'
+
+    if has("gui_macvim")
+        :set transparency=15
+    endif
 "## }}}1
 
 "## Encodings {{{1
@@ -309,6 +313,12 @@
     " I want to exchange the meaning of following shortcuts:
     :noremap <C-]> g<C-]>
     :noremap g<C-]> <C-]>
+
+    if has("gui_macvim")
+        :map <silent> <D-.> gt
+        :nnoremap <silent> <D->> :if tabpagenr() == tabpagenr("$")\|tabm 0\|else\|exe "tabm ".tabpagenr()\|endif<CR>
+        :nnoremap <silent> <D-<> :if tabpagenr() == 1\|exe "tabm ".tabpagenr("$")\|else\|exe "tabm ".(tabpagenr()-2)\|endif<CR> 
+    endif 
 
 "## }}}1
 
@@ -1126,6 +1136,10 @@ endif " has("autocmd")
     let g:dbext_default_host = 'localhost'
 
     let g:dbext_default_use_sep_result_buffer = 1
+    "}}}2
+    
+    "### settings for utl.vim {{{2
+    let g:Font_Size = 2
     "}}}2
 "## }}}1
 
