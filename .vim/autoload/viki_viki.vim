@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2007-10-05.
-" @Revision:    0.0.70
+" @Last Change: 2007-10-12.
+" @Revision:    0.0.89
 
 if &cp || exists("loaded_viki_viki")
     finish
@@ -204,9 +204,10 @@ function! viki_viki#SetupBuffer(state, ...) "{{{3
         if exists('b:vikiNameSuffix') && b:vikiNameSuffix != '' && b:vikiNameSuffix != g:vikiNameSuffix
             exec 'setlocal suffixesadd+='. b:vikiNameSuffix
         endif
-        if exists('g:loaded_hookcursormoved') && exists('b:vikiMarkInexistent') && b:vikiMarkInexistent
+        if exists('g:loaded_hookcursormoved') && g:loaded_hookcursormoved >= 3 && exists('b:vikiMarkInexistent') && b:vikiMarkInexistent
+            let b:hookcursormoved_syntaxleave = ['vikiLink', 'vikiExtendedLink', 'vikiURL', 'vikiOkLink', 'vikiInexistentLink']
             for cond in g:vikiHCM
-                call hookcursormoved#Register('b', cond, function('viki#HookCheckPreviousPosition'))
+                call hookcursormoved#Register(cond, function('viki#HookCheckPreviousPosition'))
             endfor
         endif
     endif
@@ -512,6 +513,7 @@ function! viki_viki#CompleteSimpleNameDef(def) "{{{3
         throw "Viki: Malformed simple viki name (destination=".v_dest."): ". string(a:def)
     endif
 
+    " TLogVAR v_name
     if viki#IsInterViki(v_name)
         let i_name = viki#InterVikiName(v_name)
         let useSuffix = viki#InterVikiSuffix(v_name)
@@ -532,7 +534,8 @@ function! viki_viki#CompleteSimpleNameDef(def) "{{{3
         let v_dest = expand("%:p:h")
         let useSuffix = g:vikiDefSep
     endif
-    
+    " TLogVAR i_name
+
     if viki#IsSupportedType("S")
         " TLogVAR v_name
         if v_name =~ b:vikiQuotedSelfRef
@@ -545,17 +548,22 @@ function! viki_viki#CompleteSimpleNameDef(def) "{{{3
     endif
 
     if v_name != g:vikiSelfRef
+        " TLogVAR v_dest, v_name, useSuffix
         let rdest = viki#ExpandSimpleName(v_dest, v_name, useSuffix)
+        " TLogVAR rdest
     else
         let rdest = g:vikiDefNil
+        " TLogVAR rdest
     endif
 
     if i_name != ''
         let rdest = viki#InterVikiDest(rdest, i_name)
+        " TLogVAR rdest
         " let v_name = ''
     endif
 
     let v_type   = v_type == g:vikiDefNil ? 's' : v_type
+    " TLogVAR v_type
     return viki#MakeDef(v_name, rdest, v_anchor, v_part, v_type)
 endf
 

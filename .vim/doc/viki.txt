@@ -23,11 +23,11 @@ markup.
 MINOR WIKI MODE:
 Just type |:VikiMinorMode| and all wiki names and URLs will be highlighted.  
 When the cursor is over a wiki name, you can press <c-cr> to jump to (or 
-create) the referred page. Pressing <LocalLeader>vb brings you back to the 
-original document. Alternatively, you can use <m-leftmouse> and <m-rightmouse> 
-to jump back and forth. (NOTE: In minor mode, it's possible that viki words 
-and URLs are not highlighted when they are included in some syntactic 
-regions.)
+create) the referred page (on a terminal use <LocalLeader>vf). Pressing 
+<LocalLeader>vb brings you back to the original document. Alternatively, you 
+can use <m-leftmouse> and <m-rightmouse> to jump back and forth. (NOTE: In 
+minor mode, it's possible that viki words and URLs are not highlighted when 
+they are included in some syntactic regions.)
 
 FULL WIKI MODE:
 In full mode, viki becomes a personal wiki 
@@ -588,7 +588,8 @@ Default Key Binding~
 
 <c-cr> ... |viki#MaybeFollowLink()|: Usually only works when the cursor is over 
 a wiki syntax group -- if the second argument is 1 it tries to interpret the 
-text under the cursor as a wiki name anyway.
+text under the cursor as a wiki name anyway. (NOTE: If you're working on a 
+terminal, <c-cr> most likely won't work. Use <LocalLeader>vf instead.)
 
 <LocalLeader>vf ... Open in window
 <LocalLeader>vt ... Open in a new tab

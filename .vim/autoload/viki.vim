@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-03-25.
-" @Last Change: 2007-10-04.
-" @Revision:    0.284
+" @Last Change: 2007-10-12.
+" @Revision:    0.381
 
 if &cp || exists("loaded_viki_auto") "{{{2
     finish
@@ -264,6 +264,7 @@ function! s:MarkInexistent(line1, line2, ...) "{{{3
                 endif
                 let ll  = li
                 let co1 = co - 1
+                " TLogVAR co1
                 let def = viki#GetLink(1, getline('.'), co1)
                 " TAssert IsList(def)
                 " TLogDBG getline('.')[co1 : -1]
@@ -279,6 +280,9 @@ function! s:MarkInexistent(line1, line2, ...) "{{{3
                             let check = 0
                         elseif v:version >= 700 && viki#IsHyperWord(v_part)
                             " TLogDBG "viki#IsHyperWord(v_part) => 0"
+                            let check = 0
+                        elseif v_name == g:vikiSelfRef
+                            " TLogDBG "simple self ref"
                             let check = 0
                         else
                             " TLogDBG "else1 => 1"
@@ -313,7 +317,8 @@ function! s:MarkInexistent(line1, line2, ...) "{{{3
                         let check = 0
                     endif
                     " TLogVAR check, v_dest
-                    if check && v_dest != "" && v_dest != g:vikiSelfRef && !isdirectory(v_dest)
+                    " if check && v_dest != "" && v_dest != g:vikiSelfRef && !isdirectory(v_dest)
+                    if check && v_dest != g:vikiSelfRef && !isdirectory(v_dest)
                         if filereadable(v_dest)
                             call filter(b:vikiNamesNull, 'v:val != partx')
                             call insert(b:vikiNamesOk, partx)
@@ -321,6 +326,7 @@ function! s:MarkInexistent(line1, line2, ...) "{{{3
                             call insert(b:vikiNamesNull, partx)
                             call filter(b:vikiNamesOk, 'v:val != partx')
                         endif
+                        " TLogVAR partx, b:vikiNamesNull, b:vikiNamesOk
                     endif
                 endif
                 unlet! def
@@ -748,12 +754,12 @@ function! viki#MapMarkInexistent(key, element) "{{{3
     exe 'inoremap <silent> <buffer> '. key .' '. map
 endf
 
+
+" In case this function gets called repeatedly for the same position, check only once.
 let s:hookcursormoved_oldpos = []
 function! viki#HookCheckPreviousPosition(mode) "{{{3
     " if a:mode == 'n'
     if s:hookcursormoved_oldpos != b:hookcursormoved_oldpos
-        " call setpos('.', b:hookcursormoved_oldpos)
-        " keepjumps keepmarks call s:MarkInexistentInLine()
         keepjumps keepmarks call s:MarkInexistent(b:hookcursormoved_oldpos[1], b:hookcursormoved_oldpos[1])
         let s:hookcursormoved_oldpos = b:hookcursormoved_oldpos
     endif
@@ -1394,22 +1400,25 @@ endf
 
 " Return a viki filename with a suffix
 function! viki#WithSuffix(fname)
+    " TLogVAR a:fname
+    " TLogDBG isdirectory(a:fname)
     if isdirectory(a:fname)
         return a:fname
     else
-        return a:fname.s:GetSuffix()
+        return a:fname . s:GetSuffix()
     endif
 endf
 
 " Get the suffix to use for viki filenames
 function! s:GetSuffix() "{{{3
-    if exists("b:vikiNameSuffix")
+    if exists('b:vikiNameSuffix')
         return b:vikiNameSuffix
     endif
     if g:vikiUseParentSuffix
         let sfx = expand("%:e")
-        if sfx != ""
-            return ".".sfx
+        " TLogVAR sfx
+        if !empty(sfx)
+            return '.'. sfx
         endif
     endif
     return g:vikiNameSuffix
@@ -1417,6 +1426,7 @@ endf
 
 " Return the real destination for a simple viki name
 function! viki#ExpandSimpleName(dest, name, suffix) "{{{3
+    " TLogVAR a:dest
     if a:name == ''
         return a:dest
     else
@@ -1425,11 +1435,15 @@ function! viki#ExpandSimpleName(dest, name, suffix) "{{{3
         else
             let dest = a:dest . g:vikiDirSeparator . a:name
         endif
+        " TLogVAR dest, a:suffix
         if a:suffix == g:vikiDefSep
+            " TLogDBG 'ExpandSimpleName 1'
             return viki#WithSuffix(dest)
         elseif isdirectory(dest)
+            " TLogDBG 'ExpandSimpleName 2'
             return dest
         else
+            " TLogDBG 'ExpandSimpleName 3'
             return dest . a:suffix
         endif
     endif
@@ -1457,10 +1471,11 @@ function! s:InterVikiDef(vikiname, ...)
     let ow = a:0 >= 1 ? a:1 : viki#InterVikiName(a:vikiname)
     let vd = s:LetVar('i_dest', 'vikiInter'.ow)
     let id = s:LetVar('i_index', 'vikiInter'.ow.'_index')
-    " TLogVAR a:vikiname, ow, vd, id
+    " TLogVAR a:vikiname, ow, id
     if !empty(id)
         let vd .= '|'. id
     endif
+    " TLogVAR vd
     if vd != ''
         exec vd
         if i_dest =~ '^\*\S\+('
@@ -1477,33 +1492,57 @@ endf
 
 " Return an interviki's root directory
 function! viki#InterVikiDest(vikiname, ...)
-    if a:0 >= 1  && a:1 != ''
-        let ow = a:1
-        let v_dest = a:vikiname
-    else
-        let ow = viki#InterVikiName(a:vikiname)
+    TVarArg 'ow', ['rx', 0]
+    " TLogVAR ow, rx
+    if empty(ow)
+        let ow     = viki#InterVikiName(a:vikiname)
         let v_dest = viki#InterVikiPart(a:vikiname)
+    else
+        let v_dest = a:vikiname
     endif
     let vd = s:InterVikiDef(a:vikiname, ow)
+    " TLogVAR vd
     if vd != ''
         exec vd
+        let f = strpart(i_dest, 1)
+        " TLogVAR i_type, i_dest
+        if !empty(rx)
+            let f = s:RxifyFilename(f)
+        endif
         if i_type == 'fn'
-            let f = strpart(i_dest, 1)
             exec 'let v_dest = '. s:sprintf1(f, v_dest)
         elseif i_type == 'fmt'
-            let f = strpart(i_dest, 1)
             let v_dest = s:sprintf1(f, v_dest)
         else
             if empty(v_dest) && exists('i_index')
                 let v_dest = i_index
             endif
-            let v_dest = expand(i_dest) . g:vikiDirSeparator . v_dest
+            let i_dest = expand(i_dest)
+            if !empty(rx)
+                let sep    = '[\/]'
+                let i_dest = s:RxifyFilename(i_dest)
+            else
+                let sep    = g:vikiDirSeparator
+            endif
+            let v_dest = i_dest . sep . v_dest
         endif
+        " TLogVAR v_dest
         return v_dest
     else
-        echoerr "Viki: InterViki is not defined: ". ow
+        " TLogVAR ow
+        echohl Error
+        echom "Viki: InterViki is not defined: ". ow
+        echohl NONE
         return g:vikiDefNil
     endif
+endf
+
+function! s:RxifyFilename(filename) "{{{3
+    let f = tlib#rx#Escape(a:filename)
+    if exists('+shellslash')
+        let f = substitute(f, '\(\\\\\|/\)', '[\\/]', 'g')
+    endif
+    return f
 endf
 
 " Return an interviki's suffix
@@ -1826,7 +1865,7 @@ function! viki#EditComplete(ArgLead, CmdLine, CursorPos) "{{{3
         " TLogDBG 'A'
         let f  = matchstr(arglead, '::\(\[-\)\?\zs.*$')
         let d  = viki#InterVikiDest(f.'*', i)
-        let r  = '\V\^'. viki#InterVikiDest('\(\.\{-}\)', i) .'\$'
+        let r  = '^'. viki#InterVikiDest('\(.\{-}\)', i, 1) .'$'
         " TLogVAR f,d,r
         let d  = substitute(d, '\', '/', 'g')
         let rv = split(glob(d), '\n')
@@ -1834,13 +1873,16 @@ function! viki#EditComplete(ArgLead, CmdLine, CursorPos) "{{{3
         if sfx != ''
             call filter(rv, 'isdirectory(v:val) || ".". fnamemodify(v:val, ":e") == sfx')
         endif
+        " TLogVAR rv
         call map(rv, 's:EditCompleteMapAgent1(v:val, sfx, i, r)')
+        " TLogVAR rv
         call filter(rv, '!empty(v:val)')
         " TLogVAR rv
         " call map(rv, string(i). '."::". substitute(v:val, r, ''\1'', "")')
     else
         " TLogDBG 'B'
         let rv = split(glob(arglead.'*'.sfx), '\n')
+        " TLogVAR rv
         call map(rv, 's:EditCompleteAgent('. string(i) .', v:val, v:val)')
         " TLogVAR rv
         if arglead == ''

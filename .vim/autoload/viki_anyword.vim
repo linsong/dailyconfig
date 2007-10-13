@@ -2,8 +2,8 @@
 " @Author:      Thomas Link (mailto:micathom AT gmail com?subject=vim-vikiAnyWord)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     04-Apr-2005.
-" @Last Change: 2007-10-05.
-" @Revision:    0.31
+" @Last Change: 2007-10-12.
+" @Revision:    0.35
 
 if &cp || exists('loaded_viki_anyword')
     finish

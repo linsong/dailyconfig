@@ -1,4 +1,4 @@
-*NERD_commenter.txt*         Plugin for commenting code            v214
+*NERD_commenter.txt*         Plugin for commenting code            v215
 
 
                         NERD COMMENTER REFERENCE MANUAL~
@@ -861,6 +861,14 @@ to get illegal syntax when uncommenting them.
 ==============================================================================
 8. Changelog                                                *NERDComChangelog*
 
+2.1.5
+    - added support for lilypond, bbx and lytex. Thanks to Eyolf Østrem for
+      the email.
+    - added an alterative set of delimiters for the dosbatch filetype, thanks
+      to Ingo Karkat for the email.
+    - added support for the markdown filetype. Thanks to Nicolas Weber for the
+      posting the issue.
+
 2.1.4
     - added support for the ahk filetype. Cheers to Don Hatlestad for the
       email.
@@ -1156,6 +1164,13 @@ Cheers to Don Hatlestad for telling me about the ahk filetype
 Thanks to Christophe Benz for emailing me with the Desktop and xsd filetypes.
 
 Cheers to Cheng Fang for the bug reports :D
+
+Cheers to Eyolf Østrem for emailing me about the lilypond, bbx and lytex
+filetypes.
+
+Thanks to Ingo Karkat for emailing me with the alternative dosbatch delimiters.
+
+Thanks to Nicolas Weber for the markdown filetype :)
 
 Cheers to myself for being the best looking man on Earth!
 

@@ -2,17 +2,17 @@
 " @Author:      Thomas Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     08-Dec-2003.
-" @Last Change: 2007-10-05.
-" @Revision: 3.2.2502
+" @Last Change: 2007-10-11.
+" @Revision: 3.3.2520
 "
 " GetLatestVimScripts: 861 1 viki.vim
 "
 " Short Description:
 " This plugin adds wiki-like hypertext capabilities to any document.  Just 
 " type :VikiMinorMode and all wiki names will be highlighted. If you press 
-" <c-cr> when the cursor is over a wiki name, you jump to (or create) the 
-" referred page. When invoked as :VikiMode or via :set ft=viki additional 
-" highlighting is provided.
+" <c-cr> (or <LocalLeader>vf) when the cursor is over a wiki name, you 
+" jump to (or create) the referred page. When invoked via :set ft=viki, 
+" additional highlighting is provided.
 "
 " Requirements:
 " - tlib.vim (vimscript #1863)
@@ -38,7 +38,7 @@ if !exists('loaded_tlib') || loaded_tlib < 15
     echoerr 'tlib >= 0.15 is required'
     finish
 endif
-let loaded_viki = 302
+let loaded_viki = 303
 
 " This is what we consider nil, in the absence of nil in vimscript
 let g:vikiDefNil  = ''
@@ -225,8 +225,7 @@ if !exists("g:vikiMapQParaKeys")    | let g:vikiMapQParaKeys = "\n"      | endif
 " installed)
 " "linechange" could cause some slowdown.
 if !exists("g:vikiHCM") "{{{2
-    let g:vikiHCM = ['linechange', 'syntaxchange']
-    " let g:vikiHCM = ['syntaxchange']
+    let g:vikiHCM = ['syntaxleave_oneline']
 endif
 
 " Check the viki name before inserting this character
@@ -358,6 +357,7 @@ if !exists('*VikiOpenSpecialFile') "{{{2
         endif
         if prot != ''
             let openFile = viki#SubstituteArgs(prot, 'FILE', a:file)
+            " TLogVAR openFile
             exec openFile
         else
             throw 'Viki: Please define g:vikiOpenFileWith_'. proto .' or g:vikiOpenFileWith_ANY!'
@@ -949,6 +949,11 @@ viki#HookCheckPreviousPosition().
 b:vikiCmdAnchorIdx.
 - Moved :VikiMinorModeViki, :VikiMinorModeLaTeX, and 
 :VikiMinorModeAnyWord to plugin/viki.vim
+
+3.3
+- Use hookcursormoved >= 0.3
+- Backslash-save command-line completion
+- Mark unknown intervikis as inexistent
 
 
 " vim: ff=unix
