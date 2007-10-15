@@ -1105,7 +1105,12 @@ endif " has("autocmd")
     let g:FuzzyFinder_KeySwitchMode = '<C-t>'
     let g:FuzzyFinder_KeySwitchIgnoreCase = '<C-i>'
     let g:FuzzyFinder_FileModeVars = 
-                \ { 'excludePath' : '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$' }
+                \ { 'excludePath' : '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$',
+                \   'abbrevMap' : 
+                \    { "wts" : ["~/work/trunk/src", "~/work/trunk/bugfix"],
+                \      "vp" : ["~/.vim/plugin"]
+                \    }
+                \ }
     let g:FuzzyFinder_IgnoreCase = 1
 
     " Map this to select completion item or to finish input and open a
@@ -1117,6 +1122,7 @@ endif " has("autocmd")
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMru<CR>
+    :noremap ,fv :FuzzyFinderFavorite<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2
