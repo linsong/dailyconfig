@@ -1,0 +1,14 @@
+# set up  manhole service for debug purpose
+# !!! ATTENTION: NEVER USE IT ON LIVESITE !!!
+from twisted.internet import reactor
+from twisted.manhole import telnet
+print 'Creating shell server instance'
+factory = telnet.ShellFactory()
+port = 8888
+reactor.listenTCP(port, factory)
+# add more variable into namespace
+factory.namespace['x'] = 'hello world'
+factory.username = 'vincent'
+factory.password = 'foo'
+print 'Listening on port %d' % port
+
