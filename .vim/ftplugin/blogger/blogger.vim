@@ -414,19 +414,22 @@ def authenticate(h):   #{{{
         print "Error: g:Gmail_Account variable not set."
         return
 
+    # NOTE: it seems vim.eval will always return string
     try:
-        password = vim.eval("g:Gmail_Password")
-    except vim.error:
-        try:
-            password = vim.eval("s:Gmail_Password")
-        except vim.error:
-            try:
+        has_password = vim.eval("exists('g:Gmail_Password')") != '0'
+        if has_password:
+            password = vim.eval("g:Gmail_Password")
+        else:
+            has_password = vim.eval("exists('s:Gmail_Password')") != '0'
+            if has_password:
+                password = vim.eval("s:Gmail_Password")
+            else:
                 # store password into a script scope variable to make it a bit secure
                 vim.command('let s:Gmail_Password = inputsecret("Gmail Password: ")')
                 password = vim.eval('s:Gmail_Password')
-            except vim.error:
-                print "Error: g:Gmail_Password variable not set."
-                return
+    except vim.error, e:
+        print "Error: exception(%s) happends when getting password." % str(e)
+        return
 
     auth_uri = 'https://www.google.com/accounts/ClientLogin'
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -437,6 +440,8 @@ def authenticate(h):   #{{{
         return GOOGLE_AUTH
     else:
         print "response: %s; content: %s" % (response, content)
+        # since the authorization failed, we should not remember the password
+        vim.command("unlet s:Gmail_Password")
         return None
 #}}}
 
