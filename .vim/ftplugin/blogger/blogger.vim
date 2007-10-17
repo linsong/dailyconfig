@@ -149,9 +149,9 @@ def GetPostsByLabel(labels):  #{{{
         num = len(BLOGGER_POSTS)
     for i in range(int(num)):
         if BLOGGER_POSTS[i]['draft']:
-            print str(i+1) + ': **DRAFT** ', BLOGGER_POSTS[i]['title']
+            print str(i+1) + ': **DRAFT** ' + BLOGGER_POSTS[i]['title']
         else:
-            print str(i+1) + ':', BLOGGER_POSTS[i]['title']
+            print str(i+1) + ':' + BLOGGER_POSTS[i]['title']
     vim.command('let choice = input("Enter number or ENTER: ")')
     pychoice = vim.eval('choice')
     if pychoice.isdigit():
@@ -203,9 +203,9 @@ def GetPosts(num=5):  #{{{
         num = 5
     for i in range(num):
         if BLOGGER_POSTS[i]['draft']:
-            print str(i+1) + ':', BLOGGER_POSTS[i]['title'] + '        **DRAFT**'
+            print str(i+1) + ':' + BLOGGER_POSTS[i]['title'] + '        **DRAFT**'
         else:
-            print str(i+1) + ':', BLOGGER_POSTS[i]['title']
+            print str(i+1) + ':' + BLOGGER_POSTS[i]['title']
     vim.command('let choice = input("Enter number or ENTER: ")')
     pychoice = vim.eval('choice')
     if pychoice.isdigit():
@@ -417,8 +417,16 @@ def authenticate(h):   #{{{
     try:
         password = vim.eval("g:Gmail_Password")
     except vim.error:
-        print "Error: g:Gmail_Password variable not set."
-        return
+        try:
+            password = vim.eval("s:Gmail_Password")
+        except vim.error:
+            try:
+                # store password into a script scope variable to make it a bit secure
+                vim.command('let s:Gmail_Password = inputsecret("Gmail Password: ")')
+                password = vim.eval('s:Gmail_Password')
+            except vim.error:
+                print "Error: g:Gmail_Password variable not set."
+                return
 
     auth_uri = 'https://www.google.com/accounts/ClientLogin'
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -428,6 +436,7 @@ def authenticate(h):   #{{{
         GOOGLE_AUTH = re.search('Auth=(\S*)', content).group(1)
         return GOOGLE_AUTH
     else:
+        print "response: %s; content: %s" % (response, content)
         return None
 #}}}
 
@@ -526,7 +535,7 @@ def postsFromXML(content, new=False):#{{{
 def _getTextDataFromNode(node):  # {{{
     for n in node.childNodes:
         if n.nodeType == minidom.Node.TEXT_NODE:
-            return n.data
+            return n.data.encode('utf-8')
     return None
 #}}}
 

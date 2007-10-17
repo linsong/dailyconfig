@@ -343,9 +343,8 @@
         set  <F15>=[3;2~
         imap <F15> <S-Del> " this map does not work, don't know why
         
-        set <F16>=
-
-        nmap <F16> <C-Enter>
+        "set <F16>= 
+        "nmap <F16> <C-Enter>
 
         set <F17>=n
         map <F17> <M-n>
@@ -1146,6 +1145,11 @@ endif " has("autocmd")
     
     "### settings for utl.vim {{{2
     let g:Font_Size = 2
+    "}}}2
+    
+    "### settings for blogger.vim {{{2
+    let g:Gmail_Account = 'linsong.qizi@gmail.com'
+    let g:Blog_URI = 'http://vincent-wang.blogspot.com'
     "}}}2
 "## }}}1
 
