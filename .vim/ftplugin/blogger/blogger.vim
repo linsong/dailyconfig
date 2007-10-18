@@ -63,6 +63,10 @@ function! BloggerIndex(args)
 python << EOF
 import vim
 num = vim.eval('a:args')
+try:
+    num = int(num)
+except (TypeError,ValueError), e:
+    num = 5
 GetPosts(num)
 EOF
 endfunction
@@ -241,9 +245,15 @@ def EditPost(num): #
     else:
         use_markdown = False
     if use_markdown:
-        content = html2text.html2text(BLOGGER_POSTS[postnum]['content'])
+        # FIXME: it seems html2text only accept Unicode string, but not UTF-8
+        # to workaround this, I convert content to Unicode before passing
+        # them to html2text and convert it back to UTF-8 when html2text is done
+        content = BLOGGER_POSTS[postnum]['content'].decode('utf-8')
+        content = html2text.html2text(content).encode('utf-8')
+        #content = html2text.html2text(BLOGGER_POSTS[postnum]['content'])
     else:
         content = BLOGGER_POSTS[postnum]['content']
+
     for line in str(content).split('\n'):
         vim.current.buffer.append(line)
     cat_str = '@@LABELS@@ ' + ', '.join(BLOGGER_POSTS[postnum]['categories'])
