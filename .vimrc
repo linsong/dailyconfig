@@ -1152,6 +1152,7 @@ endif " has("autocmd")
     "### settings for blogger.vim {{{2
     let g:Gmail_Account = 'linsong.qizi@gmail.com'
     let g:Blog_URI = 'http://vincent-wang.blogspot.com'
+    let g:Blog_Use_Markdown = 1
     "}}}2
 "## }}}1
 
