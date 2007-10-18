@@ -1111,6 +1111,8 @@ endif " has("autocmd")
                 \    }
                 \ }
     let g:FuzzyFinder_IgnoreCase = 1
+    " don't use Migemo(a japanese search method)
+    let g:FuzzyFinder_Migemo = 0
 
     " Map this to select completion item or to finish input and open a
     " buffer/file. 1st item is mapped to open in previous window. 2nd item is
