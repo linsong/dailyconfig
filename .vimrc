@@ -1152,8 +1152,13 @@ endif " has("autocmd")
     "### settings for blogger.vim {{{2
     let g:Gmail_Account = 'linsong.qizi@gmail.com'
     let g:Blog_URI = 'http://vincent-wang.blogspot.com'
-    let g:Blog_Use_Markdown = 1
+    let g:Blog_Use_Markdown = 0
     "}}}2
+
+    "### settings for vst.vim (Vim reStructured Text) {{{2
+    let g:vst_html_post = "myhtmlvst.vim"
+    "}}}2
+
 "## }}}1
 
 "## Xterm colors defination {{{1 

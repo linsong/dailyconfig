@@ -18,4 +18,7 @@ augroup filetypedetect
   au  BufRead,BufNewFile ipython_edit*.py set paste
   au  BufRead,BufNewFile svn-commit.tmp set paste
   au  BufRead,BufNewFile mutt-vincent-* set paste
+
+  au! BufRead,BufNewFile *.rest  setfiletype rest
+  au! BufRead,BufNewFile *.vst  setfiletype rest
 augroup END

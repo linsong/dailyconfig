@@ -16,3 +16,11 @@ while search('^\s*{read\w\{-}:.\{-}}\s*$', 'W')
 	let jout = "<pre>\n".join(output, "\n")."\n</pre>"
 	put =jout
 endwhile
+
+"remove body and header tags, prepare to post to blog
+:1,/<body>/ d
+:/<\/body/,$ d
+
+" get rid of VST specific ids and classes
+":%s/\(id\|class\)=".\{-}"//ge
+
