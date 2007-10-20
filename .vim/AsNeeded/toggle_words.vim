@@ -45,7 +45,7 @@ set cpo&vim
 
 let g:load_toggle_words = "1.1"
 
-let g:_toggle_words_dict = {'*': [['true', 'false'], ['on', 'off'], ['yes', 'no'], ['+', '-'], ['define', 'undef'], ['if', 'elseif', 'else', 'endif'], ['>', '<'], ['{', '}'], ['(', ')'], ['[', ']'], ['==', '!='], ['success', 'failure'], ['start', 'stop'], ['up', 'down'], ['good', 'bad'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'novermber', 'december'], [],],  }
+let g:_toggle_words_dict = {'*': [['true', 'false'], ['on', 'off'], ['yes', 'no'], ['+', '-'], ['define', 'undef'], ['if', 'elseif', 'else', 'endif'], ['>', '<'], ['{', '}'], ['(', ')'], ['[', ']'], ['==', '!='], ['success', 'failure'], ['start', 'stop'], ['up', 'down'], ['good', 'bad'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'novermber', 'december'], ['left', 'right'], [],],  }
 
 if exists('g:toggle_words_dict')
     :call extend(g:_toggle_words_dict, g:toggle_words_dict)

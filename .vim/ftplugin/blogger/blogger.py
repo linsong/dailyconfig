@@ -4,9 +4,9 @@
 """
 
 import sys
-import httplib2
 import re
 import urlparse
+import httplib2
 import xml.dom.minidom as minidom
 
 class Blogger:
@@ -67,7 +67,10 @@ class Blogger:
         """
         input text must be in Unicode encoding
         """
-        return text.encode('utf-8')
+        if text:
+            return text.encode('utf-8')
+        else:
+            return text
 
     def _extractPost(self, xml_content):
         posts = {}
@@ -107,7 +110,7 @@ class Blogger:
         return cat_str
 
     def _isNewPost(self, post):
-        return post.has_key('id') and post['id']:
+        return not (post.has_key('id') and post['id'])
 
     def _draftToXML(self, post):
         if self._isNewPost(post):
@@ -192,26 +195,27 @@ class Blogger:
             print "Method %s successful!" % method
             return content
         else:
-            print "Method %s failed: %s %s" % (method, response['status'], content)
-            return None
+            raise Exception("Method %s failed: %s %s" % (method,
+                                                         response['status'],
+                                                         content))
 
     def _updatePost(self, post_url, entry):
         conn = self._getHttpConn()
         headers = {'Content-Type': 'application/atom+xml',
                    'Authorization': 'GoogleLogin auth=%s' % self.google_auth.strip()}
 
-        if self._doRequest(post_url, 'PUT', entry, headers):
-            print "Entry successfully updated."
-            return True
-        else:
-            print "Entry update failed."
-            return False
+        self._doRequest(post_url, 'PUT', entry, headers)
+        print "Entry successfully updated."
+
+    def isLogin(self):
+        return self.google_auth is not None
 
     def login(self, username, password):
         if not username:
-            print "username(%s) is not correct!"
+            raise Exception("username(%s) is not correct!")
+
         if not password:
-            print "password(%s) is not correct!"
+            raise Exception("password(%s) is not correct!")
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         # TODO: use "Blogger-0.1" instead of 'dcraven-Vim-Blogger-0.1'
@@ -221,11 +225,8 @@ class Blogger:
                                          body=auth_request, headers=headers)
         if response['status'] == '200':
             self.google_auth = re.search('Auth=(\S*)', content).group(1)
-            return True
         else:
-            print "response: %s; content: %s" % (response, content)
-            # since the authorization failed, we should not remember the password
-            return False
+            raise Exception("Log in failed, response: %s; content: %s" % (response, content))
 
     def getPosts(self):
         """
@@ -267,11 +268,10 @@ class Blogger:
 
         headers = {'Content-Type': 'application/atom+xml', 'Authorization': 'GoogleLogin auth=%s' % self.google_auth.strip()}
 
-        content = self._doRequest(post_uri, 'POST', entry, headers):
+        content = self._doRequest(post_uri, 'POST', entry, headers)
         if content:
+            print "New entry successfully posted."
             return self._extractPost(content)
-        else:
-            return None
 
     def updatePost(self, post, draft=False):
         if not self.google_auth:
@@ -279,8 +279,7 @@ class Blogger:
 
         entry = self._preparePost(post, draft)
 
-        # it's an update
-        return self._updatePost(post['edit_url'], entry)
+        self._updatePost(post['edit_url'], entry)
 
     def Delete(self, post):
         if not self.google_auth:
@@ -288,14 +287,11 @@ class Blogger:
 
         headers = {'Content-Type': 'application/atom+xml', 'Authorization': 'GoogleLogin auth=%s' % self.google_auth.strip()}
 
-        if self._doRequest(post['edit_url'],
-                           'DELETE',
-                           body=None,
-                           headers=headers):
-            print "Entry successfully deleted."
-            return True
-        else:
-            return False
+        self._doRequest(post['edit_url'],
+                        'DELETE',
+                        body=None,
+                        headers=headers)
+        print "Entry successfully deleted."
 
 if __name__ == '__main__':
     pass
