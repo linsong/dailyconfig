@@ -2,10 +2,15 @@
 " 					organizes themes based upon background colors
 " Maintainer:		Erik Falor <ewfalor@gmail.com>
 " Date:				Oct 10, 2007
-" Version:			0.8.1
+" Version:			0.9
 " License:			If you copy this, just give me props.
 "
 " History:
+"   Version 0.9:	Tries not to create submenus which are too tall to fit
+"					on the screen.  By default, generated submenus are split
+"					so as to contain fewer than 45 items.  This number may be
+"					overridden via g:MaxEntriesPerSubmenu.
+"
 "   Version 0.8.1:	Shuangshi Jie bugfix: changed to Unix line endings.
 "
 "   Version 0.8:	Avoid loading menu in console mode.
@@ -58,6 +63,7 @@ set cpo&vim
 
 " Script Variables: {{{
 "store the generated menu under the same path this file is found:
+let s:MaxEntriesPerSubmenu = 45
 let s:menuFile = expand('<sfile>:p:h') . '/ColorSchemes.vim'
 let s:menuName = '&ColorSchemes'
 let s:xdigit = '[0123456789ABCDEFabcdef]'
@@ -424,14 +430,24 @@ function! <SID>ScanThemeBackgrounds() "{{{
 	return [themeColors, themeNames]
 endfunction "}}}
 
+
 function! <SID>BuildMenu(dicts) "{{{
 	"puts menu commands into a list
 	let menu = []
+
+	if exists('g:MaxEntriesPerSubmenu')
+		let MaxEntriesPerSubmenu = g:MaxEntriesPerSubmenu
+	else
+		let MaxEntriesPerSubmenu = s:MaxEntriesPerSubmenu
+	endif
+
 	call add(menu, '"ColorScheme menu generated ' . strftime("%c", localtime()))
 	call add(menu, '')
 	call add(menu, '"Do not load this menu unless running in GUI mode')
 	call add(menu, 'if !has("gui_running") | finish | endif')
 	call add(menu, '')
+
+	"ColorSchemes Sub-Menu, by Color
 	call add(menu, '"Themes by color:')
 	"count number of themes categorized by color
 	let totThemes = 0
@@ -439,15 +455,46 @@ function! <SID>BuildMenu(dicts) "{{{
 		let totThemes += len(a:dicts[0][i])
 	endfor
 	for color in sort(keys(a:dicts[0]))
-		let numThemes = len(a:dicts[0][color])
 		call add(menu, '')
 		call add(menu, '"submenu '. color)
-		for theme in sort(keys(a:dicts[0][color]))
-			call add(menu, '9000amenu '. s:menuName. '.&Colors\ ('. totThemes . ').'
-					\. color . '\ ('. numThemes . ').'
-					\. a:dicts[0][color][theme]. '  :colo '. theme . '<CR>')
-		endfor
+		let numThemes = len(a:dicts[0][color])
+		"if the number of themes for this color does not exceed the total for
+		"any sub menu, go ahead and add them all to the same menu
+		if numThemes <= MaxEntriesPerSubmenu
+			for theme in sort(keys(a:dicts[0][color]))
+				call add(menu, '9000amenu '. s:menuName. '.&Colors\ ('. totThemes . ').'
+						\. color . '\ ('. numThemes . ').'
+						\. a:dicts[0][color][theme]. '  :colo '. theme . '<CR>')
+			endfor
+		else
+			let submenus = []
+			let i = 0
+			while i < numThemes / MaxEntriesPerSubmenu
+				call add(submenus, MaxEntriesPerSubmenu)
+				let i += 1
+			endwhile
+			if numThemes % MaxEntriesPerSubmenu != 0
+				call add(submenus, numThemes % MaxEntriesPerSubmenu)
+			endif
+			if len(submenus) > 1 && submenus[-1] != submenus[-2]
+				let submenus = <SID>BalanceSubmenu(submenus)
+			endif
+			let i = 0
+			let j = 0
+			for theme in sort(keys(a:dicts[0][color]))
+				call add(menu, '9000amenu '. s:menuName. '.&Colors\ ('. totThemes . ').'
+						\. color . '-' . string(i+1) . '\ ('. submenus[i] . ').'
+						\. a:dicts[0][color][theme]. '  :colo '. theme . '<CR>')
+				let j += 1
+				if j == submenus[i]
+					let j = 0
+					let i += 1
+				endif
+			endfor
+		endif
 	endfor
+	
+	"ColorSchemes Sub-Menu, by Name
 	call add(menu, '"Themes by name:')
 	call add(menu, '')
 	"count number of themes categorized by name
@@ -459,11 +506,41 @@ function! <SID>BuildMenu(dicts) "{{{
 		let numThemes = len(a:dicts[1][letter])
 		call add(menu, '')
 		call add(menu, '"submenu '. letter)
-		for theme in sort(keys(a:dicts[1][letter]))
-			call add(menu, 'amenu '. s:menuName. '.&Names\ (' . totThemes . ').'
-					\. letter . '\ ('. numThemes .').'
-					\.  a:dicts[1][letter][theme] . '  :colo '. theme . '<CR>')
-		endfor
+		"if the number of themes for this letter does not exceed the total for
+		"any sub menu, go ahead and add them all to the same menu
+		if numThemes <= MaxEntriesPerSubmenu
+			for theme in sort(keys(a:dicts[1][letter]))
+				call add(menu, 'amenu '. s:menuName. '.&Names\ (' . totThemes . ').'
+						\. letter . '\ ('. numThemes .').'
+						\.  a:dicts[1][letter][theme] . '  :colo '. theme . '<CR>')
+			endfor
+		else
+			let submenus = []
+			let i = 0
+			while i < numThemes / MaxEntriesPerSubmenu
+				call add(submenus, MaxEntriesPerSubmenu)
+				let i += 1
+			endwhile
+			if numThemes % MaxEntriesPerSubmenu != 0
+				call add(submenus, numThemes % MaxEntriesPerSubmenu)
+			endif
+			if len(submenus) > 1 && submenus[-1] != submenus[-2]
+				let submenus = <SID>BalanceSubmenu(submenus)
+			endif
+			let i = 0
+			let j = 0
+
+			for theme in sort(keys(a:dicts[1][letter]))
+				call add(menu, '9000amenu '. s:menuName. '.&Names\ ('. totThemes . ').'
+						\. letter . '-' . string(i+1) . '\ ('. submenus[i] . ').'
+						\. a:dicts[1][letter][theme]. '  :colo '. theme . '<CR>')
+				let j += 1
+				if j == submenus[i]
+					let j = 0
+					let i += 1
+				endif
+			endfor
+		endif
 	endfor
 
 	call add(menu, '')
@@ -494,9 +571,26 @@ function! <SID>BuildMenu(dicts) "{{{
 	call add(menu, "		echomsg 'Done Refreshing " . s:menuFile . "'")
 	call add(menu, '	endfunction')
 	call add(menu, 'endif')
-
 	return menu
-endfunction "}}}
+endfunction "BuildMenu}}}
+
+function! <SID>BalanceSubmenu(s) "{{{
+	let next2last = len(a:s) - 2
+	let i = next2last
+
+	while a:s[-1] < a:s[-2]
+		let a:s[-1] += 1
+		let a:s[i] -= 1
+		if i > 0
+			let i -= 1
+		elseif a:s[-2] -1 == a:s[-1]
+			break
+		else
+			let i = next2last
+		endif
+	endwhile
+	return a:s
+endfunction "BalanceSubmenu}}}
 
 function! WriteColorSchemeMenu() "{{{
 	"Builds the menu from the two dicts returned by ScanThemeBackgrounds()

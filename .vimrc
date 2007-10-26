@@ -1122,8 +1122,9 @@ endif " has("autocmd")
     let g:FuzzyFinder_KeyOpen = ['<CR>', '<C-O>', '<C-V>']
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
-    :noremap ,fm :FuzzyFinderMru<CR>
-    :noremap ,fv :FuzzyFinderFavorite<CR>
+    :noremap ,fm :FuzzyFinderMruFile<CR>
+    :noremap ,fc :FuzzyFinderMruCmd<CR>
+    :noremap ,fv :FuzzyFinderFavFile<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2
