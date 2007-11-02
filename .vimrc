@@ -1104,7 +1104,7 @@ endif " has("autocmd")
     let g:FuzzyFinder_KeySwitchMode = '<C-t>'
     let g:FuzzyFinder_KeySwitchIgnoreCase = '<C-i>'
     let g:FuzzyFinder_FileModeVars = 
-                \ { 'excludePath' : '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$',
+                \ { 'excludedPath' : '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$',
                 \   'abbrevMap' : 
                 \    { "wts" : ["~/work/trunk/src", "~/work/trunk/bugfix"],
                 \      "vp" : ["~/.vim/plugin"]
