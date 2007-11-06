@@ -245,15 +245,15 @@ def Post(draft=False):  # {{{
         post_key = None
         subject = vim.current.buffer[0]
         if has_labels:
+            body = '\n'.join(vim.current.buffer[2:-1])
             if use_markdown:
-                body = markdown.markdown('\n'.join(vim.current.buffer[2:-1]))
-            else:
-                body = '\n'.join(vim.current.buffer[2:-1])
+                body = markdown.markdown(body.decode('utf-8'))
+                body = body.encode('utf-8')
         else:
+            body = '\n'.join(vim.current.buffer[2:])
             if use_markdown:
-                body = markdown.markdown('\n'.join(vim.current.buffer[2:]))
-            else:
-                body = '\n'.join(vim.current.buffer[2:])
+                body = markdown.markdown(body.decode('utf-8'))
+                body = body.encode('utf-8')
 
     posts = getBloggerPost()
     # construct a post object for posting

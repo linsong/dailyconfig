@@ -71,9 +71,16 @@ export VISUAL='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
 # set prompt string: user@host and current_directory
 # set different prompt basedd on different host 
 if [ `hostname` == 'vincent' ]; then
-	PS1='
+    # if we are in chroot environment, use an outstanding prompt
+    if [ ! -d '/chroot-sarge' ]; then 
+    PS1='
+\[\033[35;40m\](chroot)\u@\h \[\033[35;40m\]\w\[\033[0m\]
+\[[30;46m\][\!]\[[m\] $ '
+    else
+    PS1='
 \[\033[32m\]\u@\h \[\033[33m\]\w\[\033[0m\]
 \[[30;47m\][\!]\[[m\] $ '
+    fi
 elif [ $(hostname) == 'Tiger.local' ]; then
 	PS1='
 \[\033[36m\]\u@\h \[\033[36m\]\w\[\033[0m\]
