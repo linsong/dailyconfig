@@ -47,7 +47,7 @@ MP3_QUALITY=${MP3_QUALITY:-2} # read man page of lame (-q) for more details
 mkfifo $BUFFER_FILE
 # echo "Start to connecting to broadcaster ..."
 #mplayer -nolirc mms://211.89.225.101/live2 -ao pcm:file=$BUFFER_FILE -vc dummy -vo null &
-mplayer -nolirc $RADIO_URI -ao pcm:file=$BUFFER_FILE -vc dummy -vo null &
+mplayer -nolirc -nojoystick $RADIO_URI -ao pcm:file=$BUFFER_FILE -vc dummy -vo null &
 
 # stop recording after some minutes
 echo "kill $!" | at now + $TIME_LENGTH minutes
