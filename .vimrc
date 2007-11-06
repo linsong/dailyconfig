@@ -249,6 +249,9 @@
     " mappings for quickfix mode 
     nnoremap <xF4>   :cnext <CR>
     nnoremap <S-xF4> :cprev <CR>
+    nnoremap <C-F4>   :cnfile <CR>
+    nnoremap <S-C-F4> :cpfile <CR>
+
 
     " MAKE IT EASY TO UPDATE/RELOAD_vimrc
     if has("gui_running")
@@ -334,36 +337,49 @@
     if !has("gui_running")
       if &term == "win32"
       else
-        set <F13>=O5Q
-        nmap <F13> <C-F2>
+        "following setting does not work after I update my system
+        " (from ubuntu 7.04 to 7.10)
+        " set <F13>=O5Q
+        " set  <F14>=O2Q
+        " set  <F15>=[3;2~
+        " "set <F16>=
+        " set <F17>=n
+        " set <F18>=q
+        " set <F19>=.
+        " set <F20>=,
+        " set <F21>=>
+        " set <F22>=<
+        " set <F23>=[2~;*~
+        " set <S-xF4>=O2S
 
-        set  <F14>=O2Q
-        nmap <F14> <S-F2>
-
+        set <F13>=O1;5Q
+        set  <F14>=O1;2Q
         set  <F15>=[3;2~
-        imap <F15> <S-Del> " this map does not work, don't know why
-        
         "set <F16>= 
-        "nmap <F16> <C-Enter>
-
         set <F17>=n
-        map <F17> <M-n>
         set <F18>=q
-        map <F18> <M-q>
         set <F19>=.
-        map <F19> <M-.>
         set <F20>=,
-        map <F20> <M-,>
         set <F21>=>
-        map <F21> <M->>
         set <F22>=<
-        map <F22> <M-<>
-
-        "not work yet
         set <F23>=[2~;*~
+        set <S-xF4>=O1;2S
+        set <F24>=O1;5S
+        set <F25>=O1;6S
+        
+        nmap <F13> <C-F2>
+        nmap <F14> <S-F2>
+        imap <F15> <S-Del> " this map does not work, don't know why
+        "nmap <F16> <C-Enter>
+        map <F17> <M-n>
+        map <F18> <M-q>
+        map <F19> <M-.>
+        map <F20> <M-,>
+        map <F21> <M->>
+        map <F22> <M-<>
         map <F23> <S-Insert>
-
-        set <S-xF4>=O2S
+        map <F24> <C-F4>
+        map <F25> <C-S-F4>
       endif
     endif 
     "if !has("gui_running")
