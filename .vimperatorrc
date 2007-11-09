@@ -5,6 +5,9 @@ set complete=sbhf
 set defsearch=google
 set guioptions=mTbs
 set maxhints=1000
+set hlsearch 
+set incsearch
+set smartcase
 
 " may affect performance
 set preload 
@@ -19,6 +22,8 @@ map <A-n> :tabnew<CR>
 map <A-.> :tabnext<CR>
 map <A-,> :tabprev<CR>
 map <A-q> :tabclose<CR>
+
+map q :q<CR>
 
 
 echo .vimperatorrc sourced!
