@@ -1117,7 +1117,7 @@ endif " has("autocmd")
     "}}}2
     
     "### setting for fuzzyfinder.vim {{{2
-    let g:FuzzyFinder_KeySwitchMode = '<C-t>'
+    let g:FuzzyFinder_KeySwitchMode = ['<C-t>', '<C-S-t>']
     let g:FuzzyFinder_KeySwitchIgnoreCase = '<C-i>'
     let g:FuzzyFinder_FileModeVars = 
                 \ { 'excludedPath' : '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$',
@@ -1141,6 +1141,7 @@ endif " has("autocmd")
     :noremap ,fm :FuzzyFinderMruFile<CR>
     :noremap ,fc :FuzzyFinderMruCmd<CR>
     :noremap ,fv :FuzzyFinderFavFile<CR>
+    :noremap ,fd :FuzzyFinderDir<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2
@@ -1176,6 +1177,10 @@ endif " has("autocmd")
     let g:vst_html_post = "myhtmlvst.vim"
     "}}}2
 
+    "### settings for supertab.vim {{{2
+    let g:SuperTabLongestHighlight = 1
+    "}}}2
+    
 "## }}}1
 
 "## Xterm colors defination {{{1 
