@@ -2,8 +2,8 @@
 " @Author:      Thomas Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 2007-09-19.
-" @Revision:    4.1.3719
+" @Last Change: 2007-11-06.
+" @Revision:    4.2.3758
 "
 " GetLatestVimScripts: 1160 1 tSkeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -12,14 +12,10 @@
 " - When bits change, opened hidden buffer don't get updated it seems.
 " - Enable multiple skeleton directories (and maybe other sources like 
 "   DBs).
-" - <form in php mode doesn't work (probably a keyword-thing)
-" - ADD: More latex & html bits
+" - Sorted menus.
+" - ADD: More html bits
 " - ADD: <tskel:post> embedded tag (evaluate some vim code on the visual 
 "   region covering the final expansion)
-" - FIX: The \section bit either moves the cursor after the closing 
-"   curly brace or (when applying some correction) before the opening 
-"   CB. This is very confusing. I assume it's caused by some bracket 
-"   matching thingy.
 
 
 if &cp || exists("loaded_tskeleton") "{{{2
@@ -29,7 +25,7 @@ if !exists('loaded_tlib') || loaded_tlib < 14
     echoerr "tSkeleton requires tlib >= 0.14"
     finish
 endif
-let loaded_tskeleton = 401
+let loaded_tskeleton = 402
 
 
 if !exists("g:tskelDir") "{{{2
@@ -59,7 +55,7 @@ if !exists("g:tskelTypes") "{{{2
     " 'functions' (VIM script functions extracted from :function)
     " 'mini' ("mini" bits, one-liners etc.)
     " 'tags' (tags-based code templates, requires ctags, I presume)
-    let g:tskelTypes = ['skeleton', 'mini', 'abbreviations']
+    let g:tskelTypes = ['skeleton', 'mini']
 endif
 
 if !exists('g:tskelLicense') "{{{2
@@ -73,6 +69,7 @@ if !exists("g:tskelMarkerHiGroup") | let g:tskelMarkerHiGroup = 'Special'     | 
 if !exists("g:tskelMarkerLeft")    | let g:tskelMarkerLeft    = "<+"           | endif "{{{2
 if !exists("g:tskelMarkerRight")   | let g:tskelMarkerRight   = "+>"           | endif "{{{2
 if !exists("g:tskelMarkerCursor_mark") | let g:tskelMarkerCursor_mark = "CURSOR"           | endif "{{{2
+if !exists("g:tskelMarkerCursor_volatile") | let g:tskelMarkerCursor_volatile = "/CURSOR"           | endif "{{{2
 if !exists("g:tskelMarkerCursor_rx")   | let g:tskelMarkerCursor_rx = 'CURSOR\(/\(.\{-}\)\)\?' | endif "{{{2
 if !exists("g:tskelDateFormat")    | let g:tskelDateFormat    = '%Y-%m-%d'    | endif "{{{2
 if !exists("g:tskelUserName")      | let g:tskelUserName      = g:tskelMarkerLeft."NAME".g:tskelMarkerRight    | endif "{{{2
@@ -95,7 +92,7 @@ if !exists("g:tskelMenuPrefix")     | let g:tskelMenuPrefix  = 'TSke&l'    | end
 if !exists("g:tskelMenuCache")      | let g:tskelMenuCache = '.tskelmenu'  | endif "{{{2
 if !exists("g:tskelMenuPriority")   | let g:tskelMenuPriority = 90         | endif "{{{2
 if !exists("g:tskelMenuMiniPrefix") | let g:tskelMenuMiniPrefix = 'etc.'   | endif "{{{2
-if !exists("g:tskelAutoAbbrevs")    | let g:tskelAutoAbbrevs = 1           | endif "{{{2
+if !exists("g:tskelAutoAbbrevs")    | let g:tskelAutoAbbrevs = 0           | endif "{{{2
 if !exists("g:tskelAbbrevPostfix")  | let g:tskelAbbrevPostfix = '#'       | endif "{{{2
 
 if !exists("g:tskelUseBufferCache") | let g:tskelUseBufferCache = 0             | endif "{{{2
@@ -117,13 +114,27 @@ if !exists("g:tskelPopupNumbered") | let g:tskelPopupNumbered = 1 | endif "{{{2
 if !exists("g:tskelSelectTagMode") | let g:tskelSelectTagMode = 's' | endif "{{{2
 
 if !exists("g:tskelKeyword_bib")  | let g:tskelKeyword_bib  = '[@[:alnum:]]\{-}'       | endif "{{{2
+if !exists("g:tskelKeyword_java") | let g:tskelKeyword_java = '[[:alnum:]_@<&]\{-}'    | endif "{{{2
+if !exists("g:tskelKeyword_php")  | let g:tskelKeyword_java = '[[:alnum:]_@<&$]\{-}'   | endif "{{{2
 if !exists("g:tskelKeyword_html") | let g:tskelKeyword_html = '<\?[^>[:blank:]]\{-}'   | endif "{{{2
 if !exists("g:tskelKeyword_sh")   | let g:tskelKeyword_sh   = '[\[@${([:alpha:]]\{-}'  | endif "{{{2
 if !exists("g:tskelKeyword_tex")  | let g:tskelKeyword_tex  = '\\\?\w\{-}'             | endif "{{{2
-if !exists("g:tskelKeyword_viki") | let g:tskelKeyword_viki = '\(#\|{\)\?[^#{[:blank:]]\{-}' | endif "{{{2
+" if !exists("g:tskelKeyword_viki") | let g:tskelKeyword_viki = '\(#\|{\)\?[^#{[:blank:]]\{-}' | endif "{{{2
+if !exists("g:tskelKeyword_viki") | let g:tskelKeyword_viki = '\(#\|{\|\\\)\?[^#{[:blank:][:punct:]-]\{-}' | endif "{{{2
 
+if !exists("g:tskelBitGroup_html") "{{{2
+    let g:tskelBitGroup_html = ['html', 'html_common']
+endif
 if !exists("g:tskelBitGroup_php") "{{{2
-    let g:tskelBitGroup_php  = ['php', 'html']
+    let g:tskelBitGroup_php  = ['php', 'html', 'html_common']
+endif
+if !exists("g:tskelBitGroup_java") "{{{2
+    let g:tskelBitGroup_java = ['java', 'html_common']
+endif
+if !exists("g:tskelBitGroup_viki") "{{{2
+    let g:tskelBitGroup_viki = ['tex', 'viki']
+endif
+if !exists("g:tskelBitGroup_xslt") "{{{2
     let g:tskelBitGroup_xslt = ['xslt', 'xml']
 endif
 
@@ -599,5 +610,15 @@ you use tag/functions type of skeleton bit, it's unnecessary anyway.
 - The g:tskelMarkerCursor variable was removed and replaced with 
 g:tskelMarkerCursor_mark and g:tskelMarkerCursor_rx.
 
+4.2
+- Enable <+CURSOR/foo+>. After expansion "foo" will be selected.
+- New (old) default values: removed 'abbreviations' from g:tskelTypes 
+and set g:tskelAutoAbbrevs to 0 in order to minimize surprises.
+- Enabled tex-Skeletons for the viki filetype
+- FIX: Place the cursor at the end of an inserted bit that contains no 
+cursor marker (which was the original behaviour).
+- Split html bits into html and html_common; the java group includes 
+html_common.
+- CHANGE: Made bit names case-sensitive
+- NEW: select() tag (similar to the query tag)
 
-" Not yet: This allows for something like <+CURSOR/foo+>.

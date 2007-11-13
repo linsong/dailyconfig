@@ -16,7 +16,8 @@ Edit the vba file and type:
 
     :so %
 
-See :help vimball for details.
+See :help vimball for details. If you use vim 7.0, you probably need to 
+update vimball first.
 
 If you don't already have some skeletons, you may want to download 
 tSkeleton-Samples.zip from:
@@ -78,7 +79,20 @@ file: >
     autocmd BufNewFile *.suffix       TSkeletonSetup template.suffix
     autocmd BufNewFile /here/*.suffix TSkeletonSetup othertemplate.suffix
 
+
+Alternatively, you can store templates as:
+    ~/vimfiles/skeletons/templates/GROUP/FILETYPE PATTERN
+
+The pattern is an encoded pattern (# == *, %XX=Char XXh) for 
+auto-generated autocmds.
+
+
                                                     *tSkeleton-place-holder*
+
+Tags (which look like <+...+>) serve two purposes:
+    - marker for jump positions
+    - dynamic content expansion
+
 You can use tags to define cursor jump positions. tSkeleton also 
 supports some special tags that are expanded when inserting the 
 skeleton.
@@ -197,6 +211,9 @@ Interaction:                                        *tSkeletion-<+input+>*
         this case any whitespace (including one newline) after the tag 
         will be removed. See also the notes on |tSkeletion-<+input+>|.
 
+    <+select(VAR, LIST)+>
+        Let the user select an item from a list.
+
 Other:                                              *tSkeletion-<+nl+>*
     <+nl+>
         Insert a newline
@@ -308,6 +325,19 @@ Example for a ruby class template: >
                                                     *tSkeleton-bits*
 Bits/Code Skeletons~
 
+Smaller skeleton bits are stored in SKELETONS/bits/FILETYPE/ or 
+SKELETONS/bits/general/. I.e., code skeletons can be filetype specific 
+or generally available.
+
+The filenames of the bits may be grouped in submenus as in:
+
+    ../tex/&Define.%5Cnew&command
+    ../tex/&Define.%5Cnew&environment
+
+This will create skeletons for \newcommand and \newenvironment but will 
+group the skeletons under the TSkel.Define. menu with the respective 
+accelerators.
+
                                                     *tSkeleton-Types* *g:tskelTypes*
                                                     *tskeleton#Initialize()*
 tSkeleton supports several types of code templates:
@@ -383,6 +413,9 @@ following order:
 
     <tskel:abbrev>                                  *<tskel:abbrev>*
         Make the bit available via |:abbreviate| under the enclosed name.
+
+    <tskel:menu>                                    *<tskel:menu>*
+        Use this menu name instead of the default one.
 
     <tskel:condition>                               *<tskel:condition>*
         An expression that checks whether a bit is eligible in the 
@@ -515,7 +548,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.303
+    @Revision: 1.0.308
 
 In order to use this function, add something like this to your |vimrc| 
 file: >

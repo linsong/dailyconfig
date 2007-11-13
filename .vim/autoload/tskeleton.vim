@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2007-09-19.
-" @Revision:    0.0.1031
+" @Last Change: 2007-11-11.
+" @Revision:    0.0.1141
 
 if &cp || exists("loaded_tskeleton_autoload")
     finish
@@ -28,6 +28,7 @@ let s:initialized      = []
 
 function! tskeleton#Initialize(...) "{{{3
     TVarArg ['types', g:tskelTypes]
+    " TLogVAR types
     for type in types
         if index(s:initialized, type) == -1
             " TLogVAR type
@@ -58,11 +59,20 @@ endf
 
 
 function! tskeleton#TagRx() "{{{3
+    " let quoted = '"\(\\"\|[^"]\)*"\|''\(''''\|[^'']\)*'''
+    " return tskeleton#WrapMarker("\\("
+    "         \ ."[\\&].\\{-}\\|[gbws]:.\\{-}\\|\\(bit\\|tskel\\):.\\{-}"
+    "         \ ."\\|call:\\(". quoted ."\\|[bgs]:\\|.\\)\\{-1,}"
+    "         \ ."\\|[a-zA-Z_ -]*\\(/.\\{-}\\)\\?"
+    "         \ ."\\|\\(if\\|elseif\\|for\\|input\\|let\\|\\include\\|execute\\)(\\([^'\"]*\\|". quoted ."\\)\\{-})"
+    "         \ ."\\|?.\\{-}?"
+    "         \ ."\\)\\(: *.\\{-} *\\)\\?"
+    "         \ , 'rx')
     return tskeleton#WrapMarker("\\("
             \ ."[\\&].\\{-}\\|[gbws]:.\\{-}\\|\\(bit\\|tskel\\):.\\{-}"
             \ ."\\|call:\\('[^']*'\\|\"\\(\\\\\"\\|[^\"]\\)*\"\\|[bgs]:\\|.\\)\\{-1,}"
             \ ."\\|[a-zA-Z_ -]*\\(/.\\{-}\\)\\?"
-            \ ."\\|\\(if\\|elseif\\|for\\|input\\|let\\|\\include\\|execute\\)(.\\{-})"
+            \ ."\\|\\(if\\|elseif\\|for\\|input\\|select\\|let\\|\\include\\|execute\\)(.\\{-})"
             \ ."\\|?.\\{-}?"
             \ ."\\)\\(: *.\\{-} *\\)\\?"
             \ , 'rx')
@@ -164,8 +174,8 @@ function! tskeleton#FillIn(bit, ...) "{{{3
             endif
         endfor
         if empty(a:bit)
-            " TLogDBG "s:SetCursor"
-            call s:SetCursor('%', '')
+            " TLogDBG "tskeleton#SetCursor"
+            call tskeleton#SetCursor('%', '')
         endif
         " TLogDBG "done"
     " catch
@@ -205,6 +215,7 @@ function! tskeleton#ExtractMeta(text)
     " TLogVAR meta.here_after
     let [text, meta.abbrev]      = s:GetBitProcess(text, 'abbrev', 0)
     " TLogVAR meta.abbrev
+    let [text, meta.menu]        = s:GetBitProcess(text, 'menu', 0)
     let [text, meta.condition]   = s:GetBitProcess(text, 'condition', 0)
     if empty(meta.condition)
         let meta.condition = 1
@@ -229,6 +240,8 @@ function! s:HandleTag(match, filetype) "{{{3
         return [1, ""]
     elseif a:match =~# '^input('
         return s:Input(strpart(a:match, 5))
+    elseif a:match =~# '^select('
+        return s:Select(strpart(a:match, 6))
     elseif a:match =~# '^if('
         return [0, s:SwitchIf(strpart(a:match, 2))]
     elseif a:match =~# '^elseif('
@@ -268,8 +281,8 @@ function! s:HandleTag(match, filetype) "{{{3
 endf
 
 
-" s:SetCursor(from, to, ?mode='n', ?findOnly)
-function! s:SetCursor(from, to, ...) "{{{3
+" tskeleton#SetCursor(from, to, ?mode='n', ?findOnly)
+function! tskeleton#SetCursor(from, to, ...) "{{{3
     " TLogVAR a:from, a:to
     let mode     = a:0 >= 1 ? a:1 : 'n'
     let findOnly = a:0 >= 2 ? a:2 : (s:tskelScratchIdx > 1)
@@ -288,21 +301,33 @@ function! s:SetCursor(from, to, ...) "{{{3
         exec a:to
     end
     let cursor_rx = tskeleton#CursorMarker('rx')
-    if line('.') == 1
-        norm! G$
-        let l = search(cursor_rx, 'w')
-    else
-        norm! k$
-        let l = search(cursor_rx, 'W')
-    end
+    " if line('.') == 1
+    "     norm! G$
+        let l = search(cursor_rx, 'Wc')
+    " else
+    "     norm! k$
+    "     let l = search(cursor_rx, 'W')
+    " end
     " TLogVAR l, c
     if l == 0
-        call cursor(l, c)
-        return 0
+        " if findOnly
+        "     let l = line('$')
+        "     call cursor(l, len(getline('$')))
+        "     return l
+        " else
+            call cursor(l, c)
+            return 0
+        " endif
     elseif !findOnly
         let c = col('.')
+        " TLogDBG getline('.')
+        let smarttaglen = len(get(matchlist(getline('.')[c - 1 :], cursor_rx), 2, ''))
         silent exec 's/'. escape(cursor_rx, '/') .'/\2/e'
         call cursor(0, c)
+        if smarttaglen > 0
+            exec 'norm! v'. smarttaglen .'l'
+        endif
+        " TLogDBG getline('.')
     endif
     " TLogVAR l
     return l
@@ -315,7 +340,9 @@ endf
 
 
 function! s:Input(text) "{{{3
+    " TLogVAR a:text
     let args = eval('['. matchstr(a:text, '^(\zs.*\ze)$') .']')
+    " TLogVAR args
     let var  = get(args, 0, '')
     let vdef = s:VarName(var)
     if var[-1:-1] == '!'
@@ -331,6 +358,30 @@ function! s:Input(text) "{{{3
         let val = s:GetVar(vdef.name)
     else
         let val = call('input', args[1:-1])
+        call s:TemporaryLet(var, val)
+    endif
+    return [reval, val]
+endf
+
+
+function! s:Select(text) "{{{3
+    let args = eval('['. matchstr(a:text, '^(\zs.*\ze)$') .']')
+    " TLogVAR args
+    let var  = get(args, 0, '')
+    let vdef = s:VarName(var)
+    if var[-1:-1] == '!'
+        call s:DelTo('select(.\{-}', 1)
+        let s:tskelPostExpand = "call setpos('.', ". string(s:tskelPos0) .")"
+        " TLogDBG string(getline(1, '$'))
+        let reval = 0
+        let var   = var[0:-2]
+    else
+        let reval = 1
+    endif
+    if s:SkipVar(vdef)
+        let val = s:GetVar(vdef.name)
+    else
+        let val = tlib#input#List('s', 'Select item:', get(args, 1, ['Malformed arguments']))
         call s:TemporaryLet(var, val)
     endif
     return [reval, val]
@@ -508,55 +559,6 @@ function! s:LoopFor(text) "{{{3
 endf
 
 
-" function! s:LoopFor(text) "{{{3
-"     " TLogDBG 'for'
-"     " TLogVAR a:text
-"     let var   = matchstr(a:text, '^(\zs\S\+')
-"     let endrx = 'endfor\(('.var.')\)\?'
-"     " TLogVAR var, endrx
-"     let lists = matchstr(a:text, '\sin\s\+\zs.\{-}\ze)$')
-"     let t = @t
-"     try
-"         call s:DoVisual('for(.\{-}', 1, '"ty')
-"         let head = @t
-"         " TLogVAR head
-"         " call setpos('.', getpos("'>"))
-"         " throw "stop"
-"         call s:DelTo('for(.\{-}', 1)
-"         call s:DoVisual(endrx, 0, '"ty')
-"         let body = @t
-"         " TLogVAR body
-"         call s:DoVisual(endrx, 1, '"ty')
-"         let body0 = tlib#string#Chomp(@t)
-"         " let body0 = @t
-"         " TLogVAR body0
-"     finally
-"         let @t = t
-"     endtry
-"     call s:DelTo(endrx, 1)
-"     " TLogVAR var, lists
-"     let list  = eval(lists)
-"     " TLogVAR list
-"     let acc = []
-"     if !empty(list)
-"         let {var} = remove(list, 0)
-"         " echom "DBG ". {var}
-"         call add(acc, body)
-"         if !empty(list)
-"             " TLogVAR head
-"             let head = substitute(head, '\sin\s\+\zs.\{-}\ze)'.tlib#rx#Escape(g:tskelMarkerRight), escape(string(list), '\'), '')
-"             " TLogVAR head
-"             call add(acc, head.body0)
-"         endif
-"     endif
-"     let s:tskelPostExpand = "call setpos('.', ". string(s:tskelPos0) .")"
-"     " TLogVAR acc
-"     call s:InsertBitText('gil', join(acc, ''))
-"     " call s:InsertBitText('i', join(acc, ''))
-"     return ''
-" endf
-
-
 function! s:DoVisual(pattern, inclusive, cmd) "{{{3
     let rx = tskeleton#WrapMarker(a:pattern, 'rx')
     " TLogVAR rx
@@ -682,19 +684,19 @@ function! s:Modify(text, modifier) "{{{3
     " let rv = escape(a:text, '\&~')
     let rv = a:text
     let premod = '^[:ulcs]\{-}'
-    if a:modifier =~? premod.'u'
+    if a:modifier =~# premod.'u'
         let rv = toupper(rv)
     endif
-    if a:modifier =~? premod.'l'
+    if a:modifier =~# premod.'l'
         let rv = tolower(rv)
     endif
-    if a:modifier =~? premod.'c'
+    if a:modifier =~# premod.'c'
         let rv = toupper(rv[0]) . tolower(strpart(rv, 1))
     endif
-    if a:modifier =~? premod.'C'
+    if a:modifier =~# premod.'C'
         let rv = substitute(rv, '\(^\|[^a-zA-Z0-9_]\)\(.\)', '\u\2', 'g')
     endif
-    if a:modifier =~? premod.'s'
+    if a:modifier =~# premod.'s'
         " let mod  = matchstr(a:modifier, '^[^s]*s\zs.*\ze$')
         let mod  = matchstr(a:modifier, 's\zs.*\ze$')
         " let rxm  = '\V'
@@ -894,7 +896,7 @@ function! tskeleton#EditBitCompletion(ArgLead, CmdLine, CursorPos) "{{{3
         let bits  = map(bits, 'tlib#file#Relative(v:val["bitfile"], g:tskelBitsDir)')
         let bvals = values(bits)
         if !empty(a:ArgLead)
-            call filter(bvals, 'v:val =~ ''\V\^''. escape(a:ArgLead, ''\'')')
+            call filter(bvals, 'v:val =~# ''\V\^''. escape(a:ArgLead, ''\'')')
         endif
         return bvals
     endif
@@ -980,7 +982,7 @@ function! tskeleton#GlobBits(path, ...) "{{{3
     let pt   = "*"
     let rvs  = globpath(a:path, pt)
     let rvs  = substitute(rvs, '\\', '/', 'g')
-    let rv   = split(rvs, "\n")
+    let rv   = sort(split(rvs, "\n"))
     if mode == 0
         call map(rv, 'fnamemodify(v:val, ":t")')
     elseif mode == 1
@@ -1038,7 +1040,7 @@ function! tskeleton#FetchMiniBits(dict, filename, buildmenu) "{{{3
     " TLogVAR a:filename
     let c = s:ReadFile(a:filename)
     if c =~ '\S'
-        for line in split(c, "\n")
+        for line in sort(split(c, "\n"))
             call s:PrepareMiniBit(a:dict, line, a:buildmenu)
         endfor
     endif
@@ -1046,14 +1048,17 @@ function! tskeleton#FetchMiniBits(dict, filename, buildmenu) "{{{3
 endf
 
 
-function! tskeleton#ProcessTag_functions_with_parentheses(dict, tag, restargs)
-    if a:tag['kind'] == 'f'
+function! tskeleton#ProcessTag_functions_with_parentheses(kinds, dict, tag, restargs)
+    if empty(a:kinds) || stridx(a:kinds, a:tag['kind']) != -1
         let source0 = fnamemodify(a:tag['filename'], ':p')
         let source  = source0
         let xname   = a:tag['name']
-        let args    = matchstr(a:tag['cmd'], '(\zs.\{-}\ze)')
-        " let bname0  = xname .'/'. len(split(args, ',')) .'@'
-        let args0   = matchstr(a:tag['cmd'], '(.\{-})')
+        if has_key(a:tag, 'signature')
+            let args0 = a:tag.signature
+        else
+            let args0 = matchstr(a:tag['cmd'], '(.\{-})')
+        endif
+        let args    = matchstr(args0, '(\zs.\{-}\ze)')
         let bname0  = xname . args0 .'@'
         let bname   = bname0 . fnamemodify(source, ':t')
         if has_key(a:dict, bname)
@@ -1075,8 +1080,6 @@ function! tskeleton#ProcessTag_functions_with_parentheses(dict, tag, restargs)
             let a:dict[bname]['menu'] = mname
         endif
         return bname
-    elseif a:tag['kind'] == 'c'
-    elseif a:tag['kind'] == 'm'
     endif
     return ''
 endf
@@ -1085,12 +1088,18 @@ endf
 function! tskeleton#ReplacePrototypeArgs(text, rest)
     let args = split(a:text, ',\s\+')
     if empty(args)
-        return '()'
+        return '()' . tskeleton#CursorMarker()
     else
         let max = len(args) - 1
-        let rv  = map(range(0, max), '!empty(a:rest) && args[v:val] =~ a:rest ? tskeleton#WrapMarker('') : (v:val == 0 ? "" : ", ") . printf(tskeleton#WrapMarker("%s"), toupper(args[v:val]))')
+        " let rv  = map(range(0, max), '!empty(a:rest) && args[v:val] =~# a:rest ? tskeleton#WrapMarker("") : (v:val == 0 ? "" : ", ") . printf(tskeleton#WrapMarker("%s"), toupper(args[v:val]))')
+        let rv  = map(range(0, max), '!empty(a:rest) && args[v:val] =~# a:rest ? tskeleton#WrapMarker("") : (v:val == 0 ? "" : ", ") . printf(tskeleton#WrapMarker("%s"), s:CleanArgument(args[v:val]))')
         return printf('(%s%s)%s', tskeleton#CursorMarker(), join(rv, ''), tskeleton#WrapMarker(''))
     endif
+endf
+
+
+function! s:CleanArgument(arg) "{{{3
+    return substitute(a:arg, '[?&:|()<>]', ' ', 'g')
 endf
 
 
@@ -1243,7 +1252,7 @@ function! s:MakeMenuEntry(items, ...)
         let subpriority = 20
     endif
     let menu = []
-    call filter(copy(a:items), 'tskeleton#NewBufferMenuItem(menu, v:val, subpriority)')
+    call filter(sort(copy(a:items)), 'tskeleton#NewBufferMenuItem(menu, v:val, subpriority)')
     " TLogVAR menu
     return menu
 endf
@@ -1357,21 +1366,31 @@ function! s:PrepareMenuEntry(name, subpriority, mode) "{{{3
         " TLogVAR a:mode
         let bit   = tskeleton#BitDef(a:name)
         " TLogVAR bit
-        let mname = empty(bit) ? a:name : get(bit, 'menu', a:name)
-        " let mname = escape(mname, ' 	\')
-        let mname = escape(mname, ' 	')
+        let mname = a:name
+        " let mname = escape(a:name, ' 	')
+        " let mname = escape(a:name, ' 	\')
         " TLogVAR mname
-        let spri  = stridx(mname, '.') >= 0 ? a:subpriority - 1 : a:subpriority
-        " TLogVAR spri
-        let pri   = g:tskelMenuPriority .'.'. spri
-        " TLogVAR pri
-        if a:mode == 'i'
-            return 'imenu '. pri .' '. g:tskelMenuPrefix .'.'. mname .
-                        \ ' <c-\><c-o>:call tskeleton#ExpandBitUnderCursor("i", '. string(a:name) .')<cr>'
-        else
-            return  'menu '. pri .' '. g:tskelMenuPrefix .'.'. mname .
-                        \ ' :call tskeleton#ExpandBitUnderCursor("n", '. string(a:name) .')<cr>'
+        if !empty(bit)
+            let mname = get(bit, 'menu', mname)
         endif
+        let mname = escape(mname, ' 	\')
+        " TLogVAR mname
+        let acc = []
+        for menu_name in split(mname, "\n")
+            " TLogVAR menu_name
+            let spri  = stridx(menu_name, '.') >= 0 ? a:subpriority - 1 : a:subpriority
+            " TLogVAR spri
+            let pri   = g:tskelMenuPriority .'.'. spri
+            " TLogVAR pri
+            if a:mode == 'i'
+                call add(acc, 'imenu '. pri .' '. g:tskelMenuPrefix .'.'. menu_name .
+                            \ ' <c-\><c-o>:call tskeleton#ExpandBitUnderCursor("i", '. string(a:name) .')<cr>')
+            else
+                call add(acc, 'menu '. pri .' '. g:tskelMenuPrefix .'.'. menu_name .
+                            \ ' :call tskeleton#ExpandBitUnderCursor("n", '. string(a:name) .')<cr>')
+            endif
+        endfor
+        return join(acc, "\n")
     else
         return ''
     endif
@@ -1599,11 +1618,11 @@ function! s:CollectFunctions(pattern)
 endf
 
 
-function! s:PrepareConditionEntry(pattern, eligible) "{{{3
-    let pattern  = escape(substitute(a:pattern, '%', '%%', 'g'), '"')
-    let eligible = escape(a:eligible, '"')
-    return 'if search("'. pattern .'%s", "W") | return "'. eligible .'" | endif | '
-endf
+" function! s:PrepareConditionEntry(pattern, eligible) "{{{3
+"     let pattern  = escape(substitute(a:pattern, '%', '%%', 'g'), '"')
+"     let eligible = escape(a:eligible, '"')
+"     return 'if search("'. pattern .'%s", "W") | return "'. eligible .'" | endif | '
+" endf
 
 
 function! s:ReadFile(filename) "{{{3
@@ -1831,7 +1850,7 @@ function! s:RetrieveBit(agent, bit, ...) "{{{3
             silent norm! gg
             call tskeleton#FillIn(a:bit, ft)
             " TLogDBG string(getline(1, '$'))
-            let setCursor = s:SetCursor('%', '', '', 1)
+            let setCursor = tskeleton#SetCursor('%', '', '', 1)
             " TLogDBG string(getline(1, '$'))
             " TLogVAR setCursor
         endif
@@ -1906,6 +1925,7 @@ function! s:InsertBit(agent, bit, mode) "{{{3
     let e  = col("$")
     let l  = line(".")
     let li = getline(l)
+    let by = line2byte(l) + c
     " Adjust for vim idiosyncrasy
     if c == e - 1 && li[c - 1] == " "
         let e = e - 1
@@ -1917,9 +1937,13 @@ function! s:InsertBit(agent, bit, mode) "{{{3
     call s:InsertBitText(a:mode, bittext)
     if setCursor
         let ll = l + setCursor - 1
-        call s:SetCursor(l, ll, a:mode)
-    elseif s:IsInsertMode(a:mode) && s:IsEOL(a:mode)
-        call cursor(0, col('.') + 1)
+        call tskeleton#SetCursor(l, ll, a:mode)
+    else
+        let byte = by + len(bittext) - 1
+        if s:IsInsertMode(a:mode) && s:IsEOL(a:mode) && len(li) > 0
+            let byte += 1
+        end
+        exec 'go '. byte
     endif
 endf
 
@@ -2080,7 +2104,7 @@ function! s:BitMenuEligible(agent, bit, mode, ft) "{{{3
     " TAssert IsList(t)
     let s:tskelMenuEligibleIdx = 0
     let s:tskelMenuEligibleRx  = '^'. s:BitRx(a:bit, 0)
-    call filter(t, 'v:val =~ ''\S'' && v:val =~ s:tskelMenuEligibleRx')
+    call filter(t, 'v:val =~# ''\S'' && v:val =~# s:tskelMenuEligibleRx')
     if g:tskelPopupNumbered
         call sort(t)
     endif

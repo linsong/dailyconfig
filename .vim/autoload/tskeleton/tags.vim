@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-15.
-" @Last Change: 2007-09-15.
-" @Revision:    0.0.5
+" @Last Change: 2007-11-11.
+" @Revision:    0.0.15
 
 if &cp || exists("loaded_tskeleton_tags_autoload")
     finish
@@ -42,10 +42,13 @@ endf
 function! tskeleton#tags#BufferBits(dict, filetype) "{{{3
     " TAssert IsDictionary(a:dict)
     " TAssert IsString(a:filetype)
+    " TLogVAR a:filetype
     if exists('*tskeleton#tags#Process_'. a:filetype)
         let td_id = join(map(tagfiles(), 'fnamemodify(v:val, ":p")'), '\n')
+        " TLogVAR td_id
         if !empty(td_id)
             let tag_defs = get(s:tag_defs, td_id, {})
+            " TLogDBG len(tag_defs)
             if empty(tag_defs)
                 echom 'tSkeleton: Building tags menu for '. expand('%')
                 let tags = taglist('.')
@@ -60,6 +63,8 @@ function! tskeleton#tags#BufferBits(dict, filetype) "{{{3
             if !empty(menu_prefix)
                 let s:sort_tag_defs = tag_defs
                 let tagnames = sort(keys(tag_defs), 's:SortBySource')
+                " TLogVAR tagnames
+                " call filter(tagnames, 'tskeleton#NewBufferMenuItem(b:tskelBufferMenu, v:val)')
                 call filter(tagnames, 'tskeleton#NewBufferMenuItem(b:tskelBufferMenu, v:val)')
             endif
         endif
@@ -68,17 +73,22 @@ endf
 
 
 function! tskeleton#tags#Process_vim(dict, tag)
-    return tskeleton#ProcessTag_functions_with_parentheses(a:dict, a:tag, '\V...')
+    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\V...')
 endf
 
 
 function! tskeleton#tags#Process_ruby(dict, tag)
-    return tskeleton#ProcessTag_functions_with_parentheses(a:dict, a:tag, '\*\a\+\s*$')
+    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\*\a\+\s*$')
 endf
 
 
 function! tskeleton#tags#Process_c(dict, tag)
-    return tskeleton#ProcessTag_functions_with_parentheses(a:dict, a:tag, '')
+    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '')
+endf
+
+
+function! tskeleton#tags#Process_java(dict, tag)
+    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\V...')
 endf
 
 
