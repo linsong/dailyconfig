@@ -10,7 +10,7 @@
 " Name Of File: bufexplorer.vim
 "  Description: Buffer Explorer Vim Autoload file
 "   Maintainer: Jeff Lanzarotta (delux256-vim at yahoo dot com)
-" Last Changed: Monday, 05 November 2007
+" Last Changed: Monday, 12 November 2007
 "      Version: See g:bufexplorer_version for version number.
 "        Usage: This file should reside in the autoload directory and be
 "               automatically sourced.
@@ -27,15 +27,14 @@
 "      History: See supplied documentation.
 "=============================================================================
 
-" Check compatibility {{{1
-" Exit quickly when 'compatible' is set.
-if &cp
+" Exit quickly if already running or when 'compatible' is set. {{{1
+if exists("g:bufexplorer_version") || &cp
   finish
 endif
 "1}}}
 
 " Version number
-let g:bufexplorer_version = "7.1.2"
+let g:bufexplorer_version = "7.1.3"
 
 " Check for Vim version 700 or greater {{{1
 if v:version < 700
