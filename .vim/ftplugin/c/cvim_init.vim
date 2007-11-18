@@ -27,7 +27,7 @@
 "                  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 "                  PURPOSE.
 "                  See the GNU General Public License version 2 for more details.
-"       Revision:  $Id: c.vim,v 1.30 2007/10/03 09:07:27 mehner Exp $
+"       Revision:  $Id: c.vim,v 1.33 2007/11/15 20:09:51 mehner Exp $
 "        
 "------------------------------------------------------------------------------
 " 
@@ -41,7 +41,7 @@ endif
 if exists("g:C_Version") || &cp
  finish
 endif
-let g:C_Version= "5.0.2"  							" version number of this script; do not change
+let g:C_Version= "5.0.4"  							" version number of this script; do not change
 "        
 "###############################################################################################
 "
@@ -62,6 +62,8 @@ if	s:MSWIN
   let s:C_IndentErrorLog = $HOME.'.indent.errorlog'
 	let s:installation	   = 'system'
 	"
+	let s:C_Display        = ''
+	"
 else
 	"
   let s:escfilename 	= ' \%#[]'
@@ -80,6 +82,8 @@ else
 	"
 	let s:C_CodeSnippets   = $HOME.'/.vim/c-support/codesnippets/'
 	let s:C_IndentErrorLog = $HOME.'/.indent.errorlog'
+	"
+	let s:C_Display	= system("echo -n $DISPLAY")
 	"
 endif
 "  Use of dictionaries  {{{1
@@ -105,7 +109,7 @@ else
 	let s:C_ExeExtension        = ''         " file extension for executables (leading point required)
 	let s:C_ObjExtension        = '.o'       " file extension for objects (leading point required)
 endif
-
+"
 let s:C_CExtension     				= 'c'                    " C file extension; everything else is C++
 let s:C_CFlags         				= '-Wall -g -O0 -c'      " compiler flags: compile, don't optimize
 let s:C_CodeCheckExeName      = 'check'
@@ -128,6 +132,10 @@ let s:C_LocalTemplateFile     = $HOME.'/.vim/c-support/templates/Templates'
 let s:C_LocalTemplateDir      = fnamemodify( s:C_LocalTemplateFile, ":p:h" ).'/'
 let s:C_TemplateOverwrittenMsg= 'yes'
 "
+let s:C_FormatDate						= '%x'
+let s:C_FormatTime						= '%X %Z'
+let s:C_FormatYear						= '%Y'
+"
 "------------------------------------------------------------------------------
 "
 "  Look for global variables (if any), to override the defaults.
@@ -146,6 +154,9 @@ call C_CheckGlobal('C_CodeCheckOptions       ')
 call C_CheckGlobal('C_CodeSnippets           ')
 call C_CheckGlobal('C_CplusCompiler          ')
 call C_CheckGlobal('C_ExeExtension           ')
+call C_CheckGlobal('C_FormatDate             ')
+call C_CheckGlobal('C_FormatTime             ')
+call C_CheckGlobal('C_FormatYear             ')
 call C_CheckGlobal('C_GlobalTemplateFile     ')
 call C_CheckGlobal('C_IndentErrorLog         ')
 call C_CheckGlobal('C_LFlags                 ')
@@ -163,6 +174,7 @@ call C_CheckGlobal('C_TypeOfH                ')
 call C_CheckGlobal('C_XtermDefaults          ')
 "
 "----- some variables for internal use only -----------------------------------
+"
 "
 " set default geometry if not specified 
 " 
@@ -372,10 +384,10 @@ function! C_InitC ()
 	"
 	exe "amenu  ".s:C_Root.'&Comments.-SEP9-                     :'
 	"
-	exe " menu  ".s:C_Root.'&Comments.&date                   a<C-R>=strftime("%x")<CR>'
-	exe "imenu  ".s:C_Root.'&Comments.&date                    <C-R>=strftime("%x")<CR>'
-	exe " menu  ".s:C_Root.'&Comments.date\ &time             a<C-R>=strftime("%x %X %Z")<CR>'
-	exe "imenu  ".s:C_Root.'&Comments.date\ &time              <C-R>=strftime("%x %X %Z")<CR>'
+	exe " menu  ".s:C_Root.'&Comments.&date                             a<C-R>=C_InsertDate()<CR>'
+	exe "imenu  ".s:C_Root.'&Comments.&date                              <C-R>=C_InsertDate()<CR>'
+	exe " menu  ".s:C_Root.'&Comments.date\ &time                       a<C-R>=C_InsertDateTime()<CR>'
+	exe "imenu  ".s:C_Root.'&Comments.date\ &time                        <C-R>=C_InsertDateTime()<CR>'
 
 	exe "amenu  ".s:C_Root.'&Comments.-SEP12-                    :'
 	exe "amenu <silent> ".s:C_Root.'&Comments.\/\/\ xxx\ \ \ \ \ &->\ \ \/*\ xxx\ *\/    <Esc><Esc>:call C_CommentCppToC()<CR>'
@@ -1302,16 +1314,18 @@ endfunction    " ----------  end of function C_LegalizeName  ----------
 "------------------------------------------------------------------------------
 "  C_CodeSnippet : read / edit code snippet       {{{1
 "------------------------------------------------------------------------------
-function! C_CodeSnippet(arg1)
-	if !has("gui_running")
-		return
-	endif
+function! C_CodeSnippet(mode)
+
 	if isdirectory(s:C_CodeSnippets)
 		"
 		" read snippet file, put content below current line and indent
 		" 
-		if a:arg1 == "r"
-			let	l:snippetfile=browse(0,"read a code snippet",s:C_CodeSnippets,"")
+		if a:mode == "r"
+			if has("gui_running")
+				let	l:snippetfile=browse(0,"read a code snippet",s:C_CodeSnippets,"")
+			else
+				let	l:snippetfile=input("read snippet ", s:C_CodeSnippets, "file" )
+			end
 			if filereadable(l:snippetfile)
 				let	linesread= line("$")
 				let l:old_cpoptions	= &cpoptions " Prevent the alternate buffer from being set to this files
@@ -1329,8 +1343,12 @@ function! C_CodeSnippet(arg1)
 		"
 		" update current buffer / split window / edit snippet file
 		" 
-		if a:arg1 == "e"
-			let	l:snippetfile	= browse(0,"edit a code snippet",s:C_CodeSnippets,"")
+		if a:mode == "e"
+			if has("gui_running")
+				let	l:snippetfile	= browse(0,"edit a code snippet",s:C_CodeSnippets,"")
+			else
+				let	l:snippetfile=input("edit snippet ", s:C_CodeSnippets, "file" )
+			end
 			if l:snippetfile != ""
 				:execute "update! | split | edit ".l:snippetfile
 			endif
@@ -1338,29 +1356,23 @@ function! C_CodeSnippet(arg1)
 		"
 		" write whole buffer into snippet file 
 		" 
-		if a:arg1 == "w"
-			let	l:snippetfile=browse(0,"write a code snippet",s:C_CodeSnippets,"")
+		if a:mode == "w" || a:mode == "wv"
+			if has("gui_running")
+				let	l:snippetfile	= browse(0,"edit a code snippet",s:C_CodeSnippets,"")
+			else
+				let	l:snippetfile=input("edit snippet ", s:C_CodeSnippets, "file" )
+			end
 			if l:snippetfile != ""
 				if filereadable(l:snippetfile)
 					if confirm("File ".l:snippetfile." exists ! Overwrite ? ", "&Cancel\n&No\n&Yes") != 3
 						return
 					endif
 				endif
-				:execute ":write! ".l:snippetfile
-			endif
-		endif
-		"
-		" write marked area into snippet file 
-		" 
-		if a:arg1 == "wv"
-			let	l:snippetfile=browse(0,"write a code snippet",s:C_CodeSnippets,"")
-			if l:snippetfile != ""
-				if filereadable(l:snippetfile)
-					if confirm("File ".l:snippetfile." exists ! Overwrite ? ", "&Cancel\n&No\n&Yes") != 3
-						return
-					endif
-				endif
-				:execute ":*write! ".l:snippetfile
+				if a:mode == "w"
+					:execute ":write! ".l:snippetfile
+				else
+					:execute ":*write! ".l:snippetfile
+				end
 			endif
 		endif
 
@@ -1381,6 +1393,11 @@ function! C_CodeFor( direction, mode )
 	let	pos		= 0
 	let	jmp		= 0
 	if string != ""
+		"
+		" use internal formatting to avoid conficts when using == below
+		let	equalprg_save	= &equalprg
+		set equalprg= 
+		"
 		" loop variable
 		let loopvar		= matchstr( string, '\S\+\s*', pos )
 		let pos				= pos + strlen(loopvar)
@@ -1448,6 +1465,10 @@ function! C_CodeFor( direction, mode )
 			:'<-1
 			:exe "normal =".(line("'>")-line(".")+3)."+"
 		endif
+		"
+		" restore formatter programm
+		let &equalprg	= equalprg_save
+		"
 	endif
 endfunction    " ----------  end of function C_CodeFor ----------
 "
@@ -1527,6 +1548,11 @@ endfunction    " ---------  end of function C_ProtoPick  ----------
 "  C_ProtoInsert : insert       {{{1
 "------------------------------------------------------------------------------
 function! C_ProtoInsert ()
+	"
+	" use internal formatting to avoid conficts when using == below
+	let	equalprg_save	= &equalprg
+	set equalprg= 
+	"
 	if s:C_PrototypeCounter > 0
 		for protytype in s:C_Prototype
 			put =protytype
@@ -1537,6 +1563,10 @@ function! C_ProtoInsert ()
 	else
 		echo "currently no prototypes available"
 	endif
+	"
+	" restore formatter programm
+	let &equalprg	= equalprg_save
+	"
 endfunction    " ---------  end of function C_ProtoInsert  ----------
 "
 "------------------------------------------------------------------------------
@@ -1780,6 +1810,7 @@ function! C_Run ()
 				exe		"!\"".ExeEsc."\" ".l:arguments
 			else
 				silent exe '!xterm -title '.ExeEsc.' '.s:C_XtermDefaults.' -e '.s:C_Wrapper.' '.ExeEsc.' '.l:arguments.' &'
+				:redraw!
 			endif
 		endif
 	endif
@@ -1808,23 +1839,38 @@ endfunction    " ----------  end of function C_Arguments ----------
 "  C_Toggle_Gvim_Xterm : change output destination       {{{1
 "----------------------------------------------------------------------
 function! C_Toggle_Gvim_Xterm ()
-	
+
 	if s:C_OutputGvim == "vim"
-		exe "aunmenu  <silent>  ".s:C_Root.'&Run.&output:\ VIM->buffer->xterm'
-		exe "amenu    <silent>  ".s:C_Root.'&Run.&output:\ BUFFER->xterm->vim              <C-C>:call C_Toggle_Gvim_Xterm()<CR><CR>'
+		if has("gui_running")
+			exe "aunmenu  <silent>  ".s:C_Root.'&Run.&output:\ VIM->buffer->xterm'
+			exe "amenu    <silent>  ".s:C_Root.'&Run.&output:\ BUFFER->xterm->vim              <C-C>:call C_Toggle_Gvim_Xterm()<CR><CR>'
+		endif
 		let	s:C_OutputGvim	= "buffer"
 	else
 		if s:C_OutputGvim == "buffer"
-			exe "aunmenu  <silent>  ".s:C_Root.'&Run.&output:\ BUFFER->xterm->vim'
-			exe "amenu    <silent>  ".s:C_Root.'&Run.&output:\ XTERM->vim->buffer             <C-C>:call C_Toggle_Gvim_Xterm()<CR><CR>'
-			let	s:C_OutputGvim	= "xterm"
+			if has("gui_running")
+				exe "aunmenu  <silent>  ".s:C_Root.'&Run.&output:\ BUFFER->xterm->vim'
+				if (!s:MSWIN) 
+					exe "amenu    <silent>  ".s:C_Root.'&Run.&output:\ XTERM->vim->buffer             <C-C>:call C_Toggle_Gvim_Xterm()<CR><CR>'
+				else
+					exe "amenu    <silent>  ".s:C_Root.'&Run.&output:\ VIM->buffer->xterm            <C-C>:call C_Toggle_Gvim_Xterm()<CR><CR>'
+				endif
+			endif
+			if (!s:MSWIN) && (s:C_Display != '')
+				let	s:C_OutputGvim	= "xterm"
+			else
+				let	s:C_OutputGvim	= "vim"
+			end
 		else
 			" ---------- output : xterm -> gvim
-			exe "aunmenu  <silent>  ".s:C_Root.'&Run.&output:\ XTERM->vim->buffer'
-			exe "amenu    <silent>  ".s:C_Root.'&Run.&output:\ VIM->buffer->xterm            <C-C>:call C_Toggle_Gvim_Xterm()<CR><CR>'
+			if has("gui_running")
+				exe "aunmenu  <silent>  ".s:C_Root.'&Run.&output:\ XTERM->vim->buffer'
+				exe "amenu    <silent>  ".s:C_Root.'&Run.&output:\ VIM->buffer->xterm            <C-C>:call C_Toggle_Gvim_Xterm()<CR><CR>'
+			endif
 			let	s:C_OutputGvim	= "vim"
 		endif
 	endif
+	echomsg "output destination is '".s:C_OutputGvim."'"
 
 endfunction    " ----------  end of function C_Toggle_Gvim_Xterm ----------
 "
@@ -2277,6 +2323,12 @@ function! C_InsertTemplate ( key, ... )
   "------------------------------------------------------------------------------
   "  insert the user macros
   "------------------------------------------------------------------------------
+
+	" use internal formatting to avoid conficts when using == below
+	"
+	let	equalprg_save	= &equalprg
+	set equalprg= 
+
   let mode  = s:C_Attribute[a:key]
 
 	" remove <SPLIT> and insert the complete macro
@@ -2367,6 +2419,10 @@ function! C_InsertTemplate ( key, ... )
 			"
 		endif
 	endif
+
+	" restore formatter programm
+	let &equalprg	= equalprg_save
+
   "------------------------------------------------------------------------------
   "  position the cursor
   "------------------------------------------------------------------------------
@@ -2402,12 +2458,12 @@ function! C_ExpandUserMacros ( key )
 	"  can be replaced, with e.g. |?DATE|
   "------------------------------------------------------------------------------
 	let	s:C_Macro['|BASENAME|']	= toupper(expand("%:t:r"))
-  let s:C_Macro['|DATE|']  		= strftime("%x")
+  let s:C_Macro['|DATE|']  		= C_InsertDate()
   let s:C_Macro['|FILENAME|'] = expand("%:t")
   let s:C_Macro['|PATH|']  		= expand("%:p:h")
   let s:C_Macro['|SUFFIX|'] 	= expand("%:e")
-  let s:C_Macro['|TIME|']  		= strftime("%X %Z")
-  let s:C_Macro['|YEAR|']  		= strftime("%Y")
+  let s:C_Macro['|TIME|']  		= C_InsertTime()
+  let s:C_Macro['|YEAR|']  		= C_InsertYear()
 
   "------------------------------------------------------------------------------
   "  look for replacements
@@ -2546,6 +2602,22 @@ function! C_InsertMacroValue ( key )
 		exe 'normal i'.s:C_Macro['|'.a:key.'|']
 	end
 endfunction    " ----------  end of function C_InsertMacroValue  ----------
+
+function! C_InsertDateTime ()
+	return strftime( s:C_FormatDate ).' '.strftime( s:C_FormatTime )
+endfunction    " ----------  end of function C_InsertDate  ----------
+
+function! C_InsertDate ()
+	return strftime( s:C_FormatDate )
+endfunction    " ----------  end of function C_InsertDate  ----------
+
+function! C_InsertTime ()
+	return strftime( s:C_FormatTime )
+endfunction    " ----------  end of function C_InsertTime  ----------
+
+function! C_InsertYear ()
+	return strftime( s:C_FormatYear )
+endfunction    " ----------  end of function C_InsertYear  ----------
 
 "------------------------------------------------------------------------------
 "  show / hide the c-support menus

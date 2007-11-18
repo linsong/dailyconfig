@@ -126,17 +126,18 @@ def ChoosePost(num, start_index):
 
 def GetPostsByLabel(labels):  #{{{
     if not len(labels):
-        print "Specify labels to query..."
+        print "No labels given for query, return now ..."
         return
 
-    posts = getBloggerPost()
-
-    # get posts by labels 
-    # TODO:
-
-    post_key = ChoosePost(len(posts), 0)
-    if post_key:
-        EditPost(post_key)
+    posts = b.getPostsByLabel(labels)
+    if posts:
+        post_key = ChoosePost(len(posts), 0)
+        if post_key:
+            EditPost(post_key)
+        else:
+            print "Nothing selected, return now ..."
+    else:
+        print "Don't find any post for labels: %s" % labels
 # }}}
 
 def GetPosts(args):  #{{{
@@ -264,10 +265,7 @@ def Post(draft=False):  # {{{
         post['content'] = body
         post['categories'] = categories
         b.updatePost(post, draft)
-        if draft:
-            post['draft'] = 'yes'
-        else:
-            post['draft'] = 'no'
+        post['draft'] = draft
     else:
         post = {}
         post['title'] = subject
@@ -276,10 +274,7 @@ def Post(draft=False):  # {{{
         result = b.newPost(post, draft)
         posts.update(result)
         post_key = result.keys()[0]
-        if draft:
-            posts[post_key]['draft'] = 'yes'
-        else:
-            posts[post_key]['draft'] = 'no'
+        posts[post_key]['draft'] = draft
         vim.current.buffer[0:0] = ['@@EDIT@@ %s' % post_key]
     print "Post successful!"
 # }}}
