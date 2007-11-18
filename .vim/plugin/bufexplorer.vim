@@ -8,11 +8,11 @@
 "               event will the copyright holder be liable for any damages
 "               resulting from the use of this software.
 " Name Of File: bufexplorer.vim
-"  Description: Buffer Explorer Vim Autoload file
+"  Description: Buffer Explorer Vim Plugin
 "   Maintainer: Jeff Lanzarotta (delux256-vim at yahoo dot com)
-" Last Changed: Monday, 12 November 2007
+" Last Changed: Friday, 16 November 2007
 "      Version: See g:bufexplorer_version for version number.
-"        Usage: This file should reside in the autoload directory and be
+"        Usage: This file should reside in the plugin directory and be
 "               automatically sourced.
 "
 "               You may use the default keymappings of
@@ -34,7 +34,7 @@ endif
 "1}}}
 
 " Version number
-let g:bufexplorer_version = "7.1.3"
+let g:bufexplorer_version = "7.1.4"
 
 " Check for Vim version 700 or greater {{{1
 if v:version < 700
@@ -46,7 +46,7 @@ endif
 nmap <silent> <unique> <Leader>be :BufExplorer<CR>
 
 " Create commands {{{1
-command BufExplorer :call StartBufExplorer(has("gui")?"drop": "hide edit")
+command BufExplorer :call StartBufExplorer(has ("gui") ? "drop" : "hide edit")
 
 " Set {{{1
 function s:Set(var, default)
@@ -514,7 +514,7 @@ function s:SelectBuffer(...)
     if bufloaded(_bufNbr) && g:bufExplorerFindActive
       call s:Close()
       let bufname = expand("#"._bufNbr.":p")
-      exec "drop" bufname
+      exec "drop" substitute(bufname, "\\s", "\\\\ ", "g")
     elseif (a:0)
       call s:Close()
       tabnew
@@ -527,7 +527,7 @@ function s:SelectBuffer(...)
     exec "keepalt keepjumps silent b!" _bufNbr
   else
     call s:Error("Sorry, that buffer no longer exists, please select another")
-    call s:WipeBuffer(_bufNbr)
+    call s:DeleteBuffer(_bufNbr, "wipe")
   endif
 endfunction
 
