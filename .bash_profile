@@ -67,10 +67,16 @@ if [ $(uname) == 'Darwin' ]; then
     if [ -e ~/.macrc ]; then
         source ~/.macrc
     fi
-else
-    if [ -e ~/.exowebrc ] ; then
-        source ~/.exowebrc
-    fi
 fi
+
+case $(hostname) in 
+    nordicserver | vincent | box | forge)
+        if [ -e ~/.exowebrc ] ; then
+            source ~/.exowebrc
+        fi
+        ;;
+    *)
+        ;;
+esac
 
 
