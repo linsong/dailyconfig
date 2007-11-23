@@ -7,8 +7,10 @@ augroup filetypedetect
   " to make pasting sql query into editor of psql easier, turn on 'paste' by default
   au  BufRead,BufNewFile psql.edit.* set paste
   au! BufRead,BufNewFile *.lzx      setfiletype lzx
+
   au! BufRead,BufNewFile nordictrac.dev.exoweb.net_*.txt setfiletype exo-codereview
   au! BufRead,BufNewFile nordicbet.dev.exoweb.net*.txt setfiletype exo-codereview
+  au! BufRead,BufNewFile *.txt      setfiletype txt
 
   au! BufRead,BufNewFile *.mkd      setfiletype mkd
   au! BufRead,BufNewFile *.blogger  setfiletype blogger
