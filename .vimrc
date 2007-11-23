@@ -500,7 +500,8 @@
             "endif
             :set t_Co=256 " enable 256 colors refs: http://vim.wikia.com/wiki/256_colors_in_vim
             " if terminal support 256 colors, inkpot seems very nice
-            :colorscheme inkpot "desert256
+            ":colorscheme inkpot "inkpot does not work well on nordicserver and forge, don't know why 
+            :colorscheme desert256
             :source $VIMRUNTIME/menu.vim
             :set cpo-=<
             :set wcm=<C-Z>
