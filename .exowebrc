@@ -79,7 +79,7 @@ FETCHMAIL_CMD=$(which fetchmail)
      fi
  fi
 
- if [ $(pgrep -c checkmail.py) = 0 ]; then 
+ if [ -z "$(pgrep checkmail.py)" && "$(hostname)" == 'vincent' ]; then 
      ~/mytools/checkmail.py ~/Mail/exoweb/work &
  fi
 

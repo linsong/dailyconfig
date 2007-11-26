@@ -125,7 +125,9 @@ elif [ -e /sw/etc/bash_completion ]; then
 fi
 
 if [ ! -e $HOME/mytools/fehviewer ]; then
-    ln -s $(which feh) $HOME/mytools/fehviewer
+    if [ -n "$(which feh)" ]; then
+        ln -s $(which feh) $HOME/mytools/fehviewer
+    fi
 fi
 
 ###########################################################################
