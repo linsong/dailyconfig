@@ -74,8 +74,8 @@ if [ `hostname` == 'vincent' ]; then
     # if we are in chroot environment, use an outstanding prompt
     if [ ! -d '/chroot-sarge' ]; then 
     PS1='
-\[\033[35;40m\](chroot)\u@\h \[\033[35;40m\]\w\[\033[0m\]
-\[[30;46m\][\!]\[[m\] $ '
+\[\033[37m\](chroot)\u@\h \[\033[37m\]\w\[\033[0m\]
+\[[37;40m\][\!]\[[m\] $ '
     else
     PS1='
 \[\033[32m\]\u@\h \[\033[33m\]\w\[\033[0m\]
@@ -90,6 +90,14 @@ elif [ $(hostname) == 'ubuntu' ]; then
 	PS1='
 \[\033[33m\]\u@\h \[\033[33m\]\w\[\033[0m\]
 \[[30;47m\][\!]\[[m\] $ '
+elif [ $(hostname) == 'nordicserver' ]; then
+	PS1='
+\[\033[34m\]\u@\h \[\033[34m\]\w\[\033[0m\]
+\[[34;40m\][\!]\[[m\] $ '
+elif [ $(hostname) == 'forge' ]; then
+	PS1='
+\[\033[35m\]\u@\h \[\033[35m\]\w\[\033[0m\]
+\[[36;40m\][\!]\[[m\] $ '
 else 
     if [ $(uname -o) = 'Cygwin' ]; then 
     PS1='
