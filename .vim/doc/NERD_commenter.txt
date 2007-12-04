@@ -1,4 +1,4 @@
-*NERD_commenter.txt*         Plugin for commenting code            v216
+*NERD_commenter.txt*         Plugin for commenting code
 
 
                         NERD COMMENTER REFERENCE MANUAL~
@@ -72,7 +72,6 @@ Comments out the current line or text selected in visual mode.
 
 [count],cn |NERDComNestedComment| 
 Same as |NERDComComment| but forces nesting.
-
 
 [count],c<space> |NERDComToggleComment| 
 Toggles the comment state of the selected line(s). If the topmost selected
@@ -861,6 +860,17 @@ to get illegal syntax when uncommenting them.
 ==============================================================================
 8. Changelog                                                *NERDComChangelog*
 
+2.1.7
+    - added support for haml, thx to Greb Weber
+    - added support for asterisk, thx to Laurent ARNOUD
+    - added support for objcpp, thx to Nicolas Weber
+    - added support for the factor filetype, thx to Aaron Schaefer
+    - fixed a bug with the passwd filetype setup, thx to Yongwei Wu
+    - fixed a bug that was forcing filetypes with an alternative set of delims
+      to have at least one multipart set.
+    - split out the help file out from the script and repackaged everything as
+      a zip
+
 2.1.6
     - added support for gentoo-conf-d thanks to tinoucas for posting the issue
       and the patch
@@ -1111,6 +1121,8 @@ bugs.
 
 Cheers to Cheng Fang for the bug reports :D
 
+Cheers to Yongwei Wu for a bug report about the passwd filetype.
+
 Not to forget! Thanks to the following people for sending me new filetypes to
 support :D
 
@@ -1146,10 +1158,10 @@ Don Hatlestad                       ahk
 Christophe Benz                     Desktop and xsd
 Eyolf Østrem                        lilypond, bbx and lytex
 Ingo Karkat                         dosbatch
-Nicolas Weber                       markdown  
+Nicolas Weber                       markdown, objcpp
 tinoucas                            gentoo-conf-d
-Greg Weber                          D
+Greg Weber                          D, haml
 Bruce Sherrod                       velocity
 timberke                            cobol
-
- vim:tw=78:ts=8:ft=help:norl:
+Aaron Schaefer                      factor 
+Laurent ARNOUD                      asterisk
