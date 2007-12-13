@@ -75,7 +75,6 @@ endfunction
 
 function! s:GetSvnPrefixURL()
     if exists('g:vd_svn_repo_prefix') && !empty(g:vd_svn_repo_prefix)
-"        call Decho("g:vd_svn_repo_prefix : " . g:vd_svn_repo_prefix)
         return s:AppendSlashIfNeeded(g:vd_svn_repo_prefix)
     else
         let svn_info_output = system("svn info")
@@ -86,7 +85,6 @@ function! s:GetSvnPrefixURL()
             return '' 
         else
             let svn_repo_prefix_url = s:AppendSlashIfNeeded(strpart(lines[1], 5)) 
-"            call Decho("The prefix URL for svn repository is: " . svn_repo_prefix_url)
             return svn_repo_prefix_url
         endif
     endif
