@@ -39,7 +39,7 @@ keymap C-s SAVE_LINK
 keymap i   VIEW_IMAGE
 keymap I   PEEK_IMG
 keymap ESC-i SAVE_IMAGE
-keymap r   PEEK_LINK
+keymap R   PEEK_LINK
 keymap = INFO
 keymap C-g LINE_INFO
 keymap ";" MARK_WORD
@@ -48,7 +48,7 @@ keymap v EXTERN_LINK
 keymap ESC-l  LIST_MENU
 
 # File/Stream operation
-keymap U GOTO
+keymap o GOTO
 keymap @ READ_SHELL
 keymap # PIPE_SHELL
 keymap |   PIPE_BUF
@@ -63,7 +63,7 @@ keymap V VIEW
 keymap S PRINT
 keymap E EDIT
 keymap ESC-e EDIT_SCREEN
-keymap R RELOAD
+keymap r RELOAD
 keymap ESC-r RESHAPE
 
 # Tab operation
