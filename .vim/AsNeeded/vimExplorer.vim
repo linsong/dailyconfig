@@ -2973,6 +2973,7 @@ openRenamer             ;r              Open Renamer (Note 1)
 startShell              ;c              Start a shell from current path.
 startExplorer           ;e              Start another file
                                         manager(nautilus,konquer,explorer.exe)¡£
+openfile                ;o              open file by gnome-open or kfmclient
 
 Visual Mode Hotkeys~
 visualSelect            <space>         Mark files.
