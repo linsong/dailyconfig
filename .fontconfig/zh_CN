@@ -1,0 +1,94 @@
+<fontconfig>
+	<include ignore_missing="yes">CJK_aliases</include>
+
+	<alias>
+		<family>serif</family>
+		<prefer>
+            <family>NSimSun</family>
+			<family>WenQuanYi Bitmap Song</family>
+			<family>AR PL UMing CN</family>
+			<family>AR PL ShanHeiSun Uni</family>
+			<family>Bitstream Vera Serif</family>
+			<family>DejaVu Serif</family>
+			<family>AR PL UKai CN</family>
+			<family>AR PL ZenKai Uni</family>
+		</prefer>
+	</alias>
+	<alias>
+		<family>sans-serif</family>
+		<prefer>
+            <family>NSimSun</family>
+			<family>WenQuanYi Bitmap Song</family>
+			<family>AR PL UMing CN</family>
+			<family>AR PL ShanHeiSun Uni</family>
+			<family>Bitstream Vera Sans</family>
+			<family>DejaVu Sans</family>
+			<family>AR PL UKai CN</family>
+			<family>AR PL ZenKai Uni</family>
+		</prefer>
+	</alias>
+	<alias>
+		<family>monospace</family>
+		<prefer>
+            <family>NSimSun</family>
+			<family>WenQuanYi Bitmap Song</family>
+			<family>AR PL UMing CN</family>
+			<family>AR PL ShanHeiSun Uni</family>
+			<family>Bitstream Vera Sans Mono</family>
+			<family>DejaVu Sans Mono</family>
+			<family>AR PL UKai CN</family>
+			<family>AR PL ZenKai Uni</family>
+		</prefer>
+	</alias>
+
+	<match target="font" >
+		<test name="family" compare="contains" >
+			<string>Song</string>
+			<string>Sun</string>
+			<string>Kai</string>
+			<string>Ming</string>
+		</test> 
+                <!-- check to see if the font is just regular -->
+                <test name="weight" compare="less_eq">
+                        <int>100</int>
+		</test>
+		<test compare="more_eq" target="pattern" name="weight" >
+			<int>180</int>
+		</test>
+		<edit mode="assign" name="embolden" >
+			<bool>true</bool>
+		</edit>
+	</match>
+
+	<match target="font" >
+		<test name="family" compare="contains" >
+			<string>Song</string>
+			<string>Sun</string>
+			<string>Ming</string>
+		</test> 
+		<edit name="globaladvance">
+			<bool>false</bool>
+		</edit>
+		<edit name="spacing">
+			<int>0</int>
+		</edit>
+		<edit name="hinting">
+			<bool>true</bool>
+		</edit>
+		<edit name="autohint">
+			<bool>false</bool>
+		</edit>
+		<edit name="antialias" mode="assign">
+			<bool>true</bool>
+		</edit>
+                <test compare="more_eq" name="pixelsize">
+                        <double>11</double>
+                </test>
+                <test compare="less_eq" name="pixelsize">
+                        <double>16</double>
+                </test>
+		<edit name="antialias" mode="assign" >
+			<bool>false</bool>
+		</edit>
+	</match>
+</fontconfig>
