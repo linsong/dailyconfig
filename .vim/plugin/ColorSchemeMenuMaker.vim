@@ -1,11 +1,14 @@
 " ColorSchemeMenuMaker.vim: Generates Vim ColorScheme menu and
 "                   organizes themes based upon background colors
 " Maintainer:       Erik Falor <ewfalor@gmail.com>
-" Date:             Dec 18, 2007
-" Version:          0.10
+" Date:             Dec 26, 2007
+" Version:          0.10.1
 " License:          If you copy this, just give me props.
 "
 " History:
+"   Version 0.10.1: Fixed bug: generated menu called non-existent
+"                   function.
+"
 "   Version 0.10:   Menus sorted in case-insensitive fashion.  If this
 "                   change breaks your muscle-memory, set the global var
 "                   g:csmmIgnoreCase to 0 in your .vimrc to get the old
@@ -605,7 +608,7 @@ function! <SID>BuildMenu(dicts) "{{{
     call add(menu, 'if !exists("g:running_RebuildColorsMenu")')
     call add(menu, '    function! <SID>RebuildColorsMenu()')
     call add(menu, '        let g:running_RebuildColorsMenu = 1')
-    call add(menu, '        call WriteColorSchemeColorsMenu()')
+    call add(menu, '        call WriteColorSchemeMenu()')
     call add(menu, '        call <SID>ReloadColorsMenu()')
     call add(menu, '        unlet g:running_RebuildColorsMenu')
     call add(menu, "        echomsg 'Done rebuilding " . s:menuFile . "'")
