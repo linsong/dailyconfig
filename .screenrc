@@ -138,10 +138,6 @@ idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
 
 # Example of automatically running some programs in windows on screen startup.
 #
-screen -t music 0 
-screen -t work 2 
-screen -t work2 3
-screen -t misc 4
 
 # source local settings 
 source screenrc.local
