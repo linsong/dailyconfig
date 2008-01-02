@@ -44,7 +44,7 @@ mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Viru
 color index brightgreen  black ~N
 color index green        black "~N (~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")"
 color index yellow       black "~C vincent@exoweb.net"
-color index brightyellow black "~C livebet@exoweb.net"
+#color index black        red   "~N ~d >1d"
 color index red          black ~F
 color index black        green ~T
 color index brightwhite  black ~D
@@ -52,6 +52,9 @@ mono  index bold               ~N
 mono  index bold               ~F
 mono  index bold               ~T
 mono  index bold               ~D
+
+#color index white        green "~n 500-"
+#color index white        brightred "~n 300-500"
 
 # Highlights inside the body of a message.
 

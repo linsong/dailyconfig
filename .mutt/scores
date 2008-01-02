@@ -1,0 +1,17 @@
+# score <pattern> <value>
+# unscore <pattern>
+#
+# (pattern is something like '~A' (all), '~f aol\.com$', '~s mutt' ...)
+# (value is between -9999 and 9999. A prefix '=' sets otherwise incr/decr)
+#
+unscore *
+
+unset score                    # turn off scoring
+set score_threshold_delete=-15 # mark messages with score <=value deleted
+set score_threshold_flag=9999  # mark messages with score >=value flagged
+set score_threshold_read=-15   # mark messages with score <=value read
+
+score '~N ~C (vincent@exoweb.net\|linsong.qizi@gmail.com)' =550
+score '~N ~f (ken@exoweb.net\|jacky@exoweb.net)' =350
+score "~N ~d >1d" =250
+
