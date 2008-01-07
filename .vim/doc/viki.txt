@@ -69,16 +69,15 @@ own markup.
                                                     *viki-installation*
 Installation~
 
-Extract viki.zip to your local vimfiles directory (see also 
-|add-global-plugin|) so that you get: >
+Edit the vba file and type: >
 
-    (Linux etc.) $HOME/.vim/
-    (Windows) $VIM/vimfiles/
-        autoload/ compiler/  doc/  etc/ ftplugin/  plugin/  syntax/
+    :so %
 
-These directories are used for installing user-specific plugins. It's possible 
-that these directories already exist and are populated with other plugins -- 
-in which case you probably already knew this. ;-)
+See :help vimball for details. If you have difficulties or use vim 7.0, 
+please make sure, you have the current version of vimball (vimscript 
+#1502) installed.
+
+This script requires tlib (vimscript #1863) to be installed.
 
 Viki requires: >
 
@@ -86,25 +85,19 @@ Viki requires: >
     :filetype plugin indent on
     :syntax on
 
+You might also want to set 'expandtab' (local to buffer) in 
+after/ftplugin/viki.vim: >
+
+    setlocal expandtab
+
 Viki will be automatically loaded when starting vim. In case you have vim 
 already running and don't want to restart it, you can also type: >
-    
+
     :runtime plugin/viki.vim
-
-Then run >
-
-(Linux etc.) >
-    :helptags $HOME/.vim/doc
-
-(Windows) >
-    :helptags $VIM/vimfiles/doc
 
 Viki doesn't set the viki filetype for you. How you set the filetype is up to 
 you to decide. Basically, there are two possibilities: based on a suffix or 
-based on the location. See below for examples.
-
-Uninstalling: there is an experimental script .vim/etc/uninstall_Viki.sh that 
-should do the  trick.
+based on the location. See |viki-filetype-detection|.
 
 
 Customization:                                      *viki-customization*
@@ -115,7 +108,7 @@ It's probably a good idea to check the values of the following variables:
       context set these variables to something like (this refers to the 
       characters allowed in simple viki names and in anchors; for East Asian 
       languages you probably prefer to use quoted viki names anyway): >
-        
+
         " this is in iso-latin-1
         let g:vikiLowerCharacters = "a-z??????????????"
         let g:vikiUpperCharacters = "A-Z???"
@@ -190,6 +183,7 @@ In order to automatically set |deplate| as the compiler for viki files: >
     let g:deplatePrg = "deplate -x -X "
     au FileType viki compiler deplate
 
+                                                    *viki-filetype-detection*
 Some users might want to automatically set the filetype to viki depening on 
 the file extension. This can be done using |:autocmd|: >
 
@@ -382,7 +376,7 @@ Headings~
 
     NOTE: Headings can span more than one line by putting a backslash ('\') at 
     the end of the line.
-    
+
     NOTE: If |g:vikiHeadingFont| is defined, the heading will be set in this 
     font.
 
@@ -461,30 +455,19 @@ NOTE: See also |g:vikiMarkupEndsWithNewline|.
 
                                                     *viki-textstyles*
 Textstyles~
-There are two markup styles which are selected on the basis of 
-|vikiTextStyles|. 2 is the default now.
-
-If |vikiTextStyles| is 2, the markup is like this: >
 
     __emphasized__, ''typewriter''
-
-If |vikiTextStyles| is 1, the markup is like this: >
-
-    *bold*,       **continuous bold**
-    /italic/,     //continuous italic//
-    _underlined_, __continuous underline__
-    =typewriter=, ==continuous typewriter==
 
 <   NOTE: There must not by a whitespace after the opening mark.
 
     NOTE: For the word styles, there must be a non-word character (|/\W|) 
-    before the opening mark, i.e. a/b/c will be highlighted as normal text -- 
+    before the opening mark, i.e. a__b__c will be highlighted as normal text -- 
     it won't be highlighted. You could use the continuous markup for putting 
     the "b" in the example in italic.
 
     NOTE: If |g:vikiTypewriterFont| is defined, this font will be used to 
     highlight text in typewriter style.
-    
+
     NOTE: See also |g:vikiMarkupEndsWithNewline|.
 
 

@@ -2,8 +2,8 @@
 " @Author:      Thomas Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     30-Dez-2003.
-" @Last Change: 2007-10-04.
-" @Revision: 0.832
+" @Last Change: 2007-11-28.
+" @Revision: 0.855
 
 if !g:vikiEnabled
     finish
@@ -19,6 +19,8 @@ endif
 let b:vikiEnabled = 0
 call viki#DispatchOnFamily('MinorMode', '', 2)
 let b:vikiEnabled = 2
+
+runtime syntax/texmath.vim
 
 " On slow machine the extended syntax highlighting can cause some major 
 " slowdown (I'm not really sure what is causing this, but it can be 
@@ -37,7 +39,7 @@ exe 'syn match vikiAnchor /^[[:blank:]]*%\?[[:blank:]]*#'. b:vikiAnchorNameRx .'
 " syn match vikiMarkers /\(\([#?!+]\)\2\{2,2}\)/
 syn match vikiMarkers /\V\(###\|???\|!!!\|+++\)/
 " syn match vikiSymbols /\(--\|!=\|==\+\|\~\~\+\|<-\+>\|<=\+>\|<\~\+>\|<-\+\|-\+>\|<=\+\|=\+>\|<\~\+\|\~\+>\|\.\.\.\)/
-syn match vikiSymbols /\V\(--\|!=\|==\+\|~~\+\|<-\+>\|<=\+>\|<~\+>\|<-\+\|-\+>\|<=\+\|=\+>\|<~\+\|~\+>\|...\)/
+syn match vikiSymbols /\V\(--\|!=\|==\+\|~~\+\|<-\+>\|<=\+>\|<~\+>\|<-\+\|-\+>\|<=\+\|=\+>\|<~\+\|~\+>\|...\|&\(#\d\+\|\w\+\);\)/
 
 syn cluster vikiHyperLinks contains=vikiLink,vikiExtendedLink,vikiURL,vikiInexistentLink
 
@@ -99,8 +101,12 @@ syn match vikiPriorityListDoneE /^[[:blank:]]\+\zs#\(T: \+x\([0-9%-]\+\)\?.\{-}E
 syn match vikiPriorityListDoneF /^[[:blank:]]\+\zs#\(T: \+x\([0-9%-]\+\)\?.\{-}F.\{-}:\|\(T: \+\)\?\d*F\d* \+x[0-9%-]*\):\? .*/
 
 syn match vikiTableRowSep /||\?/ contained containedin=vikiTableRow,vikiTableHead
-syn region vikiTableHead start=/^[[:blank:]]*|| / skip=/\\\n/ end=/\(^\| \)||[[:blank:]]*$/ contains=ALLBUT,vikiTableRow,vikiTableHead transparent keepend
-syn region vikiTableRow  start=/^[[:blank:]]*| / skip=/\\\n/ end=/\(^\| \)|[[:blank:]]*$/ contains=ALLBUT,vikiTableRow,vikiTableHead transparent keepend
+syn region vikiTableHead start=/^[[:blank:]]*|| / skip=/\\\n/ end=/\(^\| \)||[[:blank:]]*$/
+            \ transparent keepend
+            " \ contains=ALLBUT,vikiTableRow,vikiTableHead 
+syn region vikiTableRow  start=/^[[:blank:]]*| / skip=/\\\n/ end=/\(^\| \)|[[:blank:]]*$/
+            \ transparent keepend
+            " \ contains=ALLBUT,vikiTableRow,vikiTableHead
 
 syn keyword vikiCommandNames 
             \ #CAP #CAPTION #LANG #LANGUAGE #INC #INCLUDE #DOC #VAR #KEYWORDS #OPT 
@@ -155,36 +161,23 @@ syn region vikiFilesRegion matchgroup=vikiMacroDelim
             \ end=/^[[:blank:]]*\z1[[:blank:]]*$/ 
             \ contains=vikiFiles
 
-" syn match vikiTexArgDelimiters /[{}\[\]]/ contained containedin=vikiTexMath
-syn match vikiTexCommand /\\[[:alnum:]]\+/ contained containedin=vikiTexMath
-syn match vikiTexMathFont /\\\(math[[:alnum:]]\+\|Bbb\|frak\)/ contained containedin=vikiTexMath
-syn match vikiTexMathWord /[[:alnum:].]\+/ contained containedin=vikiTexMath
-syn match vikiTexUnword /[^[:alnum:]${}()[\]^_\\]\+/ contained containedin=vikiTexMath
-syn match vikiTexPairs /\([<>()[\]]\|\\[lr]\(brace\|vert\|Vert\|angle\|ceil\|floor\|group\|moustache\)\)/ contained containedin=vikiTexMath
-syn match vikiTexSub /_/ contained containedin=vikiTexMath
-syn match vikiTexSup /\^/ contained containedin=vikiTexMath
-syn cluster vikiTex contains=vikiTexArgDelimiters,vikiTexCommand,vikiTexMathFont,vikiTexPairs,vikiTexUnword
-syn cluster vikiTexMath contains=@vikiTex,vikiTexMathWord,vikiTexSup,vikiTexSub
-syn region vikiTexArgDelimiters matchgroup=Delimiter
-            \ start=/{/ end=/}/ skip=/\\[{}]/
-            \ contained contains=@vikiTexMath
 
 if g:vikiHighlightMath == 'latex'
     syn region vikiTexFormula matchgroup=Comment
                 \ start=/\$/ end=/\$/
-                \ contains=@vikiTexMath
+                \ contains=@texmathMath
 endif
 
 syn region vikiTexRegion matchgroup=vikiMacroDelim
             \ start=/^[[:blank:]]*#Ltx\>\(\\\n\|.\)\{-}<<\z(.*\)$/ 
             \ end=/^[[:blank:]]*\z1[[:blank:]]*$/ 
-            \ contains=@vikiTexMath
+            \ contains=@texmathMath
 syn region vikiTexMacro matchgroup=vikiMacroDelim
             \ start=/{\(ltx\)\([^:{}]*:\)\?/ end=/}/ 
-            \ transparent contains=vikiMacroNames,@vikiTex
+            \ transparent contains=vikiMacroNames,@texmath
 syn region vikiTexMathMacro matchgroup=vikiMacroDelim
             \ start=/{\(math\>\|\$\)\([^:{}]*:\)\?/ end=/}/ 
-            \ transparent contains=vikiMacroNames,@vikiTexMath
+            \ transparent contains=vikiMacroNames,@texmathMath
 
 
 syntax sync minlines=2
@@ -319,6 +312,7 @@ if version >= 508 || !exists("did_viki_syntax_inits")
   HiLink vikiTexSub Type
   " HiLink vikiTexArgDelimiters Comment
   HiLink vikiTexCommand Statement
+  HiLink vikiTexText Normal
   HiLink vikiTexMathFont Type
   HiLink vikiTexMathWord Identifier
   HiLink vikiTexUnword Constant

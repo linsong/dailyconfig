@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-03-25.
-" @Last Change: 2007-10-12.
-" @Revision:    0.381
+" @Last Change: 2007-12-23.
+" @Revision:    0.447
 
 if &cp || exists("loaded_viki_auto") "{{{2
     finish
@@ -61,9 +61,23 @@ function! viki#Define(name, prefix, ...) "{{{3
         let vname = a:name .'::'
     end
     " let vname = escape(vname, ' \%#')
-    exec 'command! -bang -nargs=? -complete=customlist,viki#EditComplete '. a:name .' call viki#Edit(empty(<q-args>) ?'. string(vname) .' : <q-args>, "<bang>")'
+    " exec 'command! -bang -nargs=? -complete=customlist,viki#EditComplete '. a:name .' call viki#Edit(escape(empty(<q-args>) ?'. string(vname) .' : <q-args>, "#"), "<bang>")'
+    exec 'command! -bang -nargs=? -complete=customlist,viki#EditComplete '. a:name .' call viki#Edit(empty(<q-args>) ?'. string(vname) .' : viki#InterEditArg('. string(a:name) .', <q-args>), "<bang>")'
     if g:vikiMenuPrefix != ''
-        exec 'amenu '. g:vikiMenuPrefix . a:name .' :VikiEdit! '. vname .'<cr>'
+        if g:vikiMenuLevel > 0
+            let name = [ a:name[0 : g:vikiMenuLevel - 1] .'&'. a:name[g:vikiMenuLevel : -1] ]
+            let weight = []
+            for i in reverse(range(g:vikiMenuLevel))
+                call insert(name, a:name[i])
+                call insert(weight, char2nr(a:name[i]) + 500)
+            endfor
+            let ml = len(split(g:vikiMenuPrefix, '[^\\]\zs\.'))
+            let mw = repeat('500.', ml) . join(weight, '.')
+        else
+            let name = [a:name]
+            let mw = ''
+        endif
+        exec 'amenu '. mw .' '. g:vikiMenuPrefix . join(name, '.') .' :VikiEdit! '. vname .'<cr>'
     endif
 endf
 
@@ -300,7 +314,9 @@ function! s:MarkInexistent(line1, line2, ...) "{{{3
                         let check = 0
                         let partx = escape(v_part, "'\"\\/")
                         call filter(b:vikiNamesNull, 'v:val != partx')
-                        call insert(b:vikiNamesOk, partx)
+                        if index(b:vikiNamesOk, partx) == -1
+                            call insert(b:vikiNamesOk, partx)
+                        endif
                     elseif v_part =~ b:vikiExtendedNameSimpleRx
                         if v_dest =~ '^'. g:vikiSpecialProtocols .':'
                             " TLogDBG "v_dest =~ '^'. g:vikiSpecialProtocols .':' => 0"
@@ -321,9 +337,13 @@ function! s:MarkInexistent(line1, line2, ...) "{{{3
                     if check && v_dest != g:vikiSelfRef && !isdirectory(v_dest)
                         if filereadable(v_dest)
                             call filter(b:vikiNamesNull, 'v:val != partx')
-                            call insert(b:vikiNamesOk, partx)
+                            if index(b:vikiNamesOk, partx) == -1
+                                call insert(b:vikiNamesOk, partx)
+                            endif
                         else
-                            call insert(b:vikiNamesNull, partx)
+                            if index(b:vikiNamesNull, partx) == -1
+                                call insert(b:vikiNamesNull, partx)
+                            endif
                             call filter(b:vikiNamesOk, 'v:val != partx')
                         endif
                         " TLogVAR partx, b:vikiNamesNull, b:vikiNamesOk
@@ -1088,6 +1108,7 @@ function! viki#OpenLink(filename, anchor, ...) "{{{3
     if exists('*simplify')
         let filename = simplify(filename)
     endif
+    " TLogVAR filename
     let buf = bufnr('^'. filename .'$')
     call viki#SetWindow(winNr)
     if buf >= 0 && bufloaded(buf)
@@ -1097,7 +1118,7 @@ function! viki#OpenLink(filename, anchor, ...) "{{{3
     elseif exists('b:editVikiPage')
         call s:EditLocalFile(b:editVikiPage, filename, fi, li, co, g:vikiDefNil)
     elseif isdirectory(filename)
-        call s:EditLocalFile(g:vikiExplorer, filename, fi, li, co, g:vikiDefNil)
+        call s:EditLocalFile(g:vikiExplorer, tlib#dir#PlainName(filename), fi, li, co, g:vikiDefNil)
     else
         call s:EditLocalFile('edit', filename, fi, li, co, a:anchor)
     endif
@@ -1236,7 +1257,7 @@ function! s:FollowLink(def, ...) "{{{3
     endif
     let inter = s:GuessInterViki(a:def)
     let bn    = bufnr('%')
-    " TLogVAR v_name, v_dest
+    " TLogVAR v_name, v_dest, v_anchor
     if v_name == g:vikiSelfRef || v_dest == g:vikiSelfRef
         call viki#DispatchOnFamily('FindAnchor', '', v_anchor)
     elseif v_dest == g:vikiDefNil
@@ -1256,7 +1277,7 @@ function! s:OpenLink(dest, anchor, winNr)
     " TLogVAR a:dest, a:anchor, a:winNr
     try
         if viki#IsSpecialProtocol(a:dest)
-            call VikiOpenSpecialProtocol(a:dest)
+            call VikiOpenSpecialProtocol(viki#MakeUrl(a:dest, a:anchor))
         elseif viki#IsSpecialFile(a:dest)
             call VikiOpenSpecialFile(a:dest)
         elseif isdirectory(a:dest)
@@ -1276,6 +1297,10 @@ function! s:OpenLink(dest, anchor, winNr)
     finally
         let b:vikiNextWindow = 0
     endtry
+endf
+
+function! viki#MakeUrl(dest, anchor) "{{{3
+    return join([a:dest, a:anchor], '#')
 endf
 
 " Guess the interviki name from a viki name definition
@@ -1387,6 +1412,7 @@ function! viki#LinkDefinition(txt, col, compound, ignoreSyntax, type) "{{{3
             " let name   = s:GetVikiNamePart(part, erx, nameIdx,   "no name")
             " let dest   = s:GetVikiNamePart(part, erx, destIdx,   "no destination")
             " let anchor = s:GetVikiNamePart(part, erx, anchorIdx, "no anchor")
+            " TLogVAR name, dest, anchor, part, a:type
             return viki#MakeDef(name, dest, anchor, part, a:type)
         elseif a:ignoreSyntax
             return []
@@ -1712,6 +1738,16 @@ function! viki#MaybeFollowLink(oldmap, ignoreSyntax, ...) "{{{3
     endif
 endf
 
+
+function! viki#InterEditArg(iname, name) "{{{3
+    if a:name !~ '^'. tlib#rx#Escape(a:iname) .'::'
+        return a:iname .'::'. a:name
+    else
+        return a:name
+    endif
+endf
+
+
 " Edit a vikiname
 " viki#Edit(name, ?bang='', ?winNr=0, ??gnoreSpecial=0)
 function! viki#Edit(name, ...) "{{{3
@@ -1957,7 +1993,6 @@ fun! viki#GetIndent()
             
         let pnum   = v:lnum - 1
         let pind   = indent(pnum)
-        
         let pline  = getline(pnum) " last line
         let plCont = matchend(pline, '\\$')
         
@@ -1987,16 +2022,20 @@ fun! viki#GetIndent()
             let clDesc = matchend(cline, descRx)
             " let cln    = clList >= 0 ? clList : clDesc
 
+			let swhalf = &sw / 2
+
             if clList >= 0 || clDesc >= 0 || clMark >= 0 || clPri >= 0
-                let spaceEnd = matchend(cline, '^\s\+')
-                let rv = (spaceEnd / &sw) * &sw
+                " let spaceEnd = matchend(cline, '^\s\+')
+                " let rv = (spaceEnd / &sw) * &sw
+                let rv = (cind / &sw) * &sw
                 " TLogVAR clList, clDesc, clMark, clPri, rv
                 return rv
             else
                 let plMark = matchend(pline, markRx)
                 if plMark >= 0
                     " TLogVAR plMark
-                    return plMark
+                    " return plMark
+                    return pind + 4
                 endif
                 
                 let plList = matchend(pline, listRx)
@@ -2007,7 +2046,8 @@ fun! viki#GetIndent()
 
                 let plPri = matchend(pline, priRx)
                 if plPri >= 0
-                    let rv = indent(pnum) + &sw / 2
+                    " let rv = indent(pnum) + &sw / 2
+                    let rv = pind + swhalf
                     " TLogVAR plPri, rv
                     " return plPri
                     return rv
@@ -2017,9 +2057,10 @@ fun! viki#GetIndent()
                 if plDesc >= 0
                     " TLogVAR plDesc, pind
                     if plDesc >= 0 && g:vikiIndentDesc == '::'
-                        return plDesc
+                        " return plDesc
+                        return pind
                     else
-                        return pind + (&sw / 2)
+                        return pind + swhalf
                     endif
                 endif
 

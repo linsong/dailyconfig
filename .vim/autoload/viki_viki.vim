@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2007-10-12.
-" @Revision:    0.0.89
+" @Last Change: 2007-11-15.
+" @Revision:    0.0.95
 
 if &cp || exists("loaded_viki_viki")
     finish
@@ -148,7 +148,7 @@ function! viki_viki#SetupBuffer(state, ...) "{{{3
    
     if viki#IsSupportedType("x") && !(dontSetup =~# "x")
         " let vikicmd = '['. b:vikiUpperCharacters .']\w*'
-        let vikicmd    = '\(IMG\|Img\|INC\)\>'
+        let vikicmd    = '\(IMG\|Img\|INC\%[LUDE]\)\>'
         let vikimacros = '\(img\|ref\)\>'
         let b:vikiCmdRx        = '\({'. vikimacros .'\|#'. vikicmd .'\)\(.\{-}\):\s*\(.\{-}\)\($\|}\)'
         let b:vikiCmdSimpleRx  = '\({'. vikimacros .'\|#'. vikicmd .'\).\{-}\($\|}\)'
@@ -426,6 +426,7 @@ endf
 
 " Complete missing information in the definition of an extended viki name
 function! viki_viki#CompleteExtendedNameDef(def) "{{{3
+    " TLogVAR a:def
     exec viki#SplitDef(a:def)
     if v_dest == g:vikiDefNil
         if v_anchor == g:vikiDefNil
@@ -436,8 +437,10 @@ function! viki_viki#CompleteExtendedNameDef(def) "{{{3
     elseif viki#IsInterViki(v_dest)
         let useSuffix = viki#InterVikiSuffix(v_dest)
         let v_dest = viki#InterVikiDest(v_dest)
+        " TLogVAR v_dest
         if v_dest != g:vikiDefNil
             let v_dest = viki#ExpandSimpleName('', v_dest, useSuffix)
+            " TLogVAR v_dest
         endif
     else
         if v_dest =~? '^[a-z]:'                      " an absolute dos path
@@ -462,6 +465,7 @@ function! viki_viki#CompleteExtendedNameDef(def) "{{{3
         let v_name = fnamemodify(v_dest, ':t:r')
     endif
     let v_type = v_type == g:vikiDefNil ? 'e' : v_type
+    " TLogVAR v_name, v_dest, v_anchor, v_part, v_type
     return viki#MakeDef(v_name, v_dest, v_anchor, v_part, v_type)
 endf
 

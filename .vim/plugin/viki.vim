@@ -2,8 +2,8 @@
 " @Author:      Thomas Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     08-Dec-2003.
-" @Last Change: 2007-10-11.
-" @Revision: 3.3.2520
+" @Last Change: 2007-12-23.
+" @Revision: 3.4.2536
 "
 " GetLatestVimScripts: 861 1 viki.vim
 "
@@ -22,7 +22,7 @@
 " - kpsewhich (not a vim plugin :-) for vikiLaTeX
 "
 " TODO:
-" - File names containing #
+" - File names containing # (the # is interpreted as URL component)
 " - Per Interviki simple name patterns
 " - Allow Wiki links like ::Word or even ::word (not in minor mode due 
 "   possible conflict with various programming languages?)
@@ -38,7 +38,7 @@ if !exists('loaded_tlib') || loaded_tlib < 15
     echoerr 'tlib >= 0.15 is required'
     finish
 endif
-let loaded_viki = 303
+let loaded_viki = 304
 
 " This is what we consider nil, in the absence of nil in vimscript
 let g:vikiDefNil  = ''
@@ -81,6 +81,11 @@ endif
 " menu.
 if !exists("g:vikiMenuPrefix") "{{{2
     let g:vikiMenuPrefix = "Plugin.Viki."
+endif
+
+" Make submenus for N letters of the interviki names.
+if !exists('g:vikiMenuLevel')
+    let g:vikiMenuLevel = 1   "{{{2
 endif
 
 " URLs matching these protocols are handled by VikiOpenSpecialProtocol()
@@ -954,6 +959,14 @@ b:vikiCmdAnchorIdx.
 - Use hookcursormoved >= 0.3
 - Backslash-save command-line completion
 - Mark unknown intervikis as inexistent
+
+3.4
+- Promote anchors to VikiOpenSpecialProtocol().
+- viki_viki: Enabled #INCLUDE
+- Put the poor-man's math highlighting into syntax/texmath.vim so that 
+it can be included from other syntax files.
+- Cascade menu of intervikis
+- FIX: don't register viki names as known/unknown more than once
 
 
 " vim: ff=unix
