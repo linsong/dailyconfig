@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2007-11-11.
-" @Revision:    0.0.1141
+" @Last Change: 2007-11-17.
+" @Revision:    0.0.1156
 
 if &cp || exists("loaded_tskeleton_autoload")
     finish
@@ -754,6 +754,7 @@ function! s:Expand(bit, ...) "{{{3
         let [setCursor, bittext] = s:RetrieveBit('text', name, indent, ft)
         " TLogVAR setCursor, bittext
     endif
+    " TLogVAR bittext
     if empty(bittext)
         if default =~ '".*"'
             let bittext = matchstr(default, '^"\ze.*\ze"$')
@@ -896,7 +897,7 @@ function! tskeleton#EditBitCompletion(ArgLead, CmdLine, CursorPos) "{{{3
         let bits  = map(bits, 'tlib#file#Relative(v:val["bitfile"], g:tskelBitsDir)')
         let bvals = values(bits)
         if !empty(a:ArgLead)
-            call filter(bvals, 'v:val =~# ''\V\^''. escape(a:ArgLead, ''\'')')
+            call filter(bvals, 's:MatchBit(v:val, ''\V\^''. escape(a:ArgLead, ''\''))')
         endif
         return bvals
     endif
@@ -1124,10 +1125,10 @@ endf
 function! s:GetBitGroup(filetype, ...) "{{{3
     let general_first = a:0 >= 1 ? a:1 : 0
     let filetype = substitute(a:filetype, '\W', '_', 'g')
-    if exists('g:tskelBitGroup_'. filetype)
-        let bg = g:tskelBitGroup_{filetype}
+    let bg = tlib#var#Get('tskelBitGroup_'. filetype, 'bg')
+    if !empty(bg)
         if type(bg) == 1
-            echom 'tSkeleton: g:tskelBitGroup_'. filetype .' should be a list'
+            echom 'tSkeleton: [bg]:tskelBitGroup_'. filetype .' should be a list'
             let rv = split(bg, "\n")
         else
             let rv = copy(bg)
@@ -2104,7 +2105,7 @@ function! s:BitMenuEligible(agent, bit, mode, ft) "{{{3
     " TAssert IsList(t)
     let s:tskelMenuEligibleIdx = 0
     let s:tskelMenuEligibleRx  = '^'. s:BitRx(a:bit, 0)
-    call filter(t, 'v:val =~# ''\S'' && v:val =~# s:tskelMenuEligibleRx')
+    call filter(t, 'v:val =~ ''\S'' && s:MatchBit(v:val, s:tskelMenuEligibleRx)')
     if g:tskelPopupNumbered
         call sort(t)
     endif
@@ -2112,6 +2113,20 @@ function! s:BitMenuEligible(agent, bit, mode, ft) "{{{3
     " TAssert IsList(e)
     " TLogDBG 'e='. string(e)
     return tlib#list#Compact(e)
+endf
+
+
+function! s:MatchBit(value, rx) "{{{3
+    let case_sensitive = tlib#var#Get('tskelCaseSensitive_'. &filetype, 'bg', tlib#var#Get('tskelCaseSensitive', 'bg'))
+    if case_sensitive == 1
+        return a:value =~# a:rx
+    elseif case_sensitive == -1
+        return a:value =~ a:rx
+    elseif case_sensitive == 0
+        return a:value =~? a:rx
+    else
+        echoerr 'tskelCaseSensitive: Must be one of: 1, -1, 0'
+    endif
 endf
 
 
@@ -2246,7 +2261,7 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
                 if !imode && !eol_adjustment
                     norm! l
                 endif
-            elseif exists('g:tskelKeyword_'. ft) && search(g:tskelKeyword_{ft} . pos) != -1
+            elseif s:SearchKeyword(ft, pos)
                 if imode && eol_adjustment
                     let d = col - col('.')
                 else
@@ -2296,6 +2311,12 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
 endf
 
 
+function! s:SearchKeyword(filetype, pos) "{{{3
+    let kw = tlib#var#Get('tskelKeyword_'. a:filetype, 'bg')
+    return !empty(kw) && search(kw . a:pos) != -1
+endf
+
+
 function! tskeleton#WithSelection(pre) "{{{3
     let text = @"
     let bit = input('Skeleton: ', '', 'custom,tskeleton#SelectBit')
@@ -2325,7 +2346,7 @@ endf
 
 function! tskeleton#Complete(findstart, base)
     if a:findstart
-        let pattern = exists('g:tskelKeyword_'. &filetype) ? g:tskelKeyword_{&filetype} : '\w\+'
+        let pattern = tlib#var#Get('tskelKeyword_'. &filetype, 'bg', '\w\+')
         let line    = getline('.')[0:(col('.') - 1)]
         let start   = match(line, pattern.'$')
         return start == -1 ? col('.') - 1 : start

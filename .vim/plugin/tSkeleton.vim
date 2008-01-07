@@ -2,8 +2,8 @@
 " @Author:      Thomas Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 2007-11-06.
-" @Revision:    4.2.3758
+" @Last Change: 2007-11-17.
+" @Revision:    4.3.3780
 "
 " GetLatestVimScripts: 1160 1 tSkeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -25,7 +25,7 @@ if !exists('loaded_tlib') || loaded_tlib < 14
     echoerr "tSkeleton requires tlib >= 0.14"
     finish
 endif
-let loaded_tskeleton = 402
+let loaded_tskeleton = 403
 
 
 if !exists("g:tskelDir") "{{{2
@@ -95,6 +95,14 @@ if !exists("g:tskelMenuMiniPrefix") | let g:tskelMenuMiniPrefix = 'etc.'   | end
 if !exists("g:tskelAutoAbbrevs")    | let g:tskelAutoAbbrevs = 0           | endif "{{{2
 if !exists("g:tskelAbbrevPostfix")  | let g:tskelAbbrevPostfix = '#'       | endif "{{{2
 
+" By default bit names are case sensitive.
+"  1 ... case sensitive
+" -1 ... default (see 'smartcase')
+"  0 ... case insensitive
+if !exists("g:tskelCaseSensitive")        | let g:tskelCaseSensitive = 1        | endif "{{{2
+if !exists("g:tskelCaseSensitive_html")   | let g:tskelCaseSensitive_html = 0   | endif "{{{2
+if !exists("g:tskelCaseSensitive_bbcode") | let g:tskelCaseSensitive_bbcode = 0 | endif "{{{2
+
 if !exists("g:tskelUseBufferCache") | let g:tskelUseBufferCache = 0             | endif "{{{2
 if !exists("g:tskelBufferCacheDir") | let g:tskelBufferCacheDir = '.tskeleton'  | endif "{{{2
 
@@ -113,17 +121,21 @@ if !exists("g:tskelPopupNumbered") | let g:tskelPopupNumbered = 1 | endif "{{{2
 " set this to v for using visual mode when calling TSkeletonGoToNextTag()
 if !exists("g:tskelSelectTagMode") | let g:tskelSelectTagMode = 's' | endif "{{{2
 
+if !exists("g:tskelKeyword_bbcode") | let g:tskelKeyword_bbcode = '\(\[\*\|[\[\\][*[:alnum:]]\{-}\)' | endif "{{{2
 if !exists("g:tskelKeyword_bib")  | let g:tskelKeyword_bib  = '[@[:alnum:]]\{-}'       | endif "{{{2
 if !exists("g:tskelKeyword_java") | let g:tskelKeyword_java = '[[:alnum:]_@<&]\{-}'    | endif "{{{2
 if !exists("g:tskelKeyword_php")  | let g:tskelKeyword_java = '[[:alnum:]_@<&$]\{-}'   | endif "{{{2
 if !exists("g:tskelKeyword_html") | let g:tskelKeyword_html = '<\?[^>[:blank:]]\{-}'   | endif "{{{2
 if !exists("g:tskelKeyword_sh")   | let g:tskelKeyword_sh   = '[\[@${([:alpha:]]\{-}'  | endif "{{{2
 if !exists("g:tskelKeyword_tex")  | let g:tskelKeyword_tex  = '\\\?\w\{-}'             | endif "{{{2
-" if !exists("g:tskelKeyword_viki") | let g:tskelKeyword_viki = '\(#\|{\)\?[^#{[:blank:]]\{-}' | endif "{{{2
 if !exists("g:tskelKeyword_viki") | let g:tskelKeyword_viki = '\(#\|{\|\\\)\?[^#{[:blank:][:punct:]-]\{-}' | endif "{{{2
+" if !exists("g:tskelKeyword_viki") | let g:tskelKeyword_viki = '\(#\|{\)\?[^#{[:blank:]]\{-}' | endif "{{{2
 
 if !exists("g:tskelBitGroup_html") "{{{2
     let g:tskelBitGroup_html = ['html', 'html_common']
+endif
+if !exists("g:tskelBitGroup_bbcode") "{{{2
+    let g:tskelBitGroup_bbcode = ['bbcode', 'tex']
 endif
 if !exists("g:tskelBitGroup_php") "{{{2
     let g:tskelBitGroup_php  = ['php', 'html', 'html_common']
@@ -621,4 +633,10 @@ cursor marker (which was the original behaviour).
 html_common.
 - CHANGE: Made bit names case-sensitive
 - NEW: select() tag (similar to the query tag)
+
+4.3
+- bbcode group
+- tskelKeyword_{&ft} and tskelGroup_{&ft} variables can be buffer-local
+- Case-sensitivity can be configured via [bg]:tskelCaseSensitive and 
+[bg]:tskelCaseSensitive_{&filetype}
 
