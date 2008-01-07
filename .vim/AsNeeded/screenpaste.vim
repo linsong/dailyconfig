@@ -1,7 +1,7 @@
 " File:          screenpaste.vim
 " Description:   pastes/inserts current GNU Screen buffer in (almost) any mode
-" Version:       5.9
-" Mercurial:     $Hg: screenpaste.vim,v 5a3e920725c0 Thu Oct 05 14:00:36 2006 +0200 $
+" Version:       5.92
+" Mercurial:     $Id: screenpaste.vim,v 41183f681647 2008-01-06 17:29 +0100 blacktrash $
 " Author:        Christian Ebert <blacktrash@gmx.net>
 " Credits:       Mathieu Clabaut and Guo-Peng Wen for inline doc self-install code
 " URL:           http://www.vim.org/script.php?script_id=1512
@@ -10,7 +10,7 @@
 "                self installing to its current version when plugin is loaded
 "                to review before install go to last section of this file
 "
-" GetLatestVimScripts: 1512 1 screenpaste.vim
+" GetLatestVimScripts: 1512 1 :AutoInstall: screenpaste.vim
 
 " Init: store 'compatible' settings {{{1
 let s:save_cpo = &cpo
@@ -53,6 +53,10 @@ if !exists("g:loaded_screenpaste")
     let g:screen_register = '"'
   endif
 
+  if !exists("g:screen_visualselect")
+    let g:screen_visualselect = 0
+  endif
+
   " Checks: for system() and Screen executable {{{1
   function! s:Screen_CleanUp(msg)
     echohl WarningMsg
@@ -75,7 +79,7 @@ if !exists("g:loaded_screenpaste")
     finish
   endif
 
-  let s:curr_version = "v5.9"
+  let s:curr_version = "v5.92"
 
   " Mappings: propose defaults {{{1
   if !hasmapto("<Plug>ScreenpastePut") " nvo
@@ -118,16 +122,16 @@ if !exists("g:loaded_screenpaste")
   function! Screen_ClCfgComplete(A, L, P)
     return "search\nsub\nnoesc"
   endfunction
-  command! -nargs=1 -complete=custom,ScreenClCfgComplete
+  command -nargs=1 -complete=custom,Screen_ClCfgComplete
         \ ScreenCmdlineConf call <SID>Screen_ClConfig(<f-args>, 1)
-  command! ScreenCmdlineInfo call <SID>Screen_ClConfig(g:screen_clmode, 1)
-  command! ScreenSearch      call <SID>Screen_ClConfig("search", 1)
-  command! ScreenSub         call <SID>Screen_ClConfig("sub", 1)
-  command! ScreenNoEsc       call <SID>Screen_ClConfig("noesc", 1)
+  command ScreenCmdlineInfo call <SID>Screen_ClConfig(g:screen_clmode, 1)
+  command ScreenSearch      call <SID>Screen_ClConfig("search", 1)
+  command ScreenSub         call <SID>Screen_ClConfig("sub", 1)
+  command ScreenNoEsc       call <SID>Screen_ClConfig("noesc", 1)
   " yank Screen buffer into register (default: screen_register)
-  command! -register ScreenYank call <SID>Screen_Yank("<register>")
+  command -register ScreenYank call <SID>Screen_Yank("<register>")
   " buffer operation
-  command! -count=0 -bang -register ScreenPut
+  command -count=0 -bang -register ScreenPut
         \ call <SID>Screen_PutCommand("<count>", "<bang>", "<register>")
 
   " }}}1
@@ -473,7 +477,7 @@ function! s:Screen_Yank(...)
         call setreg(g:screen_register, l:screen_buf)
       endif
       return 1
-    elseif g:screen_register =~# '[A-Z]'
+    elseif g:screen_register =~ '\u'
       " do nothing
       return 1
     else
@@ -493,18 +497,18 @@ function! s:Screen_NPut(p)
 endfunction
 
 " Function: Screen_IPut pastes in insert mode {{{1
-" Function: Screen_TwRestore restores 'textwidth' {{{2
+" Function: Screen_TwRestore restores 'paste' {{{2
 " helper function, only called right after Screen_IPut
 " because Screen_IPut must return result before
-" being able to restore textwidth its previous value
+" being able to restore paste its previous value
 function! s:Screen_TwRestore()
-  let &textwidth = s:curr_tw
+  let &paste = s:curr_paste
   return ""
 endfunction
 " }}}2
 function! s:Screen_IPut()
-  let s:curr_tw = &textwidth
-  let &textwidth = 0
+  let s:curr_paste = &paste
+  let &paste = 1
   let l:screen_buf = <SID>Screen_Yank()
   return l:screen_buf
 endfunction
@@ -519,8 +523,10 @@ function! s:Screen_VPut(go)
       let @z = @"
       let g:screen_register = "z"
     endif
-    execute "normal! `<".visualmode()."`>"
-    execute 'normal! "'.g:screen_register.a:go.'p'
+    execute 'normal! gv"'.g:screen_register.a:go.'p'
+    if g:screen_visualselect
+      execute "normal! `[".visualmode()."`]"
+    endif
     if exists("l:store_reg")
       let g:screen_register = '"'
       let @0 = @z
@@ -529,7 +535,7 @@ function! s:Screen_VPut(go)
   else
     " reset visual after showing message for 3 secs
     sleep 3
-    execute "normal! `<".visualmode()."`>"
+    execute "normal! gv"
   endif
 endfunction
 
@@ -761,6 +767,13 @@ Default Value	'screen'
 	Set this option if the name of your GNU Screen executable differs from
 	"screen", or if you like to specify it's full path: >
 		let g:screen_executable = "/usr/local/bin/screen"
+
+g:screen_visualselect					*screen_visualselect*
+Type		Boolean
+Default Value	0
+
+        If set to 1 and in Visual mode the text from the Screen buffer is
+        visually selected after the put operation.
 
 g:screen_register					*screen_register*
 
