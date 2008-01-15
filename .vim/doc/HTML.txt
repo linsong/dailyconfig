@@ -1,5 +1,5 @@
 *HTML.txt*	Set of HTML/XHTML macros, menus and toolbar buttons.
-		Last change: 2007 Jul 30
+		Last change: 2007 Dec 04
 		Author: Christian J. Robinson
 
 
@@ -125,7 +125,7 @@ example, if you're within <I></I> and type |;em| it will assume you want
 
 You can set the following global Vim variables to control the behavior of the
 macros.  It is recommended you set these variables in your .vimrc--some of
-them are only effecive if they are set before HTML.vim is sourced.
+them are only effective if they are set before HTML.vim is sourced.
 
 *g:do_xhtml_mappings* *b:do_xhtml_mappings*
 Set this variable to a nonzero value if you prefer XHTML compatible tags to be
@@ -400,7 +400,7 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;co* *v_;co* *n_;co*
 ;co	Code (<CODE></CODE>). (|n_;|)
 
-						*html-definition-list*
+						*html-definition-lists*
 							*i_;dl* *v_;dl* *n_;dl*
 ;dl	Definition list (<DL><CR></DL>). (|n_;|)
 							*i_;dt* *v_;dt* *n_;dt*
@@ -540,12 +540,18 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;ul* *v_;ul* *n_;ul*
 ;ul	Unordered list (<UL><CR></UL>). (|n_;|)
 
-							*html-table*
+							*html-tables*
 							*i_;ta* *v_;ta* *n_;ta*
 ;ta	Table (<TABLE><CR></TABLE>). (|n_;|)
 							*n_;tA*
 ;tA	Interactive table; you will be interactively prompted for the table
 	rows, columns, and border width.
+							*i_;tH* *v_;tH* *n_;tH*
+;tH	Table header row (<THEAD></THEAD>). (|n_;|)
+							*i_;tb* *v_;tb* *n_;tb*
+;tb	Table body (<TBODY></TBODY>). (|n_;|)
+							*i_;tf* *v_;tf* *n_;tf*
+;tf	Table footer row (<TFOOT></TFOOT>). (|n_;|)
 							*i_;ca* *v_;ca* *n_;ca*
 ;ca	Table caption (<CAPTION></CAPTION>). (|n_;|)
 							*i_;tr* *v_;tr* *n_;tr*
@@ -553,7 +559,7 @@ another character of your preference.  See |g:html_map_leader|.
 							*i_;td* *v_;td* *n_;td*
 ;td	Table data (column element) (<TD><CR></TD>). (|n_;|)
 							*i_;th* *v_;th* *n_;th*
-;th	Table header (<TH></TH>). (|n_;|)
+;th	Table column header (<TH></TH>). (|n_;|)
 
 							*html-frames*
 							*i_;fs* *v_;fs* *n_;fs*
@@ -763,12 +769,12 @@ The following mappings are only defined if you have properly installed the
 browser_launcher.vim script, available with installation instructions here:
 http://www.infynity.spodzone.com/vim/HTML/
 								*n_;ff*
-;mo	Make Firefox view the current file, starting Firefox if it is not
+;ff	Make Firefox view the current file, starting Firefox if it is not
 	running.
 								*n_;nff*
-;nmo	Same as |;ff|, but start a new browser window.
+;nff	Same as |;ff|, but start a new browser window.
 								*n_;tff*
-;tmo	Same as |;nff|, but open a new tab.
+;tff	Same as |;nff|, but open a new tab.
 								*n_;mo*
 ;mo	Make Mozilla view the current file, starting Mozilla if it is not
 	running.

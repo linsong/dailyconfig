@@ -996,7 +996,9 @@ endif " has("autocmd")
     "### }}}2
 
     "### setting for HTML.vim {{{2
-    :let g:no_html_toolbar = 'yes'
+    :let g:no_html_toolbar = 1
+    :let g:no_html_menu = 1
+    :let g:no_html_tab_mapping = 1
     "### }}}2
 
     "### setting for scratch.vim {{{2

@@ -2,8 +2,8 @@
 "
 " Author:      Christian J. Robinson <infynity@onewest.net>
 " URL:         http://www.infynity.spodzone.com/vim/HTML/
-" Last Change: August 08, 2007
-" Version:     0.29.2
+" Last Change: December 04, 2007
+" Version:     0.29.3
 " Original Concept: Doug Renze
 "
 "
@@ -44,7 +44,7 @@
 " ---- TODO: ------------------------------------------------------------ {{{1
 " - Specific browser mappings for Win32 with "start <browser> ..." ?
 " ---- RCS Information: ------------------------------------------------- {{{1
-" $Id: HTML.vim,v 1.168 2007/09/04 07:44:42 infynity Exp $
+" $Id: HTML.vim,v 1.169 2007/12/05 02:33:47 infynity Exp $
 " ----------------------------------------------------------------------- }}}1
 
 " ---- Initialization: -------------------------------------------------- {{{1
@@ -1475,18 +1475,27 @@ call HTMLmapo('<lead>ob', 0)
 " Table stuff:
 call HTMLmap("inoremap", "<lead>ca", "<[{CAPTION></CAPTION}]><C-O>F<")
 call HTMLmap("inoremap", "<lead>ta", "<[{TABLE}]><CR></[{TABLE}]><ESC>O")
+call HTMLmap("inoremap", "<lead>tH", "<[{THEAD}]><CR></[{THEAD}]><ESC>O")
+call HTMLmap("inoremap", "<lead>tb", "<[{TBODY}]><CR></[{TBODY}]><ESC>O")
+call HTMLmap("inoremap", "<lead>tf", "<[{TFOOT}]><CR></[{TFOOT}]><ESC>O")
 call HTMLmap("inoremap", "<lead>tr", "<[{TR}]><CR></[{TR}]><ESC>O")
 call HTMLmap("inoremap", "<lead>td", "<[{TD}]><CR></[{TD}]><ESC>O")
 call HTMLmap("inoremap", "<lead>th", "<[{TH></TH}]><C-O>F<")
 " Visual mappings:
 call HTMLmap("vnoremap", "<lead>ca", "<ESC>`>a<CR></[{CAPTION}]><C-O>`<<[{CAPTION}]><CR><ESC>", 1)
 call HTMLmap("vnoremap", "<lead>ta", "<ESC>`>a<CR></[{TABLE}]><C-O>`<<[{TABLE}]><CR><ESC>", 1)
+call HTMLmap("vnoremap", "<lead>tH", "<ESC>`>a<CR></[{THEAD}]><C-O>`<<[{THEAD}]><CR><ESC>", 1)
+call HTMLmap("vnoremap", "<lead>tb", "<ESC>`>a<CR></[{TBODY}]><C-O>`<<[{TBODY}]><CR><ESC>", 1)
+call HTMLmap("vnoremap", "<lead>tf", "<ESC>`>a<CR></[{TFOOT}]><C-O>`<<[{TFOOT}]><CR><ESC>", 1)
 call HTMLmap("vnoremap", "<lead>tr", "<ESC>`>a<CR></[{TR}]><C-O>`<<[{TR}]><CR><ESC>", 1)
 call HTMLmap("vnoremap", "<lead>td", "<ESC>`>a<CR></[{TD}]><C-O>`<<[{TD}]><CR><ESC>", 1)
 call HTMLmap("vnoremap", "<lead>th", "<ESC>`>a</[{TH}]><C-O>`<<[{TH}]><ESC>", 2)
 " Motion mappings:
 call HTMLmapo("<lead>ca", 0)
 call HTMLmapo("<lead>ta", 0)
+call HTMLmapo("<lead>tH", 0)
+call HTMLmapo("<lead>tb", 0)
+call HTMLmapo("<lead>tf", 0)
 call HTMLmapo("<lead>tr", 0)
 call HTMLmapo("<lead>td", 0)
 call HTMLmapo("<lead>th", 0)
@@ -2053,87 +2062,87 @@ imenu HTML.Character\ Entities.Lessthan\ (<)<tab>\&<               &<
 imenu HTML.Character\ Entities.Space\ (nonbreaking\)<tab>\&<space> &<space>
 imenu HTML.Character\ Entities.Quotation\ mark\ (")<tab>\&'        &'
  menu HTML.Character\ Entities.-sep1- <nul>
-imenu HTML.Character\ Entities.Cent\ (¢)<tab>\&c\|                 &c\|
-imenu HTML.Character\ Entities.Pound\ (£)<tab>\&#                  &#
-imenu HTML.Character\ Entities.Yen\ (•)<tab>\&Y=                   &Y=
-imenu HTML.Character\ Entities.Left\ Angle\ Quote\ (´)<tab>\&2<    &2<
-imenu HTML.Character\ Entities.Right\ Angle\ Quote\ (ª)<tab>\&2>   &2>
-imenu HTML.Character\ Entities.Copyright\ (©)<tab>\&cO             &cO
-imenu HTML.Character\ Entities.Registered\ (Æ)<tab>\&rO            &rO
+imenu HTML.Character\ Entities.Cent\ (¬¢)<tab>\&c\|                 &c\|
+imenu HTML.Character\ Entities.Pound\ (¬£)<tab>\&#                  &#
+imenu HTML.Character\ Entities.Yen\ (¬•)<tab>\&Y=                   &Y=
+imenu HTML.Character\ Entities.Left\ Angle\ Quote\ (¬´)<tab>\&2<    &2<
+imenu HTML.Character\ Entities.Right\ Angle\ Quote\ (¬ª)<tab>\&2>   &2>
+imenu HTML.Character\ Entities.Copyright\ (¬©)<tab>\&cO             &cO
+imenu HTML.Character\ Entities.Registered\ (¬Æ)<tab>\&rO            &rO
 imenu HTML.Character\ Entities.Trademark\ (TM)<tab>\&tm            &tm
-imenu HTML.Character\ Entities.Multiply\ (◊)<tab>\&x               &x
-imenu HTML.Character\ Entities.Divide\ (˜)<tab>\&/                 &/
-imenu HTML.Character\ Entities.Inverted\ Exlamation\ (°)<tab>\&!   &!
-imenu HTML.Character\ Entities.Inverted\ Question\ (ø)<tab>\&?     &?
-imenu HTML.Character\ Entities.Degree\ (∞)<tab>\&de                &de
-imenu HTML.Character\ Entities.Micro/Greek\ mu\ (µ)<tab>\&mu       &mu
-imenu HTML.Character\ Entities.Paragraph\ (∂)<tab>\&pa             &pa
-imenu HTML.Character\ Entities.Middle\ Dot\ (∑)<tab>\&\.           &.
-imenu HTML.Character\ Entities.One\ Quarter\ (º)<tab>\&14          &14
-imenu HTML.Character\ Entities.One\ Half\ (Ω)<tab>\&12             &12
-imenu HTML.Character\ Entities.Three\ Quarters\ (æ)<tab>\&34       &34
+imenu HTML.Character\ Entities.Multiply\ (√ó)<tab>\&x               &x
+imenu HTML.Character\ Entities.Divide\ (√∑)<tab>\&/                 &/
+imenu HTML.Character\ Entities.Inverted\ Exlamation\ (¬°)<tab>\&!   &!
+imenu HTML.Character\ Entities.Inverted\ Question\ (¬ø)<tab>\&?     &?
+imenu HTML.Character\ Entities.Degree\ (¬∞)<tab>\&de                &de
+imenu HTML.Character\ Entities.Micro/Greek\ mu\ (¬µ)<tab>\&mu       &mu
+imenu HTML.Character\ Entities.Paragraph\ (¬∂)<tab>\&pa             &pa
+imenu HTML.Character\ Entities.Middle\ Dot\ (¬∑)<tab>\&\.           &.
+imenu HTML.Character\ Entities.One\ Quarter\ (¬º)<tab>\&14          &14
+imenu HTML.Character\ Entities.One\ Half\ (¬Ω)<tab>\&12             &12
+imenu HTML.Character\ Entities.Three\ Quarters\ (¬æ)<tab>\&34       &34
 imenu HTML.Character\ Entities.En\ dash\ (-)<tab>\&n-/\&2-         &n-
 imenu HTML.Character\ Entities.Em\ dash\ (--)<tab>\&m-/\&--/\&3-   &m-
 imenu HTML.Character\ Entities.Ellipsis\ (\.\.\.)<tab>\&3\.        &3.
 imenu HTML.Character\ Entities.-sep2- <nul>
-imenu HTML.Character\ Entities.Graves.A-grave\ (¿)<tab>\&A` &A`
-imenu HTML.Character\ Entities.Graves.a-grave\ (‡)<tab>\&a` &a`
-imenu HTML.Character\ Entities.Graves.E-grave\ (»)<tab>\&E` &E`
-imenu HTML.Character\ Entities.Graves.e-grave\ (Ë)<tab>\&e` &e`
-imenu HTML.Character\ Entities.Graves.I-grave\ (Ã)<tab>\&I` &I`
-imenu HTML.Character\ Entities.Graves.i-grave\ (Ï)<tab>\&i` &i`
-imenu HTML.Character\ Entities.Graves.O-grave\ (“)<tab>\&O` &O`
-imenu HTML.Character\ Entities.Graves.o-grave\ (Ú)<tab>\&o` &o`
-imenu HTML.Character\ Entities.Graves.U-grave\ (Ÿ)<tab>\&U` &U`
-imenu HTML.Character\ Entities.Graves.u-grave\ (˘)<tab>\&u` &u`
-imenu HTML.Character\ Entities.Acutes.A-acute\ (¡)<tab>\&A' &A'
-imenu HTML.Character\ Entities.Acutes.a-acute\ (·)<tab>\&a' &a'
-imenu HTML.Character\ Entities.Acutes.E-acute\ (…)<tab>\&E' &E'
-imenu HTML.Character\ Entities.Acutes.e-acute\ (È)<tab>\&e' &e'
-imenu HTML.Character\ Entities.Acutes.I-acute\ (Õ)<tab>\&I' &I'
-imenu HTML.Character\ Entities.Acutes.i-acute\ (Ì)<tab>\&i' &i'
-imenu HTML.Character\ Entities.Acutes.O-acute\ (”)<tab>\&O' &O'
-imenu HTML.Character\ Entities.Acutes.o-acute\ (Û)<tab>\&o' &o'
-imenu HTML.Character\ Entities.Acutes.U-acute\ (⁄)<tab>\&U' &U'
-imenu HTML.Character\ Entities.Acutes.u-acute\ (˙)<tab>\&u' &u'
-imenu HTML.Character\ Entities.Acutes.Y-acute\ (›)<tab>\&Y' &Y'
-imenu HTML.Character\ Entities.Acutes.y-acute\ (˝)<tab>\&y' &y'
-imenu HTML.Character\ Entities.Tildes.A-tilde\ (√)<tab>\&A~ &A~
-imenu HTML.Character\ Entities.Tildes.a-tilde\ („)<tab>\&a~ &a~
-imenu HTML.Character\ Entities.Tildes.N-tilde\ (—)<tab>\&N~ &N~
-imenu HTML.Character\ Entities.Tildes.n-tilde\ (Ò)<tab>\&n~ &n~
-imenu HTML.Character\ Entities.Tildes.O-tilde\ (’)<tab>\&O~ &O~
-imenu HTML.Character\ Entities.Tildes.o-tilde\ (ı)<tab>\&o~ &o~
-imenu HTML.Character\ Entities.Circumflexes.A-circumflex\ (¬)<tab>\&A^ &A^
-imenu HTML.Character\ Entities.Circumflexes.a-circumflex\ (‚)<tab>\&a^ &a^
-imenu HTML.Character\ Entities.Circumflexes.E-circumflex\ ( )<tab>\&E^ &E^
-imenu HTML.Character\ Entities.Circumflexes.e-circumflex\ (Í)<tab>\&e^ &e^
-imenu HTML.Character\ Entities.Circumflexes.I-circumflex\ (Œ)<tab>\&I^ &I^
-imenu HTML.Character\ Entities.Circumflexes.i-circumflex\ (Ó)<tab>\&i^ &i^
-imenu HTML.Character\ Entities.Circumflexes.O-circumflex\ (‘)<tab>\&O^ &O^
-imenu HTML.Character\ Entities.Circumflexes.o-circumflex\ (Ù)<tab>\&o^ &o^
-imenu HTML.Character\ Entities.Circumflexes.U-circumflex\ (€)<tab>\&U^ &U^
-imenu HTML.Character\ Entities.Circumflexes.u-circumflex\ (˚)<tab>\&u^ &u^
-imenu HTML.Character\ Entities.Umlauts.A-umlaut\ (ƒ)<tab>\&A" &A"
-imenu HTML.Character\ Entities.Umlauts.a-umlaut\ (‰)<tab>\&a" &a"
-imenu HTML.Character\ Entities.Umlauts.E-umlaut\ (À)<tab>\&E" &E"
-imenu HTML.Character\ Entities.Umlauts.e-umlaut\ (Î)<tab>\&e" &e"
-imenu HTML.Character\ Entities.Umlauts.I-umlaut\ (œ)<tab>\&I" &I"
-imenu HTML.Character\ Entities.Umlauts.i-umlaut\ (Ô)<tab>\&i" &i"
-imenu HTML.Character\ Entities.Umlauts.O-umlaut\ (÷)<tab>\&O" &O"
-imenu HTML.Character\ Entities.Umlauts.o-umlaut\ (ˆ)<tab>\&o" &o"
-imenu HTML.Character\ Entities.Umlauts.U-umlaut\ (‹)<tab>\&U" &U"
-imenu HTML.Character\ Entities.Umlauts.u-umlaut\ (¸)<tab>\&u" &u"
-imenu HTML.Character\ Entities.Umlauts.y-umlaut\ (ˇ)<tab>\&y" &y"
-imenu HTML.Character\ Entities.Umlauts.Umlaut\ (®)<tab>\&"    &"
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..A-ring\ (≈)<tab>\&Ao      &Ao
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..a-ring\ (Â)<tab>\&ao      &ao
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..AE-ligature\ (∆)<tab>\&AE &AE
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..ae-ligature\ (Ê)<tab>\&ae &ae
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..C-cedilla\ («)<tab>\&C,   &C,
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..c-cedilla\ (Á)<tab>\&c,   &c,
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..O-slash\ (ÿ)<tab>\&O/     &O/
-imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..o-slash\ (¯)<tab>\&o/     &o/
+imenu HTML.Character\ Entities.Graves.A-grave\ (√Ä)<tab>\&A` &A`
+imenu HTML.Character\ Entities.Graves.a-grave\ (√†)<tab>\&a` &a`
+imenu HTML.Character\ Entities.Graves.E-grave\ (√à)<tab>\&E` &E`
+imenu HTML.Character\ Entities.Graves.e-grave\ (√®)<tab>\&e` &e`
+imenu HTML.Character\ Entities.Graves.I-grave\ (√å)<tab>\&I` &I`
+imenu HTML.Character\ Entities.Graves.i-grave\ (√¨)<tab>\&i` &i`
+imenu HTML.Character\ Entities.Graves.O-grave\ (√í)<tab>\&O` &O`
+imenu HTML.Character\ Entities.Graves.o-grave\ (√≤)<tab>\&o` &o`
+imenu HTML.Character\ Entities.Graves.U-grave\ (√ô)<tab>\&U` &U`
+imenu HTML.Character\ Entities.Graves.u-grave\ (√π)<tab>\&u` &u`
+imenu HTML.Character\ Entities.Acutes.A-acute\ (√Å)<tab>\&A' &A'
+imenu HTML.Character\ Entities.Acutes.a-acute\ (√°)<tab>\&a' &a'
+imenu HTML.Character\ Entities.Acutes.E-acute\ (√â)<tab>\&E' &E'
+imenu HTML.Character\ Entities.Acutes.e-acute\ (√©)<tab>\&e' &e'
+imenu HTML.Character\ Entities.Acutes.I-acute\ (√ç)<tab>\&I' &I'
+imenu HTML.Character\ Entities.Acutes.i-acute\ (√≠)<tab>\&i' &i'
+imenu HTML.Character\ Entities.Acutes.O-acute\ (√ì)<tab>\&O' &O'
+imenu HTML.Character\ Entities.Acutes.o-acute\ (√≥)<tab>\&o' &o'
+imenu HTML.Character\ Entities.Acutes.U-acute\ (√ö)<tab>\&U' &U'
+imenu HTML.Character\ Entities.Acutes.u-acute\ (√∫)<tab>\&u' &u'
+imenu HTML.Character\ Entities.Acutes.Y-acute\ (√ù)<tab>\&Y' &Y'
+imenu HTML.Character\ Entities.Acutes.y-acute\ (√Ω)<tab>\&y' &y'
+imenu HTML.Character\ Entities.Tildes.A-tilde\ (√É)<tab>\&A~ &A~
+imenu HTML.Character\ Entities.Tildes.a-tilde\ (√£)<tab>\&a~ &a~
+imenu HTML.Character\ Entities.Tildes.N-tilde\ (√ë)<tab>\&N~ &N~
+imenu HTML.Character\ Entities.Tildes.n-tilde\ (√±)<tab>\&n~ &n~
+imenu HTML.Character\ Entities.Tildes.O-tilde\ (√ï)<tab>\&O~ &O~
+imenu HTML.Character\ Entities.Tildes.o-tilde\ (√µ)<tab>\&o~ &o~
+imenu HTML.Character\ Entities.Circumflexes.A-circumflex\ (√Ç)<tab>\&A^ &A^
+imenu HTML.Character\ Entities.Circumflexes.a-circumflex\ (√¢)<tab>\&a^ &a^
+imenu HTML.Character\ Entities.Circumflexes.E-circumflex\ (√ä)<tab>\&E^ &E^
+imenu HTML.Character\ Entities.Circumflexes.e-circumflex\ (√™)<tab>\&e^ &e^
+imenu HTML.Character\ Entities.Circumflexes.I-circumflex\ (√é)<tab>\&I^ &I^
+imenu HTML.Character\ Entities.Circumflexes.i-circumflex\ (√Æ)<tab>\&i^ &i^
+imenu HTML.Character\ Entities.Circumflexes.O-circumflex\ (√î)<tab>\&O^ &O^
+imenu HTML.Character\ Entities.Circumflexes.o-circumflex\ (√¥)<tab>\&o^ &o^
+imenu HTML.Character\ Entities.Circumflexes.U-circumflex\ (√õ)<tab>\&U^ &U^
+imenu HTML.Character\ Entities.Circumflexes.u-circumflex\ (√ª)<tab>\&u^ &u^
+imenu HTML.Character\ Entities.Umlauts.A-umlaut\ (√Ñ)<tab>\&A" &A"
+imenu HTML.Character\ Entities.Umlauts.a-umlaut\ (√§)<tab>\&a" &a"
+imenu HTML.Character\ Entities.Umlauts.E-umlaut\ (√ã)<tab>\&E" &E"
+imenu HTML.Character\ Entities.Umlauts.e-umlaut\ (√´)<tab>\&e" &e"
+imenu HTML.Character\ Entities.Umlauts.I-umlaut\ (√è)<tab>\&I" &I"
+imenu HTML.Character\ Entities.Umlauts.i-umlaut\ (√Ø)<tab>\&i" &i"
+imenu HTML.Character\ Entities.Umlauts.O-umlaut\ (√ñ)<tab>\&O" &O"
+imenu HTML.Character\ Entities.Umlauts.o-umlaut\ (√∂)<tab>\&o" &o"
+imenu HTML.Character\ Entities.Umlauts.U-umlaut\ (√ú)<tab>\&U" &U"
+imenu HTML.Character\ Entities.Umlauts.u-umlaut\ (√º)<tab>\&u" &u"
+imenu HTML.Character\ Entities.Umlauts.y-umlaut\ (√ø)<tab>\&y" &y"
+imenu HTML.Character\ Entities.Umlauts.Umlaut\ (¬®)<tab>\&"    &"
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..A-ring\ (√Ö)<tab>\&Ao      &Ao
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..a-ring\ (√•)<tab>\&ao      &ao
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..AE-ligature\ (√Ü)<tab>\&AE &AE
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..ae-ligature\ (√¶)<tab>\&ae &ae
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..C-cedilla\ (√á)<tab>\&C,   &C,
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..c-cedilla\ (√ß)<tab>\&c,   &c,
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..O-slash\ (√ò)<tab>\&O/     &O/
+imenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..o-slash\ (√∏)<tab>\&o/     &o/
 " Normal mode versions of the above.  If you change the above, it's usually
 " easier to just delete it yank the above, paste it, and run a pair of
 " substitute commands.
@@ -2142,86 +2151,86 @@ nmenu HTML.Character\ Entities.Greaterthan\ (>)<tab>\&>            i&><ESC>
 nmenu HTML.Character\ Entities.Lessthan\ (<)<tab>\&<               i&<<ESC>
 nmenu HTML.Character\ Entities.Space\ (nonbreaking\)<tab>\&<space> i&<space><ESC>
 nmenu HTML.Character\ Entities.Quotation\ mark\ (")<tab>\&'        i&'<ESC>
-nmenu HTML.Character\ Entities.Cent\ (¢)<tab>\&c\|                 i&c\|<ESC>
-nmenu HTML.Character\ Entities.Pound\ (£)<tab>\&#                  i&#<ESC>
-nmenu HTML.Character\ Entities.Yen\ (•)<tab>\&Y=                   i&Y=<ESC>
-nmenu HTML.Character\ Entities.Left\ Angle\ Quote\ (´)<tab>\&2<    i&2<<ESC>
-nmenu HTML.Character\ Entities.Right\ Angle\ Quote\ (ª)<tab>\&2>   i&2><ESC>
-nmenu HTML.Character\ Entities.Copyright\ (©)<tab>\&cO             i&cO<ESC>
-nmenu HTML.Character\ Entities.Registered\ (Æ)<tab>\&rO            i&rO<ESC>
+nmenu HTML.Character\ Entities.Cent\ (¬¢)<tab>\&c\|                 i&c\|<ESC>
+nmenu HTML.Character\ Entities.Pound\ (¬£)<tab>\&#                  i&#<ESC>
+nmenu HTML.Character\ Entities.Yen\ (¬•)<tab>\&Y=                   i&Y=<ESC>
+nmenu HTML.Character\ Entities.Left\ Angle\ Quote\ (¬´)<tab>\&2<    i&2<<ESC>
+nmenu HTML.Character\ Entities.Right\ Angle\ Quote\ (¬ª)<tab>\&2>   i&2><ESC>
+nmenu HTML.Character\ Entities.Copyright\ (¬©)<tab>\&cO             i&cO<ESC>
+nmenu HTML.Character\ Entities.Registered\ (¬Æ)<tab>\&rO            i&rO<ESC>
 nmenu HTML.Character\ Entities.Trademark\ (TM)<tab>\&tm            i&tm<ESC>
-nmenu HTML.Character\ Entities.Multiply\ (◊)<tab>\&x               i&x<ESC>
-nmenu HTML.Character\ Entities.Divide\ (˜)<tab>\&/                 i&/<ESC>
-nmenu HTML.Character\ Entities.Inverted\ Exlamation\ (°)<tab>\&!   i&!<ESC>
-nmenu HTML.Character\ Entities.Inverted\ Question\ (ø)<tab>\&?     i&?<ESC>
-nmenu HTML.Character\ Entities.Degree\ (∞)<tab>\&de                i&de<ESC>
-nmenu HTML.Character\ Entities.Micro/Greek\ mu\ (µ)<tab>\&mu       i&mu<ESC>
-nmenu HTML.Character\ Entities.Paragraph\ (∂)<tab>\&pa             i&pa<ESC>
-nmenu HTML.Character\ Entities.Middle\ Dot\ (∑)<tab>\&\.           i&.<ESC>
-nmenu HTML.Character\ Entities.One\ Quarter\ (º)<tab>\&14          i&14<ESC>
-nmenu HTML.Character\ Entities.One\ Half\ (Ω)<tab>\&12             i&12<ESC>
-nmenu HTML.Character\ Entities.Three\ Quarters\ (æ)<tab>\&34       i&34<ESC>
+nmenu HTML.Character\ Entities.Multiply\ (√ó)<tab>\&x               i&x<ESC>
+nmenu HTML.Character\ Entities.Divide\ (√∑)<tab>\&/                 i&/<ESC>
+nmenu HTML.Character\ Entities.Inverted\ Exlamation\ (¬°)<tab>\&!   i&!<ESC>
+nmenu HTML.Character\ Entities.Inverted\ Question\ (¬ø)<tab>\&?     i&?<ESC>
+nmenu HTML.Character\ Entities.Degree\ (¬∞)<tab>\&de                i&de<ESC>
+nmenu HTML.Character\ Entities.Micro/Greek\ mu\ (¬µ)<tab>\&mu       i&mu<ESC>
+nmenu HTML.Character\ Entities.Paragraph\ (¬∂)<tab>\&pa             i&pa<ESC>
+nmenu HTML.Character\ Entities.Middle\ Dot\ (¬∑)<tab>\&\.           i&.<ESC>
+nmenu HTML.Character\ Entities.One\ Quarter\ (¬º)<tab>\&14          i&14<ESC>
+nmenu HTML.Character\ Entities.One\ Half\ (¬Ω)<tab>\&12             i&12<ESC>
+nmenu HTML.Character\ Entities.Three\ Quarters\ (¬æ)<tab>\&34       i&34<ESC>
 nmenu HTML.Character\ Entities.En\ dash\ (-)<tab>\&n-              i&n-
 nmenu HTML.Character\ Entities.Em\ dash\ (--)<tab>\&m-/\&--        i&m-
 nmenu HTML.Character\ Entities.Ellipsis\ (\.\.\.)<tab>\&3\.        i&3.
-nmenu HTML.Character\ Entities.Graves.A-grave\ (¿)<tab>\&A` i&A`<ESC>
-nmenu HTML.Character\ Entities.Graves.a-grave\ (‡)<tab>\&a` i&a`<ESC>
-nmenu HTML.Character\ Entities.Graves.E-grave\ (»)<tab>\&E` i&E`<ESC>
-nmenu HTML.Character\ Entities.Graves.e-grave\ (Ë)<tab>\&e` i&e`<ESC>
-nmenu HTML.Character\ Entities.Graves.I-grave\ (Ã)<tab>\&I` i&I`<ESC>
-nmenu HTML.Character\ Entities.Graves.i-grave\ (Ï)<tab>\&i` i&i`<ESC>
-nmenu HTML.Character\ Entities.Graves.O-grave\ (“)<tab>\&O` i&O`<ESC>
-nmenu HTML.Character\ Entities.Graves.o-grave\ (Ú)<tab>\&o` i&o`<ESC>
-nmenu HTML.Character\ Entities.Graves.U-grave\ (Ÿ)<tab>\&U` i&U`<ESC>
-nmenu HTML.Character\ Entities.Graves.u-grave\ (˘)<tab>\&u` i&u`<ESC>
-nmenu HTML.Character\ Entities.Acutes.A-acute\ (¡)<tab>\&A' i&A'<ESC>
-nmenu HTML.Character\ Entities.Acutes.a-acute\ (·)<tab>\&a' i&a'<ESC>
-nmenu HTML.Character\ Entities.Acutes.E-acute\ (…)<tab>\&E' i&E'<ESC>
-nmenu HTML.Character\ Entities.Acutes.e-acute\ (È)<tab>\&e' i&e'<ESC>
-nmenu HTML.Character\ Entities.Acutes.I-acute\ (Õ)<tab>\&I' i&I'<ESC>
-nmenu HTML.Character\ Entities.Acutes.i-acute\ (Ì)<tab>\&i' i&i'<ESC>
-nmenu HTML.Character\ Entities.Acutes.O-acute\ (”)<tab>\&O' i&O'<ESC>
-nmenu HTML.Character\ Entities.Acutes.o-acute\ (Û)<tab>\&o' i&o'<ESC>
-nmenu HTML.Character\ Entities.Acutes.U-acute\ (⁄)<tab>\&U' i&U'<ESC>
-nmenu HTML.Character\ Entities.Acutes.u-acute\ (˙)<tab>\&u' i&u'<ESC>
-nmenu HTML.Character\ Entities.Acutes.Y-acute\ (›)<tab>\&Y' i&Y'<ESC>
-nmenu HTML.Character\ Entities.Acutes.y-acute\ (˝)<tab>\&y' i&y'<ESC>
-nmenu HTML.Character\ Entities.Tildes.A-tilde\ (√)<tab>\&A~ i&A~<ESC>
-nmenu HTML.Character\ Entities.Tildes.a-tilde\ („)<tab>\&a~ i&a~<ESC>
-nmenu HTML.Character\ Entities.Tildes.N-tilde\ (—)<tab>\&N~ i&N~<ESC>
-nmenu HTML.Character\ Entities.Tildes.n-tilde\ (Ò)<tab>\&n~ i&n~<ESC>
-nmenu HTML.Character\ Entities.Tildes.O-tilde\ (’)<tab>\&O~ i&O~<ESC>
-nmenu HTML.Character\ Entities.Tildes.o-tilde\ (ı)<tab>\&o~ i&o~<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.A-circumflex\ (¬)<tab>\&A^ i&A^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.a-circumflex\ (‚)<tab>\&a^ i&a^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.E-circumflex\ ( )<tab>\&E^ i&E^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.e-circumflex\ (Í)<tab>\&e^ i&e^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.I-circumflex\ (Œ)<tab>\&I^ i&I^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.i-circumflex\ (Ó)<tab>\&i^ i&i^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.O-circumflex\ (‘)<tab>\&O^ i&O^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.o-circumflex\ (Ù)<tab>\&o^ i&o^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.U-circumflex\ (€)<tab>\&U^ i&U^<ESC>
-nmenu HTML.Character\ Entities.Circumflexes.u-circumflex\ (˚)<tab>\&u^ i&u^<ESC>
-nmenu HTML.Character\ Entities.Umlauts.A-umlaut\ (ƒ)<tab>\&A" i&A"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.a-umlaut\ (‰)<tab>\&a" i&a"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.E-umlaut\ (À)<tab>\&E" i&E"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.e-umlaut\ (Î)<tab>\&e" i&e"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.I-umlaut\ (œ)<tab>\&I" i&I"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.i-umlaut\ (Ô)<tab>\&i" i&i"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.O-umlaut\ (÷)<tab>\&O" i&O"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.o-umlaut\ (ˆ)<tab>\&o" i&o"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.U-umlaut\ (‹)<tab>\&U" i&U"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.u-umlaut\ (¸)<tab>\&u" i&u"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.y-umlaut\ (ˇ)<tab>\&y" i&y"<ESC>
-nmenu HTML.Character\ Entities.Umlauts.Umlaut\ (®)<tab>\&"    i&"<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..A-ring\ (≈)<tab>\&Ao      i&Ao<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..a-ring\ (Â)<tab>\&ao      i&ao<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..AE-ligature\ (∆)<tab>\&AE i&AE<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..ae-ligature\ (Ê)<tab>\&ae i&ae<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..C-cedilla\ («)<tab>\&C,   i&C,<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..c-cedilla\ (Á)<tab>\&c,   i&c,<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..O-slash\ (ÿ)<tab>\&O/     i&O/<ESC>
-nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..o-slash\ (¯)<tab>\&o/     i&o/<ESC>
+nmenu HTML.Character\ Entities.Graves.A-grave\ (√Ä)<tab>\&A` i&A`<ESC>
+nmenu HTML.Character\ Entities.Graves.a-grave\ (√†)<tab>\&a` i&a`<ESC>
+nmenu HTML.Character\ Entities.Graves.E-grave\ (√à)<tab>\&E` i&E`<ESC>
+nmenu HTML.Character\ Entities.Graves.e-grave\ (√®)<tab>\&e` i&e`<ESC>
+nmenu HTML.Character\ Entities.Graves.I-grave\ (√å)<tab>\&I` i&I`<ESC>
+nmenu HTML.Character\ Entities.Graves.i-grave\ (√¨)<tab>\&i` i&i`<ESC>
+nmenu HTML.Character\ Entities.Graves.O-grave\ (√í)<tab>\&O` i&O`<ESC>
+nmenu HTML.Character\ Entities.Graves.o-grave\ (√≤)<tab>\&o` i&o`<ESC>
+nmenu HTML.Character\ Entities.Graves.U-grave\ (√ô)<tab>\&U` i&U`<ESC>
+nmenu HTML.Character\ Entities.Graves.u-grave\ (√π)<tab>\&u` i&u`<ESC>
+nmenu HTML.Character\ Entities.Acutes.A-acute\ (√Å)<tab>\&A' i&A'<ESC>
+nmenu HTML.Character\ Entities.Acutes.a-acute\ (√°)<tab>\&a' i&a'<ESC>
+nmenu HTML.Character\ Entities.Acutes.E-acute\ (√â)<tab>\&E' i&E'<ESC>
+nmenu HTML.Character\ Entities.Acutes.e-acute\ (√©)<tab>\&e' i&e'<ESC>
+nmenu HTML.Character\ Entities.Acutes.I-acute\ (√ç)<tab>\&I' i&I'<ESC>
+nmenu HTML.Character\ Entities.Acutes.i-acute\ (√≠)<tab>\&i' i&i'<ESC>
+nmenu HTML.Character\ Entities.Acutes.O-acute\ (√ì)<tab>\&O' i&O'<ESC>
+nmenu HTML.Character\ Entities.Acutes.o-acute\ (√≥)<tab>\&o' i&o'<ESC>
+nmenu HTML.Character\ Entities.Acutes.U-acute\ (√ö)<tab>\&U' i&U'<ESC>
+nmenu HTML.Character\ Entities.Acutes.u-acute\ (√∫)<tab>\&u' i&u'<ESC>
+nmenu HTML.Character\ Entities.Acutes.Y-acute\ (√ù)<tab>\&Y' i&Y'<ESC>
+nmenu HTML.Character\ Entities.Acutes.y-acute\ (√Ω)<tab>\&y' i&y'<ESC>
+nmenu HTML.Character\ Entities.Tildes.A-tilde\ (√É)<tab>\&A~ i&A~<ESC>
+nmenu HTML.Character\ Entities.Tildes.a-tilde\ (√£)<tab>\&a~ i&a~<ESC>
+nmenu HTML.Character\ Entities.Tildes.N-tilde\ (√ë)<tab>\&N~ i&N~<ESC>
+nmenu HTML.Character\ Entities.Tildes.n-tilde\ (√±)<tab>\&n~ i&n~<ESC>
+nmenu HTML.Character\ Entities.Tildes.O-tilde\ (√ï)<tab>\&O~ i&O~<ESC>
+nmenu HTML.Character\ Entities.Tildes.o-tilde\ (√µ)<tab>\&o~ i&o~<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.A-circumflex\ (√Ç)<tab>\&A^ i&A^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.a-circumflex\ (√¢)<tab>\&a^ i&a^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.E-circumflex\ (√ä)<tab>\&E^ i&E^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.e-circumflex\ (√™)<tab>\&e^ i&e^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.I-circumflex\ (√é)<tab>\&I^ i&I^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.i-circumflex\ (√Æ)<tab>\&i^ i&i^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.O-circumflex\ (√î)<tab>\&O^ i&O^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.o-circumflex\ (√¥)<tab>\&o^ i&o^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.U-circumflex\ (√õ)<tab>\&U^ i&U^<ESC>
+nmenu HTML.Character\ Entities.Circumflexes.u-circumflex\ (√ª)<tab>\&u^ i&u^<ESC>
+nmenu HTML.Character\ Entities.Umlauts.A-umlaut\ (√Ñ)<tab>\&A" i&A"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.a-umlaut\ (√§)<tab>\&a" i&a"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.E-umlaut\ (√ã)<tab>\&E" i&E"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.e-umlaut\ (√´)<tab>\&e" i&e"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.I-umlaut\ (√è)<tab>\&I" i&I"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.i-umlaut\ (√Ø)<tab>\&i" i&i"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.O-umlaut\ (√ñ)<tab>\&O" i&O"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.o-umlaut\ (√∂)<tab>\&o" i&o"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.U-umlaut\ (√ú)<tab>\&U" i&U"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.u-umlaut\ (√º)<tab>\&u" i&u"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.y-umlaut\ (√ø)<tab>\&y" i&y"<ESC>
+nmenu HTML.Character\ Entities.Umlauts.Umlaut\ (¬®)<tab>\&"    i&"<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..A-ring\ (√Ö)<tab>\&Ao      i&Ao<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..a-ring\ (√•)<tab>\&ao      i&ao<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..AE-ligature\ (√Ü)<tab>\&AE i&AE<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..ae-ligature\ (√¶)<tab>\&ae i&ae<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..C-cedilla\ (√á)<tab>\&C,   i&C,<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..c-cedilla\ (√ß)<tab>\&c,   i&c,<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..O-slash\ (√ò)<tab>\&O/     i&O/<ESC>
+nmenu HTML.Character\ Entities.\ \ \ \ \ \ \ etc\.\.\..o-slash\ (√∏)<tab>\&o/     i&o/<ESC>
 
 let &encoding=b:save_encoding
 unlet b:save_encoding
