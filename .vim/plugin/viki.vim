@@ -2,8 +2,8 @@
 " @Author:      Thomas Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     08-Dec-2003.
-" @Last Change: 2007-12-23.
-" @Revision: 3.4.2536
+" @Last Change: 2008-01-14.
+" @Revision: 3.6.2542
 "
 " GetLatestVimScripts: 861 1 viki.vim
 "
@@ -38,7 +38,7 @@ if !exists('loaded_tlib') || loaded_tlib < 15
     echoerr 'tlib >= 0.15 is required'
     finish
 endif
-let loaded_viki = 304
+let loaded_viki = 306
 
 " This is what we consider nil, in the absence of nil in vimscript
 let g:vikiDefNil  = ''
@@ -297,6 +297,12 @@ if v:version >= 700 && !exists("g:vikiHyperWordsFiles") "{{{2
                 \ get(split(&rtp, ','), 0).'/vikiWords.txt',
                 \ './.vikiWords',
                 \ ]
+endif
+
+" Definition of intervikis. (This variable won't be evaluated until 
+" autoload/viki.vim is loaded).
+if !exists('g:viki_intervikis')
+    let g:viki_intervikis = {}   "{{{2
 endif
 
 " Define which keys to map
@@ -967,6 +973,14 @@ b:vikiCmdAnchorIdx.
 it can be included from other syntax files.
 - Cascade menu of intervikis
 - FIX: don't register viki names as known/unknown more than once
+
+3.5
+- Don't try to append an empty anchor to an url (Thanks RM Schmid).
+- New variable g:viki_intervikis to define intervikis in ~/.vimrc.
+- Minor updates to the help file.
+
+3.6
+- Forgot to define a default value for g:viki_intervikis.
 
 
 " vim: ff=unix
