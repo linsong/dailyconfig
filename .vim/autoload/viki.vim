@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-03-25.
-" @Last Change: 2007-12-23.
-" @Revision:    0.447
+" @Last Change: 2008-01-10.
+" @Revision:    0.457
 
 if &cp || exists("loaded_viki_auto") "{{{2
     finish
@@ -81,6 +81,15 @@ function! viki#Define(name, prefix, ...) "{{{3
     endif
 endf
 
+for [s:iname, s:idef] in items(g:viki_intervikis)
+    " viki#Define(name, prefix, ?suffix="*", ?index="Index.${suffix}")
+    if type(s:idef) == 1
+        call call('viki#Define', [s:iname, s:idef])
+    else
+        call call('viki#Define', [s:iname] + s:idef)
+    endif
+    unlet! s:iname s:idef
+endfor
 
 function! s:AddToRegexp(regexp, pattern) "{{{3
     if a:pattern == ''
@@ -1300,7 +1309,17 @@ function! s:OpenLink(dest, anchor, winNr)
 endf
 
 function! viki#MakeUrl(dest, anchor) "{{{3
-    return join([a:dest, a:anchor], '#')
+    if a:anchor == ""
+        return a:dest
+    else
+        " if a:dest[-1:-1] != '/'
+        "     let dest = a:dest .'/'
+        " else
+        "     let dest = a:dest
+        " endif
+        " return join([dest, a:anchor], '#')
+        return join([a:dest, a:anchor], '#')
+    endif 
 endf
 
 " Guess the interviki name from a viki name definition
