@@ -1,7 +1,7 @@
 " vim global plugin that provides easy code commenting for various file types
-" Last Change:  26 oct 2007
+" Last Change:  18 jan 2008
 " Maintainer:   Martin Grenfell <martin_grenfell at msn.com>
-let s:NERD_commenter_version = 2.1.7
+let s:NERD_commenter_version = 2.1.9
 
 " For help documentation type :help NERDCommenter. If this fails, Restart vim
 " and try again. If it sill doesnt work... the help page is at the bottom 
@@ -54,7 +54,7 @@ call s:InitVariable("g:NERDAllowAnyVisualDelims", 1)
 call s:InitVariable("g:NERDBlockComIgnoreEmpty", 0)
 call s:InitVariable("g:NERDCommentWholeLinesInVMode", 0)
 call s:InitVariable("g:NERDCompactSexyComs", 0)
-call s:InitVariable("g:NERDDefaultNesting", 0)
+call s:InitVariable("g:NERDDefaultNesting", 1)
 call s:InitVariable("g:NERDMenuMode", 3)
 call s:InitVariable("g:NERDLPlace", "[>")
 call s:InitVariable("g:NERDUsePlaceHolders", 1)
@@ -132,6 +132,8 @@ function s:SetUpForNewFiletype(filetype, forceReset)
     "hardcoded the comment delimiters to use 
     if a:filetype == "" 
         call s:MapDelimiters('', '')
+    elseif a:filetype == "aap" 
+        call s:MapDelimiters('#', '')
     elseif a:filetype == "abaqus" 
         call s:MapDelimiters('**', '')
     elseif a:filetype == "abc" 
@@ -166,6 +168,8 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         call s:MapDelimiters('''', '')
     elseif a:filetype == "asterisk" 
         call s:MapDelimiters(';', '')
+    elseif a:filetype == "asy" 
+        call s:MapDelimiters('//', '')
     elseif a:filetype == "atlas" 
         call s:MapDelimiters('C','$') 
     elseif a:filetype == "autohotkey" 
@@ -246,6 +250,8 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         call s:MapDelimiters('','')
     elseif a:filetype == "cvs" 
         call s:MapDelimiters('CVS:','')
+    elseif a:filetype == "CVSAnnotate" 
+        call s:MapDelimiters('','')
     elseif a:filetype == "d" 
         call s:MapDelimitersWithAlternative('//','', '/*','*/')
     elseif a:filetype == "dcl" 
@@ -416,6 +422,8 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         call s:MapDelimiters('/*','*/')
     elseif a:filetype == "lftp" 
         call s:MapDelimiters('#', '')
+    elseif a:filetype == "lhaskell" 
+        call s:MapDelimiters('','')
     elseif a:filetype == "lifelines" 
         call s:MapDelimiters('/*','*/')
     elseif a:filetype == "lilo" 
@@ -478,6 +486,8 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         call s:MapDelimiters('(*','*)') 
     elseif a:filetype == "monk" 
         call s:MapDelimiters(';', '')
+    elseif a:filetype == "mrxvtrc" 
+        call s:MapDelimiters('#', '')
     elseif a:filetype == "mush" 
         call s:MapDelimiters('#', '')
     elseif a:filetype == "muttrc" 
@@ -553,7 +563,7 @@ function s:SetUpForNewFiletype(filetype, forceReset)
     elseif a:filetype == "plm" 
         call s:MapDelimitersWithAlternative('//','', '/*','*/')
     elseif a:filetype == "plsql" 
-        call s:MapDelimiters('--', '')
+        call s:MapDelimitersWithAlternative('--', '', '/*', '*/')
     elseif a:filetype == "po" 
         call s:MapDelimiters('#', '')
     elseif a:filetype == "postscr" 
@@ -620,6 +630,8 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         call s:MapDelimitersWithAlternative('//','', '/*', '')
     elseif a:filetype == "sather" 
         call s:MapDelimiters('--', '')
+    elseif a:filetype == "scala" 
+        call s:MapDelimitersWithAlternative('//','', '/*','*/')
     elseif a:filetype == "scheme" 
         call s:MapDelimiters(';', '')
     elseif a:filetype == "scilab" 
@@ -676,6 +688,8 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         call s:MapDelimiters('#', '')
     elseif a:filetype == "specman" 
         call s:MapDelimiters('//', '')
+    elseif a:filetype == "spectre" 
+        call s:MapDelimitersWithAlternative('//', '', '*', '')
     elseif a:filetype == "spice" 
         call s:MapDelimiters('$', '')
     elseif a:filetype == "sql" 
@@ -694,7 +708,11 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         call s:MapDelimiters('--', '')
     elseif a:filetype == "strace" 
         call s:MapDelimiters('/*','*/')
+    elseif a:filetype == "SVKAnnotate" 
+        call s:MapDelimiters('','')
     elseif a:filetype == "svn" 
+        call s:MapDelimiters('','')
+    elseif a:filetype == "SVNAnnotate" 
         call s:MapDelimiters('','')
     elseif a:filetype == "SVNcommitlog" 
         call s:MapDelimiters('','')
@@ -1102,12 +1120,12 @@ function s:CommentLines(forceNested, alignLeft, alignRight, firstLine, lastLine)
             " check if we can comment this line 
             if !isCommented || g:NERDUsePlaceHolders || s:Multipart()
                 if a:alignLeft
-                    let theLine = s:AddLeftDelimAligned(b:left, theLine, leftAlignIndx)
+                    let theLine = s:AddLeftDelimAligned(s:GetLeft(0,1,0), theLine, leftAlignIndx)
                 else
                     let theLine = s:AddLeftDelim(s:GetLeft(0,1,0), theLine)
                 endif
                 if a:alignRight
-                    let theLine = s:AddRightDelimAligned(b:right, theLine, rightAlignIndx)
+                    let theLine = s:AddRightDelimAligned(s:GetRight(0,1,0), theLine, rightAlignIndx)
                 else
                     let theLine = s:AddRightDelim(s:GetRight(0,1,0), theLine)
                 endif
@@ -1834,15 +1852,15 @@ function s:UncommentLineNormal(line)
     let line = a:line
 
     "get the comment status on the line so we know how it is commented 
-    let lineCommentStatus =  s:IsCommentedOuttermost(b:leftAlt, b:rightAlt, b:left, b:right, line) 
+    let lineCommentStatus =  s:IsCommentedOuttermost(b:left, b:right, b:leftAlt, b:rightAlt, line) 
 
     "it is commented with b:left and b:right so remove these delims
     if lineCommentStatus == 1 
-        let line = s:RemoveDelimiters(b:leftAlt, b:rightAlt, line)
+        let line = s:RemoveDelimiters(b:left, b:right, line)
 
     "it is commented with b:leftAlt and b:rightAlt so remove these delims
     elseif lineCommentStatus == 2 && g:NERDRemoveAltComs
-        let line = s:RemoveDelimiters(b:left, b:right, line)
+        let line = s:RemoveDelimiters(b:leftAlt, b:rightAlt, line)
 
     "it is not properly commented with any delims so we check if it has
     "any random left or right delims on it and remove the outtermost ones 

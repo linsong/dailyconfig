@@ -744,7 +744,7 @@ If this option is set to 1 then the top style will be used.
 ------------------------------------------------------------------------------
                                                           *NERDDefaultNesting*
 Values: 0 or 1.
-Default 0.
+Default 1.
 
 When this option is set to 1, comments are nested automatically. That is, if
 you hit ,cc on a line that is already commented it will be commented
@@ -859,6 +859,24 @@ to get illegal syntax when uncommenting them.
 
 ==============================================================================
 8. Changelog                                                *NERDComChangelog*
+
+2.1.9
+    - added support for mrxvtrc and aap, thx to Marco for the emails
+    - added dummy support for SVNAnnotate, SVKAnnotate and CVSAnnotate, thx to
+      nicothakis for posting the issue
+
+2.1.8
+    - fixed a couple of bugs with the NERDSpaceDelims option, thx to 
+      David Miani and Jeremy Hinegardner
+    - added dummy support for lhaskell, thx to pipp for posting the issue
+    - added an alternative set of delims for the plsql filetype, thx to Kuchma
+      Michael
+    - added support for spectre, thx to Brett Warneke
+    - added support for scala, thx to Renald Buter
+    - added support for asymptote, thx to Vladimir Lomov
+    - made NERDDefaultNesting enabled by default as this seems more intuitive,
+      thx to marco for the suggestion
+    
 
 2.1.7
     - added support for haml, thx to Greb Weber
@@ -1123,6 +1141,14 @@ Cheers to Cheng Fang for the bug reports :D
 
 Cheers to Yongwei Wu for a bug report about the passwd filetype.
 
+Thanks to David Miani for reporting a space-removal bug when using the
+NERDSpaceDelims option.
+
+Thanks to Jeremy Hinegardner for emailing me about a bug with aligned
+comments and the NERDSpaceDelims option.
+
+Thanks to marco for suggesting NERDDefaultNesting be set by default.
+
 Not to forget! Thanks to the following people for sending me new filetypes to
 support :D
 
@@ -1165,3 +1191,10 @@ Bruce Sherrod                       velocity
 timberke                            cobol
 Aaron Schaefer                      factor 
 Laurent ARNOUD                      asterisk
+Kuchma Michael                      plsql
+Brett Warneke                       spectre
+Pipp                                lhaskell
+Renald Buter                        scala
+Vladimir Lomov                      asymptote
+Marco                               mrxvtrc, aap
+nicothakis                          SVNAnnotate, CVSAnnotate, SVKAnnotate
