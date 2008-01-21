@@ -108,7 +108,7 @@ channels = (
   { name = "#livebet"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
   { name = "#dev"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
   { name = "#exoweb"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
-  { name = "#production"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
+  { name = "#delta"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
   { name = "#postgresql"; chatnet = "IRCnet"; autojoin = "yes"; }
 );
 
@@ -384,7 +384,7 @@ windows = {
       {
         type = "CHANNEL";
         chat_type = "IRC";
-        name = "#production";
+        name = "#delta";
         tag = "WorkIRCnet";
       }
     );
