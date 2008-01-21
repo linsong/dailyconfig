@@ -54,7 +54,7 @@ if exists('loaded_breakpts')
   finish
 endif
 if v:version < 701
-  echomsg 'breakpts: You need at least Vim 7.1'
+  "echomsg 'breakpts: You need at least Vim 7.1'
   finish
 endif
 if !exists('loaded_genutils')
