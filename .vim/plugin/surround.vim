@@ -1,7 +1,7 @@
 " surround.vim - Surroundings
 " Author:       Tim Pope <vimNOSPAM@tpope.info>
 " GetLatestVimScripts: 1697 1 :AutoInstall: surround.vim
-" $Id: surround.vim,v 1.29 2008-01-25 18:31:07 tpope Exp $
+" $Id: surround.vim,v 1.32 2008-01-29 15:46:22 tpope Exp $
 "
 " See surround.txt for help.  This can be accessed by doing
 "
@@ -13,7 +13,7 @@
 " ============================================================================
 
 " Exit quickly when:
-" - this plugin was already loaded (or disabled)
+" - this plugin was already loaded or disabled
 " - when 'compatible' is set
 if (exists("g:loaded_surround") && g:loaded_surround) || &cp
     finish
@@ -442,7 +442,7 @@ function! s:dosurround(...) " {{{1
         " Do nothing
         call setreg('"','')
     elseif char =~ "[\"'`]"
-        exe "norm! i \<Esc>d2i".char
+        exe "norm! a \<Esc>d2i".char
         call setreg('"',substitute(getreg('"'),' ','',''))
     elseif char == '/'
         norm! "_x
@@ -486,9 +486,9 @@ function! s:dosurround(...) " {{{1
     let s:lastdel = removed
     let &clipboard = cb_save
     if newchar == ""
-        silent! call dot#set("\<Plug>Dsurround".char,scount)
+        silent! call repeat#set("\<Plug>Dsurround".char,scount)
     else
-        silent! call dot#set("\<Plug>Csurround".char.newchar,scount)
+        silent! call repeat#set("\<Plug>Csurround".char.newchar,scount)
     endif
 endfunction " }}}1
 
@@ -556,7 +556,7 @@ function! s:opfunc(type,...) " {{{1
     let &selection = sel_save
     let &clipboard = cb_save
     if a:type =~ '^\d\+$'
-        silent! call dot#set("\<Plug>Y".(a:0 ? "S" : "s")."surround".char,a:type)
+        silent! call repeat#set("\<Plug>Y".(a:0 ? "S" : "s")."surround".char,a:type)
     endif
 endfunction
 
