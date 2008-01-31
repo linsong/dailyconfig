@@ -1,6 +1,6 @@
 *SrchRplcHiGrp.txt* Search and Replace Restricted to a Highlighting Group
 
-Author: David Fishburn					April 11, 2006
+Author: David Fishburn					January 22, 2008
 
 
 ==============================================================================

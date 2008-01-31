@@ -1,8 +1,8 @@
 " SrchRplcHiGrp.vim  - Search and Replace based on a highlight group
 "
-" Version:	    2.0
+" Version:	    4.0
 " Author:	    David Fishburn <fishburn@ianywhere.com>
-" Last Changed: Tue Apr 11 2006 10:33:09 PM
+" Last Changed: Mon 21 Jan 2008 06:17:14 PM Eastern Standard Time
 " Created:	    Tue Dec 02 2003 10:11:07 PM
 " Description:  Search and Replace based on a syntax highlight group
 " Script:	    http://www.vim.org/script.php?script_id=848
@@ -113,7 +113,7 @@ endfunction  "}}}
 " SRPositionWord:
 " Places the cursor on the next match following the 
 " previous line and column passed in.
-function! <SID>SRPositionWord( prvline, prvcol)  "{{{  
+function! <SID>SRPositionWord(prvline, prvcol, bfirsttime)  "{{{  
     let prvline = a:prvline
     let prvcol  = a:prvcol
 
@@ -121,15 +121,15 @@ function! <SID>SRPositionWord( prvline, prvcol)  "{{{
     " echo 'Visual Mode:'. visualmode()
 
     if (prvline == 0) && (prvcol == 0)
-        call s:SRSetVisualRange(prvline, prvcol)
-        " let leftcol  = col("'<") - 1
+        call s:SRSetVisualRange()
+        let leftcol  = col("'<") - 1
         " exe 'norm! '.s:srhg_firstline."G\<bar>".leftcol.(leftcol>0 ? 'l' : '' )
         call cursor(s:srhg_firstline,leftcol)
         return 1
     endif
 
     while 1==1
-        if visualmode() == 'v'
+        if visualmode() ==# 'v'
             if line(".") == s:srhg_firstline
                 " let leftcol  = col("'<") - 1
                 let leftcol  = col("'<")
@@ -141,14 +141,13 @@ function! <SID>SRPositionWord( prvline, prvcol)  "{{{
             else
                 let rightcol  = col("$")
             endif
-        elseif visualmode() == 'V'
-            " let leftcol  = 0
+        elseif visualmode() ==# 'V'
             let leftcol  = 1
             let rightcol = col("$")
-        elseif visualmode() == "\<C-V>"
-            " let leftcol  = col("'<") - 1
+        elseif visualmode() ==# "\<C-V>"
+            let leftcol  = col("'<") - 1
             let leftcol  = col("'<")
-            let rightcol = col("'>")
+            let rightcol  = col("'>")
         endif
 
         " echo 'PrvLine:'.prvline.' prvcol:'.prvcol.
@@ -157,7 +156,10 @@ function! <SID>SRPositionWord( prvline, prvcol)  "{{{
 
         " Position cursor on leftcol
         " on each new line based on visual mode
-        if col(".") < leftcol
+        if col(".") == leftcol && a:bfirsttime == 1
+            " The cursor is already at it starting position,
+            " do not move the cursor
+        elseif col(".") < leftcol
             " exe 'norm! '.line(".")."G\<bar>".leftcol.(leftcol>0 ? 'l' : '' )
             call cursor(line("."),leftcol)
         else
@@ -166,7 +168,7 @@ function! <SID>SRPositionWord( prvline, prvcol)  "{{{
 
         " Add additional check to see if the cursor has
         " moved after the above, if not, exit.
-        if (col(".") == prvcol) && (line(".") == prvline)
+        if (col(".") == prvcol) && (line(".") == prvline && a:bfirsttime != 1)
             return -1
         endif
 
@@ -213,6 +215,9 @@ function! <SID>SRHiGrp(...) range   "{{{
     endif
 
     let group_name = synIDattr(s:srhg_group_id, 'name')
+    if group_name == ''
+        let group_name = synIDattr(-s:srhg_group_id, 'name')
+    endif
 
     if(a:0 > 0) 
         if( a:1 == 0 || a:1 == 1)
@@ -268,21 +273,32 @@ function! <SID>SRHiGrp(...) range   "{{{
     endif
 
     " let higrpid    = synIDtrans(hlID(s:srhg_group_id))
-    let lastline       = line("$")
     let found          = 0
-    let curcol         = 0
+    let firsttime      = 1
+    let lastline       = line("$")
+    let orgline        = line(".")
+    let orgcol         = col(".")
     let curline        = line(".")
+    let curcol         = col(".")
     let fenkeep        = &fen
     let saveSearch     = @/
     let saveFoldEnable = &foldenable
-    set nofoldenable
+    setlocal nofoldenable
 
-    if s:SRPositionWord( curline, curcol ) == -1
+    " Reset visual range if necessary
+    call s:SRSetVisualRange()
+
+    " Restore the cursor position since resetting
+    " the visual area could have moved the cursor
+    call cursor(orgline, orgcol)
+
+    if s:SRPositionWord(orgline,(orgcol-1), firsttime) == -1
         call s:SRWarningMsg( 
                     \ 'Please reselect the visual area (ie gv)'
                     \ )
         return
     endif
+    let firsttime = 0
 
 	let gid = s:srhg_group_id
 	if(gid < 0)
@@ -315,15 +331,13 @@ function! <SID>SRHiGrp(...) range   "{{{
                 exec 's/\%#'.match_exp.'/'.replace_exp.'/e'
                 " Since this command can move the cursor, put the cursor
                 " back to its original position
-                " exe 'norm! '.curline."G\<bar>".(curcol-1)."l"
-                call cursor(curline,curcol)
-                let found = 1
+                exe 'norm! '.curline."G\<bar>".(curcol-1)."l"
             endif
         endif
 
         let prvcol  = curcol
         let prvline = curline
-        if s:SRPositionWord(prvline, prvcol) == -1
+        if s:SRPositionWord(prvline, prvcol, firsttime) == -1
             break
         endif
 
@@ -347,6 +361,8 @@ function! <SID>SRHiGrp(...) range   "{{{
         unlet prvcol
     endif
 endfunction  "}}}  
+
+"}}}  
 
 " SRSearch:
 " Finds the next occurrence of the highlight group within
@@ -376,8 +392,8 @@ function! <SID>SRSearch(fline, lline, ...) "{{{
     endif
 
     " let higrpid    = synIDtrans(hlID(s:srhg_group_id))
-    let lastline       = line("$")
     let found          = 0
+    let lastline       = line("$")
     let orgline        = line(".")
     let orgcol         = col(".")
     let curline        = line(".")
@@ -385,7 +401,11 @@ function! <SID>SRSearch(fline, lline, ...) "{{{
     let fenkeep        = &fen
     let saveSearch     = @/
     let saveFoldEnable = &foldenable
-    set nofoldenable
+    setlocal nofoldenable
+    " Set this to false, to force the search to move the cursor
+    " this prevents the user from having to manually move the
+    " cursor between recursive calls.
+    let firsttime      = 0
 
     " Reset visual range if necessary
     call s:SRSetVisualRange()
@@ -394,7 +414,7 @@ function! <SID>SRSearch(fline, lline, ...) "{{{
     " the visual area could have moved the cursor
     call cursor(orgline, orgcol)
 
-    if s:SRPositionWord(orgline,orgcol) == -1
+    if s:SRPositionWord(orgline,orgcol,firsttime) == -1
         call s:SRWarningMsg( 
                     \ 'Please reselect the visual area (ie gv)'
                     \ )
@@ -428,7 +448,7 @@ function! <SID>SRSearch(fline, lline, ...) "{{{
 
         let prvcol  = curcol
         let prvline = curline
-        if s:SRPositionWord(prvline, prvcol) == -1
+        if s:SRPositionWord(prvline, prvcol, firsttime) == -1
             break
         endif
 
