@@ -991,6 +991,7 @@ endif " has("autocmd")
     " those are mapped to completion normally
     let g:yankring_replace_n_pkey = ''
     let g:yankring_replace_n_nkey = ''
+    let g:yankring_map_dot = 0
     nmap <leader>v :YRGetElem <CR>                                              
     imap <F4> <C-o>:YRGetElem <CR>
     "### }}}2
