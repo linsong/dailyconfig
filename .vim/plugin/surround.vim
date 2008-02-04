@@ -1,7 +1,7 @@
 " surround.vim - Surroundings
 " Author:       Tim Pope <vimNOSPAM@tpope.info>
 " GetLatestVimScripts: 1697 1 :AutoInstall: surround.vim
-" $Id: surround.vim,v 1.32 2008-01-29 15:46:22 tpope Exp $
+" $Id: surround.vim,v 1.33 2008-02-04 03:50:46 tpope Exp $
 "
 " See surround.txt for help.  This can be accessed by doing
 "
@@ -425,7 +425,9 @@ function! s:dosurround(...) " {{{1
     else
         exe 'norm d'.strcount.'i'.char
         " One character backwards
-        call search('.','bW')
+        if getreg('"') != ""
+            call search('.','bW')
+        endif
     endif
     let keeper = getreg('"')
     let okeeper = keeper " for reindent below
