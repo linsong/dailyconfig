@@ -4,7 +4,7 @@
 source ~/.mutt/defaults.global
 
 # This is the index format for non-list folders.
-set index_format="%4C %Z %{%b %d} %-15.15n %?M?(#%03M)&(%4l)? %s"
+set index_format="%2N %4C %Z %{%b %d} %-15.15n %?M?(#%03M)&(%4l)? %s"
 
 # By default use the default value for abort_nosubject
 reset abort_nosubject

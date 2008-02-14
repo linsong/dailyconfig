@@ -3,8 +3,6 @@
 # Use the global defaults first.
 source ~/.mutt/defaults.global
 
-set index_format="%4C %Z %{%b %d} %-15.15n %?M?(#%03M)&(%4l)? %s"
-
 # Reset any headers that may have been set in other folder-hooks
 unmy_hdr From:
 unmy_hdr Reply-To:

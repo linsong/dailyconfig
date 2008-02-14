@@ -29,4 +29,5 @@ my_hdr From: Vincent Wang <linsong.qizi@gmail.com>
 # my_hdr X-URL: http://www.davep.org/
 
 set sort=threads
-set sort_aux=date-received                # Sort threads by date received.
+set sort_aux=reverse-last-date-received
+#set sort_aux=score
