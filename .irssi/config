@@ -105,7 +105,7 @@ chatnets = {
 channels = (
   { name = "#irssi"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
-  { name = "#livebet"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
+  { name = "#ANT"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
   { name = "#dev"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
   { name = "#exoweb"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
   { name = "#delta"; chatnet = "WorkIRCnet"; autojoin = "yes"; },
@@ -337,14 +337,14 @@ keyboard = (
   { key = "window-^K"; id = "command"; data = "WINDOW UP"; },
   { key = "window-^J"; id = "command"; data = "WINDOW DOWN"; },
   { key = "^X"; id = "active_window"; data = ""; },
-  { key = "meta-d"; id = "change_window"; data = "2"; },
-  { key = "meta-l"; id = "change_window"; data = "3"; },
-  { key = "meta-b"; id = "change_window"; data = "5"; },
-  { key = "meta-e"; id = "change_window"; data = "4"; },
-  { key = "meta-i"; id = "change_window"; data = "7"; },
-  { key = "meta-h"; id = "change_window"; data = "6"; },
-  { key = "meta-s"; id = "change_window"; data = "1"; },
-  { key = "meta-p"; id = "change_window"; data = "8"; }
+  { key = "meta-d"; id = "change_window"; data = "5"; },
+  { key = "meta-a"; id = "change_window"; data = "3"; },
+  { key = "meta-b"; id = "change_window"; data = "7"; },
+  { key = "meta-e"; id = "change_window"; data = "6"; },
+  { key = "meta-i"; id = "change_window"; data = "8"; },
+  { key = "meta-h"; id = "change_window"; data = "1"; },
+  { key = "meta-s"; id = "change_window"; data = "2"; },
+  { key = "meta-p"; id = "change_window"; data = "9"; }
 );
 hilights = (
   {
@@ -379,7 +379,25 @@ completions = {
   bns = { value = "before next scrum:"; };
 };
 windows = {
-  8 = {
+  1 = { name = "hilight"; sticky = "yes"; };
+  2 = { 
+    immortal = "yes";
+    name = "(status)";
+    level = "ALL";
+    sticky = "yes";
+  };
+  3 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#ANT";
+        tag = "WorkIRCnet";
+      }
+    );
+    sticky = "yes";
+  };
+  4 = {
     items = (
       {
         type = "CHANNEL";
@@ -389,15 +407,9 @@ windows = {
       }
     );
     sticky = "yes";
+    parent = "3";
   };
-  6 = { name = "hilight"; sticky = "yes"; };
-  1 = { 
-    immortal = "yes";
-    name = "(status)";
-    level = "ALL";
-    sticky = "yes";
-  };
-  2 = {
+  5 = {
     items = (
       {
         type = "CHANNEL";
@@ -407,43 +419,9 @@ windows = {
       }
     );
     sticky = "yes";
-    parent = "1";
+    parent = "2";
   };
-  3 = {
-    items = (
-      {
-        type = "CHANNEL";
-        chat_type = "IRC";
-        name = "#livebet";
-        tag = "WorkIRCnet";
-      }
-    );
-  };
-  7 = {
-    items = (
-      {
-        type = "CHANNEL";
-        chat_type = "IRC";
-        name = "#irssi";
-        tag = "IRCnet";
-      }
-    );
-    sticky = "yes";
-    parent = "1";
-  };
-  5 = {
-    items = (
-      {
-        type = "CHANNEL";
-        chat_type = "IRC";
-        name = "&bitlbee";
-        tag = "BitlBeeIRCnet";
-      }
-    );
-    sticky = "yes";
-    parent = "8";
-  };
-  4 = {
+  6 = {
     items = (
       {
         type = "CHANNEL";
@@ -453,11 +431,47 @@ windows = {
       }
     );
     sticky = "yes";
-    parent = "8";
+    parent = "2";
+  };
+  7 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "&bitlbee";
+        tag = "BitlBeeIRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "2";
+  };
+  8 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#irssi";
+        tag = "IRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "2";
+  };
+  9 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#postgresql";
+        tag = "IRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "2";
   };
 };
 mainwindows = {
-  8 = { first_line = "27"; lines = "26"; };
-  1 = { first_line = "8"; lines = "19"; };
-  6 = { first_line = "1"; lines = "7"; };
+  3 = { first_line = "27"; lines = "21"; };
+  2 = { first_line = "8"; lines = "24"; };
+  1 = { first_line = "1"; lines = "7"; };
 };
