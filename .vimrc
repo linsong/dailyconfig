@@ -1145,9 +1145,10 @@ endif " has("autocmd")
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
-    :noremap ,fc :FuzzyFinderMruCmd<CR>
     :noremap ,fv :FuzzyFinderFavFile<CR>
     :noremap ,fd :FuzzyFinderDir<CR>
+    :noremap ,ft :FuzzyFinderTaggedFile<CR>
+    :noremap ,fg :FuzzyFinderTag<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2
