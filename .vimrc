@@ -1123,25 +1123,39 @@ endif " has("autocmd")
     "}}}2
     
     "### setting for fuzzyfinder.vim {{{2
-    let g:FuzzyFinder_KeySwitchMode = ['<C-t>', '<C-S-t>']
-    let g:FuzzyFinder_KeySwitchIgnoreCase = '<C-i>'
-    let g:FuzzyFinder_FileModeVars = 
-                \ { 'excludedPath' : '^\.$\|\.bak$\|\~$\|\.swp$\|\.pyc$\|\.exe$',
-                \   'abbrevMap' : 
+    let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{}, 'MruFile':{}, 'FavFile':{}, 'Dir':{}, 'Tag':{}, 'TaggedFile':{}}
+    " [All Mode] This is mapped to switch to the next mode.
+    let g:FuzzyFinderOptions.Base.key_next_mode = '<C-t>'
+    " [All Mode] This is mapped to switch to the previous mode.
+    let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-S-t>'
+
+    " [All Mode] This is mapped to temporarily switch whether or not to ignore
+    " case.
+    let g:FuzzyFinderOptions.Base.key_ignore_case = '<C-i>'
+
+    " [File Mode] This is a dictionary. Each value must be a list. All matchs of
+    " a key in entered text is expanded with a value.
+    let g:FuzzyFinderOptions.File.abbrev_map = 
                 \    { "wts" : ["~/work/trunk/src", "~/work/trunk/bugfix"],
                 \      "vp" : ["~/.vim/plugin"]
                 \    }
-                \ }
-    let g:FuzzyFinder_IgnoreCase = 1
-    " don't use Migemo(a japanese search method)
-    let g:FuzzyFinder_Migemo = 0
+    " [File Mode] The items matching this are excluded from the completion list.
+    let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|((^|[/\\])\.[/\\]$)'
 
-    " Map this to select completion item or to finish input and open a
-    " buffer/file. 1st item is mapped to open in previous window. 2nd item is
-    " mapped to open in new window which is made from split previous window. 3rd
-    " item is mapped to open in new window which is made from split previous
-    " window vertically.
-    let g:FuzzyFinder_KeyOpen = ['<CR>', '<C-O>', '<C-V>']
+    let g:FuzzyFinderOptions.Base.ignore_case = 1
+
+    " [All Mode] It uses Migemo if non-zero is set.
+    let g:FuzzyFinderOptions.Base.migemo_support = 0
+
+    " [All Mode] This is mapped to select completion item or finish input and
+    " open a buffer/file in previous window.
+    let g:FuzzyFinderOptions.Base.key_open = '<CR>'
+    " [All Mode] This is mapped to select completion item or finish input and
+    " open a buffer/file in split new window
+    let g:FuzzyFinderOptions.Base.key_open_split = '<C-O>'
+    " [All Mode] This is mapped to select completion item or finish input and
+    " open a buffer/file in vertical-split new window.
+    let g:FuzzyFinderOptions.Base.key_open_vsplit = '<C-V>'
     :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
