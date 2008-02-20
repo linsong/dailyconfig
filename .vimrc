@@ -1156,7 +1156,9 @@ endif " has("autocmd")
     " [All Mode] This is mapped to select completion item or finish input and
     " open a buffer/file in vertical-split new window.
     let g:FuzzyFinderOptions.Base.key_open_vsplit = '<C-V>'
-    :noremap ,ff :FuzzyFinderFile<CR>
+
+    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
+    ":noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
     :noremap ,fv :FuzzyFinderFavFile<CR>

@@ -119,10 +119,10 @@ if !exists("g:loaded_screenpaste")
   " Commands: {{{1
   " configuration for command-line-mode
   " in v:version >= 700 this works with <SID>
-  function! Screen_ClCfgComplete(A, L, P)
+  function! ScreenClCfgComplete(A, L, P)
     return "search\nsub\nnoesc"
   endfunction
-  command -nargs=1 -complete=custom,Screen_ClCfgComplete
+  command -nargs=1 -complete=custom,ScreenClCfgComplete
         \ ScreenCmdlineConf call <SID>Screen_ClConfig(<f-args>, 1)
   command ScreenCmdlineInfo call <SID>Screen_ClConfig(g:screen_clmode, 1)
   command ScreenSearch      call <SID>Screen_ClConfig("search", 1)
