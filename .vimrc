@@ -82,7 +82,8 @@
     " set autochdir to true,so whenever u open a window or switch to a buffer,the
     " path is set
     if exists("&autochdir")
-        :set autochdir 
+        "disable autochdir for now, since fuzzyfinder does not support it well
+        ":set autochdir 
     endif
 
     " set the path to find as many file as we can :)
@@ -1125,9 +1126,9 @@ endif " has("autocmd")
     "### setting for fuzzyfinder.vim {{{2
     let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{}, 'MruFile':{}, 'FavFile':{}, 'Dir':{}, 'Tag':{}, 'TaggedFile':{}}
     " [All Mode] This is mapped to switch to the next mode.
-    let g:FuzzyFinderOptions.Base.key_next_mode = '<C-t>'
+    let g:FuzzyFinderOptions.Base.key_next_mode = '<C-l>'
     " [All Mode] This is mapped to switch to the previous mode.
-    let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-S-t>'
+    let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-S-l>'
 
     " [All Mode] This is mapped to temporarily switch whether or not to ignore
     " case.
@@ -1156,9 +1157,12 @@ endif " has("autocmd")
     " [All Mode] This is mapped to select completion item or finish input and
     " open a buffer/file in vertical-split new window.
     let g:FuzzyFinderOptions.Base.key_open_vsplit = '<C-V>'
+    " [All Mode] This is mapped to select completion item or finish input and
+    " open a buffer/file in a new tab page.
+    let g:FuzzyFinderOptions.Base.key_open_tab = '<C-t>'
 
-    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-    ":noremap ,ff :FuzzyFinderFile<CR>
+    ":nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
+    :noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
     :noremap ,fv :FuzzyFinderFavFile<CR>
