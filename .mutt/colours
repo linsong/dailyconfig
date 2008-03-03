@@ -41,9 +41,12 @@ color header    green        brightblack '^(subject):.*$'
 mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Virus-hagbard):"
 
 # Colours for items in the index
-color index brightgreen  black ~N
-color index green        black "~N (~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")"
-color index yellow       black "~C vincent@exoweb.net"
+color index green         black "~C nb@exoweb.net ~R"
+color index brightgreen   black "~C nb@exoweb.net"
+#color index green        black "~N (~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")"
+color index brightyellow  black "~N (~C vincent@exoweb.net | ~C ant@exoweb.net)"
+color index yellow        black "~R (~C vincent@exoweb.net | ~C ant@exoweb.net)"
+color index brightwhite   black "~N"
 #color index black        red   "~N ~d >1d"
 color index red          black ~F
 color index black        green ~T

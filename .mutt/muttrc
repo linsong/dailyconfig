@@ -134,4 +134,5 @@ source ~/.mutt/scores                     # Define score rules
 alternative_order text/enriched text/plain text/html application/postscript image/*
 
 # Last, but not least, get mutt to display its version on startup.
+push "<change-folder> =exoweb/work<enter>"
 push <show-version>
