@@ -361,6 +361,13 @@ hilights = (
     nick = "no";
     word = "yes";
     regexp = "yes";
+  },
+  {
+    text = "xiaofeng|leopold";
+    color = "%G";
+    nick = "no";
+    word = "yes";
+    regexp = "yes";
   }
 );
 ignores = (
@@ -377,6 +384,7 @@ logs = { };
 completions = {
   sls = { value = "since last scrum:"; };
   bns = { value = "before next scrum:"; };
+  ants = { value = "leopold, vincent, xiaofeng:"; };
 };
 windows = {
   1 = { name = "hilight"; sticky = "yes"; };

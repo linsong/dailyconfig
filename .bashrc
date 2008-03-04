@@ -65,14 +65,16 @@ export PYTHONSTARTUP=~/.pythonrc
 # using the vi style command line
 set -o vi
 
-export EDITOR='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
-export VISUAL='/usr/bin/env vim -u ~/.vim_simple_rc -U NONE --noplugin'
+#export EDITOR='/usr/bin/env vim -u /home/vincent/.vim_simple_rc -U NONE --noplugin'
+#export VISUAL='/usr/bin/env vim -u /home/vincent/.vim_simple_rc -U NONE --noplugin'
+export EDITOR='/usr/local/bin/vim'
+export VISUAL='/usr/local/bin/vim'
 
 # set prompt string: user@host and current_directory
 # set different prompt basedd on different host 
 if [ `hostname` == 'vincent' ]; then
     # if we are in chroot environment, use an outstanding prompt
-    if [ ! -d '/chroot-sarge' ]; then 
+    if [ ! -d '/dist/etch' ]; then 
     PS1='
 \[\033[37m\](chroot)\u@\h \[\033[37m\]\w\[\033[0m\]
 \[[37;40m\][\!]\[[m\] $ '

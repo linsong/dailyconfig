@@ -73,6 +73,7 @@ set allow_8bit                            # allow 8bit otherwise it will damage 
 #charset-hook !utf-8 gb2312
 
 set print=ask-yes                         # Ask before printing.
+set print_command="/usr/bin/a2ps -P ExoAdmin"
 set delete=ask-yes                        # Ask before doing a delete.
 
 set read_inc=30                           # Read counter ticks every 30 msgs.

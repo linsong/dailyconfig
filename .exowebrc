@@ -19,6 +19,8 @@ fi
  #HTTP_PROXY=$http_proxy
  #export http_proxy HTTP_PROXY
 
+ export PRINTER=ExoAdmin
+
 alias livebet_start="cd /home/vincent/work/livebet/src && ./nordicbetsite stop all && ./nordicbetsite start application_server && ./nordicbetsite start presentation_server && ./nordicbetsite start back_office_server && ./nordicbetsite start stats_server && ./nordicbetsite start livebet_bo && ./nordicbetsite start livebet_fo && cd -"
  alias lb="cd /home/vincent/work/livebet/src"
 
