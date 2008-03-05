@@ -1,16 +1,17 @@
 use strict;
+use List::Util 'shuffle';
 use Irssi 20020101.0250 ();
 use vars qw($VERSION %IRSSI); 
 
 $VERSION = "1";
 %IRSSI = (
-    authors     => "Timo Sirainen, Ian Peters",
-    contact	=> "tss\@iki.fi", 
-    name        => "Nick Color",
-    description => "assign a different color for each nick",
+    authors     => "Vincent Wang",
+    contact	=> "linsong DOT qizi AT gmail DOT com", 
+    name        => "misc commands",
+    description => "misc commands that may make daily work easier ;)",
     license	=> "Public Domain",
-    url		=> "http://irssi.org/",
-    changed	=> "2002-03-04T22:47+0100"
+    url		=> "Not avaiable yet",
+    changed	=> "2008-03-05T14:22+0800"
 );
 
 sub cmd_help1 {
@@ -93,5 +94,34 @@ SCRIPTHELP_EOF
 );
 }
 
+sub cmd_scrum {
+    my ($data, $server, $witem) = @_;
+
+    if (!$server || !$server->{connected}) {
+      Irssi::print("Not connected to server");
+      return;
+    }
+
+    my @names  = split(/[\s,:]/, $data);
+    my $report_order = join(' ', shuffle(@names));
+    my $msg = "scrum in 3 minutes";
+
+    if ($data && $witem && ($witem->{type} eq "CHANNEL"))
+    {
+      #GOTCHA: I have to call server->print to notify myself. I don't get
+      #notified when the "MSG" command is executed.
+      $server->print($witem->{name}, $msg, MSGLEVEL_HILIGHT);
+      #$witem->command("notify scrum $msg");
+      $witem->command("MSG ".$witem->{name}."${report_order}: $msg");
+      $witem->command("timer add scrum_timer 180 1 say  ${report_order}: scrum now");
+    }
+    else
+    {
+      Irssi::print("scrum: Nick not given, and no active channel/query in window");
+    }
+}
+
 Irssi::command_bind('colorhelp1', 'cmd_help1');
 Irssi::command_bind('colorhelp2', 'cmd_help2');
+
+Irssi::command_bind('scrum', 'cmd_scrum');
