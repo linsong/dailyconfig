@@ -12,10 +12,10 @@ hi DiffDelete    cterm=bold ctermfg=4 ctermbg=6 gui=bold guifg=#0000ff guibg=#68
 hi DiffText      cterm=bold ctermbg=1 gui=bold,italic guifg=#000000 guibg=#980000
 
 " for omni completion
-hi Pmenu       guibg=grey35
-hi PmenuSel    guifg=DarkBlue guibg=LightGreen
-hi PmenuSbar   guibg=Black 
-hi PmenuThumb  guifg=SeaGreen	
+hi Pmenu       guibg=grey35 ctermfg=253 ctermbg=238
+hi PmenuSel    guifg=DarkBlue guibg=LightGreen cterm=bold ctermfg=253 ctermbg=61
+hi PmenuSbar   guibg=Black cterm=bold ctermbg=63
+hi PmenuThumb  guifg=SeaGreen cterm=bold ctermfg=253 ctermbg=63 gui=reverse
 
 " for Cursor
 "highlight Cursor     gui=none       guibg=DodgerBlue guifg=#ffffff
