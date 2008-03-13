@@ -288,6 +288,13 @@ statusbar = {
         barend = { priority = "100"; alignment = "right"; };
       };
     };
+    awl_1 = {
+      items = {
+        barstart = { priority = "100"; };
+        awl_1 = { };
+        barend = { priority = "100"; alignment = "right"; };
+      };
+    };
   };
 };
 settings = {
@@ -308,7 +315,7 @@ settings = {
     expand_escapes = "yes";
     hilight_nick_matches = "yes";
   };
-  "fe-text" = { autostick_split_windows = "no"; };
+  "fe-text" = { autostick_split_windows = "no"; actlist_sort = "refnum"; };
   "fe-common/irc" = { show_away_once = "no"; };
   "irc/core" = { alternate_nick = "vincent@china"; };
   "perl/core/scripts" = {

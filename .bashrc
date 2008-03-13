@@ -35,7 +35,7 @@ export MAIL
 
 # config about locale
 export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+#export LANG=en_US.UTF-8
 #export LC_CTYPE="zh_CN"
 #LANGUAGE="en_US:en"
 #LC_CTYPE=zh_CN.UTF-8
@@ -101,7 +101,7 @@ elif [ $(hostname) == 'ubuntu' ]; then
 \[\033[31m\]\u@\h \[\033[31m\]\w\[\033[0m\]
 \[[32;40m\][\!]\[[m\] $ '
 else 
-    if [ $(uname -o) = 'Cygwin' ]; then 
+    if [ $(uname -s) = 'Cygwin' ]; then 
     PS1='
 \[\033[35;40m\]\u@\h \[\033[35;40m\]\w\[\033[0m\]
 \[[32;40m\][\!]\[[m\] $ '
@@ -172,7 +172,7 @@ fi
  fi
 
  #the following configure are only for cygwin 
- if [ $(uname) != 'Darwin' ] && [ $(uname -o) = 'Cygwin' ];then
+ if [ $(uname) != 'Darwin' ] && [ $(uname -s) = 'Cygwin' ];then
 	 #export CDPATH="${HOME}:/cygdrive/e"
 	 # use rxvt as the default term because it can give more colors
 	 alias xx='rxvt -geometry 125x44 -sr -sl 10000 -fg white -bg black -fn fixedsys -fb fixedsys -tn cygwin -cr SkyBlue -e /bin/bash --login -i&'
@@ -206,6 +206,8 @@ fi
  alias tgvim='gvim --cmd ":tabnew" --cmd ":tabfirst"'
  alias vimplugin='cd ~/download/GNU_Tools/WorkPlatform/Vim/configure/download_vimscripts/MostUseful'
  alias edclipbrd='vim +ClipBrd +only'
+
+ alias sshvincent='ssh -A box -t "ssh vincent -t \"screen -x \""'
 ###########################################################################
 ###
 ###            Function defines
@@ -349,7 +351,7 @@ __END
 
  function netlist()
  {
-     if [ ! `uname -o` = 'Cygwin' ];then
+     if [ ! `uname -s` = 'Cygwin' ];then
         sudo netstat -nlptu | /usr/bin/perl -ape 'if(@F[-1] =~ m#^(\d+)/.+$#){ open CMDLINE, "/proc/$1/cmdline" ; $cmdline = <CMDLINE>; $last_field = $1."#".$cmdline; s#\d+/.+$#$last_field# }'
      fi
  }

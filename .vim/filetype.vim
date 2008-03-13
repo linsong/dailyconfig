@@ -23,4 +23,7 @@ augroup filetypedetect
 
   au! BufRead,BufNewFile *.rest  setfiletype rest
   au! BufRead,BufNewFile *.vst  setfiletype rest
+
+  au BufNewFile,BufRead *.moin setf moin
+  au BufNewFile,BufRead *.wiki setf moin
 augroup END
