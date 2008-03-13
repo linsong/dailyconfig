@@ -112,7 +112,7 @@ sub cmd_scrum {
       #notified when the "MSG" command is executed.
       $server->print($witem->{name}, $msg, MSGLEVEL_HILIGHT);
       #$witem->command("notify scrum $msg");
-      $witem->command("MSG ".$witem->{name}."${report_order}: $msg");
+      $witem->command("MSG ".$witem->{name}." ${report_order}: $msg");
       $witem->command("timer add scrum_timer 180 1 say  ${report_order}: scrum now");
     }
     else
@@ -121,7 +121,14 @@ sub cmd_scrum {
     }
 }
 
+sub cmd_foo {
+    my ($data, $server, $witem) = @_;
+    print "windows: ". repr(Irssi::windows());
+}
+
 Irssi::command_bind('colorhelp1', 'cmd_help1');
 Irssi::command_bind('colorhelp2', 'cmd_help2');
 
 Irssi::command_bind('scrum', 'cmd_scrum');
+
+Irssi::command_bind('foo', 'cmd_foo');
