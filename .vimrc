@@ -1209,6 +1209,11 @@ endif " has("autocmd")
     let g:SuperTabLongestHighlight = 1
     "}}}2
     
+    "### settings for autocomplpop.vim {{{2
+    map ,ace :AutoComplPopEnable<CR>
+    map ,acd :AutoComplPopDisable<CR>
+    "}}}2
+    
 "## }}}1
 
 "## Xterm colors defination {{{1 

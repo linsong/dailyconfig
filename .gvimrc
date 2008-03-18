@@ -39,9 +39,10 @@ exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 set guioptions-=M
 "set guioptions-=m
 
-if ! has("gui_macvim")
-    set guioptions-=T
-endif
+set guioptions-=T
+"if ! has("gui_macvim")
+    "set guioptions-=T
+"endif
 
 " turn &cursorline on only in GUI && normal mode
 if exists("&cursorline")
