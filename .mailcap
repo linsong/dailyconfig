@@ -1,0 +1,2 @@
+text/html; w3m -T text/html -I %{charset} -dump %s; nametemplate=%s.html; copiousoutput
+image/png; feh '%s'; test=test -n "$DISPLAY" ; description=PNG Image; nametemplate=%s.png
