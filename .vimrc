@@ -356,7 +356,6 @@
         set <F13>=O1;5Q
         set  <F14>=O1;2Q
         set  <F15>=[3;2~
-        "set <F16>= 
         set <F17>=n
         set <F18>=q
         set <F19>=.
@@ -371,7 +370,6 @@
         nmap <F13> <C-F2>
         nmap <F14> <S-F2>
         imap <F15> <S-Del> " this map does not work, don't know why
-        "nmap <F16> <C-Enter>
         map <F17> <M-n>
         map <F18> <M-q>
         map <F19> <M-.>
