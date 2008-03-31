@@ -1,11 +1,20 @@
-" ColorSchemeMenuMaker.vim: Generates Vim ColorScheme menu and
-"                   organizes themes based upon background colors
+" ColorSchemeMenuMaker.vim: Generates Vim ColorScheme menu and organizes
+" themes based upon background color of Normal highlight group, and by
+" colorscheme name.
+
 " Maintainer:       Erik Falor <ewfalor@gmail.com>
-" Date:             Dec 26, 2007
-" Version:          0.10.1
-" License:          If you copy this, just give me props.
+" Date:             Mar 27, 2008
+" Version:          1.0
+" License:          Vim License
 "
-" History:
+" History: {{{
+"   Version 1.0:    No reported problems for quite a while; I feel this
+"                   plugin is no longer beta-quality.
+"                   ReloadColorsMenu and RebuildColorsMenu commands will
+"                   only remove menu items created by this plugin.  Other
+"                   items placed in the ColorSchemes menu aren't destroyed
+"                   when refreshing the menu unless absolutely necessary.
+"
 "   Version 0.10.1: Fixed bug: generated menu called non-existent
 "                   function.
 "
@@ -61,8 +70,9 @@
 "   Version 0.2:    Menu categories include a count of contained items. 
 "
 "   Version 0.1:    Initial upload
-"
-" Usage Notes:
+" }}}
+
+" Usage Notes: {{{
 " Menu entries prepended with an asterisk denote colorschemes which contain
 " more than one Normal highlight group.  CSMM does not parse the colorscheme
 " files, it simply scans them looking for a Normal highlight group defining
@@ -84,7 +94,8 @@
 " g:csmmIgnoreCase - The plugin sorts items in the submenus without regard to
 "       case.  If you want it to regard case, set this variable to zero before
 "       running :RebuildMenu.
-"
+"}}}
+
 " GetLatestVimScripts: 2004 1 ColorSchemeMenuMaker.zip
 
 " Initialization: {{{
@@ -485,6 +496,8 @@ function! <SID>BuildMenu(dicts) "{{{
     endif
 
     call add(menu, '"ColorScheme menu generated ' . strftime("%c", localtime()))
+    call add(menu, '"Menu created with ColorSchemeMenuMaker.vim by Erik Falor')
+    call add(menu, '"Get the latest version at http://www.vim.org/scripts/script.php?script_id=2004')
     call add(menu, '')
     call add(menu, '"Do not load this menu unless running in GUI mode')
     call add(menu, 'if !has("gui_running") | finish | endif')
@@ -598,7 +611,11 @@ function! <SID>BuildMenu(dicts) "{{{
     call add(menu, 'if !exists("g:running_ReloadColorsMenu")')
     call add(menu, '    function! <SID>ReloadColorsMenu()')
     call add(menu, '        let g:running_ReloadColorsMenu = 1')
-    call add(menu, '        aunmenu ' . s:menuName)
+    call add(menu, '        aunmenu ' . s:menuName . '.&Colors\ (' . totThemes . ')')
+    call add(menu, '        aunmenu ' . s:menuName . '.&Names\ (' . totThemes . ')')
+    call add(menu, '        aunmenu ' . s:menuName . '.-Sep-')
+    call add(menu, '        aunmenu ' . s:menuName . '.Reload\ Menu')
+    call add(menu, '        aunmenu ' . s:menuName . '.Rebuild\ Menu')
     call add(menu, "        execute 'source " . s:menuFile . "'")
     call add(menu, '        unlet g:running_ReloadColorsMenu')
     call add(menu, "        echomsg 'Done reloading " . s:menuFile . "'")
