@@ -1252,11 +1252,17 @@ endfunction
 " Default key mappings to generate a revision log, and diff with adjacent
 " versions.
 "------------------------------------------------------------------------------
-nnoremap <silent> <Leader>rlog  :call <SID>DisplayLog()<cr>
-nnoremap <silent> <Leader>rci   :call <SID>rcsvers("init")<cr>
+"nnoremap <silent> <Leader>rlog  :call <SID>DisplayLog()<cr>
+"nnoremap <silent> <Leader>rci   :call <SID>rcsvers("init")<cr>
 
-nnoremap <silent> <Leader>older :call <SID>NextCompareFiles("older")<cr>
-nnoremap <silent> <Leader>newer :call <SID>NextCompareFiles("newer")<cr>
+"nnoremap <silent> <Leader>older :call <SID>NextCompareFiles("older")<cr>
+"nnoremap <silent> <Leader>newer :call <SID>NextCompareFiles("newer")<cr>
+
+nnoremap <silent> ,rl   :call <SID>DisplayLog()<cr>
+nnoremap <silent> ,ri   :call <SID>rcsvers("init")<cr>
+
+nnoremap <silent> ,ro   :call <SID>NextCompareFiles("older")<cr>
+nnoremap <silent> ,rn   :call <SID>NextCompareFiles("newer")<cr>
 
 let &cpo = s:save_cpo
 " vim600:textwidth=78:foldmethod=marker:fileformat=unix:expandtab:tabstop=4:shiftwidth=4
