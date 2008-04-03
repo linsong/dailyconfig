@@ -1224,6 +1224,10 @@ endif " has("autocmd")
     "TODO: need add more options
     let g:rvExcludeExpression = '\c\.pyc\|\c\.pyo\|\c\.bmp'
     "}}}2
+    
+    "### settings for autocomplpop.vim {{{2
+    let g:AutoComplPop_NotEnableAtStartup = 1
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
