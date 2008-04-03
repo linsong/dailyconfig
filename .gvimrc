@@ -67,3 +67,5 @@ endif
 " following config to make gvim startup faster
 set guiheadroom=0
 
+set guioptions-=mTrRlLb
+

@@ -159,7 +159,7 @@ aliases = {
   "MANUAL-WINDOWS" = "set use_status_window off;set autocreate_windows off;set autocreate_query_level none;set autoclose_windows off;set reuse_unused_windows on;save";
   EXEMPTLIST = "mode $C +e";
   ATAG = "WINDOW SERVER";
-  unstickall = "window goto 1; window stick off; window goto 2;window stick off; window goto 3; window stick off; window goto 4; window stick off; window goto 5; window stick off; window goto 6; window stick off; window goto 7; window stick off; window goto 8; window stick off; window goto 9; window stick off; window goto 10; window stick off";
+  unstickall = "window goto hilight; window stick off; window goto (status);window stick off; window goto #ANT; window stick off; window goto #delta; window stick off; window goto #dev; window stick off; window goto #exoweb; window stick off; window goto &bitlbee; window stick off; window goto #irssi; window stick off; window goto #postgresql; window stick off;";
   single = "unstickall; window hide; window hide";
   fortune = "exec - -o fortune -s ";
   wu = "window up";
@@ -167,9 +167,9 @@ aliases = {
   wl = "window last ";
   mklayout = "window 8; window show 2; window size 20; window show 6; window size 5; window 2; window stick 1 on; window stick 2 on; window stick 7 on; window 8; window stick 8 on; window stick 4 on; window stick 5 on; window 6; window stick 6 on;";
   cs = "msg chanserv op $C";
-  google = "say http://www.google.com/search?hl=en&q=$0&btnG=Google+Search";
   l = "lastlog -regex ";
   resetlayout = "single; mklayout";
+  dump = "script exec use Data::Dumper\\; print Data::Dumper->new([\\\\$0-])->Dump";
 };
 
 statusbar = {
@@ -288,13 +288,6 @@ statusbar = {
         barend = { priority = "100"; alignment = "right"; };
       };
     };
-    awl_1 = {
-      items = {
-        barstart = { priority = "100"; };
-        awl_1 = { };
-        barend = { priority = "100"; alignment = "right"; };
-      };
-    };
   };
 };
 settings = {
@@ -315,7 +308,7 @@ settings = {
     expand_escapes = "yes";
     hilight_nick_matches = "yes";
   };
-  "fe-text" = { autostick_split_windows = "no"; actlist_sort = "refnum"; };
+  "fe-text" = { autostick_split_windows = "no"; };
   "fe-common/irc" = { show_away_once = "no"; };
   "irc/core" = { alternate_nick = "vincent@china"; };
   "perl/core/scripts" = {
@@ -394,7 +387,7 @@ completions = {
   ants = { value = "leopold, vincent, xiaofeng:"; };
 };
 windows = {
-  1 = { name = "hilight"; sticky = "yes"; };
+  1 = { name = "hilight"; sticky = "yes"; immortal = "yes"; };
   2 = { 
     immortal = "yes";
     name = "(status)";
@@ -490,3 +483,4 @@ mainwindows = {
   2 = { first_line = "8"; lines = "24"; };
   1 = { first_line = "1"; lines = "7"; };
 };
+notifies = { scrum = { ircnets = ( "scrum", "in", "3", "minutes" ); }; };

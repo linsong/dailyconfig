@@ -82,8 +82,8 @@
     " set autochdir to true,so whenever u open a window or switch to a buffer,the
     " path is set
     if exists("&autochdir")
-        "disable autochdir for now, since fuzzyfinder does not support it well
-        ":set autochdir 
+        ""disable autochdir for now, since fuzzyfinder does not support it well
+        :set autochdir 
     endif
 
     " set the path to find as many file as we can :)
@@ -132,6 +132,8 @@
     if has("gui_macvim")
         :set transparency=5
     endif
+
+    :set previewheight=25
 "## }}}1
 
 "## Encodings {{{1
@@ -1113,6 +1115,12 @@ endif " has("autocmd")
     "### setting for vimExplorer.vim {{{2
      let g:VEConf_showHiddenFiles = 0 " don't show dot files by default
      let g:VEConf_usingGnome = 1 "use Gnome desktop system. TODO: add support for Mac OSX
+
+     " override some file mode hot keys
+     let g:VEConf_fileHotkey = {}
+     " switch itemClicked and openPreview hotkeys 
+     let g:VEConf_fileHotkey.itemClicked = 'u'
+     let g:VEConf_fileHotkey.openPreview = '<cr>'
     "}}}2
     
     "### setting for tSkeleton.vim {{{2
@@ -1212,6 +1220,10 @@ endif " has("autocmd")
     map ,acd :AutoComplPopDisable<CR>
     "}}}2
     
+    "### settings for rcsvers.vim {{{2
+    "TODO: need add more options
+    let g:rvExcludeExpression = '\c\.pyc\|\c\.pyo\|\c\.bmp'
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
