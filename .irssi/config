@@ -21,7 +21,7 @@ servers = (
     port = "16667";
     use_ssl = "no";
     ssl_verify = "no";
-    autoconnect = "yes";
+    autoconnect = "no";
   },
   { address = "irc.stealth.net"; chatnet = "IRCnet"; port = "6668"; },
   { address = "irc.efnet.net"; chatnet = "EFNet"; port = "6667"; },
@@ -384,7 +384,7 @@ logs = { };
 completions = {
   sls = { value = "since last scrum:"; };
   bns = { value = "before next scrum:"; };
-  ants = { value = "leopold, vincent, xiaofeng:"; };
+  ants = { value = "leopold, xiaofeng, vincent, sabrina"; };
 };
 windows = {
   1 = { name = "hilight"; sticky = "yes"; immortal = "yes"; };
