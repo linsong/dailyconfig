@@ -43,3 +43,7 @@ if &bg == "dark"
 else
     highlight SignColor ctermbg=white ctermfg=blue guibg=grey guifg=RoyalBlue3
 endif
+
+highlight IncSearch  term=reverse cterm=bold ctermfg=232 ctermbg=215 gui=reverse
+highlight Search     term=reverse ctermfg=232 ctermbg=215 guifg=Black guibg=Yellow
+

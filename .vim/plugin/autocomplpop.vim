@@ -181,7 +181,7 @@
 
 " INCLUDE GUARD: ======================================================== {{{1
 if v:version < 701
-  echoerr "Sorry, Autocomplpop doesn't support this version of Vim."
+  "echoerr "Sorry, Autocomplpop doesn't support this version of Vim."
   finish
 elseif exists('loaded_autocomplpop')
   finish
