@@ -99,7 +99,7 @@ defbce "on"
 # enabled if there is no hardstatus setting for your terminal)
 #
 #hardstatus lastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
-hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %=%{m}|%l|%{-} %{r}%Y/%m/%d %c:%s%{-}"
+hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%< %=%{m}|%l|%{-} %{r}%D %m/%d %c:%s%{-}"
 
 # show caption only when there is more than one window
 caption splitonly
