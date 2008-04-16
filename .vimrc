@@ -523,7 +523,7 @@ if has("autocmd")
 
         " For all text files set 'textwidth' to 78 characters.
         autocmd FileType text setlocal textwidth=78
-        autocmd FileType svnlog :call FoldOnRegex('^r\d\{1,\}\>', -1) <CR>
+        autocmd FileType svnlog :call FoldOnRegex('^r\d\{1,\}\>', -1)
 
         " When editing a file, always jump to the last known cursor position.
         " Don't do it when the position is invalid or when inside an event handler
@@ -1038,6 +1038,7 @@ endif " has("autocmd")
     let g:NERDShutUp=1
     let g:NERDMapleader = ',c'
     let g:NERDComLineToggleMap = g:NERDMapleader . 't'
+    let g:NERDMenuMode=0
     "### }}}2   
 
     "### setting for MRU.vim {{{2
