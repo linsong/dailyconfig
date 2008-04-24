@@ -83,7 +83,7 @@
     " path is set
     if exists("&autochdir")
         ""disable autochdir for now, since fuzzyfinder does not support it well
-        :set autochdir 
+        ":set autochdir 
     endif
 
     " set the path to find as many file as we can :)
@@ -1007,12 +1007,6 @@ endif " has("autocmd")
     :let g:scratchBackupFile = '/tmp/scratch.txt'
     "### }}}2
 
-    "### [NOTUSED] setting for vimshell.vim {{{2
-    " it works but it can not  refresh by itself 
-    " because of the lack of vim's timer mechanism  
-    "nmap <leader>sh :so $VIMCFG/vimsh/vimsh.vim <CR>
-    "}}}2
-    
     "### setting for imaps.vim {{{2
     " example: 
     "  call IMAP("bit`", "\\begin{itemize}\<cr>\\item \<cr>\\end{itemize}<++>", "")
@@ -1022,10 +1016,6 @@ endif " has("autocmd")
     "let g:disable_imap = 1 
     imap <C-g>   <plug>IMAP_JumpForward
     "### }}}2   
-
-    "### [NOTUSED] setting for snippetEmu.vim {{{2
-    let g:snip_set_textmate_cp=0 
-    "### }}}2
 
     "### setting for netrw.vim {{{2
     " set what kind of files we will ignore
@@ -1051,13 +1041,6 @@ endif " has("autocmd")
     let g:proj_flags = "mstb"
     "### }}}2
    
-    "### [NOTUSED] setting for TagsParser.vim {{{2
-	let g:TagsParserOff = 1
-	"let g:TagsParserTagsPath = "/usr/local/lps-3.1/Server/lps-3.1/my-apps/sportbook-trunk/src/**"
-	"let g:TagsParserFileExcludePattern = g:TagsParserFileExcludePattern . '\|^.*\.\%(\cpyc\)$'
-	""let g:TagsParserDirExcludePattern = g:TagsParserDirExcludePattern . ''
-    "### }}}2
-
     "### setting for flagit.vim {{{2
     let icons_path = $HOME."/.vim/signs/"
     let g:Fi_Flags = { "arrow" : [icons_path."go-next.png", "> ", 1, "texthl=Title"],
@@ -1103,10 +1086,6 @@ endif " has("autocmd")
      let g:no_tagselect_maps = 1
     "}}}2
    
-    "### [NOTUSED] setting for lusty_explorer.vim {{{2
-     let g:LustyExplorerSuppressRubyWarning = 1
-    "}}}2
-    
     "### setting for toggle_words.vim {{{2
      let g:toggle_words_dict = {'python': [['if', 'elif', 'else']]}
      nmap ,t :ToggleWord<CR>
@@ -1229,6 +1208,12 @@ endif " has("autocmd")
     "### settings for autocomplpop.vim {{{2
     let g:AutoComplPop_NotEnableAtStartup = 1
     "}}}2
+
+    "### settting for blockdiff.vim {{{2
+    vmap ,d1 :call BlockDiff_GetBlock1()<CR>
+    vmap ,d2 :call BlockDiff_GetBlock2()<CR>
+    "}}}2
+
 "## }}}1
 
 "## Xterm colors defination {{{1 
