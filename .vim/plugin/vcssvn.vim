@@ -68,7 +68,7 @@ let s:svnFunctions = {}
 " command argument.
 function! s:DoCommand(cmd, cmdName, statusText, options)
 	if VCSCommandGetVCSType(expand('%')) == 'SVN'
-		let fullCmd = VCSCommandGetOption('VCSCommandSVNExec', 'svn') . ' ' . a:cmd
+		let fullCmd = VCSCommandGetOption('VCSCommandSVNExec', 'svn') . ' --non-interactive ' . a:cmd
 		return VCSCommandDoCommand(fullCmd, a:cmdName, a:statusText, a:options)
 	else
 		throw 'SVN VCSCommand plugin called on non-SVN item.'
@@ -189,7 +189,7 @@ endfunction
 function! s:svnFunctions.GetBufferInfo()
 	let originalBuffer = VCSCommandGetOriginalBuffer(bufnr('%'))
 	let fileName = bufname(originalBuffer)
-	let statusText = system(VCSCommandGetOption('VCSCommandSVNExec', 'svn') . ' status -vu "' . fileName . '"')
+	let statusText = system(VCSCommandGetOption('VCSCommandSVNExec', 'svn') . ' --non-interactive status -vu "' . fileName . '"')
 	if(v:shell_error)
 		return []
 	endif
