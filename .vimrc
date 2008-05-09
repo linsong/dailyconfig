@@ -246,7 +246,7 @@
     nmap + 5<C-W>>
 
     " use enter to unhighlighted searched-for text
-    nnoremap <C-CR> :noh<CR>
+    nnoremap ,nh    :noh<CR>
     nnoremap <leader>q :close<CR>
 
     " mappings for quickfix mode 
@@ -336,7 +336,7 @@
     "     http://groups.yahoo.com/group/vim/message/66414
     "     http://vim.sourceforge.net/tips/tip.php?tip_id=1272
     "
-    set timeout timeoutlen=1000 ttimeoutlen=100
+    set timeout timeoutlen=3000 ttimeoutlen=100
     if !has("gui_running")
       if &term == "win32"
       else
@@ -368,6 +368,7 @@
         set <S-xF4>=O1;2S
         set <F24>=O1;5S
         set <F25>=O1;6S
+        set <F26>=OF
         
         nmap <F13> <C-F2>
         nmap <F14> <S-F2>
@@ -381,6 +382,7 @@
         map <F23> <S-Insert>
         map <F24> <C-F4>
         map <F25> <C-S-F4>
+        map <F26> <end>
       endif
     endif 
     "if !has("gui_running")
@@ -1097,16 +1099,10 @@ endif " has("autocmd")
      let g:VEConf_usingGnome = 1 "use Gnome desktop system. TODO: add support for Mac OSX
 
      " override some file mode hot keys
-     let g:VEConf_fileHotkey = {}
+     "let g:VEConf_fileHotkey = {}
      " switch itemClicked and openPreview hotkeys 
-     let g:VEConf_fileHotkey.itemClicked = 'u'
-     let g:VEConf_fileHotkey.openPreview = '<cr>'
-    "}}}2
-    
-    "### setting for tSkeleton.vim {{{2
-     autocmd BufNewFile *.py       TSkeletonSetup python.py
-     "autocmd BufNewFile *.c        TSkeletonSetup c.c
-     "autocmd BufNewFile *.cpp      TSkeletonSetup c.c
+     "let g:VEConf_fileHotkey.itemClicked = 'u'
+     "let g:VEConf_fileHotkey.openPreview = '<cr>'
     "}}}2
     
     "### setting for fuzzyfinder.vim {{{2
@@ -1212,6 +1208,22 @@ endif " has("autocmd")
     "### settting for blockdiff.vim {{{2
     vmap ,d1 :call BlockDiff_GetBlock1()<CR>
     vmap ,d2 :call BlockDiff_GetBlock2()<CR>
+    "}}}2
+    
+    "### settings for mark.vim {{{2
+    if &t_Co>=256
+        "let loop_count = 0
+        "let bg_colors = ["red","yellow","blue","green","magenta","cyan","gray","brown"]
+        "let fg_colors = ["white","black","white","black","white","black","black","white"]
+        "while loop_count < 30
+            "bgColor = bg_colors[loop_count]
+            "fgColor = fg_colors[loop_count]
+            "execute 'highlight MarkWord' . loop_count
+               "\ . ' ctermbg=' . bgColor . ' guibg=' . bgColor
+               "\ . ' ctermfg=' . fgColor . ' guifg=' . fgColor
+            "let loop_count = loop_count + 1
+        "endwhile
+    endif
     "}}}2
 
 "## }}}1

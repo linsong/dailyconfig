@@ -1,3 +1,0 @@
-class <+CURSOR+>:
-    def __init__(self):
-        <++>
