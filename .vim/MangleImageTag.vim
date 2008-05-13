@@ -1,9 +1,9 @@
 " MangleImageTag() - updates an <IMG>'s width and height tags.
 "
 " Requirements:
-"       VIM 6 or later
+"       VIM 7 or later
 "
-" Copyright (C) March 2004  Christian J. Robinson <infynity@onewest.net>
+" Copyright (C) 2004-2008 Christian J. Robinson <infynity@onewest.net>
 "
 " Based on "mangleImageTag" by Devin Weaver <ktohg@tritarget.com>
 "
@@ -22,8 +22,13 @@
 " Place - Suite 330, Boston, MA 02111-1307, USA.
 "
 " RCS info: ---------------------------------------------------------------{{{
-" $Id: MangleImageTag.vim,v 1.9 2007/05/04 02:03:42 infynity Exp $
+" $Id: MangleImageTag.vim,v 1.10 2008/05/01 05:01:02 infynity Exp $
 " $Log: MangleImageTag.vim,v $
+" Revision 1.10  2008/05/01 05:01:02  infynity
+" Code changed for Vim 7:
+"  - Computed sizes should always be correct now
+"  - Code is a bit cleaner, but unfortunately slower
+"
 " Revision 1.9  2007/05/04 02:03:42  infynity
 " Computed sizes were very wrong when 'encoding' was set to UTF8 or similar
 "
@@ -52,7 +57,7 @@
 " Initial revision
 " -------------------------------------------------------------------------}}}
 
-if exists("*MangleImageTag")
+if v:version < 700 || exists("*MangleImageTag")
 	finish
 endif
 
@@ -127,30 +132,28 @@ function! MangleImageTag() "{{{1
 	endif
 
 	let size = s:ImageSize(src)
-	if size == ''
+	if len(size) != 2
 		return
 	endif
-	let width = strpart(size, 0, stridx(size, ' '))
-	let height = strpart(size, stridx(size, ' ') + 1)
 
 	if tag =~? "height=\\(\"\\d\\+\"\\|'\\d\\+\'\\|\\d\\+\\)"
 		let tag = substitute(tag,
 			\ "\\c\\(height=\\)\\([\"']\\=\\)\\(\\d\\+\\)\\(\\2\\)",
-			\ '\1\2' . height . '\4', '')
+			\ '\1\2' . size[1] . '\4', '')
 	else
 		let tag = substitute(tag,
 			\ "\\csrc=\\([\"']\\)\\(.\\{-}\\|.\\{-}\\)\\1",
-			\ '\0 ' . (case ? 'HEIGHT' : 'height') . '="' . height . '"', '')
+			\ '\0 ' . (case ? 'HEIGHT' : 'height') . '="' . size[1] . '"', '')
 	endif
 
 	if tag =~? "width=\\(\"\\d\\+\"\\|'\\d\\+\'\\|\\d\\+\\)"
 		let tag = substitute(tag,
 			\ "\\c\\(width=\\)\\([\"']\\=\\)\\(\\d\\+\\)\\(\\2\\)",
-			\ '\1\2' . width . '\4', '')
+			\ '\1\2' . size[0] . '\4', '')
 	else
 		let tag = substitute(tag,
 			\ "\\csrc=\\([\"']\\)\\(.\\{-}\\|.\\{-}\\)\\1",
-			\ '\0 ' . (case ? 'WIDTH' : 'width') . '="' . width . '"', '')
+			\ '\0 ' . (case ? 'WIDTH' : 'width') . '="' . size[0] . '"', '')
 	endif
 
 	let line = savestart . tag . saveend
@@ -166,145 +169,121 @@ endfunction
 function! s:ImageSize(image) "{{{1
 	let ext = fnamemodify(a:image, ':e')
 
-	if ext !~? 'png\|gif\|jpg'
+	if ext !~? 'png\|gif\|jpe\?g'
 		echohl ErrorMsg
 		echomsg "Image type not recognized: " . tolower(ext)
 		echohl None
-		return ''
+
+		return
 	endif
 
 	if filereadable(a:image)
 		let ldsave=&lazyredraw
-		let encsave=&encoding
 		set lazyredraw
-		set encoding=Latin1
 
-		new ++enc=Latin1
-		silent exe '$read ' . a:image
-		go
+		let buf=readfile(a:image, 'b', 1024)
+		let buf2=[]
 
-		setlocal buftype=nofile noswapfile
+		let i=0
+		for l in buf
+			let string = split(l, '\zs')
+			for c in string
+				let char = char2nr(c)
+				call add(buf2, (char == 10 ? '0' : char))
+
+				" Keep the script from being too slow, but could cause a JPG
+				" (and GIF/PNG?) to return as "malformed":
+				let i+=1
+				if i > 1024 * 4
+					break
+				endif
+			endfor
+			call add(buf2, '10')
+		endfor
 
 		if ext ==? 'png'
-			let size = s:SizePng()
+			let size = s:SizePng(buf2)
 		elseif ext ==? 'gif'
-			let size = s:SizeGif()
-		elseif ext ==? 'jpg'
-			let size = s:SizeJpg()
+			let size = s:SizeGif(buf2)
+		elseif ext ==? 'jpg' || ext ==? 'jpeg'
+			let size = s:SizeJpg(buf2)
 		endif
-
-		bwipe!
-
-		let &lazyredraw=ldsave
-		let &encoding=encsave
 	else
 		echohl ErrorMsg
 		echomsg "Can't read file: " . a:image
 		echohl None
 
-		return ''
+		return
 	endif
 
 	return size
 endfunction
 
-function! s:SizeGif() "{{{1
-	"if search("^GIF.......") == 0
-	if search('^\CGIF\_.\_.\_.\_.\_.\_.\_.') == 0
-		echohl ErrorMsg
-		echomsg "Malformed GIF file."
-		echohl None
-		return ''
-	endif
+function! s:SizeGif(lines) "{{{1
+	let i=0
+	let len=len(a:lines)
+	while i <= len
+		if join(a:lines[i : i+9], ' ') =~ '^71 73 70\( \d\+\)\{7}'
+			let width=s:Vec(reverse(a:lines[i+6 : i+7]))
+			let height=s:Vec(reverse(a:lines[i+8 : i+9]))
 
-	let saveww=&ww
-	set ww+=l
-
-	let savea=@a
-	let saveb=@b
-	normal 6l"ay2l2l"by2l
-	let width=@a[1] . @a[0]
-	let height=@b[1] . @b[0]
-	let @a=savea
-	let @b=saveb
-
-	let &ww=saveww
-
-	let width = s:Vec(width)
-	let height = s:Vec(height)
-
-	return width . ' ' . height
-endfunction
-
-function! s:SizeJpg() "{{{1
-	"if search("\xff\xc0.......") == 0
-	if search("\xff\xc0\\_.\\_.\\_.\\_.\\_.\\_.\\_.") == 0
-		echohl ErrorMsg
-		echomsg "Malformed JPEG file."
-		echohl None
-		return ''
-	endif
-
-	let saveww=&ww
-	set ww+=l
-
-	let savea=@a
-	let saveb=@b
-	normal 5l"ay2l2l"by2l
-	let height=@a
-	let width=@b
-	let @a=savea
-	let @b=saveb
-
-	let &ww=saveww
-
-	let width = s:Vec(width)
-	let height = s:Vec(height)
-
-	return width . ' ' . height
-endfunction
-
-function! s:SizePng() "{{{1
-	"if search('\CIHDR........') == 0
-	if search('\CIHDR\_.\_.\_.\_.\_.\_.\_.\_.') == 0
-		echohl ErrorMsg
-		echomsg "Malformed PNG file."
-		echohl None
-		return ''
-	endif
-
-	let saveww=&ww
-	set ww+=l
-
-	let savea=@a
-	let saveb=@b
-	normal 4l"ay4l4l"by4l
-	let width=@a
-	let height=@b
-	let @a=savea
-	let @b=saveb
-
-	let &ww=saveww
-
-	let width = s:Vec(width)
-	let height = s:Vec(height)
-
-	return width . ' ' . height
-endfunction
-
-function! s:Vec(str) "{{{1
-	let len = strlen(a:str)
-	let n = ''
-	let i = 0
-	while i < len
-		" Gah, Vim can be lame sometimes. char2nr() on a NUL returns "10".
-		" This means the image size might not be right if one of the
-		" characters really is a newline.  :(
-		let tmp = char2nr(a:str[i])
-		let n = n * 256 + (tmp == 10 ? 0 : tmp)
-		let i = i + 1
+			return [width, height]
+		endif
+		let i+=1
 	endwhile
 
+	echohl ErrorMsg
+	echomsg "Malformed GIF file."
+	echohl None
+
+	return
+endfunction
+
+function! s:SizeJpg(lines) "{{{1
+	let i=0
+	let len=len(a:lines)
+	while i <= len
+		if join(a:lines[i : i+8], ' ') =~ '^255 192\( \d\+\)\{7}'
+			let height = s:Vec(a:lines[i+5 : i+6])
+			let width = s:Vec(a:lines[i+7 : i+8])
+
+			return [width, height]
+		endif
+		let i+=1
+	endwhile
+
+	echohl ErrorMsg
+	echomsg "Malformed JPEG file."
+	echohl None
+
+	return
+endfunction
+
+function! s:SizePng(lines) "{{{1
+	let i=0
+	let len=len(a:lines)
+	while i <= len
+		if join(a:lines[i : i+11], ' ') =~ '^73 72 68 82\( \d\+\)\{8}'
+			let width = s:Vec(a:lines[i+4 : i+7])
+			let height = s:Vec(a:lines[i+8 : i+11])
+
+			return [width, height]
+		endif
+		let i+=1
+	endwhile
+
+	echohl ErrorMsg
+	echomsg "Malformed PNG file."
+	echohl None
+
+	return
+endfunction
+
+function! s:Vec(nums) "{{{1
+	let n = 0
+	for i in a:nums
+		let n = n * 256 + i
+	endfor
 	return n
 endfunction
 
