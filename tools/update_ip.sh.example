@@ -1,0 +1,3 @@
+#! /bin/sh
+#lynx -mime_header -auth=vincentwang:XXXXXX "http://www.3322.org/dyndns/update?system=dyndns&hostname=linsong.7766.org&wildcard=ON"
+wget -O - -S --http-user=vincentwang --http-passwd=XXXXXX "http://www.3322.org/dyndns/update?system=dyndns&hostname=linsong.7766.org&wildcard=ON" >/dev/null
