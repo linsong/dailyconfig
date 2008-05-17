@@ -151,6 +151,9 @@
     :set encoding=utf-8
 
     :set fileencodings=ucs-bom,utf-8,gb2312,cp936
+
+    :set splitbelow
+    :set splitright
 "## }}}1
 
 "## General Mapping {{{1
