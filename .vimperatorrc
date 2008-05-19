@@ -1,10 +1,8 @@
 " settings
 set activate=quickmark,paste
-set nobeep
 set complete=sbhf
 set defsearch=google
-set guioptions=mTbs
-set maxhints=1000
+set guioptions=T
 set hlsearch 
 set incsearch
 set smartcase
