@@ -1,6 +1,5 @@
 " settings
-set activate=quickmark,paste
-set complete=sbhf
+set complete=sbhfS
 set defsearch=google
 set guioptions=T
 set hlsearch 
