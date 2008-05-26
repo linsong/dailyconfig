@@ -80,7 +80,7 @@ set read_inc=30                           # Read counter ticks every 30 msgs.
 set write_inc=30                          # Write counter ticks every 30 msgs.
 
 # set mime config
-unset strict_mime               
+#unset strict_mime               
 
 ## This will cause Mutt to attach the message rather than quoting it in the body of the message.
 ## Otherwise use "bounce".
