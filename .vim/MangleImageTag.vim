@@ -21,9 +21,16 @@
 " this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 " Place - Suite 330, Boston, MA 02111-1307, USA.
 "
-" RCS info: ---------------------------------------------------------------{{{
-" $Id: MangleImageTag.vim,v 1.10 2008/05/01 05:01:02 infynity Exp $
+" RCS info: -------------------------------------------------------------- {{{
+" $Id: MangleImageTag.vim,v 1.12 2008/05/30 00:53:28 infynity Exp $
 " $Log: MangleImageTag.vim,v $
+" Revision 1.12  2008/05/30 00:53:28  infynity
+" - Clarify an error message
+" - Don't move the cursor when updating the tag
+"
+" Revision 1.11  2008/05/26 01:11:25  infynity
+" *** empty log message ***
+"
 " Revision 1.10  2008/05/01 05:01:02  infynity
 " Code changed for Vim 7:
 "  - Computed sizes should always be correct now
@@ -55,7 +62,7 @@
 "
 " Revision 1.1  2004/03/22 05:58:34  infynity
 " Initial revision
-" -------------------------------------------------------------------------}}}
+" ------------------------------------------------------------------------ }}}
 
 if v:version < 700 || exists("*MangleImageTag")
 	finish
@@ -69,19 +76,17 @@ function! MangleImageTag() "{{{1
 
 	if line !~? '<img'
 		echohl ErrorMsg
-		echomsg "Line doesn't contain an image tag."
+		echomsg "The current line does not contain an image tag (see :help ;mi)."
 		echohl None
 
 		return
 	endif
 
 	" Get the rest of the tag if we have a partial tag:
-	if line =~? '<img[^>]*$'
-		while line =~? '<img\_[^>]*$'
-			let end_linenr = end_linenr + 1
-			let line = line . "\n" . getline(end_linenr)
-		endwhile
-	endif
+	while line =~? '<img\_[^>]*$'
+		let end_linenr = end_linenr + 1
+		let line = line . "\n" . getline(end_linenr)
+	endwhile
 
 	" Make sure we modify the right tag if more than one is on the line:
 	if line[col] != '<'
@@ -161,7 +166,7 @@ function! MangleImageTag() "{{{1
 	let saveautoindent=&autoindent
 	let &l:autoindent=0
 
-	silent exe 'normal :' . start_linenr . ',' . end_linenr . "change\n" . line . "\n."
+	call setline(start_linenr, split(line, "\n"))
 
 	let &l:autoindent=saveautoindent
 endfunction
