@@ -499,6 +499,7 @@
         "TODO: need to set wildmode, for more details, :help 'wildmode'
         " use menu in console mode 
         if !has("gui_running")
+            "### color scheme settings {{{3
             "if $TERM == "xterm-color"
                 ":colorscheme torte
             "else
@@ -509,6 +510,12 @@
             """       configured with ./configure --enable-colors256
             " if terminal support 256 colors, inkpot seems very nice
             :colorscheme inkpot
+
+            " xterm16 color scheme setting
+            let xterm16_brightness = 'default'     " Change if needed
+            let xterm16_colormap = 'allblue'       " Change if needed
+            "### }}}3
+
             :source $VIMRUNTIME/menu.vim
             :set cpo-=<
             :set wcm=<C-Z>
