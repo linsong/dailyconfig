@@ -1,4 +1,10 @@
 " settings
+"set activate=quickmark,paste
+"set nobeep
+"set complete=sbhf
+"set defsearch=google
+set guioptions=mT
+set maxhints=1000
 set complete=sbhfS
 set defsearch=google
 set guioptions=T
@@ -7,12 +13,12 @@ set incsearch
 set smartcase
 
 " may affect performance
-set preload 
+"set preload 
 
 set showmode
 set showstatuslinks
 
-set wildmode=list:longest
+"set wildmode=list:longest
 
 " key mappings
 map <A-n> :tabnew<CR>
