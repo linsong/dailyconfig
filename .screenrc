@@ -182,6 +182,6 @@ bind -c layout c    layout new
 #
 
 # source local settings 
-source screenrc.local
+source ${HOME}/.screenrc.local
 # maybe following line is smarter ;)
 #source ${HOME}/.screenrc-${HOST}
