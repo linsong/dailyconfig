@@ -1,0 +1,28 @@
+# vim: set ft=muttrc
+##########################################################
+###   Exoweb mail SETTING
+##########################################################
+set spoolfile = $HOME/Mail/vincent
+set folder = $HOME/Mail
+set postponed = +postponed
+set record = +sent-mail
+
+#################### Override Macros ####################
+macro index ",1" "<change-folder> =vincent<enter>"
+macro index ",2" "<change-folder> =exoweb/work<enter>"
+macro index ",3" "<change-folder> =sent-mail<enter>"
+macro index ",6" "<change-folder> =rss/others<enter>"
+macro index ",7" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
+macro index ",8" "<change-folder> =maillists/vim@vim.org<enter>"
+macro index ",9" "<change-folder> =maillists/<tab><tab>"
+macro index ",0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
+
+macro pager ",1" "<change-folder> =vincent<enter>"
+macro pager ",2" "<change-folder> =exoweb/work<enter>"
+macro pager ",3" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
+macro pager ",4" "<change-folder> =maillists/vim@vim.org<enter>"
+macro pager ",9" "<change-folder> =maillists/<tab><tab>"
+macro pager ",0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
+
+
+push "<change-folder> =exoweb/work<enter>"

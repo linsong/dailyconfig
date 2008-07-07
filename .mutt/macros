@@ -17,15 +17,7 @@ macro index ",N"     "<limit>~N<enter>"                             # filter out
 macro index ",U"     "<limit>~U<enter>"                             # filter out all Unread mails
 macro index "\'"     "<clear-flag>r"                                      # Mark as un-replied
 macro index "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
-macro index "<esc>v"    "<pipe-message>urlscan<enter>"                       # URL viewer.
-macro index ",1" "<change-folder> =vincent<enter>"
-macro index ",2" "<change-folder> =exoweb/work<enter>"
-macro index ",3" "<change-folder> =sent-mail<enter>"
-macro index ",6" "<change-folder> =rss/others<enter>"
-macro index ",7" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
-macro index ",8" "<change-folder> =maillists/vim@vim.org<enter>"
-macro index ",9" "<change-folder> =maillists/<tab><tab>"
-macro index ",0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
+macro index "<esc>v"    "<pipe-message>urlview<enter>" "open url with urlview"
 #macro index "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.
 #macro index "<esc>h"    "<pipe-message>mailhops<enter>"                      # View the path of the mail.
 #macro index "<esc>f"    "<pipe-message>view-x-face<enter>"                   # View the X-Face (if there is one).
@@ -52,7 +44,7 @@ macro pager "<esc>6"    "<enter-command>set pager_index_lines=12<enter>"      # 
 macro pager "<esc>7"    "<enter-command>set pager_index_lines=14<enter>"      # Change PIL size
 macro pager "<esc>8"    "<enter-command>set pager_index_lines=16<enter>"      # Change PIL size
 macro pager "<esc>9"    "<enter-command>set pager_index_lines=18<enter>"      # Change PIL size
-macro pager "<esc>v"    "<pipe-message>urlscan<enter>"                       # URL viewer.
+macro pager "<esc>v"    "<pipe-message>urlview<enter>" "open url with urlview"
 macro pager "<esc>b"    "<pipe-message>lbdb-fetchaddr<enter>"                # Store address details in lbdb.
 macro pager "<esc>h"    "<pipe-message>mailhops<enter>"                      # View the path of the mail.
 macro pager "<esc>l"    "<enter-command>set invpipe_decode<enter>\
@@ -65,3 +57,8 @@ macro pager "<esc>l"    "<enter-command>set invpipe_decode<enter>\
 # Provide some "on-line" help.
 macro index   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
 macro pager   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
+
+macro generic "<esc>1" ":set from='Vincent Wang <linsong.qizi@gmail.com>'<enter>"
+macro generic "<esc>2" ":set from='Vincent Wang <vincent@exoweb.net>'<enter>"
+macro generic "<esc>3" ":set from='Vincent Wang <vincent@qnite.com>'<enter>"
+

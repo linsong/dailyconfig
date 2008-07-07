@@ -16,16 +16,9 @@ set forward_format="Fwd: %s"
 ##########################################################
 set spoolfile = $HOME/Mail/vincent
 
-# use mutt to get mails 
-#set pop_user = "linsong.qizi"
-#set pop_delete = no
-#set pop_pass = "password"
-#set pop_host = "pops://pop.gmail.com:995"
-
-set imap_user="vincent"
-#set imap_pass=xxxxxxxxxxx
-
-set message_cachedir = $HOME/Mail/cache
+set header_cache=$HOME/Mail/cache/headers
+set message_cachedir=$HOME/Mail/cache/bodies
+set certificate_file=$HOME/Mail/certificates
 
 set mail_check = 60                       # How often(seconds) we look for new mails 
 set timeout = 15
@@ -134,6 +127,8 @@ source ~/.mutt/scores                     # Define score rules
 
 alternative_order text/enriched text/plain text/html application/postscript image/*
 
+source $HOME/.mutt/active_mail_setting
+
 # Last, but not least, get mutt to display its version on startup.
-push "<change-folder> =exoweb/work<enter>"
 push <show-version>
+

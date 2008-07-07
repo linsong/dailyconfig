@@ -1,0 +1,9 @@
+set spoolfile = $HOME/Mail/vincent
+# folder for mailboxes, later '+' or '=' will be expanded to the value 
+# of this variable
+set folder = $HOME/Mail
+
+# set up my mailboxes
+set postponed = +postponed
+set mbox = +mbox
+set record = +sent-mail

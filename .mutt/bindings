@@ -62,6 +62,7 @@ bind pager   ",g"     group-reply
 
 bind pager   "h"      noop
 bind pager   ",fm"    noop
+bind pager   ",fi"    noop
 
 bind alias   " "      tag-entry
 bind alias   "\r"     select-entry

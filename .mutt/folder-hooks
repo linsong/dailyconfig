@@ -7,5 +7,6 @@ folder-hook .                              source ~/.mutt/defaults
 folder-hook =maillists/.*$                 source ~/.mutt/defaults.maillist
 folder-hook =exoweb/work$                  source ~/.mutt/defaults.exoweb
 folder-hook imaps://imap.exoweb.net/INBOX  source ~/.mutt/defaults.exoweb
+folder-hook imaps://imap.gmail.com:993/INBOX  source ~/.mutt/defaults.gmail
 
 

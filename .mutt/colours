@@ -45,8 +45,10 @@ mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Viru
 color index green         black "~R ~C nb@exoweb.net"
 color index brightgreen   black "~N ~C nb@exoweb.net"
 #color index green        black "~N (~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")"
-color index brightyellow  black "~N (~C vincent@exoweb.net | ~C ant@exoweb.net)"
-color index yellow        black "~R (~C vincent@exoweb.net | ~C ant@exoweb.net)"
+color index brightyellow  black "~N (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+color index yellow        black "~R (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+color index brightblue  black "~N ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+color index blue        black "~R ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
 #color index black        red   "~N ~d >1d"
 color index red          black ~F
 color index black        green ~T
