@@ -14,7 +14,6 @@ set forward_format="Fwd: %s"
 ##########################################################
 ###  INCOMING MAILS SETTING
 ##########################################################
-set spoolfile = $HOME/Mail/vincent
 
 set header_cache=$HOME/Mail/cache/headers
 set message_cachedir=$HOME/Mail/cache/bodies
@@ -36,14 +35,6 @@ set resolve
 # ask me to confirm before quit
 set quit=ask-yes
 
-# folder for mailboxes, later '+' or '=' will be expanded to the value 
-# of this variable
-set folder = $HOME/Mail
-
-# set up my mailboxes
-set postponed = +postponed
-set mbox = +mbox
-set record = +sent-mail
 set copy                                  # Keep copies of outgoing mail...
 set postpone=ask-yes                       # Ask about postponing.
 set nomove                                # Hold messages in $MAIL.
@@ -108,7 +99,7 @@ source ~/.mutt/aliases                    # Load in my aliases.
 # set up abook 
 set query_command = "abook --mutt-query '%s'"
 
-source ~/.mutt/mailboxes                  # Define the list of folders that receive mail.
+source $HOME/.mutt/active_mail_setting
 
 source ~/.mutt/headers                    # Configure header display.
 source ~/.mutt/bindings                   # Define key bindings.
@@ -126,8 +117,6 @@ source ~/.mutt/scores                     # Define score rules
 #source ~/.mutt/non-standard               # Support for mutt patches.
 
 alternative_order text/enriched text/plain text/html application/postscript image/*
-
-source $HOME/.mutt/active_mail_setting
 
 # Last, but not least, get mutt to display its version on startup.
 push <show-version>

@@ -14,3 +14,4 @@ unmy_hdr X-URL:
 my_hdr From: Vincent Wang <linsong.qizi@gmail.com>
 set from = linsong.qizi@gmail.com
 
+macro generic ,fm "<imap-fetch-mail>"

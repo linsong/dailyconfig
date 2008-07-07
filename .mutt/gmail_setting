@@ -4,10 +4,13 @@
 ##########################################################
 set imap_user = 'linsong.qizi@gmail.com'
 #set imap_pass = 'yourpass' # let mutt ask me the password instead of store it here
+
 set spoolfile = "imaps://imap.gmail.com:993/INBOX"
+
 set folder = "imaps://imap.gmail.com:993"
-set record="imaps://imap.gmail.com/[GMail]/Sent Mail"
-set postponed="imaps://imap.gmail.com/[GMail]/Drafts"
+set mbox = +mbox
+set record="imaps://imap.gmail.com/[Gmail]/Sent Mail"
+set postponed="imaps://imap.gmail.com/[Gmail]/Drafts"
 
 set smtp_url="smtp://linsong.qizi@gmail.com@smtp.gmail.com"
 # comment out the line below to let mutt to guess the authentication method one by one
@@ -19,18 +22,17 @@ macro index ",2" "<change-folder> imaps://imap.gmail.com:993/PersonalMail<enter>
 macro index ",3" "<change-folder> imaps://imap.gmail.com:993/ZAX<enter>"
 macro index ",4" "<change-folder> imaps://imap.gmail.com:993/EXOWEB<enter>"
 macro index ",7" "<change-folder> imaps://imap.gmail.com:993/[list]Django<enter>"
-macro index ",0" "<change-folder> imaps://imap.gmail.com:993/[GMail]/Sent Mail<enter>"
+macro index ",0" "<change-folder> imaps://imap.gmail.com:993/[Gmail]/Sent Mail<enter>"
 
 macro pager ",1" "<change-folder> imaps://imap.gmail.com:993/INBOX<enter>"
 macro pager ",2" "<change-folder> imaps://imap.gmail.com:993/PersonalMail<enter>"
 macro pager ",3" "<change-folder> imaps://imap.gmail.com:993/ZAX<enter>"
 macro pager ",4" "<change-folder> imaps://imap.gmail.com:993/EXOWEB<enter>"
 macro pager ",7" "<change-folder> imaps://imap.gmail.com:993/[list]Django<enter>"
-macro pager ",0" "<change-folder> imaps://imap.gmail.com:993/[GMail]/Sent Mail<enter>"
+macro pager ",0" "<change-folder> imaps://imap.gmail.com:993/[Gmail]/Sent Mail<enter>"
 
 # Provide some "on-line" help.
 macro generic "<esc>?" "<shell-escape>w3m /opt/local/share/doc/mutt/manual.html<enter>"
 macro index   "<esc>?" "<shell-escape>w3m /opt/local/share/doc/mutt/manual.html<enter>"
 macro pager   "<esc>?" "<shell-escape>w3m /opt/local/share/doc/mutt/manual.html<enter>"
 
-macro generic ,fm "<imap-fetch-mail>"
