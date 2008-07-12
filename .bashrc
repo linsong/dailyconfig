@@ -401,4 +401,6 @@ __END
  }
  # }}}
 
- source ${HOME}/.bashrc.local
+ if [ -e ${HOME}/.bashrc.local ]; then
+    source ${HOME}/.bashrc.local
+ fi
