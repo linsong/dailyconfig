@@ -66,6 +66,19 @@ bind q remove
 bind = resize +3
 bind - resize -3
 
+bind -c selectHighs 0 select 10 #these three commands are 
+bind -c selectHighs 1 select 11 #added to the command-class
+bind -c selectHighs 2 select 12 #selectHighs
+bind -c selectHighs 3 select 13 
+bind -c selectHighs 4 select 14 
+bind -c selectHighs 5 select 15 
+bind -c selectHighs 6 select 16 
+bind -c selectHighs 7 select 17 
+bind -c selectHighs 8 select 18 
+bind -c selectHighs 9 select 19 
+bind / command -c selectHighs   #bind the hyphen to 
+                                #command-class selectHighs 
+
 # An example of a "screen scraper" which will launch urlview on the current
 # screen window
 #
@@ -136,20 +149,6 @@ idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
 #
 bind + resize -v +3
 bind _ resize -v -3
-
-#
-# Bind sessions 10-19 to Shift-0, Shift-1.. etc..
-#
-bind ) select 10
-bind ! select 11
-bind @ select 12
-bind # select 13
-bind $ select 14
-bind % select 15
-bind ^ select 16
-bind & select 17
-bind * select 18
-bind ( select 19
 
 # settings about layout
 layout new
