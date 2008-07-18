@@ -1,14 +1,24 @@
 # open more windows at startup
-screen -t mail 1 /bin/bash -c 'if [ $(hostname) == "vincent" ]; then mutt; fi'
+screen -t mail 1
+stuff 'if [ $(hostname) == "vincent" ]; then mutt; fi'
+
 screen -t sandbox 2
 screen -t work 3
 screen -t chroot 4
-screen -t ipython 5 ipython 
-screen -t w3m 6 w3m www.google.com
+
+screen -t ipython 5
+stuff 'ipython'
+
+screen -t w3m 6
+stuff 'w3m www.google.com'
+
 ### the following config worked during the renovation of exoweb's office 
 #screen -t irssi 7 /bin/bash -c 'if [ $(uname) = "Darwin" ]; then irssi; fi'
-screen -t irssi 7 irssi
-screen -t psql 8 psql NBET_vincent
+screen -t irssi 7
+stuff 'irssi'
+
+screen -t psql 8
+stuff 'psql NBET_vincent'
 
 select mail
 
