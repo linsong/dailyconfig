@@ -509,7 +509,8 @@
             """ NOTE: to make 256 colors work in GNU screen, screen need to be
             """       configured with ./configure --enable-colors256
             " if terminal support 256 colors, inkpot seems very nice
-            :colorscheme inkpot
+            ":colorscheme inkpot
+            :colorscheme desert " use desert since 256 colors does not work from my macbox
 
             " xterm16 color scheme setting
             let xterm16_brightness = 'default'     " Change if needed
@@ -1236,6 +1237,12 @@ endif " has("autocmd")
     endif
     "}}}2
 
+    "### settings for tracvim.vim {{{2
+    " in file .vimrc.local
+    "let g:tracServerList = {}
+    "let g:tracServerList['NordicTrac'] = 
+        "\'http://(user):(password)@(trac serverpath)/login/xmlrpc'
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
@@ -1510,3 +1517,7 @@ function! TabMessage(cmd)
 endfunction 
 command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>) 
 "## }}}1
+
+if filereadable(expand('~/.vimrc.local'))
+    source ~/.vimrc.local
+endif
