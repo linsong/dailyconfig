@@ -1,0 +1,4 @@
+set auto_reshuffle=true
+set repeat=true
+set shuffle=true
+set id3_default_charset=gb2312
