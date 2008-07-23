@@ -8,8 +8,8 @@ augroup filetypedetect
   au  BufRead,BufNewFile psql.edit.* set paste
   au! BufRead,BufNewFile *.lzx      setfiletype lzx
 
-  au! BufRead,BufNewFile nordictrac.dev.exoweb.net_*.txt setfiletype exo-codereview
-  au! BufRead,BufNewFile nordicbet.dev.exoweb.net*.txt setfiletype exo-codereview
+  "au! BufRead,BufNewFile nordictrac.dev.exoweb.net_*comment*.txt setfiletype txt
+  au! BufRead,BufNewFile nordictrac.dev.exoweb.net_*text*.txt setfiletype exo-codereview
   au! BufRead,BufNewFile *.txt      setfiletype txt
 
   au! BufRead,BufNewFile *.mkd      setfiletype mkd
