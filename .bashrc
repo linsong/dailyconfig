@@ -215,6 +215,8 @@ fi
  alias edclipbrd='vim +ClipBrd +only'
 
  alias sshvincent='ssh -A box -t "ssh vincent -t \"screen -x \""'
+
+ alias rlwrap='rlwrap -c'
 ###########################################################################
 ###
 ###            Function defines
