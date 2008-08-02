@@ -44,6 +44,10 @@ export LC_ALL=en_US.UTF-8
 #LC_CTYPE=zh_CN.UTF-8
 
 export PYTHONSTARTUP=~/.pythonrc
+
+# environment for rlwrap(readline wrapper tool)
+export RLWRAP_HOME=~/.rlwrap
+
 # }}}
 
 ##########################################################################
