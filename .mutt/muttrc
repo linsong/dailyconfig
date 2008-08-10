@@ -22,8 +22,8 @@ set certificate_file=$HOME/Mail/certificates
 set mail_check = 60                       # How often(seconds) we look for new mails 
 set timeout = 15
 
-# don't display '+' marker before wrapped line
-set markers=no
+# display '+' marker before wrapped line or not
+set markers=yes
 
 set check_new = yes
 # use ";" tag_prefix to do this 

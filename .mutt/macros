@@ -4,7 +4,6 @@
 # NOTE: use "," to define shortcuts  if possible. NOT ";" since it is used as tag-prefix
 #
 # macros for generic mode
-macro generic "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
 macro generic ,sm ":source $HOME/.mutt/muttrc\r"
 
 macro generic,index,pager \ca "<shell-escape>abook<return>" "launch abook"
@@ -53,10 +52,6 @@ macro pager "<esc>l"    "<enter-command>set invpipe_decode<enter>\
 #macro pager "\Cs\Cs" "<pipe-message>spamprobe -T score<enter>"            # What's the score for this message?
 #macro pager "\Cs\Cj" "<pipe-message>spamprobe spam<enter>"                # This message is junk.
 #macro pager "\Cs\Cg" "<pipe-message>spamprobe good<enter>"                # This message is good.
-
-# Provide some "on-line" help.
-macro index   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
-macro pager   "<esc>?" "<shell-escape>w3m /usr/share/doc/mutt/html/manual.html<enter>"
 
 macro generic "<esc>1" ":set from='Vincent Wang <linsong.qizi@gmail.com>'<enter>"
 macro generic "<esc>2" ":set from='Vincent Wang <vincent@exoweb.net>'<enter>"

@@ -26,4 +26,8 @@ augroup filetypedetect
 
   au BufNewFile,BufRead *.moin setf moin
   au BufNewFile,BufRead *.wiki setf moin
+
+  au BufNewFile,BufRead *.as setf actionscript
+  au BufNewFile,BufRead *.mxml setf mxml
+  au BufNewFile,BufRead *.mxml compiler flex 
 augroup END

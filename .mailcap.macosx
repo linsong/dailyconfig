@@ -1,7 +1,7 @@
 # Images
-Image/JPEG; /Users/linsong/tools/mac_tool/view_attachment %s
+Image/JPEG; /Users/linsong/tools/mac_tool/view_attachment %s jpeg
 Image/PNG; /Users/linsong/tools/mac_tool/view_attachment %s png
-Image/GIF; /Users/linsong/tools/mac_tool/view_attachment %s
+Image/GIF; /Users/linsong/tools/mac_tool/view_attachment %s gif
 
 # UnIdentified.
 Application/octet-stream; /Users/linsong/tools/mac_tool/view_attachment %s "-" 

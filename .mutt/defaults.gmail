@@ -14,4 +14,17 @@ unmy_hdr X-URL:
 my_hdr From: Vincent Wang <linsong.qizi@gmail.com>
 set from = linsong.qizi@gmail.com
 
-macro generic ,fm "<imap-fetch-mail>"
+#################### Override Macros ####################
+macro index,pager ",1" "<change-folder> imaps://imap.gmail.com:993/INBOX<enter>"
+macro index,pager ",2" "<change-folder> imaps://imap.gmail.com:993/PersonalMail<enter>"
+macro index,pager ",3" "<change-folder> imaps://imap.gmail.com:993/ZAX<enter>"
+macro index,pager ",4" "<change-folder> imaps://imap.gmail.com:993/Exoweb<enter>"
+macro index,pager ",7" "<change-folder> imaps://imap.gmail.com:993/[list]Django<enter>"
+macro index,pager ",9" "<change-folder> imaps://imap.gmail.com:993/[Gmail]/Sent Mail<enter>"
+macro index,pager ",0" "<change-folder> imaps://imap.gmail.com:993/TODO<enter>"
+
+
+# Provide some "on-line" help.
+macro generic,index,pager "<esc>?" "<shell-escape>w3m /opt/local/share/doc/mutt/manual.html<enter>"
+
+macro generic,index,pager ",fm" "<imap-fetch-mail>"

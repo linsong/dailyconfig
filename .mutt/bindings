@@ -13,14 +13,13 @@ bind generic <home>  first-entry
 bind generic <end>   last-entry
 bind generic <left>  previous-entry
 bind generic <right> next-entry
+bind generic   ",fm"    noop
 
 # Specific key bindings.
 bind index   "h"     noop
 bind index   "z"     noop
 bind index   "Z"     noop
 
-#bind index  ",fm"  fetch-mail
-#bind index  ",fi"  imap-fetch-mail
 bind index   "g"        first-entry
 bind index   "G"        last-entry
 bind index   "\Cf"      next-page
@@ -61,7 +60,6 @@ bind pager   "\Cd"    half-down
 bind pager   ",g"     group-reply
 
 bind pager   "h"      noop
-bind pager   ",fm"    noop
 bind pager   ",fi"    noop
 
 bind alias   " "      tag-entry

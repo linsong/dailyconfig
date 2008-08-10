@@ -14,6 +14,3 @@ set pgp_verify_sig
 
 set from = linsong.qizi@gmail.com
 
-# wake up fetchmail deamon to fetch mail immediately
-macro generic ,fm  "<shell-escape>fetchmail<enter>"
-

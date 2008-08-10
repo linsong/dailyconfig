@@ -2,7 +2,7 @@
 " Author: Vincent Wang (linsong dot qizi at gmail dot com)
 " Created:  Fri Jun 29 18:06:29 CST 2007
 " Requires: Vim Ver7.0+ 
-" Version:  1.1
+" Version:  1.3
 "
 " Documentation: 
 "   The purpose of this plugin is very simple, it can toggle words among
@@ -28,7 +28,28 @@
 "   There are some default words for toggling predefined in the
 "   script(g:_toogle_words_dict) that will work for all filetypes.
 "   Any comment, suggestion, bug report are welcomed. 
-
+"
+" History:
+"  1.3:
+"    - fix error of 'E488: Trailing characters', patch provided by Jeremy Cantrell
+"  1.2:
+"    - fixed typo(november => novermber)
+"    - sorted and stacked the definitions to make them more readable/editable
+"    - added a few new definitions (allow/deny, min/max, before/after, block/inline/none, left/right)
+"    - add revision history 
+"    - most of above changes come from Fergus Bremner, thanks Fergus!
+"
+"  1.1:
+"    - add a simple case sensitive support 
+"
+"  1.0:
+"    - initial upload
+"
+" Contributors:
+"  Fergus Bremner
+"  Jeremy Cantrell
+"
+"   Thanks! 
 
 if v:version < 700
     "TODO: maybe I should make this script works under vim7.0
@@ -43,9 +64,35 @@ endif
 let s:keepcpo= &cpo
 set cpo&vim
 
-let g:load_toggle_words = "1.1"
+let g:load_toggle_words = "1.3"
 
-let g:_toggle_words_dict = {'*': [['true', 'false'], ['on', 'off'], ['yes', 'no'], ['+', '-'], ['define', 'undef'], ['if', 'elseif', 'else', 'endif'], ['>', '<'], ['{', '}'], ['(', ')'], ['[', ']'], ['==', '!='], ['success', 'failure'], ['start', 'stop'], ['up', 'down'], ['good', 'bad'], ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'novermber', 'december'], ['left', 'right'], [],],  }
+let g:_toggle_words_dict = {'*': [
+    \ ['==', '!='], 
+    \ ['>', '<'], 
+    \ ['(', ')'], 
+    \ ['[', ']'], 
+    \ ['{', '}'], 
+    \ ['+', '-'], 
+    \ ['allow', 'deny'], 
+    \ ['before', 'after'], 
+    \ ['block', 'inline', 'none'],
+    \ ['define', 'undef'], 
+    \ ['good', 'bad'], 
+    \ ['if', 'elseif', 'else', 'endif'], 
+    \ ['in', 'out'], 
+    \ ['left', 'right'],
+    \ ['min', 'max'], 
+    \ ['on', 'off'], 
+    \ ['start', 'stop'], 
+    \ ['success', 'failure'], 
+    \ ['true', 'false'],
+    \ ['up', 'down'], 
+    \ ['left', 'right'],
+    \ ['yes', 'no'], 
+    \ ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], 
+    \ ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'], 
+    \ [],
+    \ ],  }
 
 if exists('g:toggle_words_dict')
     :call extend(g:_toggle_words_dict, g:toggle_words_dict)
@@ -90,7 +137,7 @@ function! s:ToggleWord()
     endfor
 endfunction
 
-command! ToggleWord :call <SID>ToggleWord() <CR>
+command! ToggleWord :call <SID>ToggleWord()
 
 let &cpo= s:keepcpo
 unlet s:keepcpo

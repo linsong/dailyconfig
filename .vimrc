@@ -510,6 +510,7 @@
             """       configured with ./configure --enable-colors256
             " if terminal support 256 colors, inkpot seems very nice
             ":colorscheme inkpot
+            ":colorscheme koehler
             :colorscheme desert " use desert since 256 colors does not work from my macbox
 
             " xterm16 color scheme setting
@@ -578,6 +579,11 @@ if has("autocmd")
         :au BufEnter *.lzx :call FoldOnRegex('^\s*<\w\+', 0)
         :au BufEnter *.py  :call FoldOnRegex('^\s*\(\<def\>\|\<class\>\)', 0)
 
+
+        " settting for fcshtools 
+        ":au BufNewFile,BufRead *.mxml,*.as :nmap <C-B> :!bash ~/bin/fcshcmp.sh %:p
+        ":au BufNewFile,BufRead *.mxml,*.as :nmap <C-A> :!bash ~/bin/fcshcmp.sh %:p run 
+        
         " following config will let vim to read non-plain-text file format
         "
         " autocmd for read MS Word document
@@ -1033,7 +1039,21 @@ endif " has("autocmd")
     "### setting for netrw.vim {{{2
     " set what kind of files we will ignore
     let g:netrw_list_hide='^\..*$,^.*\~$,^.*\.pyc$'
-    let g:netrw_liststyle=3 "use tree list style
+    let g:netrw_liststyle=1 "use tree list style
+    "let g:netrw_altv          = 1
+    let g:netrw_fastbrowse    = 2
+    let g:netrw_keepdir       = 0
+    let g:netrw_silent        = 1
+    let g:netrw_special_syntax= 1
+    let g:netrw_altv          = 1
+    let g:netrw_fastbrowse    = 2
+    let g:netrw_keepdir       = 0
+    let g:netrw_liststyle     = 2
+    let g:netrw_retmap        = 1
+    let g:netrw_silent        = 1
+    let g:netrw_special_syntax= 1
+
+
     "### }}}2   
 
     "### setting for NERD_comments.vim {{{2

@@ -49,7 +49,8 @@ def main():
     ip.expose_magic('fdir', flat_dir)
 
     # custom magic commands
-    ip.magic('alias ls ls -F --color=auto')
+    #ip.magic('alias ls ls -F --color=auto')
+    ip.magic('alias ls ls -F -G')
 
     o = ip.options
     # An example on how to set options

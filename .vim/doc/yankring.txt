@@ -1,7 +1,7 @@
-*yankring.txt*      For Vim version 6.2 and 7.0. 
+*yankring.txt*      For Vim version 7.0. 
 
-Author:	        David Fishburn                             August 20, 2005
-Version:        2.0
+Author:	        David Fishburn                             August 9, 2008
+Version:        4.1
 
 For instructions on installing this file, type
 	:help add-local-help |add-local-help| inside Vim.
@@ -33,6 +33,7 @@ For instructions on installing this file, type
        5.14 YRMapsCreate......................: |YRMapsCreate|
        5.15 YRMapsDelete......................: |YRMapsDelete|
        5.16 YRSearch..........................: |YRSearch|
+       5.17 YRRunAfterMaps....................: |yankring-custom-maps|
     6. Tutorial...............................: |yankring-tutorial|
        6.1  YRShow............................: |YRShow-example|
        6.2  YRReplace.........................: |YRReplace-example|
@@ -53,22 +54,29 @@ deletes.  These previous deletes can be referenced using [register]p, so
 "1p will paste the last delete, "2p the 2nd last delete.  For more
 information see |quote_number|.
 
-Vim does not provide any mechanism to reference previous yanked text.  
+Vim does not provide any mechanism to reference previously yanked text.  
 In Emacs this feature is called the "kill ring".
 
 The yankring plugin allows the user to configure the number of yanked
 and deleted text.  After text has been pasted, it can be replaced with
 a previous value from the yankring.
 
+As of version 3.0, the yankring's content will persist (by default) 
+between starting and stopping Vim.
+
 The plugin can be toggled on and off, and supports:
    Ranges
    Registers
    Counts
    All visual modes
+   All motions
+   All text-objects
 
 If you have any suggestions for the improvement of this plugin, see the
 yankring.vim file for my email address.  Suggestions / bug reports are
 always welcome.
+
+For details on the changes between versions see |yankring-history|.
 
 ==============================================================================
 3. Configuration                                 *yankring-configure*
@@ -101,6 +109,12 @@ your |.vimrc|.
         separate line.  Since each yank could be very large, the display of
         the element is limited to the above default.  >
             let g:yankring_max_display = 70
+    yankring_persist  
+<       Default: 1
+        If you have enabled the storing of global variables in the |viminfo|
+        file, the yankring will be default persist the contents of the ring
+        between starting and stopping Vim.  To disable this feature: >
+            let g:yankring_persist = 0
     yankring_dot_repeat_yank
 <       Default: Based on the Vim cpoption setting
         By default Vim will not repeat (using '.') yanking of text.  This can
@@ -198,6 +212,13 @@ your |.vimrc|.
         the top 10 elements in the yankring are in the numbered reqisters 0-9
         you can put the following in your |vimrc| >
             let g:yankring_manage_numbered_reg = 1
+    yankring_ignore_operator
+<       Default: 'g~ gu gU ! = gq g? > < zf g@'
+        There are a number of Vim operations which do not change any 
+        registers, and therefore should not be captured by the yankring.
+        This list is used to ignore the appropriate operators.
+        You can put the following in your |vimrc| >
+            let g:yankring_ignore_operator = 'g~ gu gU ! = gq g? > < zf g@'
 
 <
 3.2 Default Keys                                 *yankring-mappings*
@@ -307,6 +328,7 @@ This line remaps Y (which the user presses) to the YRYankCount command.  The
 YRYankCount tells Vim to execute y$ instead.
 
 
+==============================================================================
 4. Using the YankRing Window:                    *yankring-window*
 
 This is a new feature as of the 2.0 release.  The yankring uses a
@@ -360,6 +382,7 @@ in the yankring window.
  
 
 
+==============================================================================
 5. Commands:                                     *yankring-commands*
 
 The predefined mappings call some specific commands with special parameters.
@@ -948,6 +971,73 @@ mapping: >
 
 ==============================================================================
 7. History                                       *yankring-history*
+
+  4.1: August 9, 2008: 
+         NF: The yankring now allows you to override which operators should
+             be ignored (yankring_ignore_operator).  By default this is
+             set for the standard Vim operators which do not modify any
+             registers (Examples: = and gu) (Andy Wokula).
+         NF: The yankring did not map v_x (Matt Tolton).
+         BF: The expression register (quote_=) was not accounted for correctly
+             (Agathoklis Hatzimanikas).
+         BF: Using the v:operator variable must be escaped when used in
+             a regular expression.
+
+  4.0: June 24, 2008: 
+         NF: The yankring by default now captures all |text-objects| and 
+             all motions (|motion.txt|) which Vim supports.  Version 3.0 only
+             supported a subset of the basic motion commands.
+         NF: Prior to this version only predefined maps triggered the 
+             capture of data into the yankring.  These maps only supported
+             yanks and deletes.  The yankring now also supports
+             operator-pending mode, which allows a greater range of operations
+             to be automatically captured and added to the yankring.  
+             Operating pending mode functionality requires Vim 7.2 or Vim 7.1
+             with patch #205.  If using Vim 7.1 you can determine this with: 
+                echo has("patch205")
+         NF: Prior to this version only yanks and deletes were registered
+             in the yankring.  Changes are now also captured into the
+             yankring.
+         NF: The yankring will also capture the system cliboard when focus is
+             returned to the vim window.  This is useful if you copy text
+             between applications.
+         NF: The yankring window always opened bottom horizontal.  Now it
+             can be opened top or bottom and horizontal or vertically.
+             This can be controlled via variables in your .vimrc.
+         BF: The yankring has an option to persist between instances
+             of Vim by storing the values in global variables within
+             the viminfo.  This has led to some unusual ordering of
+             items in the ring from conflicts between instances.
+             This option has been turn off by default.
+         BF: Their was an issue with yanking using y$.
+
+  3.1: September 10, 2007: 
+         NF: YRClear will now unlet all global variables it uses to store
+             the data if the persist storage is specified (the default).
+             Large values in the viminfo file could possibly affect other
+             applications.
+
+  3.0: September 7, 2007: 
+         NF: Converted the yankring to use the new Vim7's List object which
+             means it is no longer compatible with Vim6.
+         NF: By default the yankring will now maintain the yankring's items
+             persistently by default.  It does this via the |viminfo| file.
+             This means the contents of the yankring rely on the internal
+             variables of only 1 Vim instance.
+         BF: YRToggle was not unmapping 'gp' and 'gP'.
+         BF: YRSearch prompted the user for a regex even if one was provided
+             on the command line.
+         BF: If g:yankring_manage_numbered_reg is enabled, the "." operator
+             did not correctly repeat the previous action (Pedro DeRose).
+
+  2.2: November 1, 2005: 
+         NF: Added 'x' to the list of yankring_n_keys.  This is very useful
+             in visual mode since it can delete a lot of characters.
+
+  2.2: October 19, 2005: 
+         BF: If you pressed '?' to toggle the display of the help in the
+             yankring window, the window would close.  This also applied to
+             'a', which allowed you to toggle the autoclose feature.
 
   2.1: October 11, 2005: 
          NF: Added the ability for the yankring to override Vim's numbered 
