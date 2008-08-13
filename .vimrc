@@ -432,8 +432,7 @@
     set nobackup writebackup
 
     let $VIMCFG = '$HOME/.vim'
-    " windows specific setting 
-    if has('win32')  "{{{2
+    if has('win32')  " windows specific setting{{{2
         set runtimepath=~/.vim,$VIMRUNTIME
 
         "setting about word complete
@@ -474,8 +473,10 @@
         :set clipboard=unamed
 
         " windows setting end }}}2
-    elseif has('macunix')
+    elseif has('macunix') "macosx specific settings {{{2
         set guifont=Monaco:h14
+        let Grep_Xargs_Options = '-0' 
+        " macosx specific settings end}}}2
     else  " linux like platform specific setting {{{2
         " put some untested or untrusted plugin into .vim-experiment folder,
         " don't mess up .vim 
