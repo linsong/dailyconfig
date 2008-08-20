@@ -12,5 +12,5 @@
 #fcc-hook stormcock@(steamradio\.com|mistlethrush\.co\.uk)        /dev/null
 #fcc-hook (clocc|cclan)-list@lists\.sourceforge\.net              /dev/null
 #fcc-hook debian-.*@lists\.debian\.org                            /dev/null
-fcc-hook .*                                                      =sent-mail
+#fcc-hook .*                                                      =sent-mail
 
