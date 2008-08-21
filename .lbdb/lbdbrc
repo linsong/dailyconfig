@@ -40,8 +40,8 @@
 # - m_evolution  search in the Ximan Evolution addressbook.
 # - m_vcf        search a vcard (according to RFC2426) file.
 
-METHODS="m_inmail m_passwd m_finger m_muttalias"
-
+#METHODS="m_inmail m_passwd m_finger m_muttalias"
+METHODS="m_muttalias m_osx_addressbook"
 
 #
 # If you want m_finger to ask other host then localhost, create a list here:
@@ -65,9 +65,9 @@ METHODS="m_inmail m_passwd m_finger m_muttalias"
 # not exist) prepended before the file name. Absolute file names
 # (beginning with /) will be taken direct.
 #
-#MUTT_DIRECTORY="$HOME/.mutt"
+MUTT_DIRECTORY="$HOME/.mutt"
 #MUTTALIAS_FILES=".muttrc .mail_aliases muttrc aliases"
-
+MUTTALIAS_FILES="aliases"
 
 # - m_pine	search pine addressbook files for aliases:
 #
@@ -136,7 +136,7 @@ METHODS="m_inmail m_passwd m_finger m_muttalias"
 # file. For this you have to define the selected enties as a space
 # separated list in the the variable LDAP_NICKS.
 #
-LDAP_NICKS="debian bigfoot"
+#LDAP_NICKS="debian bigfoot"
 
 
 # - m_abook query the abook(1) programm
@@ -167,7 +167,7 @@ LDAP_NICKS="debian bigfoot"
 # (a space separated list):
 #
 #MODULES_PATH="/usr/lib/lbdb $HOME/.lbdb/modules"
-
+MODULES_PATH="/opt/local/lib/lbdb"
 
 #
 # Do you want the output to be sorted?
@@ -180,6 +180,7 @@ LDAP_NICKS="debian bigfoot"
 # (that's the default).
 #
 #SORT_OUTPUT=address
+SORT_OUTPUT=name
 
 #
 # Do you want to see duplicate mail addresses (with multiple real
