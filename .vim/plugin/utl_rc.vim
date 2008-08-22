@@ -50,6 +50,8 @@ if has("win32")
     "
     "	Samples for other browsers are welcome!
 
+elseif has("macunix")
+    let g:utl_rc_app_browser = "silent !open '%u'"
 elseif has("unix")
 
     "	Konqueror

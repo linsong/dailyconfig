@@ -1257,13 +1257,11 @@ endif " has("autocmd")
         "endwhile
     endif
     "}}}2
-
-    "### settings for tracvim.vim {{{2
-    " in file .vimrc.local
-    "let g:tracServerList = {}
-    "let g:tracServerList['NordicTrac'] = 
-        "\'http://(user):(password)@(trac serverpath)/login/xmlrpc'
+    
+    "### settings for RltvNmbr.vim {{{2
+    map ,r :RN<CR>
     "}}}2
+
 "## }}}1
 
 "## Xterm colors defination {{{1 
