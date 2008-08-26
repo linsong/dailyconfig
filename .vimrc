@@ -1193,6 +1193,7 @@ endif " has("autocmd")
     
     "### settings for utl.vim {{{2
     let g:nordicbet_trac_base_url = 'https://nordictrac.dev.exoweb.net/trac'
+    let g:Font_Size = 2
     "}}}2
     
     "### settings for dbext.vim {{{2
@@ -1206,9 +1207,6 @@ endif " has("autocmd")
     let g:dbext_default_use_sep_result_buffer = 1
     "}}}2
     
-    "### settings for utl.vim {{{2
-    let g:Font_Size = 2
-    "}}}2
     
     "### settings for blogger.vim {{{2
     let g:Gmail_Account = 'linsong.qizi@gmail.com'
