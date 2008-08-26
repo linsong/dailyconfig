@@ -104,6 +104,7 @@ endfunction
 
 " Function: s:svnFunctions.Annotate(argList) {{{2
 function! s:svnFunctions.Annotate(argList)
+    let currentLine=line(".")
 	if len(a:argList) == 0
 		if &filetype == 'SVNAnnotate'
 			" Perform annotation of the version indicated by the current line.
@@ -124,6 +125,7 @@ function! s:svnFunctions.Annotate(argList)
 	let resultBuffer = s:DoCommand('blame' . options, 'annotate', caption, {})
 	if resultBuffer > 0
 		set filetype=SVNAnnotate
+        exec currentLine
 	endif
 	return resultBuffer
 endfunction
