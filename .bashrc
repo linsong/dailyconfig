@@ -131,6 +131,8 @@ if [ -e /etc/bash_completion ]; then
 	source /etc/bash_completion
 elif [ -e /sw/etc/bash_completion ]; then
 	source /sw/etc/bash_completion
+elif [ -f /opt/local/etc/bash_completion ]; then
+    . /opt/local/etc/bash_completion
 fi
 
 if [ ! -e $HOME/mytools/fehviewer ]; then

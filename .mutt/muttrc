@@ -97,7 +97,9 @@ set alias_file=~/.mutt/aliases            # Keep aliases in this file.
 source ~/.mutt/aliases                    # Load in my aliases.
 
 # set up abook 
-set query_command = "abook --mutt-query '%s'"
+#set query_command = "abook --mutt-query '%s'"
+set query_command="/opt/local/bin/lbdbq '%s'"
+
 
 source $HOME/.mutt/active_mail_setting
 
