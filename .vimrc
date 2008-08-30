@@ -66,7 +66,13 @@
 
     "setting about indent
     set autoindent
-    set smartindent
+
+    " It seems smartindent make things bad instead of smart:
+    "  > You're probably setting 'smartindent' in your .vimrc.  'smartindent'
+    "  > is worse than cindent for C/C++/Java, and much worse than filetype
+    "  > indent scripts for other languages; I'd definitely recommend against
+    "  > using it. 
+    set nosmartindent
 
     " always want at least two lines of context visible around the cursor at
     " all times
