@@ -65,7 +65,9 @@
     set expandtab
 
     "setting about indent
-    set autoindent
+    " autoindent is not very convenient especially when editing mail text, 
+    " use filetype indent script instead
+    set noautoindent
 
     " It seems smartindent make things bad instead of smart:
     "  > You're probably setting 'smartindent' in your .vimrc.  'smartindent'
