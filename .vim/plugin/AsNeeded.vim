@@ -1,9 +1,9 @@
 " AsNeeded: allows functions/maps to reside in .../.vim/AsNeeded/ directory
 "           and will enable their loaded as needed
 " Author:	Charles E. Campbell, Jr.
-" Date:		Feb 23, 2007
-" Version:	15
-" Copyright:    Copyright (C) 2004-2006 Charles E. Campbell, Jr. {{{1
+" Date:		Aug 01, 2008
+" Version:	16
+" Copyright:    Copyright (C) 2004-2008 Charles E. Campbell, Jr. {{{1
 "               Permission is hereby granted to use and distribute this code,
 "               with or without modifications, provided that this copyright
 "               notice is copied with it. Like anything else that's free,
@@ -39,21 +39,53 @@
 if exists("g:loaded_AsNeeded") || &cp || v:version < 700
  finish
 endif
-let g:loaded_AsNeeded = "v15"
+let g:loaded_AsNeeded = "v16"
 let s:keepcpo         = &cpo
 set cpo&vim
 
 " ---------------------------------------------------------------------
+" Debugging Support:
+"if !exists("g:loaded_Decho") | runtime plugin/Decho.vim | endif
+
+" ---------------------------------------------------------------------
 "  Public Interface:	{{{1
 au FuncUndefined *       call AsNeeded(1,expand("<afile>"))
-com! -nargs=1 -complete=command AsNeeded   call AsNeeded(2,<q-args>)
-com! -nargs=1 -complete=command AN         call AsNeeded(2,<q-args>)
-com! -nargs=1 -complete=command ANX        call AsNeeded(3,<q-args>)
+com! -nargs=+ -complete=command AsNeeded   call AsNeeded(2,<q-args>)
+com! -nargs=+ -complete=command AN         call AsNeeded(2,<q-args>)
+com! -nargs=+ -complete=command ANX        call AsNeeded(3,<q-args>)
 com! -nargs=0 -complete=command MakeANtags call MakeANtags()
 com! -nargs=0 -complete=command MkAsNeeded call MakeANtags()
 
+" ---------------------------------------------------------------------
+"  Variables As Options: {{{1
+if has("gui_running") && has("menu") && &go =~ 'm'
+ if !exists("g:DrChipTopLvlMenu")
+  let g:DrChipTopLvlMenu= "DrChip."
+ endif
+endif
+if !exists("g:AsNeededSuccess")
+ let g:AsNeededSuccess= 1
+endif
+
 " =====================================================================
 "  Functions: {{{1
+
+" ---------------------------------------------------------------------
+" FindHome: determine the home directory for AsNeeded {{{2
+fun! s:FindHome()
+"  call Dfunc("FindHome()")
+
+  for home in split(&rtp,',') + ['']
+   if isdirectory(home) | break | endif
+  endfor
+  if home == ""
+   let home= substitute(&rtp,',.*$','','')
+  endif
+  let home= substitute(home,'\\','/','g')
+
+"  call Dret("FindHome <".home.">")
+  return home
+endfun
 
 " ---------------------------------------------------------------------
 "  AsNeeded: looks for maps in AsNeeded/*.vim using the runtimepath. {{{2
@@ -61,6 +93,7 @@ com! -nargs=0 -complete=command MkAsNeeded call MakeANtags()
 "                   -1=failure          =2: called by command :AsNeeded or :AN
 "                                       =3: called by command :ANX
 fun! AsNeeded(type,cmdmap)
+"  DechoTabOn
 "  call Dfunc("AsNeeded(type=".a:type.",cmdmap<".a:cmdmap.">) (".g:loaded_AsNeeded.")")
 
   " ------------------------------
@@ -103,10 +136,18 @@ fun! AsNeeded(type,cmdmap)
 "  call Decho("ANtags<".ANtags.">")
 
   if ANtags != ""
+   " -----------------------------
+   " ANtags file present -- use it
+   " -----------------------------
 "   call Decho("using ANtags")
    set ma
    %d
    exe "silent 0r ".ANtags
+
+   " ---------------------------------------------
+   " determine the home directory for AsNeeded {{{2
+   " ---------------------------------------------
+   let home= s:FindHome()."/AsNeeded/"
 
    if     a:type == 1
    	" called via a FuncUndefined event
@@ -116,21 +157,22 @@ fun! AsNeeded(type,cmdmap)
    elseif a:type >= 2
    	" called by command :AsNeeded, :AN, or :ANX
 "	call Decho("a:type=".a:type.": set up search (:AsNeeded, :AN, or :ANX)")
-    let srchstring= escape(substitute(a:cmdmap,' .*$','','e'),'\')
-"	call Decho("srchstring<".srchstring.">")
+    let srchstring= substitute(a:cmdmap,' .*$','','e')
+"	call Decho("1: srchstring<".srchstring.">")
     if exists("g:mapleader") && match(srchstring,'^'.g:mapleader) == 0
 	 let srchstring= escape(srchstring,'\').substitute(srchstring,'^.\(.*\)$','\\|<[lL][eE][aA][dD][eE][rR]>\1','')
+"	 call Decho("2: srchstring<".srchstring.">")
 	elseif !exists("g:mapleader") && match(srchstring,'^\\') == 0
-	 let srchstring= srchstring.substitute(srchstring,'^.\(.*\)$','\\|<[lL][eE][aA][dD][eE][rR]>\1','')
+	 let srchstring= escape(srchstring,'\').substitute(srchstring,'^.\(.*\)$','\\|<[lL][eE][aA][dD][eE][rR]>\1','')
+"	 call Decho("3: srchstring<".srchstring.">")
 	endif
-"	call Decho("srchstring<".srchstring.">")
 	let result= search('^[mc]\t\<'.srchstring.'\>')
 	if result == 0
      let srch= search('^[mc]\t'.srchstring)
 	else
 	 let srch= result
 	endif
-"    call Decho("type#".a:type.": using <ANtags>: srchstring<".srchstring."> srch=".srch)
+"    call Decho("type#".a:type.", using <ANtags>: srchstring<".srchstring."> srch=".srch)
    endif
 
    if srch != 0
@@ -144,6 +186,9 @@ fun! AsNeeded(type,cmdmap)
    endif
 
   else
+   " -----------------------------
+   " ANtags file not present
+   " -----------------------------
 "   call Decho("<ANtags> not found, using search")
 
    " --------------------
@@ -171,7 +216,7 @@ fun! AsNeeded(type,cmdmap)
 "    call Decho("mlgt      <".mlgt.">")
 "    call Decho("modsrch   <".modsrch.">")
     let srchstring= '\(map\|[nvoilc]m\%[ap]\|\([oilc]\=no\|[nv]n\)\%[remap]\|com\%[mand]\)!\=\s.*'.modsrch.'\s'
-"    call Decho("srchstring<".srchstring.">")
+"    call Decho("3:srchstring<".srchstring.">")
    endif
 
    " --------------------------------
@@ -204,6 +249,7 @@ fun! AsNeeded(type,cmdmap)
   " source in the selected file {{{3
   " ---------------------------
   if exists("vimfile") && vimfile != ""
+   let vimfile= home.vimfile
 "   call Decho("success: sourcing ".vimfile)
    call s:RestoreSettings()
    if !filereadable(vimfile)
@@ -219,7 +265,7 @@ fun! AsNeeded(type,cmdmap)
 "   call Decho('exe "so "'.vimfile)
    exe "so ".vimfile
    call s:SaveSettings()
-   if exists("g:AsNeededSuccess")
+   if g:AsNeededSuccess
     let vimf = substitute(vimfile,$HOME,'\~','')
 	if exists("srchstring")
 	 let msg= "***success*** AsNeeded found <".substitute(srchstring,'\\\\','\','g')."> in <".vimf.">; now loaded"
@@ -238,7 +284,10 @@ fun! AsNeeded(type,cmdmap)
    	if maprhs == ""
 	 " attempt to execute a:cmdmap as a command (with no arguments)
 "	 call Decho("exe ".a:cmdmap)
-   	 exe "silent! ".a:cmdmap
+	 try
+	  exe a:cmdmap
+	 catch /^Vim/
+	 endtry
 	else
 	 " attempt to execute a:cmdmap as a normal command (ie. a map)
 "	 call Decho("norm ".a:cmdmap)
@@ -282,7 +331,9 @@ endfun
 
 " ---------------------------------------------------------------------
 " MakeANtags: makes the (optional) ANtags file {{{2
+"             Also builds the DrChip:AsNeeded menu
 fun! MakeANtags()
+"  DechoTabOn
 "  call Dfunc("MakeANtags()")
 
   " ------------------------------
@@ -305,7 +356,7 @@ fun! MakeANtags()
 
   let fncsrch  = '\<fu\%[nction]!\=\s\+\%([sS]:\|<[sS][iI][dD]>\)\@<!\(\u\w*\)\s*('
   let mapsrch  = '\<\%(map\|[nvoilc]m\%[ap]\|[oic]\=no\%[remap]\|[nl]n\%[oremap]\)!\=\s\+\%(<\%([sS][iI][lL][eE][nN][tT]\|[uU][nN][iI][qQ][uU][eE]\|[bB][uU][fF][fF][eE][rR]\|[sS][cC][rR][iI][pP][tT]\)>\s\+\)*\(\S\+\)\s'
-  let cmdsrch  = '\<com\%[mand]!\=\s.\{-}\(\u\w*\)\>'
+  let cmdsrch  = '\<com\%[mand]!\=\%(\s\+-\S\+\)*\s\+\(\u\w*\)\>'
   let fmcsrch  = fncsrch.'\|'.mapsrch.'\|'.cmdsrch
   let mapreject= '\<\%(map\|[nvoilc]m\%[ap]\|[oic]\=no\%[remap]\|[nl]n\%[oremap]\)!\=\s\+\%(<\%([sS][iI][lL][eE][nN][tT]\|[uU][nN][iI][qQ][uU][eE]\|[bB][uU][fF][fF][eE][rR]\|[sS][cC][rR][iI][pP][tT]\)>\s\+\)*<[pP][lL][uU][gG]>\(\u\w*\)\s'
 
@@ -319,16 +370,10 @@ fun! MakeANtags()
    call delete(globpath(&rtp,"ANcmds.vim")
   endif
 
-  " ------------------------------------------
-  "  Determine the home directory for plugins: {{{3
-  " ------------------------------------------
-  for home in split(&rtp,',') + ['']
-   if isdirectory(home) | break | endif
-  endfor
-  if home == ""
-   let home= substitute(&rtp,',.*$','','')
-  endif
-"  call Decho("home<".home.">")
+  " ---------------------------------------------
+  " determine the home directory for AsNeeded {{{2
+  " ---------------------------------------------
+  let home= s:FindHome()
 
   " ---------------------------------------------
   " search for all commands, maps, and functions: {{{3
@@ -348,6 +393,8 @@ fun! MakeANtags()
 "    call Decho(".bwipe read-in buf#".bufnr("$"))
     exe "silent! ".bufnr("$")."bwipe!"
    endif
+"   call Decho("clean out all non-map, non-command, non-function lines")
+"   call Dredir("%p")
 
    " clean out all non-map, non-command, non-function lines
    silent! g/^\s*"/d
@@ -365,6 +412,10 @@ fun! MakeANtags()
    exe 'silent! %s@^[ \t:]*'.fncsrch.'.*$@f\t\1\t'.escape(vimfile,'@ \').'@e'
    exe 'silent! %s@^.*'.mapsrch.'.*$@m\t\1\t'.escape(vimfile,'@ \').'@e'
    exe 'silent! %s@^[ \t:]*'.cmdsrch.'.*$@c\t\1\t'.escape(vimfile,'@ \').'@e'
+
+   " elide home directory and /AsNeeded - these are constant
+   silent! %s@^\([^\t]\+\t[^\t]\+\t\)\(.*\)$@\=submatch(1).substitute(submatch(2),'\\','/','g')@
+   exe "silent! %s@".home."/AsNeeded/@@e"
 
    " clean up anything that snuck into <ANtags> that shouldn't be there.
    silent v/^[mfc]\t/d
@@ -414,6 +465,24 @@ fun! MakeANtags()
    q!
   endif
 
+  " -----------------------------
+  " create a DrChip.AsNeeded menu {{{3
+  " -----------------------------
+  if isdirectory(home."/AsNeeded") && has("gui_running") && has("menu") && &go =~ 'm'
+"   call Decho("creating ".home."/AsNeeded/ANmenu")
+   silent! 1split
+"   call Decho("exe silent! e ".home."/AsNeeded/ANmenu")
+   exe "silent! e ".home."/AsNeeded/ANmenu"
+   silent %d
+   exe "silent! r ".ANtags
+   silent! v/^c/d
+   if getline(1) != ""
+	exe '%s/^c\t\(\S\+\)\t.*$/menu '.g:DrChipTopLvlMenu.'AsNeeded.\1\t:AN \1<cr>/e'
+	%sort
+   endif
+   silent! wq!
+  endif
+
   " ------------------------------
   " restore registers and settings {{{3
   " ------------------------------
@@ -428,13 +497,22 @@ endfun
 " ---------------------------------------------------------------------
 " s:SaveSettings: {{{2
 fun! s:SaveSettings()
+"  DechoTabOn
 "  call Dfunc("s:SaveSettings()")
-  let s:keeprep = &report
-  let s:keepa   = @a
-  let s:keepei  = &ei
-  let s:keeplz  = &lz
-  let s:keeppm  = &pm
-  set lz ei=all report=10000 pm=
+  if exists("&acd")
+   let s:keepacd = &acd
+  endif
+  let s:keeprep   = &report
+  let s:keepa     = @a
+  let s:keepei    = &ei
+  let s:keepim    = &im
+  let s:keeplz    = &lz
+  let s:keeppm    = &pm
+  let s:keepmagic = &magic
+  set lz ei=all report=10000 pm= magic noim
+  if exists("&acd")
+   set noacd
+  endif
 "  call Dret("s:SaveSettings")
 endfun
 
@@ -442,11 +520,16 @@ endfun
 " s:RestoreSettings: {{{2
 fun! s:RestoreSettings()
 "  call Dfunc("s:RestoreSettings()")
+  if exists("&acd")
+   let &acd   = s:keepacd
+  endif
   let @a      = s:keepa
   let &ei     = s:keepei
+  let &im     = s:keepim
   let &lz     = s:keeplz
   let &report = s:keeprep
   let &pm     = s:keeppm
+  let &magic  = s:keepmagic
 "  call Dret("s:RestoreSettings")
 endfun
 
@@ -456,7 +539,11 @@ if exists("g:AsNeededAutoMake")
   let ANtags= globpath(&rtp,"AsNeeded/ANtags")
   if ANtags != "" && filereadable(ANtags)
    let andir  = fnamemodify(ANtags,':p:h')
-   let anfiles= split(system(g:AsNeededAutoMake." ".andir))
+   try
+    let anfiles= split(system(g:AsNeededAutoMake." ".andir))
+   catch /^Vim\%((\a\+)\)\=:E145
+   	let anfiles= []
+   endtry
    for entry in anfiles
    	if entry =~ '\.vim\>'
 	 echomsg "auto-called MakeANtags()"
