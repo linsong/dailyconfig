@@ -580,8 +580,8 @@ if has("autocmd")
 
         :au BufNewFile,BufRead *.as set suffixesadd=.as
 
-        :au BufNewFile,BufRead *.html let g:snip_start_tag = "@"
-        :au BufNewFile,BufRead *.html let g:snip_end_tag = "@"
+        :au BufNewFile,BufRead *.html let b:snip_start_tag = "@"
+        :au BufNewFile,BufRead *.html let b:snip_end_tag = "@"
         :au BufNewFile,BufRead *.lzx let g:snip_start_tag = "@"
         :au BufNewFile,BufRead *.lzx let g:snip_end_tag = "@"
 
@@ -1146,15 +1146,13 @@ endif " has("autocmd")
     "}}}2
     
     "### setting for fuzzyfinder.vim {{{2
-    let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{}, 'MruFile':{}, 'FavFile':{}, 'Dir':{}, 'Tag':{}, 'TaggedFile':{}}
+    let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{},
+                  \    'MruFile':{}, 'MruCmd':{}, 'FavFile':{},
+                  \    'Dir':{}, 'Tag':{}, 'TaggedFile':{} }
     " [All Mode] This is mapped to switch to the next mode.
     let g:FuzzyFinderOptions.Base.key_next_mode = '<C-l>'
     " [All Mode] This is mapped to switch to the previous mode.
     let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-S-l>'
-
-    " [All Mode] This is mapped to temporarily switch whether or not to ignore
-    " case.
-    let g:FuzzyFinderOptions.Base.key_ignore_case = '<C-i>'
 
     " [File Mode] This is a dictionary. Each value must be a list. All matchs of
     " a key in entered text is expanded with a value.
@@ -1165,6 +1163,27 @@ endif " has("autocmd")
     " [File Mode] The items matching this are excluded from the completion list.
     let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|((^|[/\\])\.[/\\]$)'
 
+    " customize mode's prompts 
+    let g:FuzzyFinderOptions.Buffer.prompt = '[Buffer]'
+    let g:FuzzyFinderOptions.Buffer.prompt_highlight = 'BufferMode'
+    let g:FuzzyFinderOptions.File.prompt = '[File]'
+    let g:FuzzyFinderOptions.File.prompt_highlight = 'FileMode'
+    let g:FuzzyFinderOptions.Dir.prompt = '[Dir]'
+    let g:FuzzyFinderOptions.Dir.prompt_highlight = 'DirMode'
+    let g:FuzzyFinderOptions.MruFile.prompt = '[MruFile]'
+    let g:FuzzyFinderOptions.MruFile.prompt_highlight = 'MruFileMode'
+    let g:FuzzyFinderOptions.MruCmd.prompt = '[MruCmd]'
+    let g:FuzzyFinderOptions.MruCmd.prompt_highlight = 'MruCmdMode'
+    let g:FuzzyFinderOptions.FavFile.prompt = '[FavFile]'
+    let g:FuzzyFinderOptions.FavFile.prompt_highlight = 'FavFileMode'
+    let g:FuzzyFinderOptions.Tag.prompt = '[Tag]'
+    let g:FuzzyFinderOptions.Tag.prompt_highlight = 'TagMode'
+    let g:FuzzyFinderOptions.TaggedFile.prompt = '[TaggedFile]'
+    let g:FuzzyFinderOptions.TaggedFile.prompt_highlight = 'TaggedFileMode'
+
+    " [All Mode] This is mapped to temporarily switch whether or not to ignore
+    " case.
+    let g:FuzzyFinderOptions.Base.key_ignore_case = '<C-i>'
     let g:FuzzyFinderOptions.Base.ignore_case = 1
 
     " [All Mode] It uses Migemo if non-zero is set.
@@ -1183,8 +1202,8 @@ endif " has("autocmd")
     " open a buffer/file in a new tab page.
     let g:FuzzyFinderOptions.Base.key_open_tab = '<C-t>'
 
-    ":nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-    :noremap ,ff :FuzzyFinderFile<CR>
+    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
+    ":noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
     :noremap ,fv :FuzzyFinderFavFile<CR>
