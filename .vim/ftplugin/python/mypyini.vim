@@ -43,7 +43,7 @@ if ! exists("b:mypyini")
     " set the python module search path 
     " TODO: need to get the path more generally
     if has('unix')
-        setlocal path+=/usr/lib/python2.3/site-packages
+        setlocal path+=/usr/lib/python2.5/site-packages
     endif
 
     """ This is not needed since python_match.vim defined these already
@@ -143,3 +143,7 @@ endif
 
 command! Pylint :call <SID>PythonGrep('pylint')<CR>
 command! Pychecker :call <SID>PythonGrep('pychecker')<CR>
+
+" undo buffer settings view "help undo_ftplugin" for details
+let b:undo_ftplugin = "setlocal expandtab< softtabstop< textwidth<"
+    \ . "| unlet b:mypyini"
