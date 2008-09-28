@@ -15,6 +15,7 @@ let et = g:snip_end_tag
 let cd = g:snip_elem_delim
 
 exec "Snippet pdb import pdb, readline; pdb.set_trace();"
+exec "Snippet rpdb import rpdb2; rpdb2.start_embedded_debugger('hello')"
 exec "Snippet log import logging;
 \<CR>logging.critical(\"".st.et."\")"
 
