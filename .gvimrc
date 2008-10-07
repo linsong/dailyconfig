@@ -40,9 +40,10 @@ set guioptions-=M
 "set guioptions-=m
 
 set guioptions-=T
-"if ! has("gui_macvim")
-    "set guioptions-=T
-"endif
+
+if has("gui_macvim")
+    set fuoptions=maxvert,maxhorz,background:Normal
+endif
 
 " turn &cursorline on only in GUI && normal mode
 if exists("&cursorline")

@@ -333,6 +333,16 @@
 
     if has("gui_macvim")
         :map <silent> <D-.> gt
+        :map <silent> <D-1> :tabnext 1<CR>
+        :map <silent> <D-2> :tabnext 2<CR>
+        :map <silent> <D-3> :tabnext 3<CR>
+        :map <silent> <D-4> :tabnext 4<CR>
+        :map <silent> <D-5> :tabnext 5<CR>
+        :map <silent> <D-6> :tabnext 6<CR>
+        :map <silent> <D-7> :tabnext 7<CR>
+        :map <silent> <D-8> :tabnext 8<CR>
+        :map <silent> <D-9> :tabnext 9<CR>
+        :map <silent> <D-0> :tabnext 10<CR>
         :nnoremap <silent> <D->> :if tabpagenr() == tabpagenr("$")\|tabm 0\|else\|exe "tabm ".tabpagenr()\|endif<CR>
         :nnoremap <silent> <D-<> :if tabpagenr() == 1\|exe "tabm ".tabpagenr("$")\|else\|exe "tabm ".(tabpagenr()-2)\|endif<CR> 
     endif 
@@ -1015,7 +1025,7 @@ endif " has("autocmd")
     "### }}}2
 
     "### setting for yankring.vim {{{2
-    :let g:yankring_n_keys = "yy,dd,yw,dw,ye,de,yE,dE,yiw,diw,yaw,daw,y$,d$,ygg,dgg,yG,dG,D,Y,ya\',ya\",yi\',yi\""         
+    :let g:yankring_n_keys = "yy dd yw dw ye de yE dE yiw diw yaw daw y$ d$ ygg dgg yG dG D Y ya\' ya\" yi\' yi\""         
     " we don't the default map of yangring since it uses <C-N> and <C-P> and
     " those are mapped to completion normally
     let g:yankring_replace_n_pkey = ''
@@ -1073,11 +1083,11 @@ endif " has("autocmd")
     let g:NERDMenuMode=0
     "### }}}2   
 
-    "### setting for MRU.vim {{{2
-    let MRU_Max_Entries = 150
-    let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'
-    map <silent> ,m :MRU<CR>
-    "### }}}2   
+    ""### setting for MRU.vim {{{2
+    "let MRU_Max_Entries = 150
+    "let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'
+    "map <silent> ,m :MRU<CR>
+    ""### }}}2   
 
     "### setting for project.vim {{{2
     let g:proj_flags = "mstb"
@@ -1288,6 +1298,13 @@ endif " has("autocmd")
     map ,r :RN<CR>
     "}}}2
 
+
+    "### settings for marvim.vim {{{2
+    let marvim_store = $HOME.'/.marvim/'
+    let marvim_find_key = ',mf'
+    let marvim_store_key = ',ms'
+    "let marvim_register = 'q'
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
