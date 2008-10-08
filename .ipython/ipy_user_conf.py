@@ -52,6 +52,9 @@ def main():
     #ip.magic('alias ls ls -F --color=auto')
     ip.magic('alias ls ls -F -G')
 
+    # load external commands, methods etc
+    ip.ex('from dumpObject import dumpObj')
+
     o = ip.options
     # An example on how to set options
     #o.autocall = 1
