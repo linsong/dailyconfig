@@ -30,4 +30,6 @@ augroup filetypedetect
   au BufNewFile,BufRead *.as setf actionscript
   au BufNewFile,BufRead *.mxml setf mxml
   au BufNewFile,BufRead *.mxml compiler flex 
+
+  au BufNewFile,BufRead *.arff compiler arff
 augroup END
