@@ -24,9 +24,11 @@ fi
    INFOPATH="~/info:${INFOPATH}"
  fi
 
- if [ -e /sw/bin/init.sh ]; then 
-     . /sw/bin/init.sh
- fi
+###########################################
+### Settings for Fink
+if [ -e /sw/bin/init.sh ]; then 
+    . /sw/bin/init.sh
+fi
 
 if [ -f /sw/etc/bash_completion ]; then 
     . /sw/etc/bash_completion
@@ -79,4 +81,24 @@ case $(hostname) in
         ;;
 esac
 
+## NOT DONE YET
+## check current environment and set up relevant env virables
+#ASPIRE=10.2.19.201
+#ZAX=192.168.1.11
+#HOME=192.168.0.1
+
+#ping -c 0 -t 1 $ASPIRE
+#if [ "$?" -ne "0" ]; then 
+    #export LOCATION='ASPIRE'
+#else
+    #ping -c 0 -t 1 $ZAX
+    #if [ "$?" -ne "0" ]; then
+        #export LOCATION='ZAX'
+    #else
+        #ping -c 0 -t 1 $HOME
+        #if [ "$?" -ne "0" ]; then
+            #export LOCATION='HOME'
+        #fi
+     #fi
+#fi
 

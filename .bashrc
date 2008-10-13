@@ -409,6 +409,28 @@ __END
  }
  # }}}
 
+
+#{{{ wcd settings example for Mac OS X, it can be used on *nix system 
+# #  with some minor modification, put these lines to .bashrc.local file
+# export WCDEXCLUDE=/dev:/tmp:*CVS:*.svn:.Trash
+# function wcd
+# {
+#    go=$HOME/.wcd/bin/wcd.go
+#    test -f $go && rm -f $go
+#    /usr/local/bin/wcd -z 30 -G $HOME/.wcd/bin $* && test -f $go && source $go
+# }
+
+# # -j option make wcd to change to the first option directly,
+# # if this is not what you want, you can just use '$ !!<CR>'
+# #  or <C-p><CR> to reexecute the command to go to the next option, it is cyclic
+# alias w='wcd -j'
+# alias wg='wcd -g'
+
+# alias md='wcd -m' # mkdir a new directory and add it to treedata
+# alias r='wcd -r'  # remove a directory and its treedata if the directory is empty
+# alias rt='wcd -rmtree' # remove a directory, all its subdirectory and related treedata
+ #}}}
+
  if [ -e ${HOME}/.bashrc.local ]; then
     source ${HOME}/.bashrc.local
  fi
