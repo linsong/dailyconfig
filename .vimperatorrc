@@ -1,24 +1,27 @@
 " settings
-"set activate=quickmark,paste
-"set nobeep
-"set complete=sbhf
-"set defsearch=google
-set guioptions=mT
-set maxhints=1000
-set complete=sbhfS
+
+set guioptions+=m
+" use the firefox awesomebar style hints 
+set wildoptions=auto
+set complete=l
+"set complete=sbhfS
+
 set defsearch=google
-set guioptions=T
 set hlsearch 
 set incsearch
 set smartcase
 
-" may affect performance
-"set preload 
-
 set showmode
 set showstatuslinks
 
+set nextpattern+=^\s*下一页\s*$
+set previouspattern+=^\s*上一页\s*$
+
 "set wildmode=list:longest
+
+"Allow user to click in address bar.
+set! browser.urlbar.clickSelectsAll=true
+set! browser.urlbar.doubleClickSelectsAll=true
 
 " key mappings
 map <A-n> :tabnew<CR>
@@ -26,9 +29,43 @@ map <A-.> :tabnext<CR>
 map <A-,> :tabprev<CR>
 map <A-q> :tabclose<CR>
 
+"Map paste operation normally.
+imap <C-v> <C-v>
+
 map q :q<CR>
 
+" autocommands
+au LocationChange .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL)
+au LocationChange .* :js modes.passAllKeys = /www\.google\.com/reader.test(buffer.URL)
 
-echo .vimperatorrc sourced!
+"" for Linux 
+"":au LocationChange .* :set editor=gvim -f
+"":au LocationChange mail\.google\.com :set editor=gvim -f -c 'set ft=mail'
+" for MacOSX
+:set editor=open -W -n -t
+
+command google open google <args>
+
+" Changing the command line color when focused
+javascript <<EOM
+  (function() {
+      var inputElement = document.getElementById('liberator-commandline-command');
+      function swapBGColor(event) {
+        inputElement.parentNode.style.backgroundColor = event.type == "focus" ? "yellow" : "";
+      }
+      inputElement.addEventListener('focus', swapBGColor, false);
+      inputElement.addEventListener('blur', swapBGColor, false);
+  })();
+EOM
+
+" Toggle element
+:js << EOF
+  toggle_element = function (name){
+    document.getElementById(name).collapsed ^= 1;
+  }
+EOF
+
+" Toggle webdeveloper toolbar
+map <C-T> :js toggle_element('webdeveloper-toolbar')<CR>
 
 " vim: ft=vimperator sw=2 sts=2
