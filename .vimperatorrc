@@ -36,7 +36,7 @@ map q :q<CR>
 
 " autocommands
 au LocationChange .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL)
-au LocationChange .* :js modes.passAllKeys = /www\.google\.com/reader.test(buffer.URL)
+au LocationChange .* :js modes.passAllKeys = /www\.google\.com\/reader/.test(buffer.URL)
 
 "" for Linux 
 "":au LocationChange .* :set editor=gvim -f
