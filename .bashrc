@@ -77,47 +77,9 @@ set -o vi
 export EDITOR='/usr/local/bin/vim'
 export VISUAL='/usr/local/bin/vim'
 
-# set prompt string: user@host and current_directory
-# set different prompt basedd on different host 
-if [ `hostname` == 'vincent' ]; then
-    # if we are in chroot environment, use an outstanding prompt
-    if [ ! -d '/dist/etch' ]; then 
-    PS1='
-\[\033[37m\](chroot)\u@\h \[\033[37m\]\w\[\033[0m\]
-\[[37;40m\][\!]\[[m\] $ '
-    else
-    PS1='
-\[\033[32m\]\u@\h \[\033[33m\]\w\[\033[0m\]
-\[[30;47m\][\!]\[[m\] $ '
-    fi
-elif [ $(hostname) == 'nordicserver' ]; then
-	PS1='
-\[\033[33m\]\u@\h \[\033[33m\]\w\[\033[0m\]
-\[[30;47m\][\!]\[[m\] $ '
-elif [ $(hostname) == 'forge' ]; then
-	PS1='
-\[\033[35m\]\u@\h \[\033[35m\]\w\[\033[0m\]
-\[[30;47m\][\!]\[[m\] $ '
-elif [ $(hostname) == 'Tiger.local' ]; then
-	PS1='
-\[\033[36m\]\u@\h \[\033[36m\]\w\[\033[0m\]
-\[[33;40m\][\!]\[[m\] $ '
-
-elif [ $(hostname) == 'ubuntu' ]; then
-	PS1='
-\[\033[31m\]\u@\h \[\033[31m\]\w\[\033[0m\]
-\[[32;40m\][\!]\[[m\] $ '
-else 
-    if [ $(uname -s) = 'Cygwin' ]; then 
-    PS1='
-\[\033[35;40m\]\u@\h \[\033[35;40m\]\w\[\033[0m\]
-\[[32;40m\][\!]\[[m\] $ '
-    else
-    PS1='
+PS1='
 \[\033[31;40m\]\u@\h \[\033[31;40m\]\w\[\033[0m\]
 \[[36;40m\][\!]\[[m\] $ '
-    fi
-fi
 
 if ! [ $(uname) = "Darwin" ]; then 
     eval `dircolors -b ~/DIR_COLORS`
