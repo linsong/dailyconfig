@@ -1,0 +1,43 @@
+1. aptitude install amule-common amule-daemon
+2. create amule user by command "sudo adduser amule"
+3. modify /etc/default/amule-daemon file, 
+    AMULED_USER="amule"
+4. start amule-daemon to populate amule user's config directory, then stop it
+    $ sudo /etc/init.d/amule-daemon start 
+5. modify ~amule/.aMule/amule.conf file, the following configuration variables
+   need to be modifed:
+    [eMule]
+    ... ...
+    MaxUpload=50
+    MaxDownload=60
+    Autoconnect=1
+    MaxSourcesPerFile=10
+    MaxConnections=50
+    MaxConnectionsPerFiveSeconds=20
+    RemoveDeadServer=1
+    AddServersFromServer=1
+    AddServersFromClient=1
+    ... ...
+    ConnectToKad=1
+    ConnectToED2K=1
+    ... ... 
+    DownloadCapacity=3
+    UploadCapacity=3
+
+    ... ...
+    [WebServer]
+    Enabled=1
+    Password=$$$ echo -n amule | md5sum | cut -d ' ' -f 1 $$$
+    ... ...
+    [ExternalConnect]
+    AcceptExternalConnections=1
+    ECAddress=
+    ECPort=4712
+    ECPassword=$$$ echo -n amule | md5sum | cut -d ' ' -f 1 $$$
+6. run 'amuleweb -w' command to generate amuleweb's config file
+7. make firewall port forwarding for 'Port' and 'UDPPort'
+8. then download server.met file and nodes.dat file, two possible place to
+   download the files:
+    KadNodesUrl=http://emule-inside.net/nodes.dat
+    Ed2kServersUrl=http://gruk.org/server.met.gz
+9. restart amule-daemon
