@@ -32,4 +32,7 @@ augroup filetypedetect
   au BufNewFile,BufRead *.mxml compiler flex 
 
   au BufNewFile,BufRead *.arff compiler arff
+
+  au BufNewFile,BufRead *.blog setfiletype blog
+  au BufNewFile,BufRead *.blog source $VIMCFG/manualload/blog.vim
 augroup END
