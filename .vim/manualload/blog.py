@@ -1,14 +1,28 @@
 # -*- coding: utf-8 -*-
-import urllib , urllib2 , vim , xml.dom.minidom , xmlrpclib , sys , string , re
+import urllib
+import urllib2
+import vim
+import xml.dom.minidom
+import xmlrpclib
+import sys
+import string
+import re
 
 #####################
 #      Settings     #
 #####################
 
 enable_tags = 0
+enable_markdown = 0
 blog_username = ''
 blog_password = ''
 blog_url = 'http://blog.linsong.org/xmlrpc.php'
+
+if vim.eval('g:Blog_Use_Markdown')=='1':
+    enable_markdown = 1
+    import html2text
+    #import markdown
+    import markdown2 as markdown
 
 #####################
 # Do not edit below #
@@ -37,26 +51,29 @@ def blog_send_post():
     while not vim.current.buffer[start].startswith('"'+what):
       start +=1
     return start
-  def get_meta(what): 
+  def get_meta(what):
     start = get_line(what)
     end = start + 1
     while not vim.current.buffer[end][0] == '"':
       end +=1
     return " ".join(vim.current.buffer[start:end]).split(":")[1].strip()
-      
+
   strid = get_meta("StrID")
   title = get_meta("Title")
   cats = [i.strip() for i in get_meta("Cats").split(",")]
   if enable_tags:
     tags = get_meta("Tags")
-  
+
   text_start = 0
   while not vim.current.buffer[text_start] == "\"========== Content ==========":
     text_start +=1
   text_start +=1
   text = '\n'.join(vim.current.buffer[text_start:])
 
-  content = text
+  if enable_markdown:
+    content = markdown.markdown(text.decode('utf-8')).encode('utf-8')
+  else:
+    content = text
 
   if enable_tags:
     post = {
@@ -125,7 +142,10 @@ def blog_open_post(id):
     if enable_tags:
       vim.current.buffer.append("\"Tags  : "+(post["mt_keywords"]).encode("utf-8"))
     vim.current.buffer.append("\"========== Content ==========\n")
-    content = (post["description"]).encode("utf-8")
+    if enable_markdown:
+        content = html2text.html2text(post["description"]).encode("utf-8")
+    else:
+        content = (post["description"]).encode("utf-8")
     for line in content.split('\n'):
       vim.current.buffer.append(line)
     text_start = 0

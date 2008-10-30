@@ -65,6 +65,7 @@ nmap <unique> <silent> ,bs :BlogSend<CR>
 nmap <unique> <silent> ,bo :BlogOpen 
 
 let g:Blog_Account = 'vincent'
+let g:Blog_Use_Markdown = 1
 
 au BufNewFile,BufRead *.blog set syntax=blogsyntax
 au BufNewFile         *.blog :BlogNew
