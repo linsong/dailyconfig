@@ -19,10 +19,10 @@ blog_password = ''
 blog_url = 'http://blog.linsong.org/xmlrpc.php'
 
 if vim.eval('g:Blog_Use_Markdown')=='1':
-    enable_markdown = 1
-    import html2text
-    #import markdown
-    import markdown2 as markdown
+  enable_markdown = 1
+  import html2text
+  #import markdown
+  import markdown2 as markdown
 
 #####################
 # Do not edit below #
