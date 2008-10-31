@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import urllib
 import urllib2
+from httplib import socket
 import vim
 import xml.dom.minidom
 import xmlrpclib
@@ -89,7 +90,7 @@ def blog_send_post():
       'categories': cats,
     }
 
-  authenticate()
+  init_login_info()
   if strid == '':
     strid = handler.newPost('', blog_username,
       blog_password, post, 1)
@@ -104,12 +105,16 @@ def blog_send_post():
 
 def blog_new_post():
   def blog_get_cats():
-    authenticate()
-    l = handler.getCategories('', blog_username, blog_password)
+    init_login_info()
+    try:
+        l = handler.getCategories('', blog_username, blog_password)
+    except socket.gaierror, e:
+        print "network seems not avaiable, give up fetching Category..."
+        l = []
     s = ""
     for i in l:
       s = s + (i["description"].encode("utf-8"))+", "
-    if s != "": 
+    if s != "":
       return s[:-2]
     else:
       return s
@@ -130,7 +135,7 @@ def blog_new_post():
 
 def blog_open_post(id):
   try:
-    authenticate()
+    init_login_info()
     post = handler.getPost(id, blog_username, blog_password)
     blog_edit_on()
     vim.command("set syntax=blogsyntax")
@@ -168,7 +173,7 @@ def blog_list_edit():
 
 def blog_list_posts():
   try:
-    authenticate()
+    init_login_info()
     lessthan = handler.getRecentPosts('',blog_username, blog_password,1)[0]["postid"]
     size = len(lessthan)
     allposts = handler.getRecentPosts('',blog_username, blog_password,int(lessthan))
@@ -184,7 +189,7 @@ def blog_list_posts():
   except:
     sys.stderr.write("An error has occured")
 
-def authenticate():
+def init_login_info():
   global blog_username
   global blog_password
   try:
