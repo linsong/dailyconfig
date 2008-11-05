@@ -257,7 +257,9 @@
     nmap + 5<C-W>>
 
     " use enter to unhighlighted searched-for text
-    nnoremap ,nh    :noh<CR>
+    nnoremap <CR> :nohlsearch<CR><CR>
+    "nnoremap <CR> :set invhlsearch<CR><CR>
+    "nnoremap ,nh    :noh<CR>
     nnoremap <leader>q :close<CR>
 
     " mappings for quickfix mode 
@@ -1216,6 +1218,7 @@ endif " has("autocmd")
     ":noremap ,ff :FuzzyFinderFile<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
+    :noremap ,f; :FuzzyFinderMruCmd<CR>
     :noremap ,fv :FuzzyFinderFavFile<CR>
     :noremap ,fd :FuzzyFinderDir<CR>
     :noremap ,ft :FuzzyFinderTaggedFile<CR>
