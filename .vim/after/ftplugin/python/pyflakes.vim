@@ -66,10 +66,13 @@ au BufWinLeave <buffer> call s:ClearPyflakes()
 au BufEnter <buffer> call s:RunPyflakes()
 au InsertLeave <buffer> call s:RunPyflakes()
 
-au CursorHold <buffer> call s:RunPyflakes()
+"HACK: following autocommand make vim slow, I think I only need 'InsertLeave'
+"au CursorHold <buffer> call s:RunPyflakes()
 au CursorHold <buffer> call s:GetPyflakesMessage()
 au CursorMoved <buffer> call s:GetPyflakesMessage()
-au CursorHoldI <buffer> call s:RunPyflakes()
+"au CursorHoldI <buffer> call s:RunPyflakes()
+
+au InsertLeave <buffer> call s:GetPyflakesMessage()
 
 " WideMsg() prints [long] message up to (&columns-1) length
 " guaranteed without "Press Enter" prompt.
@@ -85,7 +88,10 @@ endif
 
 if !exists("*s:RunPyflakes")
     function s:RunPyflakes()
-        highlight PyFlakes term=underline gui=undercurl guisp=Orange
+        " HACK: the following highlight does not work for me, use the default
+        " 'Error' highlight
+        "highlight PyFlakes term=underline gui=undercurl guisp=Orange
+         highlight PyFlakes term=reverse cterm=bold ctermfg=7 ctermbg=1 guifg=White guibg=Red
 
         if exists("b:cleared")
             if b:cleared == 0
