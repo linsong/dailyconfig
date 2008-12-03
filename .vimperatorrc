@@ -14,8 +14,8 @@ set smartcase
 set showmode
 set showstatuslinks
 
-set nextpattern+=^\s*下一页\s*$,^\s*下一张\s*$
-set previouspattern+=^\s*上一页\s*$,^\s*上一张\s*$
+set nextpattern+=^\s*下一页\s*$,^\s*下一张\s*$,^››$
+set previouspattern+=^\s*上一页\s*$,^\s*上一张\s*$,^‹‹$
 
 "set wildmode=list:longest
 
