@@ -2,3 +2,4 @@
 nolirc=yes
 msgcharset=utf8
 #shuffle=yes
+sub-fuzziness=1
