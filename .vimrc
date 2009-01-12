@@ -522,7 +522,7 @@
         if !has("gui_running")
             "### color scheme settings {{{3
             "if $TERM == "xterm-color"
-                ":colorscheme torte
+                ":colorscheme torte vibrantink
             "else
                 ":colorscheme desert "torte bluegreen
             "endif
@@ -602,7 +602,8 @@ if has("autocmd")
 
         :au BufEnter *.lzx :call FoldOnRegex('^\s*<\w\+', 0)
         :au BufEnter *.py  :call FoldOnRegex('^\s*\(\<def\>\|\<class\>\)', 0)
-
+        " remove trailing whitespace automatically
+        :au BufWritePre *.py :%s/\s\+$//e 
 
         " settting for fcshtools 
         ":au BufNewFile,BufRead *.mxml,*.as :nmap <C-B> :!bash ~/bin/fcshcmp.sh %:p
@@ -813,15 +814,15 @@ endif " has("autocmd")
     endfunction
     " }}}2
 
-    "### make the tab more clever {{{2
-    function! CleverTab()
-       if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-      return "\<Tab>"
-       else
-      return "\<C-N>"
-    endfunction
-    inoremap <Tab> <C-R>=CleverTab()<CR>
-    "" }}}2
+    ""### make the tab more clever {{{2
+    "function! CleverTab()
+       "if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+      "return "\<Tab>"
+       "else
+      "return "\<C-N>"
+    "endfunction
+    "inoremap <Tab> <C-R>=CleverTab()<CR>
+    """ }}}2
 
     "### elimit the abbreviation of pathname from tabpage title{{{2
     " set mode=1 to enable pathname abbreviation's display
@@ -1036,6 +1037,7 @@ endif " has("autocmd")
     let g:yankring_replace_n_pkey = ''
     let g:yankring_replace_n_nkey = ''
     let g:yankring_map_dot = 0
+    let g:yankring_max_element_length = 1024
     nmap ,y :YRGetElem <CR>                                              
     imap <F4> <C-o>:YRGetElem <CR>
     "### }}}2
@@ -1310,6 +1312,10 @@ endif " has("autocmd")
     let marvim_find_key = ',mf'
     let marvim_store_key = ',ms'
     "let marvim_register = 'q'
+    "}}}2
+   
+    "### settings for NERDTree {{{2 
+    let NERDTreeShowBookmarks=1
     "}}}2
 "## }}}1
 
