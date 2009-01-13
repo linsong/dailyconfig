@@ -28,7 +28,7 @@ endif
 "set colorscheme randomly
 let colorscheme_list = ['blacksea', 'desert', 'mymud',
             \ 'dante', 'candy', 'elflord', 'golden',
-            \ 'less']
+            \ 'less', 'vibrantink']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 ":colorscheme desert "mymud zenburn ps_color elflord metacosm dusk
 
