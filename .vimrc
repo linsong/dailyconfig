@@ -1164,7 +1164,7 @@ endif " has("autocmd")
     
     "### setting for fuzzyfinder.vim {{{2
     let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{},
-                  \    'MruFile':{}, 'MruCmd':{}, 'FavFile':{},
+                  \    'MruFile':{}, 'MruCmd':{}, 'Bookmark':{},
                   \    'Dir':{}, 'Tag':{}, 'TaggedFile':{} }
     " [All Mode] This is mapped to switch to the next mode.
     let g:FuzzyFinderOptions.Base.key_next_mode = '<C-l>'
@@ -1174,7 +1174,7 @@ endif " has("autocmd")
     " [File Mode] This is a dictionary. Each value must be a list. All matchs of
     " a key in entered text is expanded with a value.
     let g:FuzzyFinderOptions.File.abbrev_map = 
-                \    { "wts" : ["~/work/trunk/src", "~/work/trunk/bugfix"],
+                \    { "sr" : ["~/project/zax/siteradar"],
                 \      "vp" : ["~/.vim/plugin"]
                 \    }
     " [File Mode] The items matching this are excluded from the completion list.
@@ -1191,8 +1191,8 @@ endif " has("autocmd")
     let g:FuzzyFinderOptions.MruFile.prompt_highlight = 'MruFileMode'
     let g:FuzzyFinderOptions.MruCmd.prompt = '[MruCmd]'
     let g:FuzzyFinderOptions.MruCmd.prompt_highlight = 'MruCmdMode'
-    let g:FuzzyFinderOptions.FavFile.prompt = '[FavFile]'
-    let g:FuzzyFinderOptions.FavFile.prompt_highlight = 'FavFileMode'
+    let g:FuzzyFinderOptions.Bookmark.prompt = '[Bookmark]'
+    let g:FuzzyFinderOptions.Bookmark.prompt_highlight = 'BookmarkMode'
     let g:FuzzyFinderOptions.Tag.prompt = '[Tag]'
     let g:FuzzyFinderOptions.Tag.prompt_highlight = 'TagMode'
     let g:FuzzyFinderOptions.TaggedFile.prompt = '[TaggedFile]'
@@ -1224,10 +1224,12 @@ endif " has("autocmd")
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
     :noremap ,f; :FuzzyFinderMruCmd<CR>
-    :noremap ,fv :FuzzyFinderFavFile<CR>
+    :noremap ,fk :FuzzyFinderBookmark<CR>
+    :noremap ,fa :FuzzyFinderAddBookmark<CR>
     :noremap ,fd :FuzzyFinderDir<CR>
     :noremap ,ft :FuzzyFinderTaggedFile<CR>
     :noremap ,fg :FuzzyFinderTag<CR>
+    :noremap ,f] :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
     :noremap ,fc :FuzzyFinderRemoveCache<CR>
     :noremap ,fi :FuzzyFinderEditInfo<CR>
     "}}}2
@@ -1306,7 +1308,6 @@ endif " has("autocmd")
     map ,r :RN<CR>
     "}}}2
 
-
     "### settings for marvim.vim {{{2
     let marvim_store = $HOME.'/.marvim/'
     let marvim_find_key = ',mf'
@@ -1316,6 +1317,10 @@ endif " has("autocmd")
    
     "### settings for NERDTree {{{2 
     let NERDTreeShowBookmarks=1
+    "}}}2
+    
+    "### settings for vimim {{{2
+    let g:vimim_i_ctrl6 = 1
     "}}}2
 "## }}}1
 
