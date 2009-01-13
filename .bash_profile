@@ -102,3 +102,4 @@ esac
      #fi
 #fi
 
+fortune | cowsay 
