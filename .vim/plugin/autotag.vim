@@ -148,7 +148,7 @@ if !exists("g:autotagCtagsCmd")
 endif
 if !exists("g:autotag_autocmd_set")
    let g:autotag_autocmd_set=1
-   autocmd BufWritePost,FileWritePost * call AutoTag ()
+   autocmd BufWritePost,FileWritePost * silent call AutoTag ()
 endif
 
 endif " has("python")

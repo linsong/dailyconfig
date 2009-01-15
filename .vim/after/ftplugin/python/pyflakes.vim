@@ -9,6 +9,10 @@
 "
 " Thanks to matlib.vim for ideas/code on interactive linting.
 
+if !has('python') || has("gui_macvim")
+    finish
+end
+
 if exists("b:did_pyflakes_plugin")
     finish " only load once
 else

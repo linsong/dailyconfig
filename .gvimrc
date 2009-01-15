@@ -44,7 +44,6 @@ set guioptions-=T
 if has("gui_macvim")
     set fuoptions=maxvert,maxhorz,background:Normal
     set lines=39 columns=157
-    set fullscreen
 endif
 
 " turn &cursorline on only in GUI && normal mode
