@@ -24,9 +24,10 @@ if ! exists("b:mypyini")
     "TODO: is there a way to define abbriviation locally? Answer: Yes, invoke 
     "  help :abbreviate-local for details
     iabbr <buffer> slef self
-    iabbr <buffer> this self
-    iabbr <buffer> true True
-    iabbr <buffer> false False
+    " following abbr make more trouble than convenience for me 
+    "iabbr <buffer> this self
+    "iabbr <buffer> true True
+    "iabbr <buffer> false False
 
     "############################################################################
     "#    FUNCTION TO COMMAND MAPS
