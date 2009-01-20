@@ -349,6 +349,9 @@
         :nnoremap <silent> <D-<> :if tabpagenr() == 1\|exe "tabm ".tabpagenr("$")\|else\|exe "tabm ".(tabpagenr()-2)\|endif<CR> 
     endif 
 
+    :nnoremap <silent> <C-n> :tabnext<CR>
+    :nnoremap <silent> <C-p> :tabprevious<CR>
+    
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 
