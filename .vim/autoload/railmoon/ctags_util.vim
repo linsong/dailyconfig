@@ -6,7 +6,12 @@
 
 
 function! railmoon#ctags_util#taglist_for_file(filename, language, kinds, fields)
-    let kind_option = "--".a:language.'-kinds=+'.a:kinds.' --language-force='.a:language
+    let language_for_ctags = a:language
+    if language_for_ctags == 'cpp'
+        let language_for_ctags = 'c++'
+    endif
+
+    let kind_option = "--".language_for_ctags.'-kinds=+'.a:kinds.' --language-force='.language_for_ctags
     let field_option = '--fields='.a:fields
 
     if !exists('g:ctags_exe')

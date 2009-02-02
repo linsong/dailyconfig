@@ -12,7 +12,7 @@ function! railmoon#oscan#extractor#taglist_under_cursor#create()
     let new_extractor.file_extension = expand("%:e")
     let new_extractor.filetype = &filetype
     let new_extractor.word_under_cursor = expand('<cword>')
-    let new_extractor.description = 'Jump to tag "'.new_extractor.word_under_cursor.'" according to tags dabase ("set tags=...")'
+    let new_extractor.description = 'Jump to tag "'.new_extractor.word_under_cursor.'" according to "'.&tags.'" tags dabase'
 
     return new_extractor
 endfunction
@@ -20,15 +20,7 @@ endfunction
 let s:tag_scan_taglist_under_cursor_extractor = {}
 function! s:tag_scan_taglist_under_cursor_extractor.process(record)
     exec 'tag '.self.word_under_cursor
-    exec 'edit '.a:record.data.filename
-    update
-    let cmd = a:record.data.cmd
-
-    if cmd =~ '^\d\+$'
-        exec cmd
-    else
-        exec escape(cmd, '*')
-    endif
+    call railmoon#oscan#extractor#ctags#process(a:record.data)
 endfunction
 
 function! s:record_for_language_tag( language, ctag_item )
@@ -42,13 +34,12 @@ function! s:tag_scan_taglist_under_cursor_extractor.extract()
 
     let result = []
 
-    let extension = self.file_extension
-    let language = railmoon#oscan#extractor#ctags#language_by_extension(extension)
+    let self.language = railmoon#oscan#extractor#ctags#language_by_current_buffer()
 
     let ctags_tags = taglist('\<'.self.word_under_cursor.'\>')
 
     for item in ctags_tags
-        let record = s:record_for_language_tag(language, item)
+        let record = s:record_for_language_tag(self.language, item)
         let record.data = item
         call add(result, record)
     endfor
@@ -58,6 +49,6 @@ endfunction
 
 function! s:tag_scan_taglist_under_cursor_extractor.colorize()
     let &filetype = self.filetype
-    call railmoon#oscan#extractor#ctags#colorize_keywords()
+    call railmoon#oscan#extractor#ctags#colorize_keywords(self.language)
 endfunction
 

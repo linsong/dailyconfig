@@ -2,8 +2,7 @@
 " Email: golubev.nikolay@gmail.com
 " Site: www.railmoon.com
 " Plugin: oscan
-" Purpose: quick move through current document or through any entities that
-"          can be tagged
+" Purpose: quick move through current document or through any entities that can be tagged
 
 
 if ! exists('g:ctags_exe')
@@ -620,13 +619,17 @@ function! railmoon#oscan#open(...)
         "set lazyredraw
         silent tab help
 
+        let width = winwidth('%')
+
         let s:plugin_window_goes_close = 0
 
         call railmoon#widget#stop_handle_autocommands()
         call s:turnoff_unexpected_plugins()
 
         call railmoon#trace#debug('create available_tags_window')
-        30 vsplit
+        let tags_window_width = width/5
+        exec tags_window_width.' vsplit'
+
         let s:available_tags_window = railmoon#widget#selection_window#create(
             \ 'Available tags window',
             \ extractor_description,

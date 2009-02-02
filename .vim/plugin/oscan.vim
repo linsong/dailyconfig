@@ -11,6 +11,8 @@ nnoremap <silent> 0as :OScan search_in_scope<CR>
 nnoremap <silent> 0b :OScan buffers<CR>
 nnoremap <silent> 0w :OScan windows<CR>
 nnoremap <silent> 0v :OScan vims<CR>
+nnoremap <silent> 0p :OScan paste<CR>
+nnoremap <silent> 0h :OScan changes<CR>
 nnoremap <silent> 0m :OScan marks<CR>
 nnoremap <silent> 0M :OScan marks global user<CR>
 nnoremap <silent> 0u :OScan taglist_under_cursor<CR>

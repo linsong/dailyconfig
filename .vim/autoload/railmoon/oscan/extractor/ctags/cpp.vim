@@ -11,9 +11,9 @@ function! railmoon#oscan#extractor#ctags#cpp#kinds()
 endfunction
 
 function! railmoon#oscan#extractor#ctags#cpp#colorize()
-    syntax keyword Type variable inner field enumeration function method public private
+    syntax keyword Type variable inner field enumeration function method public private protected global
     syntax keyword Keyword constructor destructor
-    syntax keyword Identifier declaration
+    syntax keyword Identifier decl def
 endfunction
 
 function! railmoon#oscan#extractor#ctags#cpp#record( tag_item )
@@ -68,8 +68,11 @@ function! railmoon#oscan#extractor#ctags#cpp#record( tag_item )
         endif
 
         if kind == 'p'
-            let header .= 'declaration '
-            call add(tag_list, "declaration")
+            let header .= 'decl. '
+            call add(tag_list, "decl")
+        else 
+            let header .= 'def. '
+            call add(tag_list, "def")
         endif
     elseif kind == 'c'
         let header .= "class "

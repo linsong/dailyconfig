@@ -27,15 +27,9 @@ function! s:get_nearest_ctags_tag()
     let filename = @%
     let linenumber = line('.')
 
-    let extension = fnamemodify(filename, ':e')
-    let language = railmoon#oscan#extractor#ctags#language_by_extension(extension)
+    let self.language = railmoon#oscan#extractor#ctags#language_by_current_buffer()
 
-    let language_for_ctags = language
-    if language_for_ctags == 'cpp'
-        let language_for_ctags = 'c++'
-    endif
-
-    let ctags_tags = railmoon#ctags_util#taglist_for_file(filename, language_for_ctags, railmoon#oscan#extractor#ctags#kind_types_for_langauge(language), 'sikaS')
+    let ctags_tags = railmoon#ctags_util#taglist_for_file(filename, language, railmoon#oscan#extractor#ctags#kind_types_for_langauge(language), 'sikaS')
 
     let i = len(ctags_tags) - 1
     while i >= 0
@@ -70,7 +64,7 @@ function! s:return_definitions(ctags_tag)
     let similar_tags = taglist('\<'.a:ctags_tag.name.'\>')
 
     for tag_item in similar_tags 
-        if tag_item.kind =~ 'p'
+        if tag_item.kind == 'p'
             continue
         endif
 
@@ -123,5 +117,5 @@ endfunction
 
 function! s:tag_scan_definition_declaration_extractor.colorize()
     let &filetype = self.filetype
-    call railmoon#oscan#extractor#ctags#colorize_keywords()
+    call railmoon#oscan#extractor#ctags#colorize_keywords(self.language)
 endfunction

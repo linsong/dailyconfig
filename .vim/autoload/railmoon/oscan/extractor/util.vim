@@ -24,11 +24,9 @@ function! railmoon#oscan#extractor#util#tags_from_file_name(file_name)
     return tags
 endfunction
 
-function! railmoon#oscan#extractor#util#tags_from_searched_line(line_number, line) " line
+function! railmoon#oscan#extractor#util#tags_from_line(line)
     let tags = split(a:line, '\W')
     call filter(tags, 'v:val != ""')
-
-    call add(tags, a:line_number)
 
     if a:line =~ '='
         call extend(tags, ['equal', '='])
@@ -42,13 +40,20 @@ function! railmoon#oscan#extractor#util#tags_from_searched_line(line_number, lin
         call extend(tags, ['dot', '.'])
     endif
 
-    if a:line =~ '[+-]' || a:line =~ '/' || a:line =~ '\*' " TODO in one expression
+    if a:line =~ '[+-/\*]'
         call add(tags, 'sign')
     endif
 
     if a:line =~ '&&' || a:line =~ '||' || a:line =~ '==' || a:line =~ '!=' " TODO in one expression
         call add(tags, 'logic')
     endif
+
+    return tags
+endfunction
+
+function! railmoon#oscan#extractor#util#tags_from_searched_line(line_number, line)
+    let tags = railmoon#oscan#extractor#util#tags_from_line( a:line )
+    call add(tags, a:line_number)
 
     return tags
 endfunction
@@ -66,14 +71,4 @@ function! railmoon#oscan#extractor#util#buffer_list()
 
     return result
 endfunction
-
-"function! railmoon#oscan#extractor#util#buffer_list_as_string()
-    "let result = ''
-
-    "for buffer_number, buffer_name in railmoon#oscan#extractor#util#buffer_list()
-        "let result .= buffer_number.' '.buffer_name."\n"
-    "endfor
-
-    "return result
-"endfunction TODO
 

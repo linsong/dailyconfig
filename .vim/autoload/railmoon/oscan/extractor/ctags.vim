@@ -3,7 +3,7 @@
 " Site: www.railmoon.com
 " Plugin: oscan
 " Module: extractor#ctags
-" Purpose: extract ctags record from buffer
+" Purpose: extract ctags record from current buffer
 
 function! railmoon#oscan#extractor#ctags#create()
     let new_extractor = copy(s:tag_scan_ctags_extractor)
@@ -44,6 +44,11 @@ function! railmoon#oscan#extractor#ctags#process(tag_item)
         let previous_magic = &magic
         set nomagic
 
+        if fnamemodify( @%, ':p' ) != fnamemodify( a:tag_item.filename, ':p' )
+            exec 'silent edit '.a:tag_item.filename
+        endif
+
+        silent 1
         exec a:tag_item.cmd
     finally
         let &magic = previous_magic
@@ -72,6 +77,15 @@ function! railmoon#oscan#extractor#ctags#language_by_extension( extension )
     return 'cpp'
 endfunction
 
+" return language name for current buffer
+" default language c++
+function! railmoon#oscan#extractor#ctags#language_by_current_buffer()
+    let extension = fnamemodify(@%, ':e')
+    let language = exists( '&filetype' ) ? &filetype : railmoon#oscan#extractor#ctags#language_by_extension(extension)
+
+    return language
+endfunction
+
 let s:tag_scan_ctags_extractor = {}
 function! s:tag_scan_ctags_extractor.process(record)
     call railmoon#oscan#extractor#ctags#process(a:record.data)
@@ -80,21 +94,14 @@ endfunction
 function! s:tag_scan_ctags_extractor.extract()
     let result = []
 
-    let extension = self.file_extension
-    let language = exists( '&filetype' ) ? &filetype : railmoon#oscan#extractor#ctags#language_by_extension(extension)
-    let self.language = language
-
-    let language_for_ctags = language
-    if language_for_ctags == 'cpp'
-        let language_for_ctags = 'c++'
-    endif
+    let self.language = railmoon#oscan#extractor#ctags#language_by_current_buffer()
 
     " fields 
     " f - file name
     " s - structures
     " i - inherits
     " k - kinds
-    " K - kinds full writted 
+    " K - kinds full written
     " a - access
     " l - language
     " t,m,z - unknown for me yet
@@ -103,10 +110,13 @@ function! s:tag_scan_ctags_extractor.extract()
     " extra 
     " q - tag names include namespace
     " f - file names added
-    let ctags_tags = railmoon#ctags_util#taglist_for_file(self.file_name, language_for_ctags, railmoon#oscan#extractor#ctags#kind_types_for_langauge(language), 'sikaS')
+    let ctags_tags = railmoon#ctags_util#taglist_for_file(self.file_name, 
+                \ self.language,
+                \ railmoon#oscan#extractor#ctags#kind_types_for_langauge(self.language),
+                \ 'sikaS')
 
     for item in ctags_tags
-        let record = railmoon#oscan#extractor#ctags#record_for_language_tag(language, item)
+        let record = railmoon#oscan#extractor#ctags#record_for_language_tag(self.language, item)
         
         " no need file name to show in each row ( all tags in one file )
         let record.additional_info = ''
@@ -117,7 +127,8 @@ function! s:tag_scan_ctags_extractor.extract()
     return result
 endfunction
 
-function! railmoon#oscan#extractor#ctags#colorize_keywords()
+function! railmoon#oscan#extractor#ctags#colorize_keywords(language)
+    call railmoon#oscan#extractor#ctags#colorize_for_langauge(a:language)
 endfunction
 
 function! s:tag_scan_ctags_extractor.colorize()

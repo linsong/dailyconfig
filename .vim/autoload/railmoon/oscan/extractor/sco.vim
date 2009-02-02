@@ -105,7 +105,7 @@ function! s:tag_scan_sco_extractor.extract_sco_results()
             let short_file_name = fnamemodify(file_name, ':t')
 
             let tag_list = []
-            call extend(tag_list, split(body))
+            call extend(tag_list, railmoon#oscan#extractor#util#tags_from_line(body))
             call add(tag_list, function_name)
             call extend(tag_list, railmoon#oscan#extractor#util#tags_from_file_name(file_name))
 
