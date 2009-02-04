@@ -63,6 +63,7 @@
     set ts=4
     set sw=4
     set expandtab
+    set smarttab
 
     "setting about indent
     " autoindent is not very convenient especially when editing mail text, 
@@ -85,7 +86,6 @@
     set winfixheight
     " not let all windows keep the same height/width
     set noequalalways
-
 
     " set autochdir to true,so whenever u open a window or switch to a buffer,the
     " path is set
@@ -351,7 +351,16 @@
 
     :nnoremap <silent> <C-n> :tabnext<CR>
     :nnoremap <silent> <C-p> :tabprevious<CR>
-    
+
+    " tip from http://vim.wikia.com/wiki/Creating_new_text_objects
+    :vnoremap af :<C-U>silent! normal! [zV]z<CR>
+    :omap af :normal Vaf<CR>
+
+    " http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
+    nnoremap <F1> :set invpaste paste?<CR>
+    imap <F1> <C-O><F1>
+    set pastetoggle=<F1>
+
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 
@@ -443,6 +452,75 @@
       endif
       return "[" . size . "] " . line
     endfunction
+
+    " tip from http://vim.wikia.com/wiki/Indent_text_object {{{2
+    :onoremap <silent>ai :<C-u>cal IndTxtObj(0)<CR>
+    :onoremap <silent>ii :<C-u>cal IndTxtObj(1)<CR>
+    :vnoremap <silent>ai :<C-u>cal IndTxtObj(0)<CR><Esc>gv
+    :vnoremap <silent>ii :<C-u>cal IndTxtObj(1)<CR><Esc>gv
+
+    function! IndTxtObj(inner)
+        let curline = line(".")
+        let lastline = line("$")
+        let i = indent(line(".")) - &shiftwidth * (v:count1 - 1)
+        let i = i < 0 ? 0 : i
+        if getline(".") =~ "^\\s*$"
+            return
+        endif
+
+        let p = line(".") - 1
+        let nextblank = getline(p) =~ "^\\s*$"
+        while p > 0 && (nextblank || indent(p) >= i )
+            -
+            let p = line(".") - 1
+            let nextblank = getline(p) =~ "^\\s*$"
+        endwhile
+        if (!a:inner)
+            -
+        endif
+        normal! 0V
+        call cursor(curline, 0)
+        let p = line(".") + 1
+        let nextblank = getline(p) =~ "^\\s*$"
+        while p <= lastline && (nextblank || indent(p) >= i )
+            +
+            let p = line(".") + 1
+            let nextblank = getline(p) =~ "^\\s*$"
+        endwhile
+        if (!a:inner)
+            +
+        endif
+        normal! $
+    endfunction
+    " }}}2
+
+    " http://vim.wikia.com/wiki/Quickly_switch_between_pager-like_and_editor-like_scroll {{{2
+    function! LessMode()
+        if g:lessmode == 0
+            let g:lessmode = 1
+            let onoff = 'on'
+            " Scroll half a page down
+            noremap <script> d <C-D>
+            " Scroll one line down
+            noremap <script> j <C-E>
+            " Scroll half a page up
+            noremap <script> u <C-U>
+            " Scroll one line up
+            noremap <script> k <C-Y>
+        else
+            let g:lessmode = 0
+            let onoff = 'off'
+            unmap d
+            unmap j
+            unmap u
+            unmap k
+        endif
+        echohl Label | echo "Less mode" onoff | echohl None
+    endfunction
+    let g:lessmode = 0
+    nnoremap <F5> :call LessMode()<CR>
+    inoremap <F5> <Esc>:call LessMode()<CR>
+    " }}}2
 "}}}1
     
 "## Platform dependent Setting {{{1
@@ -588,6 +666,7 @@ if has("autocmd")
         
         autocmd FileType html setlocal ts=2
         autocmd FileType html setlocal sw=2
+
     augroup END
 
     " settings related to specified file type. but checkings for file type 
