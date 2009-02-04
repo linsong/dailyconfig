@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 """
-TODO: 
-    1. add config for which notify-client is used. options are:
-        gnome-osd-client, notify-send, growl  etc
+This script is a fork of netgrowl.py that is shipped with Growl application.
+The main change is adding gnome-osd-client support, then this script can be
+used to:
+   * send On Screen Display notification to local linux machine
+   * send NetGrowl notification to local or remote Mac machine
+
 """
 
 # URL for this script: http://the.taoofmac.com/space/Projects/netgrowl.py
@@ -148,7 +151,7 @@ def _send_notify_by_growl(name, message, password='', host='',
     s = socket(AF_INET, SOCK_DGRAM)
     if not quiet:
         print "Assembling standard notification packet"
-    #TODO: guess the encoding of message and decode them 
+    #TODO: guess the encoding of message and decode them
     p = GrowlNotificationPacket(title=name.decode('utf-8'),
                                 description=message.decode('utf-8'),
                                 password=password,
@@ -168,30 +171,16 @@ def _send_notify_by_notifydaemon(name, message, icon, time):
     #message = message.replace('~', '&tilde;')
     #message = message.replace('-', '&ndash;')
 
-    #cmd = "notify-send -i %s -t %s '%s' '%s'" % (icon, time, name, message)
-
-    # the following command is very slow 
-    #cmd = """
-    #gnome-osd-client -f "<message id='notification' osd_fake_translucent_bg='on'
-    #hide_timeout='5000' osd_halignment='right'>From (%s): %s </message>"
-    #""" % (name, message)
-
     cmd = 'gnome-osd-client "(%s): %s"' % (name, message)
-    #os.popen(cmd)
     os.system(cmd)
 
-def send_notify(options):
-    config_name = local_configs['active']
-    for entry in local_configs[config_name]:
-        if not hasattr(options, entry) or not getattr(options, entry):
-            setattr(options, entry, local_configs[config_name][entry])
-
-    if config_name=='linux':
+def send_notify(profile, options):
+    if profile=='linux':
         _send_notify_by_notifydaemon(options.name or "NetGrowl",
                                     options.message or "Nortification",
                                     options.icon,
                                     options.time)
-    elif config_name=='darwin':
+    elif profile=='darwin':
         _send_notify_by_growl(options.name or "NetGrowl",
                              options.message or "Nortification",
                              options.password,
@@ -200,13 +189,17 @@ def send_notify(options):
     else:
         print "I don't know this kind of OS."
 
-def play_sound_effect(sound, host='localhost'):
-    # there are more sound effect files in /System/Library/Sounds 
-    #TODO: make sound effect file is configurable
-    if sound:
-        # to use esdplay, you need to install esound or esound-clients package
-        cmd = 'esdplay -s ' + host + ' ~/sound/glass.aiff'
-        os.system(cmd)
+def play_sound_effect():
+    if not options.sound:
+        return
+
+    host = options.host or 'localhost'
+    sound_file = options.sound_file or '~/sound/glass.aiff'
+
+    # there are more sound effect files in /System/Library/Sounds
+    # to use esdplay, you need to install esound or esound-clients package
+    cmd = ' '.join(['esdplay', '-s', host, sound_file])
+    os.system(cmd)
 
 if __name__ == '__main__':
     parser = optparse.OptionParser(usage="%prog [OPTION]...",
@@ -229,6 +222,8 @@ if __name__ == '__main__':
                       help = 'Port number for UDP notifications.')
     parser.add_option('-S', '--sound', dest='sound',
                       action='store_true', help="play sound effect file")
+    parser.add_option('-f', '--soundfile', dest='sound_file', default="",
+                      help="play which sound effect file")
     parser.add_option('-i', '--icon', dest='icon', default="",
                       help='specify an icon for notification message')
     parser.add_option('-t', '--time', dest='time', default=5000,
@@ -241,7 +236,12 @@ if __name__ == '__main__':
     if not args and not options:
         unit_test()
     else:
-        send_notify(options)
-        play_sound_effect(options.sound, options.host)
+        profile = local_configs['active']
+        for entry in local_configs[profile]:
+            if not hasattr(options, entry) or not getattr(options, entry):
+                setattr(options, entry, local_configs[profile][entry])
+
+        send_notify(profile, options)
+        play_sound_effect(options)
 
 

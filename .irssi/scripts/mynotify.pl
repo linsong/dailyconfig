@@ -45,27 +45,6 @@ sub notify($$$$)
     #system("netgrowl.py -q -n '$title' -m '$data'");
     open(TEMP_HANDLER, '|' . "netgrowl.py -q -n '" . $title . "' -m '" . $data . "'");
     close(TEMP_HANDLER);
-
-    #my $tool_type = Irssi::settings_get_str('notify_notification_tool');
-    #if ($tool_type =~ m/growl/i)
-    #{
-        ## for MacOSX
-        #system("netgrowl.py -q -n '$title' -m '$data'");
-    #}
-    #elsif ($tool_type =~ m/notify_send/i)
-    #{
-        ##for linux
-        ## Make the message entity-safe
-        #$data =~ s/&/&amp;/g; # That could have been done better.
-        #$data =~ s/</&lt;/g;
-        #$data =~ s/>/&gt;/g;
-        #$data =~ s/'/&apos;/g;
-        #system("notify-send -i gtk-dialog-info -t 5000 '$title' '$data'");
-    #}
-    #else
-    #{
-        #Irssi::print('Error: value of notify_notification_tool is not correct');
-    #}
 }
 
 sub sig_message_private ($$$$) {
