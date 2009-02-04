@@ -1,20 +1,6 @@
-# Default Server List for podget
-# FORMAT:    <url> <category> <name>
-# NOTES: 
-#    1. The Category must be one word without spaces.  You may use underscores.
-#    2. Any spaces in the urls needs to be converted to %20 
-#    3. Disable the downloading of any feed by commenting it out with a #.
-#    4. If you are creating ASX playlists, make sure the feed name does not
-#       have any spaces in it.
-# Find more servers at: http://www.ipodder.org/directory/4/podcasts
+http://blog.stackoverflow.com/index.php?feed=podcast StackOverflow StackOverflow
 
-# # Technology
-#http://www.podcastingnews.com/forum/links.php?func=show&id=214 IT In the Trenches
-#http://www.lugradio.org/episodes.rss Linux LUG Radio
+http://www.awaretek.com/python/index.xml Python Python411
 
-# ## Python 
-http://www.awaretek.com/python/index.xml Python411 Python411
-
-# # English learning
 http://feeds.feedburner.com/EnglishAsASecondLanguagePodcast EnglishAsSecondLanguage English as second language
 

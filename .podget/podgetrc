@@ -2,7 +2,8 @@
 config_serverlist=serverlist
 
 # Directory where to store downloaded files
-dir_library=/home/vincent/download/mp3/POD
+#dir_library=/home/vincent/download/mp3/POD
+dir_library=/Users/linsong/Music/POD
 
 # Directory to store logs in
 # dir_log=/home/vincent/POD/LOG
