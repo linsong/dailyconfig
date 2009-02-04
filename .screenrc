@@ -20,6 +20,8 @@
 # SCREEN SETTINGS
 # ------------------------------------------------------------------------------
 
+escape ^Oo
+
 startup_message off
 #nethack on
 
@@ -138,7 +140,7 @@ ignorecase on
 #
 # Run a screensaver if there's nothing happening for a while.
 #
-idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
+#idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
 
 # use blankerprg will make cursor missing, don't know the reason yet
 #blankerprg cmatrix -f -o -u 10
