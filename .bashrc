@@ -22,9 +22,6 @@ export LESSCHARSET=latin1
 export HOSTNAME
 PATH=${PATH}:/usr/bin:/bin:/usr/local/bin:~/mytools:~/tools/KeePassX-0.2.2:~/win32tools:~/bin:~/tools
 
-export PYTHONPATH=${PYTHONPATH}:~/workspace/djtrunk
-PATH=${PATH}:~/workspace/djtrunk/django/bin
- 
 # setting for mail   
 MAIL=/var/spool/mail/$USER
 export MAIL
@@ -87,6 +84,8 @@ fi
 
 # for details of how to use shopt, read Man bash
 shopt -s cdspell extglob dotglob nocaseglob
+# save histories from all sessions into one history file
+shopt -s histappend
 
 # Programmable Completion visit http://www.caliban.org/bash for more details
 if [ -e /etc/bash_completion ]; then
@@ -396,3 +395,9 @@ __END
  if [ -e ${HOME}/.bashrc.local ]; then
     source ${HOME}/.bashrc.local
  fi
+
+# For kcd
+KCD_INIT="/opt/local/etc/kcd.sh.init"
+if [ -e "$KCD_INIT" ]; then
+	. "$KCD_INIT"
+fi
