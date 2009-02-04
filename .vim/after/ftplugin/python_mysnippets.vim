@@ -47,3 +47,6 @@ exec "Snippet ipy #############  Embeded IPython #############
 \<CR>ipshell('***Hit Ctrl-D to exit interpreter and continue program.')
 \<CR>#############       END        #############"
 
+exec "Snippet header #! /usr/bin/env python
+\<CR># -*- coding: utf8 -*- 
+\<CR>".st.et
