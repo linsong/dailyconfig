@@ -366,6 +366,10 @@
     map ,cd :cd %:p:h<CR>
 
 
+    " use :w!! to write to a file using sudo if you forgot to 'sudo vim file'
+    " (it will prompt for sudo password when writing)
+    cmap w!! %!sudo tee > /dev/null %
+
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 
