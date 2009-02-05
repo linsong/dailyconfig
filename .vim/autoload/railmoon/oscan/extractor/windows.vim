@@ -50,6 +50,7 @@ function! s:tag_scan_windows_extractor.extract()
 
                 let buffer_number = winbufnr(window_number)
                 let buffer_name = bufname(buffer_number)
+                exec window_number.'wincmd w'
                 let line_number = line('.')
 
                 call add(result, railmoon#oscan#record#create( self.header_by_name(buffer_name, buffer_number),

@@ -7,8 +7,6 @@
 
 function! railmoon#oscan#extractor#buffers#create()
     let new_extractor = copy(s:tag_scan_buffers_extractor)
-    let new_extractor.last_buffer_number = bufnr('$')
-    let new_extractor.buffer_number_width = len(line('$'))
     let new_extractor.description = 'Select buffer to edit'
 
     return new_extractor
@@ -68,8 +66,8 @@ function! s:tag_scan_buffers_extractor.extract()
 endfunction
 
 function! s:tag_scan_buffers_extractor.colorize()
-    syntax match Comment /|.\{-}|/
-    syntax match Keyword /[\\/]/
-    syntax match Number /[0-9]\+/
+    syntax match FileName /.*\zs\/.*\ze/
+
+    hi link FileName Identifier
 endfunction
 

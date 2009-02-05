@@ -2,12 +2,12 @@
 " TwitVim - Post to Twitter from Vim
 " Based on Twitter Vim script by Travis Jeffery <eatsleepgolf@gmail.com>
 "
-" Version: 0.3.3
+" Version: 0.3.4
 " License: Vim license. See :help license
 " Language: Vim script
 " Maintainer: Po Shan Cheah <morton@mortonfox.com>
 " Created: March 28, 2008
-" Last updated: October 6, 2008
+" Last updated: November 11, 2008
 "
 " GetLatestVimScripts: 2204 1 twitvim.vim
 " ==============================================================
@@ -35,7 +35,7 @@ endfunction
 
 " Allow user to set the format for retweets.
 function! s:get_retweet_fmt()
-    return exists('g:twitvim_retweet_format') ? g:twitvim_retweet_format : "Retweeting %s: %t"
+    return exists('g:twitvim_retweet_format') ? g:twitvim_retweet_format : "RT %s: %t"
 endfunction
 
 " Allow user to enable Python networking code by setting twitvim_enable_python.
@@ -74,6 +74,21 @@ function! s:get_proxy_login()
     else
 	return exists('g:twitvim_proxy_login') ? g:twitvim_proxy_login : ''
     endif
+endfunction
+
+" Get twitvim_count, if it exists. This will be the number of tweets returned
+" by :FriendsTwitter, :UserTwitter, and :SearchTwitter.
+function! s:get_count()
+    if exists('g:twitvim_count')
+	if g:twitvim_count < 1
+	    return 1
+	elseif g:twitvim_count > 200
+	    return 200
+	else
+	    return g:twitvim_count
+	endif
+    endif
+    return 0
 endfunction
 
 " Display an error message in the message area.
@@ -904,7 +919,7 @@ function! s:launch_url_cword()
     " Handle #-hashtags by showing the Twitter Search for that hashtag.
     let matchres = matchlist(s, '^\(#\w\+\)')
     if matchres != []
-	call s:get_summize(matchres[1])
+	call s:get_summize(matchres[1], 1)
 	return
     endif
 
@@ -999,10 +1014,7 @@ let s:twit_buftype = ""
 " Set syntax highlighting in timeline window.
 function! s:twitter_win_syntax(wintype)
     " Beautify the Twitter window with syntax highlighting.
-    "if has("syntax") && exists("g:syntax_on") && !has("syntax_items")
-    "### below is a hacking way to enable the syntax highlighting
-    "### I don't understand why syntax_items is used here
-    if has("syntax") && exists("g:syntax_on")
+    if has("syntax") && exists("g:syntax_on") && !has("syntax_items")
 
 	" Twitter user name: from start of line to first colon.
 	syntax match twitterUser /^.\{-1,}:/
@@ -1157,6 +1169,8 @@ endif
 
 " Generic timeline retrieval function.
 function! s:get_timeline(tline_name, username, page)
+    let gotparam = 0
+
     if a:tline_name == "public"
 	" No authentication is needed for public timeline.
 	let login = ''
@@ -1176,6 +1190,16 @@ function! s:get_timeline(tline_name, username, page)
     " Support pagination.
     if a:page > 1
 	let url_fname .= '?page='.a:page
+	let gotparam = 1
+    endif
+
+    " Support count parameter in friends and user timelines.
+    if a:tline_name == 'friends' || a:tline_name == 'user'
+	let tcount = s:get_count()
+	if tcount > 0
+	    let url_fname .= (gotparam ? '&' : '?').'count='.tcount
+	    let gotparam = 1
+	endif
     endif
 
     redraw
@@ -1787,7 +1811,7 @@ if !exists(":PCligs")
 endif
 
 " Parse and format search results from Twitter Search API.
-function! s:show_summize(searchres)
+function! s:show_summize(searchres, page)
     let text = []
     let matchcount = 1
 
@@ -1796,6 +1820,10 @@ function! s:show_summize(searchres)
 
     let channel = s:xml_remove_elements(a:searchres, 'entry')
     let title = s:xml_get_element(channel, 'title')
+
+    if a:page > 1
+	let title .= ' (page '.a:page.')'
+    endif
 
     " The extra stars at the end are for the syntax highlighter to recognize
     " the title. Then the syntax highlighter hides the stars by coloring them
@@ -1825,11 +1853,24 @@ function! s:show_summize(searchres)
 endfunction
 
 " Query Twitter Search API and retrieve results
-function! s:get_summize(query)
+function! s:get_summize(query, page)
     redraw
     echo "Sending search request to Twitter Search..."
 
-    let url = 'http://search.twitter.com/search.atom?rpp=25&q='.s:url_encode(a:query)
+    let param = ''
+
+    " Support pagination.
+    if a:page > 1
+	let param .= 'page='.a:page.'&'
+    endif
+
+    " Support count parameter in search results.
+    let tcount = s:get_count()
+    if tcount > 0
+	let param .= 'rpp='.tcount.'&'
+    endif
+
+    let url = 'http://search.twitter.com/search.atom?'.param.'q='.s:url_encode(a:query)
     let [error, output] = s:run_curl(url, '', s:get_proxy(), s:get_proxy_login(), {})
 
     if error != ''
@@ -1837,14 +1878,14 @@ function! s:get_summize(query)
 	return
     endif
 
-    call s:show_summize(output)
+    call s:show_summize(output, a:page)
     let s:twit_buftype = "summize"
     redraw
     echo "Received search results from Twitter Search."
 endfunction
 
 " Prompt user for Twitter Search query string if not entered on command line.
-function! s:Summize(query)
+function! s:Summize(query, page)
     let query = a:query
 
     " Prompt the user to enter a query if not provided on :SearchTwitter
@@ -1860,14 +1901,14 @@ function! s:Summize(query)
 	return
     endif
 
-    call s:get_summize(query)
+    call s:get_summize(query, a:page)
 endfunction
 
 if !exists(":Summize")
-    command -nargs=? Summize :call <SID>Summize(<q-args>)
+    command -count=1 -nargs=? Summize :call <SID>Summize(<q-args>, <count>)
 endif
 if !exists(":SearchTwitter")
-    command -nargs=? SearchTwitter :call <SID>Summize(<q-args>)
+    command -count=1 -nargs=? SearchTwitter :call <SID>Summize(<q-args>, <count>)
 endif
 
 let &cpo = s:save_cpo

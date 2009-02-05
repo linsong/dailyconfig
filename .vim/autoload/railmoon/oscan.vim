@@ -247,7 +247,6 @@ function! s:suggestions_sort(lhs, rhs)
 endfunction
 
 function! s:tag_enter_window_callback.refresh_suggestion_list(current_tag, line)
-
     let entered_tags = split(a:line, ',')
 
     let current_tag = a:current_tag

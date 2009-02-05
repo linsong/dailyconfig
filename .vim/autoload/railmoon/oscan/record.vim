@@ -46,7 +46,7 @@ let s:record_id = 0
 function! s:record.has_tag( tag )
     if a:tag[0] == '~'
         for l:tag in self.tag_list 
-            if l:tag =~ a:tag[1 : ]
+            if l:tag =~ '\c'.a:tag[1 : ]
                 return 1
             endif
         endfor

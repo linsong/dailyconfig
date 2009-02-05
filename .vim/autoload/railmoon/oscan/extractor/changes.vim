@@ -21,8 +21,6 @@ endfunction
 function! s:tag_scan_changes_extractor.extract()
     let result = []
 
-    echo 1232
-
     redir => changes_string
     silent changes
     redir END
@@ -47,13 +45,10 @@ function! s:tag_scan_changes_extractor.extract()
                     \ line_number,
                     \ line_number))
     endfor
-    echo 444
-
 
     return result
 endfunction
 
 function! s:tag_scan_changes_extractor.colorize()
-    echo 555
 endfunction
 
