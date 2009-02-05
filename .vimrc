@@ -518,6 +518,48 @@
         normal! $
     endfunction
 
+    onoremap <silent>aI :<C-u>call IndTxtObj2(0)<CR>
+    onoremap <silent>iI :<C-u>call IndTxtObj2(1)<CR>
+    vnoremap <silent>aI :<C-u>call IndTxtObj2(0)<CR><Esc>gv
+    vnoremap <silent>iI :<C-u>call IndTxtObj2(1)<CR><Esc>gv
+    function! IndTxtObj2(inner)
+        let curcol = col(".")
+        let curline = line(".")
+        let lastline = line("$")
+        let i = indent(line(".")) - &shiftwidth * (v:count1 - 1)
+        let i = i < 0 ? 0 : i
+        if getline(".") =~ "^\\s*$"
+            return
+        endif
+
+        let p = line(".") - 1
+        let nextblank = getline(p) =~ "^\\s*$"
+        while p > 0 && ( nextblank || indent(p) >= i ) 
+            -
+            let p = line(".") - 1
+            let nextblank = getline(p) =~ "^\\s*$"
+        endwhile
+        if (!a:inner)
+            -
+        endif
+
+        normal! 0V
+        call cursor(curline, curcol)
+
+        let p = line(".") + 1
+        let nextblank = getline(p) =~ "^\\s*$"
+        while p <=lastline && ( nextblank || indent(p) >= i ) 
+            +
+            let p = line(".") + 1
+            let nextblank = getline(p) =~ "^\\s*$"
+        endwhile
+        if (!a:inner)
+            +
+        endif
+
+        normal! $
+    endfunction
+
     " }}}2
 
     " http://vim.wikia.com/wiki/Quickly_switch_between_pager-like_and_editor-like_scroll {{{2
