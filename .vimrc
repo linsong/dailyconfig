@@ -361,6 +361,11 @@
     imap <F1> <C-O><F1>
     set pastetoggle=<F1>
 
+
+    " http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file
+    map ,cd :cd %:p:h<CR>
+
+
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 
@@ -428,38 +433,43 @@
 
 "## General function defination {{{1
     function! MyFoldText()
-      let line = getline(v:foldstart)
-      let nnum = nextnonblank(v:foldstart + 1)
-      let nextline = getline(nnum)
-      if nextline =~ '^\s\+"""$'
-        let line = line . getline(nnum + 1)
-      elseif nextline =~ '^\s\+"""'
-        let line = line . ' ' . matchstr(nextline, '"""\zs.\{-}\ze\("""\)\?$')
-      elseif nextline =~ '^\s\+"[^"]\+"$'
-        let line = line . ' ' . matchstr(nextline, '"\zs.*\ze"')
-      elseif nextline =~ '^\s\+pass\s*$'
-        let line = line . ' pass'
-      endif
-      let size = 1 + v:foldend - v:foldstart
-      if size < 10
-        let size = " " . size
-      endif
-      if size < 100
-        let size = " " . size
-      endif
-      if size < 1000
-        let size = " " . size
-      endif
-      return "[" . size . "] " . line
+        let line = getline(v:foldstart)
+        let nnum = nextnonblank(v:foldstart + 1)
+        let nextline = getline(nnum)
+        if nextline =~ '^\s\+"""$'
+            let line = line . getline(nnum + 1)
+        elseif nextline =~ '^\s\+"""'
+            let line = line . ' ' . matchstr(nextline, '"""\zs.\{-}\ze\("""\)\?$')
+        elseif nextline =~ '^\s\+"[^"]\+"$'
+            let line = line . ' ' . matchstr(nextline, '"\zs.*\ze"')
+        elseif nextline =~ '^\s\+pass\s*$'
+            let line = line . ' pass'
+        endif
+        let size = 1 + v:foldend - v:foldstart
+        if size < 10
+            let size = " " . size
+        endif
+        if size < 100
+            let size = " " . size
+        endif
+        if size < 1000
+            let size = " " . size
+        endif
+        return "[" . size . "] " . line
     endfunction
 
-    " tip from http://vim.wikia.com/wiki/Indent_text_object {{{2
-    :onoremap <silent>ai :<C-u>cal IndTxtObj(0)<CR>
-    :onoremap <silent>ii :<C-u>cal IndTxtObj(1)<CR>
-    :vnoremap <silent>ai :<C-u>cal IndTxtObj(0)<CR><Esc>gv
-    :vnoremap <silent>ii :<C-u>cal IndTxtObj(1)<CR><Esc>gv
+    " [Modified by me] define indent block text object
+    " Changes to allow blank lines in blocks, and double
+    " blank lines as block delimiter
+    " Press: vai, vii to select outer/inner python blocks by indetation.
+    " Press: vii, yii, dii, cii to select/yank/delete/change an indented block.
+    onoremap <silent>ai :<C-u>call IndTxtObj(0)<CR>
+    onoremap <silent>ii :<C-u>call IndTxtObj(1)<CR>
+    vnoremap <silent>ai :<C-u>call IndTxtObj(0)<CR><Esc>gv
+    vnoremap <silent>ii :<C-u>call IndTxtObj(1)<CR><Esc>gv
 
     function! IndTxtObj(inner)
+        let curcol = col(".")
         let curline = line(".")
         let lastline = line("$")
         let i = indent(line(".")) - &shiftwidth * (v:count1 - 1)
@@ -469,29 +479,41 @@
         endif
 
         let p = line(".") - 1
+        let pp = line(".") - 2
         let nextblank = getline(p) =~ "^\\s*$"
-        while p > 0 && (nextblank || indent(p) >= i )
+        let nextnextblank = getline(pp) =~ "^\\s*$"
+        while p > 0 && !(nextblank && nextnextblank) && ( nextblank || indent(p) >= i ) 
             -
             let p = line(".") - 1
+            let pp = line(".") - 2
             let nextblank = getline(p) =~ "^\\s*$"
+            let nextnextblank = getline(pp) =~ "^\\s*$"
         endwhile
         if (!a:inner)
             -
         endif
+
         normal! 0V
-        call cursor(curline, 0)
+        call cursor(curline, curcol)
+
         let p = line(".") + 1
+        let pp = line(".") + 2
         let nextblank = getline(p) =~ "^\\s*$"
-        while p <= lastline && (nextblank || indent(p) >= i )
+        let nextnextblank = getline(pp) =~ "^\\s*$"
+        while p <=lastline && !(nextblank && nextnextblank) && ( nextblank || indent(p) >= i ) 
             +
             let p = line(".") + 1
+            let pp = line(".") + 2
             let nextblank = getline(p) =~ "^\\s*$"
+            let nextnextblank = getline(pp) =~ "^\\s*$"
         endwhile
         if (!a:inner)
             +
         endif
+
         normal! $
     endfunction
+
     " }}}2
 
     " http://vim.wikia.com/wiki/Quickly_switch_between_pager-like_and_editor-like_scroll {{{2
