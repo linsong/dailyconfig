@@ -709,7 +709,9 @@ function! <SID>ParseSCOSettings() "{{{
 			let l:option_value = substitute(l:line, l:option_pattern, '\2', '')
 			"echo "otpname:".l:option_name." ; value:".l:option_value
 			let s:sco_settings[ l:option_name ] = l:option_value
-		else
+		endif
+		
+		if l:line =~ '^\s*$'
 			break
 		endif
 
