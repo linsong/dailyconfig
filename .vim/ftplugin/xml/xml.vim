@@ -2,8 +2,8 @@
 " FileType:     XML
 " Author:       Devin Weaver <vim (at) tritarget.com> 
 " Maintainer:   Devin Weaver <vim (at) tritarget.com>
-" Last Change:  $Date: 2009-01-29 02:04:50 -0500 (Thu, 29 Jan 2009) $
-" Version:      $Revision: 81 $
+" Last Change:  $Date: 2009-02-06 00:15:06 -0500 (Fri, 06 Feb 2009) $
+" Version:      $Revision: 82 $
 " Location:     http://www.vim.org/scripts/script.php?script_id=301
 " Licence:      This program is free software; you can redistribute it
 "               and/or modify it under the terms of the GNU General Public
@@ -507,8 +507,10 @@ endif
 " ClearJumpMarks -> Clean out extranious left over xml_jump_string garbage. {{{1
 if !exists("*s:ClearJumpMarks")
 function s:ClearJumpMarks( )
-    if (g:xml_jump_string != "")
-        execute ":%s/" . g:xml_jump_string . "//ge"
+    if exists("g:xml_jump_string")
+       if g:xml_jump_string != ""
+           execute ":%s/" . g:xml_jump_string . "//ge"
+       endif
     endif
 endfunction
 endif
@@ -659,7 +661,7 @@ endfunction
 " }}}2
 
 let s:revision=
-      \ substitute("$Revision: 81 $",'\$\S*: \([.0-9]\+\) \$','\1','')
+      \ substitute("$Revision: 82 $",'\$\S*: \([.0-9]\+\) \$','\1','')
 silent! let s:install_status =
     \ s:XmlInstallDocumentation(expand('<sfile>:p'), s:revision)
 if (s:install_status == 1)

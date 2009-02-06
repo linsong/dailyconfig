@@ -23,6 +23,10 @@ exec "Snippet table CREATE TABLE ".st.et." (
 \<CR>".st.et."
 \<CR>);"
 
+exec "Snippet index CREATE INDEX ".st.et." ON ".st.et."(".st.et.");"
+
 exec "Snippet type CREATE TYPE ".st.et." AS (".st.et.");"
+
+exec "Snippet log raise notice '".st.et."', ".st.et.";"
 
 
