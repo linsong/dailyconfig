@@ -1,4 +1,4 @@
-*xml-plugin.txt*  Help edit XML and SGML documents.                   v81
+*xml-plugin.txt*  Help edit XML and SGML documents.                   v82
 
                                    XML Edit      ~
 
