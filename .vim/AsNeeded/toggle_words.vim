@@ -2,7 +2,7 @@
 " Author: Vincent Wang (linsong dot qizi at gmail dot com)
 " Created:  Fri Jun 29 18:06:29 CST 2007
 " Requires: Vim Ver7.0+ 
-" Version:  1.4
+" Version:  1.5
 "
 " Documentation: 
 "   The purpose of this plugin is very simple, it can toggle words among
@@ -30,6 +30,9 @@
 "   Any comment, suggestion, bug report are welcomed. 
 "
 " History:
+"  1.5:
+"    - add support to extend default toggle words ('*'), based on patch
+"    provided by Jeremy Cantrell, thanks
 "  1.4:
 "    - add one more toggle word option: 1 and 0
 "  1.3:
@@ -66,7 +69,7 @@ endif
 let s:keepcpo= &cpo
 set cpo&vim
 
-let g:load_toggle_words = "1.4"
+let g:load_toggle_words = "1.5"
 
 let g:_toggle_words_dict = {'*': [
     \ ['==', '!='], 
@@ -98,7 +101,13 @@ let g:_toggle_words_dict = {'*': [
     \ ],  }
 
 if exists('g:toggle_words_dict')
-    :call extend(g:_toggle_words_dict, g:toggle_words_dict)
+    for key in keys(g:toggle_words_dict)
+        if has_key(g:_toggle_words_dict, key)
+            call extend(g:_toggle_words_dict[key], g:toggle_words_dict[key])
+        else
+            let g:_toggle_words_dict[key] = g:toggle_words_dict[key]
+        endif
+    endfor
 endif
 
 function! s:ToggleWord()
