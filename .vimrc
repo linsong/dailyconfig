@@ -1296,7 +1296,7 @@ endif " has("autocmd")
     "}}}2
    
     "### setting for toggle_words.vim {{{2
-     let g:toggle_words_dict = {'python': [['if', 'elif', 'else']]}
+     let g:toggle_words_dict = {'*': [['white', 'black']], 'python': [['if', 'elif', 'else']]}
      nmap ,t :ToggleWord<CR>
      vmap ,t <ESC>:ToggleWord<CR>
     "}}}2
