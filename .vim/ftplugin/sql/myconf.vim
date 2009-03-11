@@ -24,6 +24,8 @@ if ! exists("b:mysqlini")
     nmap <buffer> <Enter> :.,.DBExecRangeSQL<CR>
     vmap <buffer> <Enter> :DBExecRangeSQL<CR>
 
+    nmap <buffer> ;f :.,.SQLUFormatter<CR>
+    vmap <buffer> ;f :SQLUFormatter<CR>
     """ This is not needed since python_match.vim defined these already
     "if !exists("b:match_words")
         "let b:match_ignorecase=0
