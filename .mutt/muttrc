@@ -115,6 +115,16 @@ source ~/.mutt/fcc-hooks                  # Define fcc-hooks.
 source ~/.mutt/message-hooks              # Define message hooks.
 source ~/.mutt/scores                     # Define score rules
 
+#
+#  Load the sidebar configuration file if this host has muttng
+#
+#  If not just show the version number of mutt on startup - the best
+# side-effect free alternative I can think of!
+#
+source ~/.mutt/sidebar
+#`test -x ~/.mutt/sidebar && echo source .mutt-sidebar || echo "push "`
+
+
 #source /usr/local/doc/mutt/samples/gpg.rc # Use GPG
 #source ~/.mutt/non-standard               # Support for mutt patches.
 

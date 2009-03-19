@@ -180,6 +180,8 @@ fi
  alias sshvincent='ssh -A box -t "ssh vincent -t \"screen -x \""'
 
  alias rlwrap='rlwrap -c'
+
+ alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"' 
 ###########################################################################
 ###
 ###            Function defines

@@ -17,4 +17,4 @@ set smtp_url="smtp://linsong.qizi@gmail.com@smtp.gmail.com"
 # comment out the line below to let mutt to guess the authentication method one by one
 #set smtp_authenticators="cram-md5"
 
-
+source ~/.mutt/mailboxes                  # Define the list of folders that receive mail.

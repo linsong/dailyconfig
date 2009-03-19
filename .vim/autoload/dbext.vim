@@ -1129,7 +1129,7 @@ function! s:DB_varToString(name)
     endif
 endfunction
 
-"FIXME: Csinálni kell erre egy kommandot.
+"FIXME: Csin?lni kell erre egy kommandot.
 function! s:DB_getParameters(scope)
     "scope must be 'b', 'g', 'd' (buffer, global, default)
     if (a:scope == "b")
@@ -2096,9 +2096,9 @@ function! s:DB_DB2_execSql(str)
     " In batch files I used the following
     "     -c close when done
     "     -w wait until command finishes
-    "     -i don’t spawn a new cmd window
-    "     -t don’t change the window title
-    "     db2cmd -c -w -i –t “db2 -s -t ; -v -f dave.sql”
+    "     -i don?t spawn a new cmd window
+    "     -t don?t change the window title
+    "     db2cmd -c -w -i ?t ?db2 -s -t ; -v -f dave.sql?
     " To see command line options
     "     cd IBM\SQLLIB\BIN
     "     db2cmd -w -i
