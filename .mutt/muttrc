@@ -121,7 +121,7 @@ source ~/.mutt/scores                     # Define score rules
 #  If not just show the version number of mutt on startup - the best
 # side-effect free alternative I can think of!
 #
-source ~/.mutt/sidebar
+#source ~/.mutt/sidebar
 #`test -x ~/.mutt/sidebar && echo source .mutt-sidebar || echo "push "`
 
 
