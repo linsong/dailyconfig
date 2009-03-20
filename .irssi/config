@@ -337,7 +337,8 @@ keyboard = (
   { key = "meta-p"; id = "change_window"; data = "6"; },
   { key = "meta-b"; id = "change_window"; data = "7"; },
   { key = "meta-i"; id = "change_window"; data = "8"; },
-  { key = "meta-x"; id = "change_window"; data = "9"; }
+  { key = "meta-a"; id = "change_window"; data = "9"; },
+  { key = "meta-x"; id = "change_window"; data = "10"; }
 );
 hilights = (
   {
