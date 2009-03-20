@@ -101,6 +101,7 @@ channels = (
   { name = "#ubuntu-cn";  chatnet = "IRCnet"; autojoin = "yes"; }, 
   { name = "#postgresql"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "silc";        chatnet = "silc";   autojoin = "No"; }
+  { name = "#archlinux";  chatnet = "IRCnet"; autojoin = "yes"; },
 );
 
 aliases = {
@@ -444,6 +445,18 @@ windows = {
         type = "CHANNEL";
         chat_type = "IRC";
         name = "#irssi";
+        tag = "IRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "3";
+  };
+  9 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#archlinux";
         tag = "IRCnet";
       }
     );
