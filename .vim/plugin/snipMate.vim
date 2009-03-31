@@ -1,7 +1,7 @@
 " File:          snipMate.vim
 " Author:        Michael Sanders
-" Version:       0.75
-" Last Modified: March 27 2009
+" Version:       0.77
+" Last Updated:  March 29, 2009.
 " Description:   snipMate.vim implements some of TextMate's snippets features in
 "                Vim. A snippet is a piece of often-typed text that you can
 "                insert into your document using a trigger word followed by a "<tab>".
@@ -104,13 +104,15 @@ fun! ResetSnippets()
 endf
 
 let g:did_ft = {}
-fun! GetSnippets(dir)
-	for ft in split(&ft, '\.')
+fun! GetSnippets(dir, filetype)
+	for ft in split(a:filetype, '\.')
 		if has_key(g:did_ft, ft) | continue | endif
-		for path in split(globpath(a:dir, ft.'\(-*\)\=/'), '\n')
+		for path in split(globpath(a:dir, ft.'/')."\n".
+						\ globpath(a:dir, ft.'-*/'), "\n")
 			call ExtractSnips(path, ft)
 		endfor
-		for path in split(globpath(a:dir, ft.'\(-*\)\=.snippets'), '\n')
+		for path in split(globpath(a:dir, ft.'.snippets')."\n".
+						\ globpath(a:dir, ft.'-*.snippets'), "\n")
 			call ExtractSnipsFile(path)
 		endfor
 		let g:did_ft[ft] = 1
@@ -120,15 +122,15 @@ endf
 fun! TriggerSnippet()
 	if exists('g:SuperTabMappingForward')
 		if g:SuperTabMappingForward == "<tab>"
-			let g:SuperTabKey = "\<c-n>"
+			let SuperTabKey = "\<c-n>"
 		elseif g:SuperTabMappingBackward == "<tab>"
-			let g:SuperTabKey = "\<c-p>"
+			let SuperTabKey = "\<c-p>"
 		endif
 	endif
 
 	if pumvisible() " Update snippet if completion is used, or deal with supertab
-		if exists('g:SuperTabKey')
-			call feedkeys(g:SuperTabKey) | return ''
+		if exists('SuperTabKey')
+			call feedkeys(SuperTabKey) | return ''
 		endif
 		call feedkeys("\<esc>a", 'n') " Close completion menu
 		call feedkeys("\<tab>") | return ''
@@ -150,9 +152,11 @@ fun! TriggerSnippet()
 		let col = col('.') - len(trigger)
 		sil exe 's/'.escape(trigger, '.^$/\*[]').'\%#//'
 		return snipMate#expandSnip(col)
+	elseif exists('SuperTabKey')
+		call feedkeys(SuperTabKey)
+		return ''
 	endif
-	return exists('g:SuperTabKey') && getline('.')[col('.')-2] =~ '\S' 
-				\ ? g:SuperTabKey : "\<tab>"
+	return "\<tab>"
 endf
 
 " Check if word under cursor is snippet trigger; if it isn't, try checking if
@@ -160,9 +164,9 @@ endf
 fun s:GetSnippet(word, scope)
 	let word = a:word
 	wh !exists('g:snippet')
-		if exists('s:snippets["'.a:scope.'"]['''.word.''']')
+		if exists('s:snippets["'.a:scope.'"]["'.escape(word, '\"').'"]')
 			let g:snippet = s:snippets[a:scope][word]
-		elseif exists('s:multi_snips["'.a:scope.'"]['''.word.''']')
+		elseif exists('s:multi_snips["'.a:scope.'"]["'.escape(word, '\"').'"]')
 			let g:snippet = s:ChooseSnippet(a:scope, word)
 		else
 			if match(word, '\W') == -1 | break | endif
