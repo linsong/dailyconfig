@@ -1119,10 +1119,12 @@ endif " has("autocmd")
         ":vmap <leader>gbi y:SearchBuffers <C-R>"<CR>
     "### }}}2
 
-    "### [NOTUSED] setting for showmarks.vim {{{2
-        ":let g:showmarks_enable=0
-        ":let g:showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'`"
+    "### setting for showmarks.vim {{{2
+        :let g:showmarks_enable=0
+        :let g:showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'`"
         ":let g:showmarks_ignore_type="hmpqr"
+        :let g:showmarks_hlline_lower = 1
+        :let g:showmarks_hlline_upper = 1
     "### }}}2
 
     "### setting for vcscommand.vim {{{2
@@ -1471,6 +1473,12 @@ endif " has("autocmd")
     
     "### settings for vimim {{{2
     let g:vimim_i_ctrl6 = 1
+    "}}}2
+    
+    "### settings for EasyGrep.vim {{{2
+    let g:EasyGrepMode = 2
+    let g:EasyGrepCommand = 1
+    let g:EasyGrepRecursive = 1
     "}}}2
 "## }}}1
 
