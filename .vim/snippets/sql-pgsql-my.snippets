@@ -13,19 +13,13 @@ snippet for
 	FOR ${1} IN ${2} LOOP
 		${3}
 	END LOOP;
-
 snippet table
 	CREATE TABLE ${1} (
 		${2}
 	);
-
 snippet index
 	CREATE INDEX ${1} ON ${2}(${3});
-
 snippet type
 	CREATE TYPE ${1} AS (${2});
-
 snippet log
 	raise notice '${1}', ${2};
-
-
