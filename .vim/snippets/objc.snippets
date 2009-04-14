@@ -10,6 +10,9 @@ snippet sel
 # @"..." string
 snippet s
 	@"${1}"${2}
+# Object
+snippet o
+	${1:NSObject} *${2:foo} = [${3:$1 alloc}];${5}
 # NSLog(...)
 snippet log
 	NSLog(@"${1}"${2});${3}
@@ -24,12 +27,28 @@ snippet objc
 	- (id) init
 	{
 		if (self = [super init])
+		{${3}
+		}
+		return self;
+	}
+	@end
 # Class Interface
 snippet clh
-	@interface ${1:ClassName} : ${2:NSObject}
+	@interface ${1:`Filename('', 'object')`} : ${2:NSObject}
 	{${3}
 	}
 	${4}
+	@end
+# Class Implementation
+snippet clm
+	@implementation ${1:`Filename('', 'object')`} : ${2:NSObject}
+	- (id)init
+	{
+		if ((self = [super init]))
+		{$0
+		}
+		return self;
+	}
 	@end
 snippet ibo
 	IBOutlet ${1:NSSomeClass} *${2:$1};
@@ -65,8 +84,14 @@ snippet m
 snippet md
 	- (${1:id})${2:method};${3}
 # IBAction declaration
-snippet iba
+snippet ibad
 	- (IBAction)${1:method};${2}
+# IBAction method
+snippet iba
+	- (IBAction)${1:method}
+	{
+		${2}
+	}
 # awakeFromNib method
 snippet wake
 	- (void)awakeFromNib
@@ -114,11 +139,10 @@ snippet fora
 		${4}
 	}
 snippet forarray
-	unsigned int	${1:object}Count = [${2:array} count];
+	unsigned int ${1:object}Count = [${2:array} count];
 	
-	for (unsigned int index = 0; index < $1Count; index++)
-	{
-		${3:id}	$1 = [$2 $1AtIndex:index];
+	for (unsigned int index = 0; index < $1Count; index++) {
+		${3:id} $1 = [$2 $1AtIndex:index];
 		${4}
 	}
 # IBOutlet
