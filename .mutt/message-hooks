@@ -14,11 +14,13 @@ message-hook "~h \"X-Mailer: (Microsoft Outlook IMO|Experian ContactMail)\"" "se
 # DOS formatted text. Clean things up.
 message-hook "~h \"X-Mailer: IncrediMail" "set display_filter='tr -d \\\\r'"
 
-message-hook "(~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")" "my_hdr From: Vincent Wang <vincent@exoweb.net>"
-message-hook "(~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")" "set from = vincent@exoweb.net"
-message-hook "(~x nordicbet\.com | ~h \"^In-[Rr]eply-[Tt]o: .*nordicbet\.com\")" "my_hdr From: Vincent Wang <vincent@exoweb.net>"
-message-hook "(~x nordicbet\.com | ~h \"^In-[Rr]eply-[Tt]o: .*nordicbet\.com\")" "set from = vincent@exoweb.net"
-
-message-hook "~f exoweb\.net" "set from='Vincent Wang <vincent@exoweb.net>'"
-message-hook "~f nordicbet\.com" "set from='Vincent Wang <vincent@exoweb.net>'"
+#message-hook "(~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")" "my_hdr From: Vincent Wang <vincent@exoweb.net>"
+#message-hook "(~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")" "set from = vincent@exoweb.net"
+#message-hook "(~x nordicbet\.com | ~h \"^In-[Rr]eply-[Tt]o: .*nordicbet\.com\")" "my_hdr From: Vincent Wang <vincent@exoweb.net>"
+#message-hook "(~x nordicbet\.com | ~h \"^In-[Rr]eply-[Tt]o: .*nordicbet\.com\")" "set from = vincent@exoweb.net"
+#
+#message-hook "~f exoweb\.net" "set from='Vincent Wang <vincent@exoweb.net>'"
+#message-hook "~f nordicbet\.com" "set from='Vincent Wang <vincent@exoweb.net>'"
 message-hook "~f qnite\.com" "set from='Vincent Wang <vincent@qnite.com>'"
+
+message-hook "~t linsong\.org" "set from='Vincent Wang <vincent@linsong.com>'"

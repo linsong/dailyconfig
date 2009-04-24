@@ -54,6 +54,7 @@ macro pager "<esc>l"    "<enter-command>set invpipe_decode<enter>\
 #macro pager "\Cs\Cg" "<pipe-message>spamprobe good<enter>"                # This message is good.
 
 macro generic "<esc>1" ":set from='Vincent Wang <linsong.qizi@gmail.com>'<enter>"
-macro generic "<esc>2" ":set from='Vincent Wang <vincent@exoweb.net>'<enter>"
+#macro generic "<esc>2" ":set from='Vincent Wang <vincent@exoweb.net>'<enter>"
+macro generic "<esc>2" ":set from='Vincent Wang <vincent@linsong.org>'<enter>"
 macro generic "<esc>3" ":set from='Vincent Wang <vincent@qnite.com>'<enter>"
 
