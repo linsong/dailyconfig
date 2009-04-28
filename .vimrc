@@ -586,8 +586,8 @@
         echohl Label | echo "Less mode" onoff | echohl None
     endfunction
     let g:lessmode = 0
-    nnoremap <F5> :call LessMode()<CR>
-    inoremap <F5> <Esc>:call LessMode()<CR>
+    nnoremap <F6> :call LessMode()<CR>
+    inoremap <F6> <Esc>:call LessMode()<CR>
     " }}}2
 "}}}1
     
@@ -601,6 +601,21 @@
     set nobackup writebackup
 
     let $VIMCFG = '$HOME/.vim'
+
+    " how to check different systems
+    "if has("unix")
+    "  " code common to Cygwin and Linux
+    "  if has("win32unix")
+    "    " code for Cygwin but not Linux
+    "  else
+    "    " code for Linux but not Cygwin
+    "  endif
+    "elseif has("win32")
+    "  " code for windows-native Vim
+    "else
+    "  echoerr "Unknown OS"
+    "endif
+
     if has('win32')  " windows specific setting{{{2
         set runtimepath=~/.vim,$VIMRUNTIME
 
@@ -1087,6 +1102,34 @@ endif " has("autocmd")
         :noremap ,ll :LimitOnRegex <C-R>=expand("<cword>")<CR>
         :vnoremap ,ll :call LimitOnRegex(GetVisualSelectionEscaped("enV"), -1)<CR>
     " }}}2
+    
+    " hybrid syntax snip {{{2
+    function! TextEnableCodeSnip(filetype,start,end) abort
+      let ft=toupper(a:filetype)
+      let group='textGroup'.ft
+      if exists('b:current_syntax')
+        let s:current_syntax=b:current_syntax
+        " Remove current syntax definition, as some syntax files (e.g. cpp.vim)
+        " do nothing if b:current_syntax is defined.
+        unlet b:current_syntax
+      endif
+      execute 'syntax include @'.group.' syntax/'.a:filetype.'.vim'
+      try
+        execute 'syntax include @'.group.' after/syntax/'.a:filetype.'.vim'
+      catch
+      endtry
+      if exists('s:current_syntax')
+        let b:current_syntax=s:current_syntax
+      else
+        unlet b:current_syntax
+      endif
+      execute 'syntax region textSnip'.ft.'
+      \ matchgroup=textSnip
+      \ start="'.a:start.'" end="'.a:end.'"
+      \ contains=@'.group
+      hi link textSnip SpecialComment
+    endfunction
+    " }}}2
 
 "## }}}1
 
@@ -1479,6 +1522,13 @@ endif " has("autocmd")
     let g:EasyGrepMode = 2
     let g:EasyGrepCommand = 1
     let g:EasyGrepRecursive = 1
+    "}}}2
+    
+    "### settings for crefvim {{{2
+    vmap <silent> <unique> ,cr <Plug>CRV_CRefVimVisual
+    nmap <silent> <unique> ,cr <Plug>CRV_CRefVimNormal
+    map <silent> <unique> ,cw <Plug>CRV_CRefVimAsk
+    map <silent> <unique> ,cc <Plug>CRV_CRefVimInvoke
     "}}}2
 "## }}}1
 
