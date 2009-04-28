@@ -1,3 +1,69 @@
+================================================================================
+  RELEASE NOTES FOR VERSION 5.5
+================================================================================
++ Additional plugin-tags (jump targets in templates): <+text+>, <-text->.
++ Additional mapping Ctrl-j : jump to these new targets.
++ Template-file: additional macro |STYLE| and IF-ENDIF-construct to easily
+  choose between sets of templates.
++ Additional mapping: auto-complete classical C comment (also multi-line).
++ Additional mapping: auto-complete open block starting with {<CR> .
++ Visual mode for date and time insertion (menu 'Comments').
++ Visual mode for tags (submenu 'Comments->tags (plugin)').
++ Bugfix: hotkey \ica not working
++ Bugfix: hotkey Shift-F2 for the alternate-plugin disappeared. 
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 5.4
+=======================================================================================
++ New hotkey \+co inserts ' cout <<  << endl;'
++ New menu item C++-menu: 'cout' replaces 'cout variable' and 'cout string'.
++ Hotkey \c/ removed ( \cc does the same).
++ Bugfix: after an unsuccessful compilation screen sometimes garbled.
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 5.3
+=======================================================================================
++ Insertions work properly when folding is used.
++ Menu items Idioms->for(...) : type declaration for loop variable possible (tab completion).
++ Specification of command line arguments (Run->cmd. line arg.): filename completion active.
++ New main menu item 'show manual' (hotkey \hm): read manual for word under cursor. 
++ One hotkey renamed: \h -> \hp (help plugin)
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 5.2.1
+=======================================================================================
++ Bugfix: stray characters whith three dialogs
++ Bugfix: Missing parameter in 2 internal function calls
++ Menu items 'Snippets->edit local/global templates' start an file browser (convenience).
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 5.2
+=======================================================================================
++ Superfluous control characters for mode switching (menus, hotkeys) removed. Caused beeps.
++ Template files (local/global) can be opened from the snippet menu.
++ Three new preprocessor statements.
++ v-mode for RTTI-entries.
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 5.1
+=======================================================================================
++ Definition and implementation of classes have now different templates and menu entries.
++ Accessor methods (get/set) can be generated.
++ New templates: everything other than language keywords comes from a template 
+  (and is user changeable).
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 5.0.5
+=======================================================================================
++ Bugfix: on a few systems doubling of path components in the run command (F9).
+  Skip this upgrade if you do not have this problem.
+
+=======================================================================================
+  RELEASE NOTES FOR VERSION 5.0.4
+=======================================================================================
++ Format for the macros |DATE|, |TIME|, and |YEAR| can be defined by the user.
++ Help text improved.
+
 =======================================================================================
   RELEASE NOTES FOR VERSION 5.0.3
 =======================================================================================

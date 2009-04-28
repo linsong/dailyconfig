@@ -1,16 +1,16 @@
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.function ==
 void<CURSOR>
-|?FUNCTION_NAME| (  )
+|?FUNCTION_NAME| ( <+argument list+> )
 {
-<SPLIT>	return ;
+<SPLIT>	return <+return value+>;
 }		// -----  end of function |FUNCTION_NAME|  -----
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.function-static ==
 static void<CURSOR>
-|?FUNCTION_NAME| (  )
+|?FUNCTION_NAME| ( <+argument list+> )
 {
-<SPLIT>	return ;
+<SPLIT>	return <+return value+>;
 }		// -----  end of static function |FUNCTION_NAME|  -----
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.main ==
@@ -32,26 +32,38 @@ $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 union |?UNION_NAME| {<CURSOR>
 <SPLIT>};				// ----------  end of union |UNION_NAME|  ----------
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.printf ==
+printf ( "<CURSOR>\n" );
+== idioms.scanf ==
+scanf ( "<CURSOR>", & );
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.calloc ==
-|?POINTER|	= (<CURSOR>TYPE*)calloc ( (size_t)(COUNT), sizeof(TYPE) );
+|?POINTER|	= (<CURSOR><+TYPE+>*)calloc ( (size_t)(<+COUNT+>), sizeof(<+TYPE+>) );
 if ( |POINTER|==NULL ) {
 	fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 	exit (EXIT_FAILURE);
 }
 
 free (|POINTER|);
+|POINTER|	= NULL;
 
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.malloc ==
-|?POINTER|	= (<CURSOR>TYPE*)malloc ( sizeof(TYPE) );
+|?POINTER|	= (<CURSOR><+TYPE+>*)malloc ( sizeof(<+TYPE+>) );
 if ( |POINTER|==NULL ) {
 	fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 	exit (EXIT_FAILURE);
 }
 
 free (|POINTER|);
+|POINTER|	= NULL;
 
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.sizeof == insert ==
+sizeof(<CURSOR><SPLIT>)
+== idioms.assert == insert ==
+assert(<CURSOR><SPLIT>);
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.open-input-file ==
 FILE	*|?FILEPOINTER|;										// input-file pointer
 char	*|FILEPOINTER|_file_name = "<CURSOR>";		// input-file name
@@ -62,8 +74,7 @@ if ( |FILEPOINTER| == NULL ) {
 			|FILEPOINTER|_file_name, strerror(errno) );
 	exit (EXIT_FAILURE);
 }
-
-
+<SPLIT>{-continue here-}
 if( fclose(|FILEPOINTER|) == EOF ) {			// close input file
 	fprintf ( stderr, "couldn't close file '%s'; %s\n",
 			|FILEPOINTER|_file_name, strerror(errno) );
@@ -81,8 +92,7 @@ if ( |FILEPOINTER| == NULL ) {
 			|FILEPOINTER|_file_name, strerror(errno) );
 	exit (EXIT_FAILURE);
 }
-
-
+<SPLIT>{-continue here-}
 if( fclose(|FILEPOINTER|) == EOF ) {			// close output file
 	fprintf ( stderr, "couldn't close file '%s'; %s\n",
 			|FILEPOINTER|_file_name, strerror(errno) );
@@ -92,7 +102,6 @@ if( fclose(|FILEPOINTER|) == EOF ) {			// close output file
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.fprintf ==
 fprintf ( |?FILEPOINTER|, "<CURSOR>\n",  );
-$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.fscanf ==
 fscanf ( |?FILEPOINTER|, "<CURSOR>", & );
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
