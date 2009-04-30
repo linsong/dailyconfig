@@ -6,6 +6,10 @@
 # By default, don't do anything clever.
 message-hook . "unset display_filter"
 
+# default from address is my gmail address
+message-hook . "my_hdr From: Vincent Wang <linsong.qizi@gmail.com>"
+message-hook . "set from = linsong.qizi@gmail.com"
+
 # Sort out silly characters from Microsoft MUAs or MUAs that suffer the same
 # problems.
 message-hook "~h \"X-Mailer: (Microsoft Outlook IMO|Experian ContactMail)\"" "set display_filter='tr \\\\200\\\\202\\\\221\\\\222\\\\223\\\\224\\\\225\\\\226\\\\227 \\\\244\\\\054\\\\140\\\\047\\\\042\\\\042\\\\052\\\\055\\\\055'"
@@ -23,4 +27,12 @@ message-hook "~h \"X-Mailer: IncrediMail" "set display_filter='tr -d \\\\r'"
 #message-hook "~f nordicbet\.com" "set from='Vincent Wang <vincent@exoweb.net>'"
 message-hook "~f qnite\.com" "set from='Vincent Wang <vincent@qnite.com>'"
 
-message-hook "~t linsong\.org" "set from='Vincent Wang <vincent@linsong.com>'"
+message-hook "~L vincent@linsong\.org" "my_hdr From: Vincent Wang <vincent@linsong.org>"
+message-hook "~L vincent@linsong\.org" "set from = vincent@linsong.org"
+
+message-hook "~L wangwei@linsong\.org" "my_hdr From: Wang Wei <wangwei@linsong.org>"
+message-hook "~L wangwei@linsong\.org" "set from = wangwei@linsong.org"
+
+message-hook "~L vincent@qnite\.com" "my_hdr From: Vincent Wang <vincent@qnite.com>"
+message-hook "~L vincent@qnite\.com" "set from = vincent@qnite.com"
+# message-hook "~h \"^X-Forwarded-For: vincent@linsong\.org\"" "my_hdr From: vincent@linsong.org"
