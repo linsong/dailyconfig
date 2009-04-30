@@ -48,11 +48,12 @@ highlight IncSearch  term=reverse cterm=bold ctermfg=232 ctermbg=215 gui=reverse
 highlight Search     term=reverse ctermfg=232 ctermbg=215 guifg=Black guibg=Yellow
 
 " highlights for fuzzyfinder mode prompts
-hi FileMode       ctermbg=Cyan    ctermfg=Black   guibg=#8CCBEA guifg=DarkRed
-hi BufferMode     ctermbg=Green   ctermfg=Black   guibg=#A4E57E guifg=DarkRed
-hi DirMode        ctermbg=Yellow  ctermfg=Black   guibg=#FFDB72 guifg=DarkRed
+hi FileMode       ctermbg=Cyan    ctermfg=Black   guibg=#8CCBEA guifg=DarkCyan
+hi BufferMode     ctermbg=Green   ctermfg=Black   guibg=#A4E57E guifg=DarkGreen
+hi DirMode        ctermbg=Yellow  ctermfg=Black   guibg=#FFDB72 guifg=DarkYellow
 hi MruFileMode    ctermbg=Red     ctermfg=Black   guibg=#FF7272 guifg=DarkRed
-hi MruCmdMode     ctermbg=Magenta ctermfg=Black   guibg=#FFB3FF guifg=DarkRed
-hi FavFileMode    ctermbg=Blue    ctermfg=Black   guibg=#9999FF guifg=DarkRed
-hi TagMode        ctermbg=Yellow  ctermfg=Green   guibg=#FFDB72 guifg=DarkRed
-hi TaggedFileMode ctermbg=Yellow  ctermfg=Magenta guibg=#FFDB72 guifg=DarkRed
+hi MruCmdMode     ctermbg=Magenta ctermfg=Black   guibg=#FFB3FF guifg=DarkMagenta
+hi FavFileMode    ctermbg=Blue    ctermfg=Black   guibg=#9999FF guifg=DarkBlack
+hi TagMode        ctermbg=Yellow  ctermfg=Green   guibg=#FFDB72 guifg=DarkGreen
+hi TaggedFileMode ctermbg=Yellow  ctermfg=Magenta guibg=#FFDB72 guifg=DarkMagenta
+hi BookmarkMode ctermbg=Yellow  ctermfg=Red guibg=#FFDB72 guifg=DarkRed

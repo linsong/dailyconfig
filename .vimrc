@@ -1362,9 +1362,9 @@ endif " has("autocmd")
                   \    'MruFile':{}, 'MruCmd':{}, 'Bookmark':{},
                   \    'Dir':{}, 'Tag':{}, 'TaggedFile':{} }
     " [All Mode] This is mapped to switch to the next mode.
-    let g:FuzzyFinderOptions.Base.key_next_mode = '<C-l>'
+    let g:FuzzyFinderOptions.Base.key_next_mode = '<C-j>'
     " [All Mode] This is mapped to switch to the previous mode.
-    let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-S-l>'
+    let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-k>'
 
     " [File Mode] This is a dictionary. Each value must be a list. All matchs of
     " a key in entered text is expanded with a value.
@@ -1406,7 +1406,7 @@ endif " has("autocmd")
     let g:FuzzyFinderOptions.Base.key_open = '<CR>'
     " [All Mode] This is mapped to select completion item or finish input and
     " open a buffer/file in split new window
-    let g:FuzzyFinderOptions.Base.key_open_split = '<C-O>'
+    let g:FuzzyFinderOptions.Base.key_open_split = '<C-l>'
     " [All Mode] This is mapped to select completion item or finish input and
     " open a buffer/file in vertical-split new window.
     let g:FuzzyFinderOptions.Base.key_open_vsplit = '<C-V>'
@@ -1414,18 +1414,18 @@ endif " has("autocmd")
     " open a buffer/file in a new tab page.
     let g:FuzzyFinderOptions.Base.key_open_tab = '<C-t>'
 
-    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-    ":noremap ,ff :FuzzyFinderFile<CR>
+"    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
+    :noremap ,ff :FuzzyFinderFileWithCurrentBufferDir<CR>
     :noremap ,fb :FuzzyFinderBuffer<CR>
     :noremap ,fm :FuzzyFinderMruFile<CR>
     :noremap ,f; :FuzzyFinderMruCmd<CR>
     :noremap ,fk :FuzzyFinderBookmark<CR>
-    :noremap ,fa :FuzzyFinderAddBookmark<CR>
+    :noremap ,fa :FuzzyFinderAddBookmarkAsSelectedText<CR>
     :noremap ,fd :FuzzyFinderDir<CR>
     :noremap ,ft :FuzzyFinderTaggedFile<CR>
     :noremap ,fg :FuzzyFinderTag<CR>
     :noremap ,f] :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
-    :noremap ,fc :FuzzyFinderRemoveCache<CR>
+    :noremap ,fc :FuzzyFinderRenewCache<CR>
     :noremap ,fi :FuzzyFinderEditInfo<CR>
     "}}}2
     
@@ -1529,6 +1529,15 @@ endif " has("autocmd")
     nmap <silent> <unique> ,cr <Plug>CRV_CRefVimNormal
     map <silent> <unique> ,cw <Plug>CRV_CRefVimAsk
     map <silent> <unique> ,cc <Plug>CRV_CRefVimInvoke
+    "}}}2
+
+    "### settings for c.vim {{{2
+    let g:C_Ctrl_j   = 'off'
+    let g:C_Root = '&Plugin.&C\/C\+\+.'
+    "}}}2
+    
+    "### settings for bash.vim {{{2
+    let g:BASH_Root = "&Plugin.B&ash."
     "}}}2
 "## }}}1
 
