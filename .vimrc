@@ -1539,6 +1539,11 @@ endif " has("autocmd")
     "### settings for bash.vim {{{2
     let g:BASH_Root = "&Plugin.B&ash."
     "}}}2
+
+    "### settings for DrChip serial plugins {{{2
+    let g:DrChipTopLvlMenu = "&Plugin.DrChip."
+    "}}}2
+
 "## }}}1
 
 "## Xterm colors defination {{{1 
