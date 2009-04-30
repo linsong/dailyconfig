@@ -87,51 +87,51 @@ vmap ]f   :call PythonDec("function", 1)<CR>
 
 
 " Menu entries
-nmenu <silent> &Python.Update\ IM-Python\ Menu 
+nmenu <silent> &Plugin.&Python.Update\ IM-Plugin.&Python. Menu 
     \:call UpdateMenu()<CR>
-nmenu &Python.-Sep1- :
-nmenu <silent> &Python.Beginning\ of\ Block<Tab>[t 
+nmenu &Plugin.&Python.-Sep1- :
+nmenu <silent> &Plugin.&Python.Beginning\ of\ Block<Tab>[t 
     \]t
-nmenu <silent> &Python.End\ of\ Block<Tab>]e 
+nmenu <silent> &Plugin.&Python.End\ of\ Block<Tab>]e 
     \]e
-nmenu &Python.-Sep2- :
-nmenu <silent> &Python.Shift\ Block\ Left<Tab>]< 
+nmenu &Plugin.&Python.-Sep2- :
+nmenu <silent> &Plugin.&Python.Shift\ Block\ Left<Tab>]< 
     \]<
-vmenu <silent> &Python.Shift\ Block\ Left<Tab>]< 
+vmenu <silent> &Plugin.&Python.Shift\ Block\ Left<Tab>]< 
     \]<
-nmenu <silent> &Python.Shift\ Block\ Right<Tab>]> 
+nmenu <silent> &Plugin.&Python.Shift\ Block\ Right<Tab>]> 
     \]>
-vmenu <silent> &Python.Shift\ Block\ Right<Tab>]> 
+vmenu <silent> &Plugin.&Python.Shift\ Block\ Right<Tab>]> 
     \]>
-nmenu &Python.-Sep3- :
-vmenu <silent> &Python.Comment\ Selection<Tab>]# 
+nmenu &Plugin.&Python.-Sep3- :
+vmenu <silent> &Plugin.&Python.Comment\ Selection<Tab>]# 
     \]#
-nmenu <silent> &Python.Comment\ Selection<Tab>]# 
+nmenu <silent> &Plugin.&Python.Comment\ Selection<Tab>]# 
     \]#
-vmenu <silent> &Python.Uncomment\ Selection<Tab>]u 
+vmenu <silent> &Plugin.&Python.Uncomment\ Selection<Tab>]u 
     \]u
-nmenu <silent> &Python.Uncomment\ Selection<Tab>]u 
+nmenu <silent> &Plugin.&Python.Uncomment\ Selection<Tab>]u 
     \]u
-nmenu &Python.-Sep4- :
-nmenu <silent> &Python.Previous\ Class<Tab>]J 
+nmenu &Plugin.&Python.-Sep4- :
+nmenu <silent> &Plugin.&Python.Previous\ Class<Tab>]J 
     \]J
-nmenu <silent> &Python.Next\ Class<Tab>]j 
+nmenu <silent> &Plugin.&Python.Next\ Class<Tab>]j 
     \]j
-nmenu <silent> &Python.Previous\ Function<Tab>]F 
+nmenu <silent> &Plugin.&Python.Previous\ Function<Tab>]F 
     \]F
-nmenu <silent> &Python.Next\ Function<Tab>]f 
+nmenu <silent> &Plugin.&Python.Next\ Function<Tab>]f 
     \]f
-nmenu &Python.-Sep5- :
-nmenu <silent> &Python.Select\ Block<Tab>]v 
+nmenu &Plugin.&Python.-Sep5- :
+nmenu <silent> &Plugin.&Python.Select\ Block<Tab>]v 
     \]v
-nmenu <silent> &Python.Select\ Function<Tab>]d 
+nmenu <silent> &Plugin.&Python.Select\ Function<Tab>]d 
     \]d
-nmenu <silent> &Python.Select\ Class<Tab>]c 
+nmenu <silent> &Plugin.&Python.Select\ Class<Tab>]c 
     \]c
-nmenu &Python.-Sep6- :
-nmenu <silent> &Python.Previous\ Line\ wrt\ indent<Tab>]<up> 
+nmenu &Plugin.&Python.-Sep6- :
+nmenu <silent> &Plugin.&Python.Previous\ Line\ wrt\ indent<Tab>]<up> 
     \]<up>
-nmenu <silent> &Python.Next\ Line\ wrt\ indent<Tab>]<down> 
+nmenu <silent> &Plugin.&Python.Next\ Line\ wrt\ indent<Tab>]<down> 
     \]<down>
 
 :com! PBoB execute "normal ".PythonBoB(line('.'), -1, 1)."G"
