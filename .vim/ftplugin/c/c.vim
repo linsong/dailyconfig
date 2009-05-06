@@ -382,5 +382,5 @@ inoremap  <buffer>  /*<CR>  /*<CR><CR>/<Esc>kA<Space>
 inoremap  <buffer>  {<CR>  {<CR>}<Esc>O
 vnoremap  <buffer>  {<CR> s{<CR>}<Esc>P=iB
 "
-nmap    <buffer>  <silent>  <C-j>    i<C-R>=C_JumpCtrlJ()<CR>
+"nmap    <buffer>  <silent>  <C-j>    i<C-R>=C_JumpCtrlJ()<CR>
 imap    <buffer>  <silent>  <C-j>    <C-R>=C_JumpCtrlJ()<CR>
