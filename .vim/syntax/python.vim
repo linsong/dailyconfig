@@ -2,9 +2,9 @@
 " Language:	Python
 " Maintainer:	Dmitry Vasiliev <dima@hlabs.spb.ru>
 " URL:		http://www.hlabs.spb.ru/vim/python.vim
-" Last Change:	2008-09-22
+" Last Change:	2008-09-29
 " Filenames:	*.py
-" Version:	2.6.2
+" Version:	2.6.4
 "
 " Based on python.vim (from Vim 6.1 distribution)
 " by Neil Schemenauer <nas@python.ca>
@@ -108,7 +108,7 @@ syn keyword pythonStatement	def class nextgroup=pythonFunction skipwhite
 syn match   pythonFunction	"[a-zA-Z_][a-zA-Z0-9_]*" display contained
 syn keyword pythonRepeat	for while
 syn keyword pythonConditional	if elif else
-syn keyword pythonImport	import from as
+syn keyword pythonPreCondit	import from as
 syn keyword pythonException	try except finally
 syn keyword pythonOperator	and in is not or
 
@@ -211,20 +211,20 @@ if exists("python_highlight_doctests") && python_highlight_doctests != 0
 endif
 
 " Numbers (ints, longs, floats, complex)
-syn match   pythonHexError	"\<0[xX]\x*[g-zG-Z]\x*\>" display
+syn match   pythonHexError	"\<0[xX]\x*[g-zG-Z]\x*[lL]\=\>" display
 
-syn match   pythonHexNumber	"\<0[xX]\x\+\>" display
-syn match   pythonOctNumber "\<0[oO]\o\+\>" display
-syn match   pythonBinNumber "\<0[bB][01]\+\>" display
+syn match   pythonHexNumber	"\<0[xX]\x\+[lL]\=\>" display
+syn match   pythonOctNumber "\<0[oO]\o\+[lL]\=\>" display
+syn match   pythonBinNumber "\<0[bB][01]\+[lL]\=\>" display
 
-syn match   pythonNumber	"\<\d\+[jJ]\=\>" display
+syn match   pythonNumber	"\<\d\+[lLjJ]\=\>" display
 
 syn match   pythonFloat		"\.\d\+\([eE][+-]\=\d\+\)\=[jJ]\=\>" display
 syn match   pythonFloat		"\<\d\+[eE][+-]\=\d\+[jJ]\=\>" display
 syn match   pythonFloat		"\<\d\+\.\d*\([eE][+-]\=\d\+\)\=[jJ]\=" display
 
-syn match   pythonOctError	"\<0[oO]\=\o*[8-9]\d*\>" display
-syn match   pythonBinError	"\<0[bB][01]*[2-9]\d*\>" display
+syn match   pythonOctError	"\<0[oO]\=\o*[8-9]\d*[lL]\=\>" display
+syn match   pythonBinError	"\<0[bB][01]*[2-9]\d*[lL]\=\>" display
 
 if exists("python_highlight_builtins") && python_highlight_builtins != 0
   " Builtin functions, types and objects
@@ -295,7 +295,7 @@ if version >= 508 || !exists("did_python_syn_inits")
   endif
 
   HiLink pythonStatement	Statement
-  HiLink pythonImport		Statement
+  HiLink pythonPreCondit	Statement
   HiLink pythonFunction		Function
   HiLink pythonConditional	Conditional
   HiLink pythonRepeat		Repeat
