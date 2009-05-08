@@ -31,21 +31,21 @@ keymap TAB NEXT_LINK
 keymap ESC-TAB PREV_LINK
 keymap u UNDO
 keymap C-r REDO
-keymap L MOVE_LIST_MENU
+keymap L LIST_MENU
 
 # Hyperlink operation
+keymap M MARK_WORD
+# keymap M  MARK_URL
 keymap C-t TAB_LINK
 keymap C-s SAVE_LINK
-keymap i   VIEW_IMAGE
-keymap I   PEEK_IMG
+keymap V  VIEW_IMAGE
+# keymap V  PEEK_IMG
+keymap i  INFO
+
 keymap ESC-i SAVE_IMAGE
 keymap R   PEEK_LINK
-keymap = INFO
 keymap C-g LINE_INFO
-keymap ";" MARK_WORD
-keymap :  MARK_URL
-keymap v EXTERN_LINK
-keymap ESC-l  LIST_MENU
+keymap O EXTERN_LINK
 
 # File/Stream operation
 keymap o GOTO
@@ -59,18 +59,20 @@ keymap . NEXT
 keymap , PREV
 keymap s SELECT_MENU
 keymap ESC-s SAVE
-keymap V VIEW
-keymap S PRINT
+keymap v VIEW
+keymap P PRINT
 keymap E EDIT
 keymap ESC-e EDIT_SCREEN
 keymap r RELOAD
 keymap ESC-r RESHAPE
 
 # Tab operation
+keymap C-p PREV_TAB
+keymap C-n NEXT_TAB
 keymap T NEW_TAB
-keymap C-q CLOSE_TAB
-keymap [ PREV_TAB
-keymap ] NEXT_TAB
+keymap t TAB_MENU
+keymap d CLOSE_TAB
+
 keymap ESC-b VIEW_BOOKMARK
 keymap ESC-a ADD_BOOKMARK
 
@@ -85,10 +87,10 @@ keymap ESC-w DICT_WORD
 keymap ESC-W DICT_WORD_AT
 
 # Mark operation
-keymap C-@ MARK
-keymap ESC-n NEXT_MARK
-keymap ESC-p PREV_MARK
-#keymap  "  REG_MARK
+keymap m MARK
+keymap ] NEXT_MARK
+keymap [ PREV_MARK
+keymap  \"  REG_MARK
 
 # bookmark operation
 keymap ESC-b VIEW_BOOKMARK
