@@ -32,17 +32,15 @@ map <A-q> :tabclose<CR>
 "Map paste operation normally.
 imap <C-v> <C-v>
 
-map q :q<CR>
-
 " autocommands
-au LocationChange .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL)
+"au LocationChange .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL)
 au LocationChange .* :js modes.passAllKeys = /www\.google\.com\/reader/.test(buffer.URL)
 
 "" for Linux 
 "":au LocationChange .* :set editor=gvim -f
 "":au LocationChange mail\.google\.com :set editor=gvim -f -c 'set ft=mail'
 " for MacOSX
-:set editor=open -W -n -t
+":set editor=open -W -n -t
 
 command google open google <args>
 
@@ -67,5 +65,16 @@ EOF
 
 " Toggle webdeveloper toolbar
 map <C-T> :js toggle_element('webdeveloper-toolbar')<CR>
+
+javascript <<EOF
+(function(){
+ var feedPanel = document.createElement("statusbarpanel");
+ feedPanel.setAttribute("id", "feed-panel-clone");
+ feedPanel.appendChild(document.getElementById("feed-button"));
+ feedPanel.firstChild.setAttribute("style", "padding: 0; max-height: 16px;");
+ document.getElementById("status-bar")
+ .insertBefore(feedPanel, document.getElementById("security-button"));
+ })();
+EOF
 
 " vim: ft=vimperator sw=2 sts=2
