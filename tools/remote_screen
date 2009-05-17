@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# $1 is the remote host name
+# $2 is the preselect window name, optional
+
+ssh -t $1 screen -S main -xRR -p $2 -q
