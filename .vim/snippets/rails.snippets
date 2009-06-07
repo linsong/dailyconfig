@@ -1,0 +1,10 @@
+snippet redirect_to
+	redirect_to :action => "${1:index}"
+snippet form_tag
+	<%= form_tag :action => "${1:update}" %>
+snippet link_to
+	<%= link_to :action => "${1:index}" %>
+snippet redirect_to
+	redirect_to :controller => "${1:items}"
+snippet flash
+	flash[:${1:notice}] = "${1}"${2}

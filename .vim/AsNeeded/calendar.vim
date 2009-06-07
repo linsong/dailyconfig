@@ -1179,12 +1179,12 @@ function! s:CalendarDiary(day, month, year, week, dir)
   let vbufnr = bufnr('__Calendar')
 
   " load the file
-  exe "sp " . sfile
+  exe "vsp " . sfile
   setlocal ft=calendar
   let dir = getbufvar(vbufnr, "CalendarDir")
   let vyear = getbufvar(vbufnr, "CalendarYear")
   let vmnth = getbufvar(vbufnr, "CalendarMonth")
-  exe "auto BufLeave ".escape(sfile, ' \\')." w|call Calendar(" . dir . "," . vyear . "," . vmnth . ")"
+"  exe "auto BufLeave ".escape(sfile, ' \\')." w|call Calendar(" . dir . "," . vyear . "," . vmnth . ")"
 endfunc
 
 "*****************************************************************
