@@ -36,3 +36,8 @@ message-hook "~L wangwei@linsong\.org" "set from = wangwei@linsong.org"
 message-hook "~L vincent@qnite\.com" "my_hdr From: Vincent Wang <vincent@qnite.com>"
 message-hook "~L vincent@qnite\.com" "set from = vincent@qnite.com"
 # message-hook "~h \"^X-Forwarded-For: vincent@linsong\.org\"" "my_hdr From: vincent@linsong.org"
+
+message-hook "~f seravia\.com" "set from='Vincent Wang <vincent@seravia.com>'"
+message-hook "~f seravia\.com" "my_hdr From: Vincent Wang <vincent@seravia.com>"
+message-hook "~L vincent@seravia\.com" "my_hdr From: Vincent Wang <vincent@seravia.com>"
+message-hook "~L vincent@seravia\.com" "set from = vincent@seravia.com"

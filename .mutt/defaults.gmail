@@ -16,9 +16,9 @@ set from = linsong.qizi@gmail.com
 
 #################### Override Macros ####################
 macro index,pager ",1" "<change-folder> imaps://imap.gmail.com:993/INBOX<enter>"
-macro index,pager ",2" "<change-folder> imaps://imap.gmail.com:993/PersonalMail<enter>"
+macro index,pager ",2" "<change-folder> imaps://imap.gmail.com:993/Seravia<enter>"
 macro index,pager ",3" "<change-folder> imaps://imap.gmail.com:993/ZAX<enter>"
-macro index,pager ",4" "<change-folder> imaps://imap.gmail.com:993/Exoweb<enter>"
+# macro index,pager ",5" "<change-folder> imaps://imap.gmail.com:993/Exoweb<enter>"
 macro index,pager ",7" "<change-folder> imaps://imap.gmail.com:993/[list]Django<enter>"
 macro index,pager ",9" "<change-folder> imaps://imap.gmail.com:993/[Gmail]/Sent Mail<enter>"
 macro index,pager ",0" "<change-folder> imaps://imap.gmail.com:993/TODO<enter>"
