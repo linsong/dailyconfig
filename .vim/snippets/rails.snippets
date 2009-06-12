@@ -8,3 +8,5 @@ snippet redirect_to
 	redirect_to :controller => "${1:items}"
 snippet flash
 	flash[:${1:notice}] = "${1}"${2}
+snippet acol
+	add_column ${1:table} ${2:column}, :${3:string}
