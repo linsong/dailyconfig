@@ -17,7 +17,7 @@ if version > 580
     " complaining
     hi clear
     if exists("syntax_on")
-        syntax reset
+                syntax reset
     endif
 endif
 
@@ -48,18 +48,18 @@ hi MatchParen   guibg=#7b5a55 guifg=#001122
 " syntax highlighting """"""""""""""""""""""""""""""""""""""""
 
 
-hi Comment      guifg=#349d58 guibg=bg
-hi Title        guifg=#e5e5ca gui=none
+hi Comment              guifg=#349d58 guibg=bg
+hi Title            guifg=#e5e5ca gui=none
 hi Underlined   guifg=#bac5ba gui=none
 
 hi Statement    guifg=#fca8ad gui=none "a080aa
-hi Type         guifg=#0490e8  gui=bold
-hi Constant     guifg=#5c78f0 "guibg=#111a2a
+hi Type             guifg=#0490e8  gui=bold
+hi Constant         guifg=#5c78f0 "guibg=#111a2a
 hi Number       guifg=#4580b4 "guibg=#111a2a
 hi PreProc      guifg=#ba75cf
-hi Special      guifg=#aaaaca
+hi Special          guifg=#aaaaca
 hi Ignore       guifg=grey40
-hi Todo         guifg=orangered guibg=yellow2
+hi Todo             guifg=orangered guibg=yellow2
 hi Error        guibg=#b03452
 hi Function     guifg=#bab588 guibg=bg gui=bold 
 hi Identifier   guifg=#5094c4   
@@ -118,55 +118,55 @@ highlight Conditional ctermfg=darkred
 highlight Repeat ctermfg=darkred
 hi Exception ctermfg=darkred
 hi SpecialKey   ctermfg=darkgreen
-hi NonText  cterm=bold ctermfg=darkgrey
+hi NonText      cterm=bold ctermfg=darkgrey
 hi Directory    ctermfg=darkcyan
-hi ErrorMsg cterm=bold ctermfg=7 ctermbg=1
+hi ErrorMsg     cterm=bold ctermfg=7 ctermbg=1
 hi IncSearch    ctermfg=yellow ctermbg=darkyellow cterm=NONE
-hi Search   ctermfg=black ctermbg=darkyellow cterm=NONE
-hi MoreMsg  ctermfg=darkgreen
-hi ModeMsg  cterm=NONE ctermfg=brown
-hi LineNr   ctermfg=darkcyan ctermbg=black
-hi Question ctermfg=green
+hi Search       ctermfg=black ctermbg=darkyellow cterm=NONE
+hi MoreMsg      ctermfg=darkgreen
+hi ModeMsg      cterm=NONE ctermfg=brown
+hi LineNr       ctermfg=darkcyan ctermbg=black
+hi Question     ctermfg=green
 hi StatusLine   ctermfg=yellow ctermbg=darkblue cterm=NONE
 hi StatusLineNC ctermfg=grey ctermbg=darkblue cterm=NONE
 hi VertSplit    ctermfg=black ctermbg=darkgrey cterm=NONE
-hi Title    ctermfg=yellow cterm=NONE
-hi Visual   ctermbg=grey ctermfg=blue cterm=NONE
+hi Title        ctermfg=yellow cterm=NONE
+hi Visual       ctermbg=grey ctermfg=blue cterm=NONE
 hi VisualNOS    ctermbg=grey ctermfg=blue cterm=NONE
 hi WarningMsg   ctermfg=1
-hi WildMenu ctermfg=0 ctermbg=3
-hi Folded   ctermfg=darkgreen ctermbg=darkblue cterm=NONE
+hi WildMenu     ctermfg=0 ctermbg=3
+hi Folded       ctermfg=darkgreen ctermbg=darkblue cterm=NONE
 hi FoldColumn   ctermfg=yellow ctermbg=black
-hi DiffAdd  ctermbg=4
+hi DiffAdd      ctermbg=4
 hi DiffChange   ctermbg=5
 hi DiffDelete   cterm=bold ctermfg=4 ctermbg=6
-hi DiffText cterm=bold ctermbg=1
-hi Comment      ctermfg=darkgreen ctermbg=black
+hi DiffText     cterm=bold ctermbg=1
+hi Comment              ctermfg=darkgreen ctermbg=black
 hi Identifier   ctermfg=cyan
 
 "set comments to grey on non-Windows OS's to make sure
 "it is readable
 if &term == "builtin_gui" || &term == "win32"
-    hi function ctermfg=grey
-    hi Type     ctermfg=darkyellow ctermbg=darkblue
-    hi IncSearch    ctermfg=black ctermbg=grey cterm=NONE
-    hi Search   ctermfg=black ctermbg=darkgrey cterm=NONE
+        hi function ctermfg=grey
+        hi Type         ctermfg=darkyellow ctermbg=darkblue
+        hi IncSearch    ctermfg=black ctermbg=grey cterm=NONE
+        hi Search       ctermfg=black ctermbg=darkgrey cterm=NONE
 else
-    hi function ctermfg=white
-    hi Type     ctermfg=grey
-    hi IncSearch    ctermfg=yellow ctermbg=darkyellow cterm=NONE
-    hi Search   ctermfg=black ctermbg=darkyellow cterm=NONE
+        hi function ctermfg=white
+        hi Type         ctermfg=grey
+        hi IncSearch    ctermfg=yellow ctermbg=darkyellow cterm=NONE
+        hi Search       ctermfg=black ctermbg=darkyellow cterm=NONE
 endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
-hi Constant ctermfg=darkcyan
-hi Special  ctermfg=white
+hi Constant     ctermfg=darkcyan
+hi Special      ctermfg=white
 hi Statement    ctermfg=yellow
-hi PreProc  ctermfg=darkred
+hi PreProc      ctermfg=darkred
 hi Underlined   ctermfg=cyan cterm=NONE
-hi Ignore   cterm=bold ctermfg=7
-hi Ignore   ctermfg=darkgrey
-hi Error    cterm=bold ctermfg=7 ctermbg=1
+hi Ignore       cterm=bold ctermfg=7
+hi Ignore       ctermfg=darkgrey
+hi Error        cterm=bold ctermfg=7 ctermbg=1
 
 " new Vim 7.0 items
 hi Pmenu        ctermbg=darkblue ctermfg=lightgrey
@@ -190,23 +190,23 @@ hi NonText      guifg=#382920 guibg=#152555
 "set comments to grey on non-Windows OS's to make sure
 "it is readable
 if &term == "builtin_gui" || &term == "win32"
-    hi Comment      guifg=#daddb8  guibg=#308ae5
+        hi Comment              guifg=#daddb8  guibg=#308ae5
 else
-    hi Comment      guifg=darkyellow  guibg=#207ada
+        hi Comment              guifg=darkyellow  guibg=#207ada
 endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
-hi Title        guifg=#857540  gui=none
+hi Title                guifg=#857540  gui=none
 hi Underlined   guifg=#8a758a  
 
 hi Statement    guifg=#da302a  gui=none
-hi Type         guifg=#307aca  gui=none
-hi Constant     guifg=#3a40aa  gui=none
+hi Type                 guifg=#307aca  gui=none
+hi Constant             guifg=#3a40aa  gui=none
 hi PreProc      guifg=#9570b5 
 hi Identifier   guifg=#856075  "gui=bold
-hi Special      guifg=#652a7a 
+hi Special              guifg=#652a7a 
 hi Ignore       guifg=grey40
-hi Todo         guifg=orangered guibg=yellow2
+hi Todo                 guifg=orangered guibg=yellow2
 hi Error        guibg=#b03452
 """""this section borrowed from OceanDeep/Midnight"""""
 hi Number guifg=#006bcd 
@@ -273,42 +273,42 @@ highlight Repeat ctermfg=magenta
 hi Exception ctermfg=red
 hi function ctermfg=darkyellow
 hi SpecialKey   ctermfg=darkgreen
-hi NonText  cterm=bold ctermfg=darkgrey ctermbg=grey
+hi NonText      cterm=bold ctermfg=darkgrey ctermbg=grey
 hi Directory    ctermfg=darkcyan
-hi ErrorMsg cterm=bold ctermfg=7 ctermbg=1
+hi ErrorMsg     cterm=bold ctermfg=7 ctermbg=1
 hi IncSearch    ctermfg=yellow ctermbg=darkyellow cterm=NONE
-hi Search   ctermfg=white ctermbg=darkyellow cterm=NONE
-hi MoreMsg  ctermfg=darkgreen
-hi ModeMsg  cterm=NONE ctermfg=brown
-hi LineNr   ctermfg=black ctermbg=blue
-hi Question ctermfg=green
+hi Search       ctermfg=white ctermbg=darkyellow cterm=NONE
+hi MoreMsg      ctermfg=darkgreen
+hi ModeMsg      cterm=NONE ctermfg=brown
+hi LineNr       ctermfg=black ctermbg=blue
+hi Question     ctermfg=green
 hi StatusLine   ctermfg=cyan ctermbg=blue cterm=NONE
 hi StatusLineNC ctermfg=grey ctermbg=darkblue cterm=NONE
 hi VertSplit    ctermfg=black ctermbg=black cterm=NONE
-hi Title    ctermfg=darkyellow ctermbg=white
-hi Visual   ctermbg=darkcyan ctermfg=cyan cterm=NONE
+hi Title        ctermfg=darkyellow ctermbg=white
+hi Visual       ctermbg=darkcyan ctermfg=cyan cterm=NONE
 hi VisualNOS    ctermbg=darkcyan ctermfg=white cterm=NONE
 hi WarningMsg   ctermfg=1
-hi WildMenu ctermfg=0 ctermbg=3
-hi Folded   ctermfg=black ctermbg=white cterm=NONE
+hi WildMenu     ctermfg=0 ctermbg=3
+hi Folded       ctermfg=black ctermbg=white cterm=NONE
 hi FoldColumn   ctermfg=green ctermbg=blue
-hi DiffAdd  ctermbg=4
+hi DiffAdd      ctermbg=4
 hi DiffChange   ctermbg=5
 hi DiffDelete   cterm=bold ctermfg=4 ctermbg=6
-hi DiffText cterm=bold ctermbg=1
+hi DiffText     cterm=bold ctermbg=1
 
-hi Comment      ctermfg=grey  ctermbg=blue
+hi Comment              ctermfg=grey  ctermbg=blue
 
-hi Constant ctermfg=darkblue
-hi Special  ctermfg=darkmagenta
+hi Constant     ctermfg=darkblue
+hi Special      ctermfg=darkmagenta
 hi Identifier   ctermfg=darkyellow cterm=NONE
 hi Statement    ctermfg=red
-hi PreProc  ctermfg=magenta
-hi Type     ctermfg=darkcyan "or darkcyan
+hi PreProc      ctermfg=magenta
+hi Type         ctermfg=darkcyan "or darkcyan
 hi Underlined   ctermfg=black ctermbg=white
-hi Ignore   cterm=bold ctermfg=7
-hi Ignore   ctermfg=darkgrey
-hi Error    cterm=bold ctermfg=7 ctermbg=1
+hi Ignore       cterm=bold ctermfg=7
+hi Ignore       ctermfg=darkgrey
+hi Error        cterm=bold ctermfg=7 ctermbg=1
 
 " new Vim 7.0 items
 hi Pmenu        ctermbg=darkblue ctermfg=lightgrey

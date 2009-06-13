@@ -1,5 +1,5 @@
 " ------------------------------------------------------------------
-" Filename:  marklar.vim
+" Filename:      marklar.vim
 " Last Modified: Nov, 30 2006 (13:01)
 " Version:       0.5
 " Maintainer:    SM Smithfield (m_smithfield AT yahoo DOT com)

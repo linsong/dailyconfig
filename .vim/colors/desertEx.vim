@@ -8,12 +8,12 @@ if version > 580
     " complaining
     hi clear
     if exists("syntax_on")
-    syntax reset
+        syntax reset
     endif
 endif
 let g:colors_name="desertEx"
 
-hi Normal   guifg=gray guibg=grey17 gui=none
+hi Normal       guifg=gray guibg=grey17 gui=none
 
 " AlignCtrl default
 " AlignCtrl =P0 guifg guibg gui

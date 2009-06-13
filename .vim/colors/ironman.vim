@@ -92,19 +92,19 @@ hi Function                  gui=BOLD guifg=#3E0F70
 
 hi! link String Constant
 hi! link SpecialComment Comment
-hi! link Character  Constant
-hi! link Boolean    Constant
-hi! link Float      Number
-hi! link Label      Statement
-hi! link Include    PreProc
+hi! link Character      Constant
+hi! link Boolean        Constant
+hi! link Float          Number
+hi! link Label          Statement
+hi! link Include        PreProc
 hi! link Define PreProc
-hi! link Macro      PreProc
-hi! link PreCondit  PreProc
+hi! link Macro          PreProc
+hi! link PreCondit      PreProc
 hi! link StorageClass   Type
-hi! link Structure  Type
-hi! link Typedef    Type
+hi! link Structure      Type
+hi! link Typedef        Type
 hi! link SpecialChar    Special
-hi! link Debug      Special
+hi! link Debug          Special
 
 " HTML
 hi htmlLink                  gui=UNDERLINE guifg=#0000ff guibg=NONE
