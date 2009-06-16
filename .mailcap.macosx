@@ -1,21 +1,21 @@
 # Images
-Image/JPEG; /Users/linsong/tools/mac_tool/view_attachment %s jpeg
-Image/PNG; /Users/linsong/tools/mac_tool/view_attachment %s png
-Image/GIF; /Users/linsong/tools/mac_tool/view_attachment %s gif
+Image/JPEG; /Users/vincent/tools/mac_tool/view_attachment %s jpeg
+Image/PNG; /Users/vincent/tools/mac_tool/view_attachment %s png
+Image/GIF; /Users/vincent/tools/mac_tool/view_attachment %s gif
 
 # UnIdentified.
-Application/octet-stream; /Users/linsong/tools/mac_tool/view_attachment %s "-" 
+Application/octet-stream; /Users/vincent/tools/mac_tool/view_attachment %s "-" 
 
 # PDF
-Application/PDF; /Users/linsong/tools/mac_tool/view_attachment %s pdf
-document/pdf; /Users/linsong/tools/mac_tool/view_attachment.sh %s -
+Application/PDF; /Users/vincent/tools/mac_tool/view_attachment %s pdf
+document/pdf; /Users/vincent/tools/mac_tool/view_attachment.sh %s -
 
 # HTML
 text/html; w3m -T text/html -I %{charset} -dump %s ; copiousoutput
 
-video/*; /Users/linsong/tools/mac_tool/view_attachment.sh %s -
-image/*; /Users/linsong/tools/mac_tool/view_attachment.sh %s -
+video/*; /Users/vincent/tools/mac_tool/view_attachment.sh %s -
+image/*; /Users/vincent/tools/mac_tool/view_attachment.sh %s -
 
 mime_lookup application/octet-stream
 
-application/*; /Users/linsong/tools/mac_tool/view_attachment.sh %s -
+application/*; /Users/vincent/tools/mac_tool/view_attachment.sh %s -

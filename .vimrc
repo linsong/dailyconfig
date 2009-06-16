@@ -1544,6 +1544,10 @@ endif " has("autocmd")
     let g:DrChipTopLvlMenu = "&Plugin.DrChip."
     "}}}2
 
+    "### settings for vimwiki {{{2
+    let g:vimwiki_menu = "Plugin.Vimwiki"
+    "}}}2
+
 "## }}}1
 
 "## Xterm colors defination {{{1 
