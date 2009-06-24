@@ -70,7 +70,7 @@ editor-cmd=vim -u ~/.vim_simple_rc -U NONE --noplugin -c new -c "read ! svn diff
 ### which Subversion will ignore in its 'status' output, and
 ### while importing or adding files and directories.
 # global-ignores = *.o *.lo *.la #*# .*.rej *.rej .*~ *~ .#* .DS_Store
-global-ignores = *.o *.lo *.la *.al .libs *.so *.so.[0-9]* *.a *.pyc *.pyo schema.rb DS_Store *.swp *.local *.rej *~ *.swo *.log svn-commit.tmp sandbox*.sql tags TAGS database.foo *.diff *.patch FILES.txt
+global-ignores = *.o *.lo *.la *.al .libs *.so *.so.[0-9]* *.a *.pyc *.pyo schema.rb DS_Store *.swp *.local *.rej *~ *.swo *.log svn-commit.tmp sandbox*.sql tags TAGS database.foo *.diff *.patch FILES.txt .DS_Store
 ### Set log-encoding to the default encoding for log messages
 # log-encoding = latin1
 ### Set use-commit-times to make checkout/update/switch/revert
