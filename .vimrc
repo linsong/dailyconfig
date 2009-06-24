@@ -1360,7 +1360,8 @@ endif " has("autocmd")
     "### setting for fuzzyfinder.vim {{{2
     let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{},
                   \    'MruFile':{}, 'MruCmd':{}, 'Bookmark':{},
-                  \    'Dir':{}, 'Tag':{}, 'TaggedFile':{} }
+                  \    'Dir':{}, 'Tag':{}, 'TaggedFile':{},
+                  \    'GivenFile':{}}
     " [All Mode] This is mapped to switch to the next mode.
     let g:FuzzyFinderOptions.Base.key_next_mode = '<C-j>'
     " [All Mode] This is mapped to switch to the previous mode.
@@ -1392,6 +1393,8 @@ endif " has("autocmd")
     let g:FuzzyFinderOptions.Tag.prompt_highlight = 'TagMode'
     let g:FuzzyFinderOptions.TaggedFile.prompt = '[TaggedFile]'
     let g:FuzzyFinderOptions.TaggedFile.prompt_highlight = 'TaggedFileMode'
+    let g:FuzzyFinderOptions.GivenFile.prompt = '[GivenFile]'
+    let g:FuzzyFinderOptions.GivenFile.prompt_highlight = 'GivenFileMode'
 
     " [All Mode] This is mapped to temporarily switch whether or not to ignore
     " case.
@@ -1427,6 +1430,11 @@ endif " has("autocmd")
     :noremap ,f] :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
     :noremap ,fc :FuzzyFinderRenewCache<CR>
     :noremap ,fi :FuzzyFinderEditInfo<CR>
+
+
+    " super find file command, will search the files recursively from current
+    " directory
+    :noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 1, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
     "}}}2
     
     "### setting for view_diff.vim {{{2
@@ -1548,6 +1556,9 @@ endif " has("autocmd")
     let g:vimwiki_menu = "Plugin.Vimwiki"
     "}}}2
 
+    "### settings for autotag {{{2
+    let g:autotagDisabled = 1
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
