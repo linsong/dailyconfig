@@ -789,6 +789,13 @@ if has("autocmd")
         elseif has('win32')
             "use pdftotext that comes cygwin
         endif
+
+"        :autocmd User Rails             colorschem vividchalk
+        :autocmd User Rails.controller* set ft=railscontroller.ruby
+        :autocmd User Rails.model.arb*  set ft=railsmodel.ruby
+        :autocmd User Rails.test*       set ft=railstest.ruby
+        :autocmd User Rails.migration*  set ft=railsmigration.ruby
+        :autocmd User Rails.view.erb*   set ft=railsview.eruby
     augroup END
     "}}}4
 

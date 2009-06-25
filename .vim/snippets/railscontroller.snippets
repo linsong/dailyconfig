@@ -1,0 +1,9 @@
+snippet rt within the same controller
+	redirect_to :action => "${1:index}"
+snippet rt not within the same controller
+	redirect_to :controller => "${1:items}", :action => "${2:index}"
+snippet fl
+	flash[:${1:notice}] = "${1}"${2}
+snippet url
+	url_for(:controller => :${1}, :action => :${2}${3:, :id => :${4}} )
+	
