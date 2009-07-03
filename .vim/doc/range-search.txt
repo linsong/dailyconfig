@@ -1,0 +1,15 @@
+*range-search.txt*  Plugin for searching inside ranges
+
+==============================================================================
+Author:  Shlomi Fish < http://www.shlomifish.org/ >
+License: MIT/X11 ( http://www.opensource.org/licenses/mit-license.php )
+
+==============================================================================
+
+:[range]Rs {pattern}                                             *:Rs*
+
+    Searches the range for the pattern.
+
+:[range]RS {pattern}                                             *:RS*
+
+    Same as :Rs.
