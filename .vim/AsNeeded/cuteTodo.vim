@@ -2,16 +2,69 @@
 " What Is This:
 " File: metatodo.vim
 " Author: Vincent Berthoux <twinside@gmail.com>
-" Last Change: 2009 june 11
-" Version: 1.0
+" Last Change: 2009 june 28
+" Version: 1.1
 "
 " ChangeLog:
-"       1.0: initial version
+"     * 1.1 :- Taking into account "Documents and Settings" folder...
+"            - Adding icons source from $VIM or $VIMRUNTIME
+"            - Checking the nocompatible option (the only one required)
+"     * 1.0 : Original version
 if exists("g:__CUTETODO_VIM__")
     finish
 endif
 let g:__CUTETODO_VIM__ = 1
 
+"======================================================================
+"           Configuration checking
+"======================================================================
+if &compatible
+    echom 'cuteTodoList require the nocompatible option, loading aborted'
+    echom "To fix it add 'set nocompatible' in your .vimrc file"
+    finish
+endif
+
+fun! s:GetInstallPath(of) "{{{
+    " If the plugin in installed in the vim runtime directory
+    if filereadable( expand( '$VIMRUNTIME' ) . a:of )
+        return expand( '$VIMRUNTIME' )
+    endif
+
+    " If the plugin in installed in the vim directory
+    if filereadable( expand( '$VIM' ) . a:of )
+        return expand( '$VIM' )
+    endif
+
+    if has("win32")
+        let vimprofile = 'vimfiles'
+    else
+        let vimprofile = '.vim'
+    endif
+
+    " else in the profile directory
+    if filereadable( expand( '~/' . vimprofile ) . a:of )
+        return expand('~/' . vimprofile )
+    endif
+
+    return ''
+endfunction "}}}
+
+if has("win32")
+    let s:ext = '.ico'
+else
+    let s:ext = '.png'
+endif
+
+let s:path = escape( s:GetInstallPath( '/signs/priol1' . s:ext ), ' \' )
+if s:path == ''
+    echom "Cute Todo list can't find icons, plugin not loaded."
+    finish
+else
+    let s:path = s:path . '/signs/'
+endif
+"======================================================================
+"           General Options
+"======================================================================
 if !exists("g:todo_list_buff_name")
     let g:todo_list_buff_name = 'Todo\ List'
 endif
@@ -28,6 +81,9 @@ if !exists("g:todo_list_globfilename")
     let g:todo_list_globfilename = '.global.todo.txt'
 endif
 
+"======================================================================
+"           Plugin data
+"======================================================================
 " The todo list is stored with the following type (haskell
 " notation) :
 " DisplayName, Filename, Text :: String
@@ -49,14 +105,6 @@ let s:todoMinPrio = 0
 let s:todoMaxPrio = 4
 let s:default_priority = 2
 let s:defaultSortKind = 0
-
-if has("win32")
-    let s:path = expand("~/vimfiles/signs/")
-    let s:ext = '.ico'
-else
-    let s:path = expand("~/.vim/signs/")
-    let s:ext = '.png'
-endif
 
 exec 'sign define todopriop2 text=!! icon=' . s:path . 'priop2' . s:ext
 exec 'sign define todopriop1 text=!1 icon=' . s:path . 'priop1' . s:ext

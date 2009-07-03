@@ -1,4 +1,4 @@
-*CuteTodoList.txt*    Plugin to handle a todo list, nicely
+*CuteTodoList.txt*    Plugin to handle a todo list, nicely (v1.3)
 
                             Cute Todo List Plugin ~
 
@@ -29,6 +29,10 @@
         This plug-in can also extract all tasks gathered in your open buffer.
     If you mark something TODO in your document, you will see it appear in the
     list after the next (manual) update.
+     
+      To be able to use this plugin, you must put : >
+        set nocompatible
+>   somwhere on your .vimrc
 
 ==============================================================================
 *cuteTodoCommands*   List of hoogle related command
