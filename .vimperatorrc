@@ -42,7 +42,8 @@ au LocationChange .* :js modes.passAllKeys = /www\.google\.com\/reader/.test(buf
 " for MacOSX
 ":set editor=open -W -n -t
 
-command google open google <args>
+:command -nargs=* g open google <args>
+:map ,g :g 
 
 " Changing the command line color when focused
 javascript <<EOM
