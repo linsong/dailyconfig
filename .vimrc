@@ -1281,15 +1281,12 @@ endif " has("autocmd")
     let g:netrw_silent        = 1
     let g:netrw_special_syntax= 1
 
-
     "### }}}2   
 
     "### setting for NERD_comments.vim {{{2
     " make NERD_comments silent 
-    let g:NERDShutUp=1
-    let g:NERDMapleader = ',c'
-    let g:NERDComLineToggleMap = g:NERDMapleader . 't'
     let g:NERDMenuMode=0
+    :map <silent> ,ct :call NERDComment(1, 'toggle')<CR>
     "### }}}2   
 
     ""### setting for MRU.vim {{{2
