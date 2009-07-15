@@ -23,7 +23,8 @@ set previouspattern+=^\s*上一页\s*$,^\s*上一张\s*$,^‹‹$
 set! browser.urlbar.clickSelectsAll=true
 set! browser.urlbar.doubleClickSelectsAll=true
 
-" key mappings
+" key mappings {{{1
+
 map <A-n> :tabnew<CR>
 map <A-.> :tabnext<CR>
 map <A-,> :tabprev<CR>
@@ -32,7 +33,14 @@ map <A-q> :tabclose<CR>
 "Map paste operation normally.
 imap <C-v> <C-v>
 
-" autocommands
+:command -nargs=* g open google <args>
+:map ,g :g 
+
+:map ,wc :emenu Tools.Web Developer.Cookies.Delete Path Cookies
+
+" }}}1
+
+" autocommands {{{1
 "au LocationChange .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL)
 au LocationChange .* :js modes.passAllKeys = /www\.google\.com\/reader/.test(buffer.URL)
 
@@ -42,8 +50,7 @@ au LocationChange .* :js modes.passAllKeys = /www\.google\.com\/reader/.test(buf
 " for MacOSX
 ":set editor=open -W -n -t
 
-:command -nargs=* g open google <args>
-:map ,g :g 
+" }}}1
 
 " Changing the command line color when focused
 javascript <<EOM
@@ -78,4 +85,4 @@ javascript <<EOF
  })();
 EOF
 
-" vim: ft=vimperator sw=2 sts=2
+" vim: ft=vimperator sw=2 sts=2 foldmethod=marker
