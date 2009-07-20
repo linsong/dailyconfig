@@ -36,7 +36,13 @@ imap <C-v> <C-v>
 :command -nargs=* g open google <args>
 :map ,g :g 
 
+" web developers menu shortcut mapping
 :map ,wc :emenu Tools.Web Developer.Cookies.Delete Path Cookies
+
+" firebug menu shortcut mapping
+:map ,fb :emenu Tools.Firebug.Open Firebug
+:map ,fi :emenu Tools.Firebug.Inspect Element
+:map ,fl :emenu Tools.Firebug.Command Line
 
 " }}}1
 
