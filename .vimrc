@@ -796,6 +796,11 @@ if has("autocmd")
         :autocmd User Rails.test*       set ft=railstest.ruby
         :autocmd User Rails.migration*  set ft=railsmigration.ruby
         :autocmd User Rails.view.erb*   set ft=railsview.eruby
+
+        "load mutt alias script
+        :au BufRead /tmp/mutt-* source ~/.vim/manualload/mutt-aliases.vim
+        :au BufRead /private/var/folder/*/mutt-* source ~/.vim/manualload/mutt-aliases.vim
+
     augroup END
     "}}}4
 
@@ -1439,6 +1444,27 @@ endif " has("autocmd")
     " super find file command, will search the files recursively from current
     " directory
     :noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 1, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
+
+
+    let listener = {}
+    function! listener.onComplete(item, method)
+      let content = join(split(a:item, ' ')[1:], ' ')
+      exec  "norm i " . content . ''
+      "call setline(line('.'), content)
+    endfunction
+
+    function! listener.onAbort()
+      echo "Abort"
+    endfunction
+
+    " Select an item from a given list.
+    let g:aliases_lines = []
+    for a in readfile(expand("~/.mutt/aliases"))
+        let parts = split(a, ' ')
+        call add(g:aliases_lines, join(parts[1:], ' '))
+    endfor
+    :noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
+
     "}}}2
     
     "### setting for view_diff.vim {{{2
@@ -1562,6 +1588,10 @@ endif " has("autocmd")
 
     "### settings for autotag {{{2
     let g:autotagDisabled = 1
+    "}}}2
+
+    "### settings for mutt-alias.vim {{{2
+    let g:mutt_aliases_file = "/Users/vincent/.mutt/aliases"
     "}}}2
 "## }}}1
 
