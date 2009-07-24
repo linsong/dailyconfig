@@ -790,16 +790,16 @@ if has("autocmd")
             "use pdftotext that comes cygwin
         endif
 
-"        :autocmd User Rails             colorschem vividchalk
+        ":autocmd User Rails             colorschem vividchalk
         :autocmd User Rails.controller* set ft=railscontroller.ruby
         :autocmd User Rails.model.arb*  set ft=railsmodel.ruby
         :autocmd User Rails.test*       set ft=railstest.ruby
         :autocmd User Rails.migration*  set ft=railsmigration.ruby
         :autocmd User Rails.view.erb*   set ft=railsview.eruby
+        :autocmd User Rails             let g:Grep_Skip_Dirs = join(['log', 'vender', 'index', 'tmp', 'wireframes'] + Grep_Skip_Dirs_List, ' ')
 
-        "load mutt alias script
-        :au BufRead /tmp/mutt-* source ~/.vim/manualload/mutt-aliases.vim
-        :au BufRead /private/var/folder/*/mutt-* source ~/.vim/manualload/mutt-aliases.vim
+        " add the current extension to the grep file list
+        :autocmd BufNewFile,BufRead * let g:Grep_Default_Filelist = join(["*." . expand("%:e")] + Grep_Default_Filelist_List, ' ')
 
     augroup END
     "}}}4
@@ -1214,9 +1214,12 @@ endif " has("autocmd")
     "### setting for grep.vim {{{2
     let Grep_Key = '<F12>'
     let Grep_Default_Options = '-inH'
-    let Grep_Skip_Dirs = '.svn .cvs zope'
-    let Grep_Skip_Files = '*.bak *~ *.swp *.pyc *.swf *.exe'
-    let Grep_Default_Filelist = '*.py'
+    let Grep_Skip_Dirs_List = ['.svn', '.cvs', 'zope']
+    let Grep_Skip_Dirs = join(g:Grep_Skip_Dirs_List, ' ')
+    let Grep_Skip_Files_List = ['*.bak', '*~', '*.swp', '*.swo', '*.pyc', '*.swf', '*.exe', 'tags', 'TAGS']
+    let Grep_Skip_Files = join(Grep_Skip_Files_List, ' ')
+    let Grep_Default_Filelist_List = ['*']
+    let Grep_Default_Filelist = join(Grep_Default_Filelist_List, ' ')
     map ,gr :Rgrep<CR>
     map ,gg :Grep<CR>
     map ,gf :Fgrep<CR>
@@ -1380,10 +1383,11 @@ endif " has("autocmd")
     " a key in entered text is expanded with a value.
     let g:FuzzyFinderOptions.File.abbrev_map = 
                 \    { "sr" : ["~/project/zax/siteradar"],
-                \      "vp" : ["~/.vim/plugin"]
+                \      "vp" : ["~/.vim/plugin"],
+                \      ";r" : ["app/models", "app/views", "app/controllers", "test/functional", "test/integration", "test/unit", "test/fixtures", "db/fixtures"],
                 \    }
     " [File Mode] The items matching this are excluded from the completion list.
-    let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|((^|[/\\])\.[/\\]$)'
+    let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|\.swo|\.DS_Store$|\.svn/$|\CVS/$|((^|[/\\])\.[/\\]$)'
 
     " customize mode's prompts 
     let g:FuzzyFinderOptions.Buffer.prompt = '[Buffer]'
@@ -1592,6 +1596,12 @@ endif " has("autocmd")
 
     "### settings for mutt-alias.vim {{{2
     let g:mutt_aliases_file = "/Users/vincent/.mutt/aliases"
+    "}}}2
+
+    "### settings for UltiSnips.vim {{{2
+    let g:UltiSnipsExpandTrigger="<tab>" 
+    let g:UltiSnipsJumpForwardTrigger="<tab>" 
+    let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
     "}}}2
 "## }}}1
 
