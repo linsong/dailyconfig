@@ -24,25 +24,32 @@ set! browser.urlbar.clickSelectsAll=true
 set! browser.urlbar.doubleClickSelectsAll=true
 
 " key mappings {{{1
+" resource the rc file
+:map ,s :source ~/.vimperatorrc<CR>
 
-map <A-n> :tabnew<CR>
-map <A-.> :tabnext<CR>
-map <A-,> :tabprev<CR>
-map <A-q> :tabclose<CR>
+:map <A-n> :tabnew<CR>
+:map <A-.> :tabnext<CR>
+:map <A-,> :tabprev<CR>
+:map <A-q> :tabclose<CR>
 
 "Map paste operation normally.
 imap <C-v> <C-v>
 
-:command -nargs=* g open google <args>
+:command! -nargs=* g open google <args>
 :map ,g :g 
 
 " web developers menu shortcut mapping
-:map ,wc :emenu Tools.Web Developer.Cookies.Delete Path Cookies
+:map ,wc :emenu Tools.Web Developer.Cookies.Delete Path Cookies<CR>
 
 " firebug menu shortcut mapping
-:map ,fb :emenu Tools.Firebug.Open Firebug
-:map ,fi :emenu Tools.Firebug.Inspect Element
-:map ,fl :emenu Tools.Firebug.Command Line
+:map ,fb :emenu Tools.Firebug.Open Firebug<CR>
+:map ,fi :emenu Tools.Firebug.Inspect Element<CR>
+:map ,fl :emenu Tools.Firebug.Command Line<CR>
+
+" look up word in dict.cn
+:command! dict -nargs=* tabopen http://dict.cn/<args>
+:map w :dict 
+:map <silent> W :exe ":dict "+content.getSelection()<CR> 
 
 " }}}1
 
