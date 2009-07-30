@@ -35,6 +35,10 @@ set! browser.urlbar.doubleClickSelectsAll=true
 "Map paste operation normally.
 imap <C-v> <C-v>
 
+" use c-n and c-p to go up and down in insert mode
+imap <C-n> <down>
+imap <C-p> <up>
+
 :command! -nargs=* g open google <args>
 :map ,g :g 
 
@@ -96,6 +100,16 @@ javascript <<EOF
  document.getElementById("status-bar")
  .insertBefore(feedPanel, document.getElementById("security-button"));
  })();
+
 EOF
+
+javascript <<EOF
+ inject_jquery = function(){
+   var s = document.createElement('script');
+   s.setAttribute('src', 'http://jquery.com/src/jquery-latest.js');
+   document.getElementsByTagName('body')[0].appendChild(s);
+ };
+EOF
+command! jquery js inject_jquery()
 
 " vim: ft=vimperator sw=2 sts=2 foldmethod=marker
