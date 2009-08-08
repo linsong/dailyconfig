@@ -9,3 +9,8 @@ begin
 rescue LoadError => err
   warn "Couldn't load Wirble: #{err}"
 end
+
+def ri(*names) 
+    system(%{ri #{names.map {|name| name.to_s}.join(" ")}}) 
+end 
+
