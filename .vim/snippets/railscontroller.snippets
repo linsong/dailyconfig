@@ -6,4 +6,7 @@ snippet fl
 	flash[:${1:notice}] = "${1}"${2}
 snippet url
 	url_for(:controller => :${1}, :action => :${2}${3:, :id => :${4}} )
-	
+snippet renderu
+	render :update do |page|
+		page.${1}
+	end
