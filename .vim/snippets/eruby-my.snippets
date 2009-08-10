@@ -27,5 +27,37 @@ snippet formf
 	<% end %>
 snippet link
 	<%= link_to :action => "${1:index}" %>
-snippet render
-	<%= render :partial => ${1} %>
+snippet rf
+	render :file => "${1:filepath}"
+snippet rfu
+	render :file => "${1:filepath}", :use_full_path => ${2:false}
+snippet ri
+	render :inline => "${1:<%= 'hello' %>}"
+snippet ril
+	render :inline => "${1:<%= 'hello' %>}", :locals => { ${2:name} => "${3:value}" }
+snippet rit
+	render :inline => "${1:<%= 'hello' %>}", :type => :${2:rxml})
+snippet rl
+	render :layout => "${1:layoutname}"
+snippet rn
+	render :nothing => ${1:true}
+snippet rns
+	render :nothing => ${1:true}, :status => ${2:401}
+snippet rp
+	render :partial => "${1:item}"
+snippet rpc
+	render :partial => "${1:item}", :collection => ${2:items}
+snippet rpl
+	render :partial => "${1:item}", :locals => { :${2:name} => "${3:value}"}
+snippet rpo
+	render :partial => "${1:item}", :object => ${2:object}
+snippet rps
+	render :partial => "${1:item}", :status => ${2:500}
+snippet rt
+	render :text => "${1:Text here...}"
+snippet rtl
+	render :text => "${1:Text here...}", :layout => "${2:layoutname}"
+snippet rtlt
+	render :text => "${1:Text here...}", :layout => ${2:true}
+snippet rts
+	render :text => "${1:Text here...}", :status => ${2:401}

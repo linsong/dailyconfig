@@ -2,6 +2,16 @@ snippet test
 	test "${1}" do
 	  ${2}
 	end
+snippet ae
+	assert_equal ${1:expected}, ${2:actual}
+snippet ako
+	assert_kind_of ${1:class}, ${2:object}
+snippet ann
+	assert_not_nil ${1:object}
+snippet ars
+	assert_raises ${1:Exception} { $. }
+snippet art
+	assert_redirected_to :controller => "${1:controller}"
 snippet ar success response
 	assert_response :success
 snippet ar redirect response
