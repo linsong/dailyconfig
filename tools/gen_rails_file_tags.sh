@@ -25,7 +25,7 @@ find $* \
          -path '*/coverage/*' \
      \) -prune -or \
      -type f -print | \
-ruby -nle 'puts %Q{#{File.basename($_)}\t#{$_}\t%q{/^/;"}\tc}' | \
+ruby -nle 'puts %Q{#{File.basename($_)}\t#{$_}\t#{%q{/^/;"}}\tc}' | \
 sort >> $FILE_TAGS_NAME
 
 exit 0
