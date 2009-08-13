@@ -3,8 +3,10 @@
 #require "rubygems"
 #require "ruby-debug"
 
+tags = ARGV[0].nil? ? 'tags' : ARGV[0]
+
 result = []
-File.open(ARGV[0]) do |f|
+File.open(tags) do |f|
   f.readlines.each do |line|
     parts = line.split("\t")
     if !parts[3].nil? && (parts[3].start_with?('c') || parts[3].start_with?('m'))
@@ -15,7 +17,7 @@ File.open(ARGV[0]) do |f|
   end
 end
 
-File.open(ARGV[0], "w") do |f|
+File.open(tags, "w") do |f|
   f.write(result.join)
 end
 

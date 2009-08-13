@@ -270,12 +270,14 @@
 
 
     " MAKE IT EASY TO UPDATE/RELOAD_vimrc
-    if has("gui_running")
-        :nmap ,s :source $HOME/.vimrc \| source $HOME/.gvimrc<CR>
-    else
-        :nmap ,s :source $HOME/.vimrc<CR>
-    endif
-    :nmap ,v :e $HOME/.vimrc<CR> 
+    " I am short of shortcut keys, below key mapping is kind of waste, I
+    " recycle them now
+    "if has("gui_running")
+        ":nmap ,s :source $HOME/.vimrc \| source $HOME/.gvimrc<CR>
+    "else
+        ":nmap ,s :source $HOME/.vimrc<CR>
+    "endif
+    ":nmap ,v :e $HOME/.vimrc<CR> 
 
     " Make navigate tabs easier
     :nnoremap <silent> <M-.> gt
@@ -1447,7 +1449,7 @@ endif " has("autocmd")
 
     " super find file command, will search the files recursively from current
     " directory
-    :noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 1, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
+    :noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 0, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
 
 
     let listener = {}
@@ -1469,6 +1471,10 @@ endif " has("autocmd")
     endfor
     :noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
 
+    " FuzzyFinderTag is really useful especially after we process the tags
+    " file, for example generate a tags file for files, that will minic the
+    " behavior of TextMate easily. So give it a seperate shortcut 
+    :noremap ,s  :FuzzyFinderTag<CR> 
     "}}}2
     
     "### setting for view_diff.vim {{{2
