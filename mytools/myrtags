@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+
+ctags --languages=Ruby --regex-Ruby='/^[ \t]*named_scope[ \t]+:([a-zA-Z0-9_]+),/\1/' $*
