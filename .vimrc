@@ -131,7 +131,7 @@
     :set numberwidth=1
 
     " set tags 
-    :set tags+=../tags,../../tags
+    :set tags+=../tags,../../tags,file_tags
 
     :set number
 
