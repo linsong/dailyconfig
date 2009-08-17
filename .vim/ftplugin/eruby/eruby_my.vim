@@ -1,8 +1,8 @@
-if (exists("b:myrubyini"))
+if (exists("b:myerubyini"))
   finish
 endif
 
-let b:myrubyini = 1
+let b:myerubyini = 1
 
 let g:autotagDisabled = 1
 

@@ -1475,6 +1475,7 @@ endif " has("autocmd")
     " file, for example generate a tags file for files, that will minic the
     " behavior of TextMate easily. So give it a seperate shortcut 
     :noremap ,s  :FuzzyFinderTag<CR> 
+    :noremap <C-g> :FuzzyFinderTag<CR> 
     "}}}2
     
     "### setting for view_diff.vim {{{2
