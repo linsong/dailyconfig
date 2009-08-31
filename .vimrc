@@ -60,8 +60,8 @@
     set sessionoptions+=unix,slash
 
     " set tabstop value and shift width 
-    set ts=4
-    set sw=4
+    set ts=2
+    set sw=2
     set expandtab
     set smarttab
 
@@ -131,7 +131,7 @@
     :set numberwidth=1
 
     " set tags 
-    :set tags+=../tags,../../tags,file_tags
+    :set tags+=../tags,../../tags,ftags
 
     :set number
 
@@ -1479,7 +1479,7 @@ endif " has("autocmd")
     "}}}2
     
     "### setting for view_diff.vim {{{2
-    let g:vd_svn_repo_prefix = 'https://nordicbet.dev.exoweb.net/svn/trunk/src'
+    "let g:vd_svn_repo_prefix = 'https://nordicbet.dev.exoweb.net/svn/trunk/src'
     "}}}2
     
     "### settings for utl.vim {{{2
