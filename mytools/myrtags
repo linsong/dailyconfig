@@ -1,3 +1,4 @@
 #! /usr/bin/env bash
 
-ctags --languages=Ruby --regex-Ruby='/^[ \t]*named_scope[ \t]+:([a-zA-Z0-9_]+),/\1/' $*
+#ctags --languages=Ruby --regex-Ruby='/^[ \t]*(named_scope|has_many)[ \t]+:([a-zA-Z0-9_]+)/\2/' --regex-Ruby='/^[ \t]*event[ \t]+:([a-zA-Z0-9_]+)/\1!/' $*
+ctags -R $*

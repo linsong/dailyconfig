@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-FILE_TAGS_NAME='file_tags'
+FILE_TAGS_NAME='ftags'
 
 echo '!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/' > $FILE_TAGS_NAME
 echo '!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/' >> $FILE_TAGS_NAME
@@ -11,6 +11,9 @@ echo '!_TAG_PROGRAM_VERSION	5.7	//' >> $FILE_TAGS_NAME
 
 find $* \
     \( \
+        -name '.DS_Store' -or \
+        -name '.tmp__*~' -or \
+        -name '*.pdf' -or \
         -name '*.jpg' -or \
         -name '*.png' -or \
         -name '*.swf' -or \
