@@ -1464,12 +1464,14 @@ endif " has("autocmd")
     endfunction
 
     " Select an item from a given list.
-    let g:aliases_lines = []
-    for a in readfile(expand("~/.mutt/aliases"))
-        let parts = split(a, ' ')
-        call add(g:aliases_lines, join(parts[1:], ' '))
-    endfor
-    :noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
+    if filereadable(expand("~/.mutt/aliases"))
+      let g:aliases_lines = []
+      for a in readfile(expand("~/.mutt/aliases"))
+          let parts = split(a, ' ')
+          call add(g:aliases_lines, join(parts[1:], ' '))
+      endfor
+      :noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
+    endif
 
     " FuzzyFinderTag is really useful especially after we process the tags
     " file, for example generate a tags file for files, that will minic the
