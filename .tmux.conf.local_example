@@ -1,0 +1,21 @@
+# C-m means Enter
+#new-session -n music -s main
+
+rename-window -t 0 musiC
+send -t 0 'cd ~/Music'
+
+new-window -n mutt -t 1
+send -t 1 'mutt'
+
+new-window -n work1 -t 2 
+send -t 2 'cd $PROJECT_DIR'
+
+new-window -n work2 -t 3 
+send -t 3 'cd $PROJECT_DIR'
+
+new-window -n GTD -t 9 
+send -t 9 'cd ~/GTD; ~/tools/gtd; vim todo.gtd'
+
+selectw -t 1
+
+
