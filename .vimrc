@@ -683,33 +683,29 @@
     endif "}}}2
 
     "### console mode setting {{{2
-        "TODO: need to set wildmode, for more details, :help 'wildmode'
-        " use menu in console mode 
-        if !has("gui_running")
-            "### color scheme settings {{{3
-            "if $TERM == "xterm-color"
-                ":colorscheme torte vibrantink
-            "else
-                ":colorscheme desert "torte bluegreen
-            "endif
-            :set t_Co=256 " enable 256 colors refs: http://vim.wikia.com/wiki/256_colors_in_vim
-            """ NOTE: to make 256 colors work in GNU screen, screen need to be
-            """       configured with ./configure --enable-colors256
-            " if terminal support 256 colors, inkpot seems very nice
-            ":colorscheme inkpot
-            ":colorscheme koehler
-            :colorscheme desert " use desert since 256 colors does not work from my macbox
+    "TODO: need to set wildmode, for more details, :help 'wildmode'
+    " use menu in console mode 
+    if !has("gui_running")
+      "### color scheme settings {{{3
+      " to enable 256 colors, you need to put following lines into .vimrc.local file 
+      ":set t_Co=256 " enable 256 colors refs: http://vim.wikia.com/wiki/256_colors_in_vim
+      """ NOTE: to make 256 colors work in GNU screen, screen need to be
+      """       configured with ./configure --enable-colors256
+      " if terminal support 256 colors, inkpot seems very nice
+      ":colorscheme inkpot
+      ":colorscheme koehler
+      :colorscheme desert " use desert since 256 colors does not work from my macbox
 
-            " xterm16 color scheme setting
-            let xterm16_brightness = 'default'     " Change if needed
-            let xterm16_colormap = 'allblue'       " Change if needed
-            "### }}}3
+      " xterm16 color scheme setting
+      let xterm16_brightness = 'default'     " Change if needed
+      let xterm16_colormap = 'allblue'       " Change if needed
+      "### }}}3
 
-            :source $VIMRUNTIME/menu.vim
-            :set cpo-=<
-            :set wcm=<C-Z>
-            :map <M-e> :emenu <C-Z>
-        endif 
+      :source $VIMRUNTIME/menu.vim
+      :set cpo-=<
+      :set wcm=<C-Z>
+      :map <M-e> :emenu <C-Z>
+    endif 
     "### }}}2
 "## }}}1
 
