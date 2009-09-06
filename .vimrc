@@ -1368,112 +1368,203 @@ endif " has("autocmd")
     "}}}2
     
     "### setting for fuzzyfinder.vim {{{2
-    let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{},
-                  \    'MruFile':{}, 'MruCmd':{}, 'Bookmark':{},
-                  \    'Dir':{}, 'Tag':{}, 'TaggedFile':{},
-                  \    'GivenFile':{}}
-    " [All Mode] This is mapped to switch to the next mode.
-    let g:FuzzyFinderOptions.Base.key_next_mode = '<C-j>'
-    " [All Mode] This is mapped to switch to the previous mode.
-    let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-k>'
-
-    " [File Mode] This is a dictionary. Each value must be a list. All matchs of
-    " a key in entered text is expanded with a value.
-    let g:FuzzyFinderOptions.File.abbrev_map = 
+    let g:fuf_modesDisable = []
+    let g:fuf_abbrevMap = 
                 \    { "sr" : ["~/project/zax/siteradar"],
                 \      "vp" : ["~/.vim/plugin"],
                 \      ";r" : ["app/models", "app/views", "app/controllers", "test/functional", "test/integration", "test/unit", "test/fixtures", "db/fixtures"],
                 \    }
-    " [File Mode] The items matching this are excluded from the completion list.
-    let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|\.swo|\.DS_Store$|\.svn/$|\CVS/$|((^|[/\\])\.[/\\]$)'
+    "let g:fuf_abbrevMap = {
+          "\   '^vr:' : map(filter(split(&runtimepath, ','), 'v:val !~ "after$"'), 'v:val . ''/**/'''),
+          "\   '^m0:' : [ '/mnt/d/0/', '/mnt/j/0/' ],
+          "\ }
+          
+    let g:fuf_mrufile_maxItem = 300
+    let g:fuf_mrucmd_maxItem = 400
+
+    let  g:fuf_file_exclude = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|\.swo|\.DS_Store$|\.svn/$|\CVS/$|((^|[/\\])\.[/\\]$)'
+
+    let g:fuf_ignoreCase = 1
+    let g:fuf_useMigemo = 0
 
     " customize mode's prompts 
-    let g:FuzzyFinderOptions.Buffer.prompt = '[Buffer]'
-    let g:FuzzyFinderOptions.Buffer.prompt_highlight = 'BufferMode'
-    let g:FuzzyFinderOptions.File.prompt = '[File]'
-    let g:FuzzyFinderOptions.File.prompt_highlight = 'FileMode'
-    let g:FuzzyFinderOptions.Dir.prompt = '[Dir]'
-    let g:FuzzyFinderOptions.Dir.prompt_highlight = 'DirMode'
-    let g:FuzzyFinderOptions.MruFile.prompt = '[MruFile]'
-    let g:FuzzyFinderOptions.MruFile.prompt_highlight = 'MruFileMode'
-    let g:FuzzyFinderOptions.MruCmd.prompt = '[MruCmd]'
-    let g:FuzzyFinderOptions.MruCmd.prompt_highlight = 'MruCmdMode'
-    let g:FuzzyFinderOptions.Bookmark.prompt = '[Bookmark]'
-    let g:FuzzyFinderOptions.Bookmark.prompt_highlight = 'BookmarkMode'
-    let g:FuzzyFinderOptions.Tag.prompt = '[Tag]'
-    let g:FuzzyFinderOptions.Tag.prompt_highlight = 'TagMode'
-    let g:FuzzyFinderOptions.TaggedFile.prompt = '[TaggedFile]'
-    let g:FuzzyFinderOptions.TaggedFile.prompt_highlight = 'TaggedFileMode'
-    let g:FuzzyFinderOptions.GivenFile.prompt = '[GivenFile]'
-    let g:FuzzyFinderOptions.GivenFile.prompt_highlight = 'GivenFileMode'
+    let g:fuf_buffer_prompt = '[Buffer]'
+    let g:fuf_buffer_promptHighlight = 'BufferMode'
+    let g:fuf_file_prompt = '[File]'
+    let g:fuf_file_promptHighlight = 'FileMode'
+    let g:fuf_dir_prompt = '[Dir]'
+    let g:fuf_dir_promptHighlight = 'DirMode'
+    let g:fuf_mrufile_prompt = '[MruFile]'
+    let g:fuf_mrufile_promptHighlight = 'MruFileMode'
+    let g:fuf_mrucmd_prompt = '[MruCmd]'
+    let g:fuf_mrucmd_promptHighlight = 'MruCmdMode'
+    let g:fuf_bookmark_prompt = '[Bookmark]'
+    let g:fuf_bookmark_promptHighlight = 'BookmarkMode'
+    let g:fuf_tag_prompt = '[Tag]'
+    let g:fuf_tag_promptHighlight = 'TagMode'
+    let g:fuf_taggedFile_prompt = '[TaggedFile]'
+    let g:fuf_taggedFile_promptHighlight = 'TaggedFileMode'
+    let g:fuf_givenFile_prompt = '[GivenFile]'
+    let g:fuf_givenFile_promptHighlight = 'GivenFileMode'
 
-    " [All Mode] This is mapped to temporarily switch whether or not to ignore
-    " case.
-    let g:FuzzyFinderOptions.Base.key_ignore_case = '<C-i>'
-    let g:FuzzyFinderOptions.Base.ignore_case = 1
 
-    " [All Mode] It uses Migemo if non-zero is set.
-    let g:FuzzyFinderOptions.Base.migemo_support = 0
+    let g:fuf_keyOpenTabpage = '<C-t>'
+    let g:fuf_keyOpen = '<CR>'
+    let g:fuf_keyOpenSplit = '<C-l>'
+    let g:fuf_keyOpenVsplit = '<C-V>'
 
-    " [All Mode] This is mapped to select completion item or finish input and
-    " open a buffer/file in previous window.
-    let g:FuzzyFinderOptions.Base.key_open = '<CR>'
-    " [All Mode] This is mapped to select completion item or finish input and
-    " open a buffer/file in split new window
-    let g:FuzzyFinderOptions.Base.key_open_split = '<C-l>'
-    " [All Mode] This is mapped to select completion item or finish input and
-    " open a buffer/file in vertical-split new window.
-    let g:FuzzyFinderOptions.Base.key_open_vsplit = '<C-V>'
-    " [All Mode] This is mapped to select completion item or finish input and
-    " open a buffer/file in a new tab page.
-    let g:FuzzyFinderOptions.Base.key_open_tab = '<C-t>'
-
-"    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-    :noremap ,ff :FuzzyFinderFileWithCurrentBufferDir<CR>
-    :noremap ,fb :FuzzyFinderBuffer<CR>
-    :noremap ,fm :FuzzyFinderMruFile<CR>
-    :noremap ,f; :FuzzyFinderMruCmd<CR>
-    :noremap ,fk :FuzzyFinderBookmark<CR>
-    :noremap ,fa :FuzzyFinderAddBookmarkAsSelectedText<CR>
-    :noremap ,fd :FuzzyFinderDir<CR>
-    :noremap ,ft :FuzzyFinderTaggedFile<CR>
-    :noremap ,fg :FuzzyFinderTag<CR>
-    :noremap ,f] :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
-    :noremap ,fc :FuzzyFinderRenewCache<CR>
+    :noremap ,ff :FufFileWithCurrentBufferDir<CR>
+    :noremap ,fb :FufBuffer<CR>
+    :noremap ,fm :FufMruFile<CR>
+    :noremap ,f; :FufMruCmd<CR>
+    :noremap ,fk :FufBookmark<CR>
+    :noremap ,fa :FufAddBookmarkAsSelectedText<CR>
+    :noremap ,fd :FufDir<CR>
+    :noremap ,ft :FufTaggedFile<CR>
+    :noremap ,fg :FufTag<CR>
+    :noremap ,f] :FufTag! <C-r>=expand('<cword>')<CR><CR>
+    :noremap ,fc :FufRenewCache<CR>
     :noremap ,fi :FuzzyFinderEditInfo<CR>
 
+    "" super find file command, will search the files recursively from current
+    "" directory
+    ":noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 0, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
 
-    " super find file command, will search the files recursively from current
-    " directory
-    :noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 0, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
 
+    "let listener = {}
+    "function! listener.onComplete(item, method)
+      "let content = join(split(a:item, ' ')[1:], ' ')
+      "exec  "norm i " . content . ''
+      ""call setline(line('.'), content)
+    "endfunction
 
-    let listener = {}
-    function! listener.onComplete(item, method)
-      let content = join(split(a:item, ' ')[1:], ' ')
-      exec  "norm i " . content . ''
-      "call setline(line('.'), content)
-    endfunction
+    "function! listener.onAbort()
+      "echo "Abort"
+    "endfunction
 
-    function! listener.onAbort()
-      echo "Abort"
-    endfunction
-
-    " Select an item from a given list.
-    if filereadable(expand("~/.mutt/aliases"))
-      let g:aliases_lines = []
-      for a in readfile(expand("~/.mutt/aliases"))
-          let parts = split(a, ' ')
-          call add(g:aliases_lines, join(parts[1:], ' '))
-      endfor
-      :noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
-    endif
+    "" Select an item from a given list.
+    "if filereadable(expand("~/.mutt/aliases"))
+      "let g:aliases_lines = []
+      "for a in readfile(expand("~/.mutt/aliases"))
+          "let parts = split(a, ' ')
+          "call add(g:aliases_lines, join(parts[1:], ' '))
+      "endfor
+      ":noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
+    "endif
 
     " FuzzyFinderTag is really useful especially after we process the tags
     " file, for example generate a tags file for files, that will minic the
     " behavior of TextMate easily. So give it a seperate shortcut 
-    :noremap ,s  :FuzzyFinderTag<CR> 
-    :noremap <C-g> :FuzzyFinderTag<CR> 
+    :noremap ,s  :FufTag<CR> 
+    :noremap <C-g> :FufTag<CR> 
+
+    "" obsolete
+    "let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{},
+                  "\    'MruFile':{}, 'MruCmd':{}, 'Bookmark':{},
+                  "\    'Dir':{}, 'Tag':{}, 'TaggedFile':{},
+                  "\    'GivenFile':{}}
+    "" [All Mode] This is mapped to switch to the next mode.
+    "let g:FuzzyFinderOptions.Base.key_next_mode = '<C-j>'
+    "" [All Mode] This is mapped to switch to the previous mode.
+    "let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-k>'
+
+    "" [File Mode] This is a dictionary. Each value must be a list. All matchs of
+    "" a key in entered text is expanded with a value.
+    "let g:FuzzyFinderOptions.File.abbrev_map = 
+                "\    { "sr" : ["~/project/zax/siteradar"],
+                "\      "vp" : ["~/.vim/plugin"],
+                "\      ";r" : ["app/models", "app/views", "app/controllers", "test/functional", "test/integration", "test/unit", "test/fixtures", "db/fixtures"],
+                "\    }
+    "" [File Mode] The items matching this are excluded from the completion list.
+    "let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|\.swo|\.DS_Store$|\.svn/$|\CVS/$|((^|[/\\])\.[/\\]$)'
+
+    "" customize mode's prompts 
+    "let g:FuzzyFinderOptions.Buffer.prompt = '[Buffer]'
+    "let g:FuzzyFinderOptions.Buffer.prompt_highlight = 'BufferMode'
+    "let g:FuzzyFinderOptions.File.prompt = '[File]'
+    "let g:FuzzyFinderOptions.File.prompt_highlight = 'FileMode'
+    "let g:FuzzyFinderOptions.Dir.prompt = '[Dir]'
+    "let g:FuzzyFinderOptions.Dir.prompt_highlight = 'DirMode'
+    "let g:FuzzyFinderOptions.MruFile.prompt = '[MruFile]'
+    "let g:FuzzyFinderOptions.MruFile.prompt_highlight = 'MruFileMode'
+    "let g:FuzzyFinderOptions.MruCmd.prompt = '[MruCmd]'
+    "let g:FuzzyFinderOptions.MruCmd.prompt_highlight = 'MruCmdMode'
+    "let g:FuzzyFinderOptions.Bookmark.prompt = '[Bookmark]'
+    "let g:FuzzyFinderOptions.Bookmark.prompt_highlight = 'BookmarkMode'
+    "let g:FuzzyFinderOptions.Tag.prompt = '[Tag]'
+    "let g:FuzzyFinderOptions.Tag.prompt_highlight = 'TagMode'
+    "let g:FuzzyFinderOptions.TaggedFile.prompt = '[TaggedFile]'
+    "let g:FuzzyFinderOptions.TaggedFile.prompt_highlight = 'TaggedFileMode'
+    "let g:FuzzyFinderOptions.GivenFile.prompt = '[GivenFile]'
+    "let g:FuzzyFinderOptions.GivenFile.prompt_highlight = 'GivenFileMode'
+
+    "" [All Mode] This is mapped to temporarily switch whether or not to ignore
+    "" case.
+    "let g:FuzzyFinderOptions.Base.key_ignore_case = '<C-i>'
+    "let g:FuzzyFinderOptions.Base.ignore_case = 1
+
+    "" [All Mode] It uses Migemo if non-zero is set.
+    "let g:FuzzyFinderOptions.Base.migemo_support = 0
+
+    "" [All Mode] This is mapped to select completion item or finish input and
+    "" open a buffer/file in previous window.
+    "let g:FuzzyFinderOptions.Base.key_open = '<CR>'
+    "" [All Mode] This is mapped to select completion item or finish input and
+    "" open a buffer/file in split new window
+    "let g:FuzzyFinderOptions.Base.key_open_split = '<C-l>'
+    "" [All Mode] This is mapped to select completion item or finish input and
+    "" open a buffer/file in vertical-split new window.
+    "let g:FuzzyFinderOptions.Base.key_open_vsplit = '<C-V>'
+    "" [All Mode] This is mapped to select completion item or finish input and
+    "" open a buffer/file in a new tab page.
+    "let g:FuzzyFinderOptions.Base.key_open_tab = '<C-t>'
+
+""    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
+    ":noremap ,ff :FuzzyFinderFileWithCurrentBufferDir<CR>
+    ":noremap ,fb :FuzzyFinderBuffer<CR>
+    ":noremap ,fm :FuzzyFinderMruFile<CR>
+    ":noremap ,f; :FuzzyFinderMruCmd<CR>
+    ":noremap ,fk :FuzzyFinderBookmark<CR>
+    ":noremap ,fa :FuzzyFinderAddBookmarkAsSelectedText<CR>
+    ":noremap ,fd :FuzzyFinderDir<CR>
+    ":noremap ,ft :FuzzyFinderTaggedFile<CR>
+    ":noremap ,fg :FuzzyFinderTag<CR>
+    ":noremap ,f] :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
+    ":noremap ,fc :FuzzyFinderRenewCache<CR>
+    ":noremap ,fi :FuzzyFinderEditInfo<CR>
+
+
+    "" super find file command, will search the files recursively from current
+    "" directory
+    ":noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 0, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
+
+
+    "let listener = {}
+    "function! listener.onComplete(item, method)
+      "let content = join(split(a:item, ' ')[1:], ' ')
+      "exec  "norm i " . content . ''
+      ""call setline(line('.'), content)
+    "endfunction
+
+    "function! listener.onAbort()
+      "echo "Abort"
+    "endfunction
+
+    "" Select an item from a given list.
+    "if filereadable(expand("~/.mutt/aliases"))
+      "let g:aliases_lines = []
+      "for a in readfile(expand("~/.mutt/aliases"))
+          "let parts = split(a, ' ')
+          "call add(g:aliases_lines, join(parts[1:], ' '))
+      "endfor
+      ":noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
+    "endif
+
+    "" FuzzyFinderTag is really useful especially after we process the tags
+    "" file, for example generate a tags file for files, that will minic the
+    "" behavior of TextMate easily. So give it a seperate shortcut 
+    ":noremap ,s  :FuzzyFinderTag<CR> 
+    ":noremap <C-g> :FuzzyFinderTag<CR> 
     "}}}2
     
     "### setting for view_diff.vim {{{2
