@@ -35,4 +35,6 @@ augroup filetypedetect
 
   au BufNewFile,BufRead *.blog setfiletype blog
   au BufNewFile,BufRead *.blog source $VIMCFG/manualload/blog.vim
+
+  au BufNewFile,BufRead .tmux.conf* setfiletype tmux
 augroup END
