@@ -1,21 +1,40 @@
 # C-m means Enter
 #new-session -n music -s main
+new-session -d -swork -n music
+#rename-window -t 0 musiC
+send -t work:0 'cd ~/Music'
+send -t work:0 'ncmpc'
 
-rename-window -t 0 musiC
-send -t 0 'cd ~/Music'
+new-window -d -n mutt
+send -t work:1 'mutt'
 
-new-window -n mutt -t 1
-send -t 1 'mutt'
+new-window -d -n work1
+send -t work:2 'cd $PROJECT_DIR'
 
-new-window -n work1 -t 2 
-send -t 2 'cd $PROJECT_DIR'
+new-window -d -n work2 
+send -t work:3 'cd $PROJECT_DIR'
 
-new-window -n work2 -t 3 
-send -t 3 'cd $PROJECT_DIR'
+new-window -d -n GTD -t work:9
+send -t work:9 'cd ~/GTD; ~/tools/gtd; vim todo.gtd'
 
-new-window -n GTD -t 9 
-send -t 9 'cd ~/GTD; ~/tools/gtd; vim todo.gtd'
+selectw -t work:1
 
-selectw -t 1
+# second session
+new-session -d -s panel
+set -t panel status-bg green
+link-window -dk -t :0 -s work:0
+link-window -dk -t :1 -s work:1
+link-window -dk -t :9 -s work:9
+new-window -d -t :2
+new-window -d -t :3
 
+
+# third session
+new-session -d -s misc
+set -t misc status-bg yellow
+link-window -dk -t :0 -s work:0
+link-window -dk -t :1 -s work:1
+link-window -dk -t :9 -s work:9
+new-window -d -t :2
+new-window -d -t :3
 
