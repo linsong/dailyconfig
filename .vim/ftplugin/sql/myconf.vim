@@ -21,17 +21,24 @@ if ! exists("b:mysqlini")
     setlocal expandtab
     setlocal softtabstop=4
 
-    nmap <buffer> <Enter> :.,.DBExecRangeSQL<CR>
-    vmap <buffer> <Enter> :DBExecRangeSQL<CR>
+    "nmap <buffer> <Enter> :.,.DBExecRangeSQL<CR>
+    "vmap <buffer> <Enter> :DBExecRangeSQL<CR>
+
+    function! SmartExecSQL()
+      if len(split(getline('.'), '\s\+')) == 1
+        :DBSelectFromTable
+      else
+        if mode() == 'V'
+          :DBExecRangeSQL
+        else
+          :.,.DBExecRangeSQL
+        endif
+      endif
+    endfunction
+
+    nmap <buffer> <Enter> :call SmartExecSQL()<CR>
+    vmap <buffer> <Enter> :call SmartExecSQL()<CR>
 
     nmap <buffer> ;f :.,.SQLUFormatter<CR>
     vmap <buffer> ;f :SQLUFormatter<CR>
-    """ This is not needed since python_match.vim defined these already
-    "if !exists("b:match_words")
-        "let b:match_ignorecase=0
-        "let b:match_words = 'if:elif:else,' .
-                    "\ 'try:except' .
-                    "\ 'from:import' .
-
-    "endif
 endif
