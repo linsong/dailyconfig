@@ -14,7 +14,8 @@ list-format = "[[%artist% - ]%title%]|[%file%]"
 
 ##### Light color scheme #####
 color background = none
-color list = magnet
+color list = magenta
+color list-bold = brightmagenta
 color line = cyan
 color line-flags = green
 color progressbar = blue
