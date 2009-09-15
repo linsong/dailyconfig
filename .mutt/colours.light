@@ -1,0 +1,94 @@
+# vim: set ft=muttrc
+#
+# Colour settings for mutt.
+#
+
+# Default colour definitions
+color normal     black        default
+color hdrdefault black        cyan
+color signature  brightblack  default 
+color indicator  brightwhite  cyan
+color attachment magenta      default
+color error      red          default
+color message    green        default
+color search     brightwhite  magenta
+color status     brightyellow blue
+color tree       brightblue   default
+color tilde      green        default
+color bold       brightyellow default
+color markers    red          default
+
+# Colour definitions when on a mono screen
+mono bold      bold
+mono underline underline
+mono indicator reverse
+
+# Colours for items in the reader
+color header    magenta      default '^(status|lines|date|received|sender|references):'
+color header    magenta      brightblack '^(pr|mime|x-|user|return|content-)[^:]*:'
+color header    brightyellow brightblack '^content-type:'
+color header    magenta      brightblack '^content-type: *text/plain'
+color header    brightcyan   brightblack '^(message-id|in-reply-to):'
+color header    brightgreen  brightblack '^list-[^:]*:'
+color header    yellow       brightblack '^from '
+color header    brightcyan   brightblack '^(disposition)'
+color header    green        brightblack '^(mail-)?followup'
+color header    white        brightblack '^reply'
+color header    brightwhite  brightblack '^(resent)'
+color header    default      brightblack '^from:'
+color header    cyan         brightblack '^(to|cc|bcc):'
+color header    green        brightblack '^(subject):.*$'
+mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Virus-hagbard):"
+
+# Colours for items in the index
+#color index brightwhite   black "~N"
+color index green         default "~R ~C nb@exoweb.net"
+color index brightgreen   default "~N ~C nb@exoweb.net"
+#color index green        black "~N (~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")"
+color index brightyellow  default "~N (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+color index yellow        default "~R (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+color index brightblue  default "~N ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+color index blue        default "~R ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+#color index black        red   "~N ~d >1d"
+color index red          default ~F
+color index black        green ~T
+color index brightwhite  default ~D
+mono  index bold               ~N
+mono  index bold               ~F
+mono  index bold               ~T
+mono  index bold               ~D
+
+#color index white        green "~n 500-"
+#color index white        brightred "~n 300-500"
+
+# Highlights inside the body of a message.
+
+# URLs
+color body brightblue  default "(http|https|ftp|news|telnet|finger)://[^ \">\t\r\n]*"
+color body brightblue  default "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+color body brightblue  default "news:[^ \">\t\r\n]*"
+mono  body bold              "(http|https|ftp|news|telnet|finger)://[^ \">\t\r\n]*"
+mono  body bold              "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+mono  body bold              "news:[^ \">\t\r\n]*"
+
+# email addresses
+color body brightblue  white "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+mono  body bold              "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+
+# Various smilies and the like
+color body brightgreen default "<[Gg]>"                                            # <g>
+color body brightgreen default "<[Bb][Gg]>"                                        # <bg>
+color body brightgreen default " [;:]-*[)>(<|]"                                    # :-) etc...
+color body brightblue  default "(^|[[:space:]])\\*[^[:space:]]+\\*([[:space:]]|$)" # *Bold* text.
+color body brightblue  default "(^|[[:space:]])_[^[:space:]]+_([[:space:]]|$)"     # _Underlined_ text.
+color body brightblue  default "(^|[[:space:]])/[^[:space:]]+/([[:space:]]|$)"     # /Italic/ text.
+
+# make quotes colorful
+color quoted    cyan default
+color quoted1   green  default
+color quoted2   yellow default
+color quoted3   red    default
+color quoted4   brightcyan default
+color quoted5   brightgreen default
+color quoted6   brightyellow default
+color quoted7   brightred default
