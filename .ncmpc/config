@@ -5,3 +5,17 @@ enable-colors = yes
 set-xterm-title = yes
 xterm-title-format = "[%file%]"
 #xterm-title-format = "[[%artist% - ]%title%]|[%file%]"
+
+list-format = "[[%artist% - ]%title%]|[%file%]"
+
+#########################################################
+### Colours 
+#########################################################
+
+##### Light color scheme #####
+color background = none
+color list = magnet
+color line = cyan
+color line-flags = green
+color progressbar = blue
+
