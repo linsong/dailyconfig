@@ -108,7 +108,6 @@
 
     " setting for completion 
     if v:version >= 700
-        ":set completeopt+=longest
         :set completeopt=longest,menuone
     endif
 
@@ -257,9 +256,9 @@
     nmap + 5<C-W>>
 
     " use enter to unhighlighted searched-for text
-    nnoremap <CR> :nohlsearch<CR><CR>
+    "nnoremap <CR> :nohlsearch<CR><CR>
     "nnoremap <CR> :set invhlsearch<CR><CR>
-    "nnoremap ,nh    :noh<CR>
+    nnoremap ,nh    :noh<CR>
     nnoremap <leader>q :close<CR>
 
     " mappings for quickfix mode 
@@ -267,7 +266,6 @@
     nnoremap <S-xF4> :cprev <CR>
     nnoremap <C-F4>   :cnfile <CR>
     nnoremap <S-C-F4> :cpfile <CR>
-
 
     " MAKE IT EASY TO UPDATE/RELOAD_vimrc
     " I am short of shortcut keys, below key mapping is kind of waste, I
@@ -694,7 +692,8 @@
       " if terminal support 256 colors, inkpot seems very nice
       ":colorscheme inkpot
       ":colorscheme koehler
-      :colorscheme desert " use desert since 256 colors does not work from my macbox
+      ":colorscheme desert " use desert since 256 colors does not work from my macbox
+      :colorscheme sienna " use sienna since 256 colors does not work from my macbox
 
       " xterm16 color scheme setting
       let xterm16_brightness = 'default'     " Change if needed
@@ -1426,10 +1425,9 @@ endif " has("autocmd")
     :noremap ,fc :FufRenewCache<CR>
     :noremap ,fi :FuzzyFinderEditInfo<CR>
 
-    "" super find file command, will search the files recursively from current
-    "" directory
-    ":noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 0, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
-
+    " super find file command, will search the files recursively from current
+    " directory
+    :noremap <silent> ,fs :call fuf#givenfile#launch('', 0, '[SuperFF]', split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
 
     "let listener = {}
     "function! listener.onComplete(item, method)
@@ -1587,7 +1585,6 @@ endif " has("autocmd")
     let g:dbext_default_use_sep_result_buffer = 1
     "}}}2
     
-    
     "### settings for blogger.vim {{{2
     let g:Gmail_Account = 'linsong.qizi@gmail.com'
     let g:Blog_URI = 'http://vincent-wang.blogspot.com'
@@ -1602,9 +1599,9 @@ endif " has("autocmd")
     let g:SuperTabLongestHighlight = 1
     "}}}2
     
-    "### settings for autocomplpop.vim {{{2
-    map ,ace :AutoComplPopEnable<CR>
-    map ,acd :AutoComplPopDisable<CR>
+    "### settings for acp.vim {{{2
+    map ,ace :AcpEnable<CR>
+    map ,acd :AcpDisable<CR>
     "}}}2
     
     "### settings for rcsvers.vim {{{2
@@ -1622,19 +1619,19 @@ endif " has("autocmd")
     "}}}2
     
     "### settings for mark.vim {{{2
-    if &t_Co>=256
+    "if &t_Co>=256 || has("gui_running")
         "let loop_count = 0
         "let bg_colors = ["red","yellow","blue","green","magenta","cyan","gray","brown"]
         "let fg_colors = ["white","black","white","black","white","black","black","white"]
         "while loop_count < 30
             "bgColor = bg_colors[loop_count]
             "fgColor = fg_colors[loop_count]
-            "execute 'highlight MarkWord' . loop_count
+            "execute 'highlight def MarkWord' . loop_count
                "\ . ' ctermbg=' . bgColor . ' guibg=' . bgColor
                "\ . ' ctermfg=' . fgColor . ' guifg=' . fgColor
             "let loop_count = loop_count + 1
         "endwhile
-    endif
+    "endif
     "}}}2
     
     "### settings for RltvNmbr.vim {{{2
@@ -1698,6 +1695,10 @@ endif " has("autocmd")
     let g:UltiSnipsExpandTrigger="<tab>" 
     let g:UltiSnipsJumpForwardTrigger="<tab>" 
     let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
+    "}}}2
+
+    "### settings for redocommand {{{2
+    let g:redocommand_no_short_command = 1
     "}}}2
 "## }}}1
 
