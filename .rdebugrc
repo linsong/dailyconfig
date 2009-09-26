@@ -1,0 +1,3 @@
+set autoeval on # if the input is not rdb command, then eval it as ruby code
+set forcestep on # skip duplicate lines during step
+set autolist 1
