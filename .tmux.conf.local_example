@@ -38,3 +38,25 @@ link-window -dk -t :9 -s work:9
 new-window -d -t :2
 new-window -d -t :3
 
+
+####################################
+### setting for servers 
+####################################
+
+#new-session -d -s work -n panel
+#send 'htop^M'
+#
+#new-window -d -n work1 -t work:2
+#send -t work:2 'cd $PROJECT_DIR^M'
+#
+#new-window -d -n work2 -t work:3
+#send -t work:3 'cd $PROJECT_DIR^M'
+#
+#new-window -d -n w3m -t work:6
+#send -t work:6 'w3m http://www.google.com^M'
+#
+#new-window -d -n irssi -t work:7
+#send -t work:7 'irssi^M'
+#
+#selectw -t work:2
+
