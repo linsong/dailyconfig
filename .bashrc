@@ -182,6 +182,12 @@ fi
  alias rlwrap='rlwrap -c'
 
  alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"' 
+
+ # alias for rails 
+ alias ss='./script/server'
+ alias sg='./script/generate'
+ alias sc='./script/console'
+ alias r='rake'
 ###########################################################################
 ###
 ###            Function defines

@@ -55,6 +55,8 @@ imap <C-p> <up>
 :map w :dict 
 :map <silent> W :exe ":dict "+content.getSelection()<CR> 
 
+:map ,lh :emenu Tools.Live HTTP headers<CR>
+
 " }}}1
 
 " autocommands {{{1
