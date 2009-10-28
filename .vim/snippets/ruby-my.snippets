@@ -3,3 +3,9 @@ snippet d
 snippet dd
 	require "rubygems"
 	require "ruby-debug"
+snippet tr
+	require 'unroller'
+	Unroller::trace do
+		${1}
+	end
+
