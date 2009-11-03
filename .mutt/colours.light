@@ -25,19 +25,19 @@ mono indicator reverse
 
 # Colours for items in the reader
 color header    magenta      default '^(status|lines|date|received|sender|references):'
-color header    magenta      brightblack '^(pr|mime|x-|user|return|content-)[^:]*:'
-color header    brightyellow brightblack '^content-type:'
-color header    magenta      brightblack '^content-type: *text/plain'
-color header    brightcyan   brightblack '^(message-id|in-reply-to):'
-color header    brightgreen  brightblack '^list-[^:]*:'
-color header    yellow       brightblack '^from '
-color header    brightcyan   brightblack '^(disposition)'
-color header    green        brightblack '^(mail-)?followup'
-color header    white        brightblack '^reply'
-color header    brightwhite  brightblack '^(resent)'
-color header    default      brightblack '^from:'
-color header    cyan         brightblack '^(to|cc|bcc):'
-color header    green        brightblack '^(subject):.*$'
+color header    magenta      default '^(pr|mime|x-|user|return|content-)[^:]*:'
+color header    brightyellow default '^content-type:'
+color header    magenta      default '^content-type: *text/plain'
+color header    brightcyan   default '^(message-id|in-reply-to):'
+color header    brightgreen  default '^list-[^:]*:'
+color header    yellow       default '^from '
+color header    brightcyan   default '^(disposition)'
+color header    green        default '^(mail-)?followup'
+color header    white        default '^reply'
+color header    brightwhite  default '^(resent)'
+color header    default      default '^from:'
+color header    cyan         default '^(to|cc|bcc):'
+color header    green        default '^(subject):.*$'
 mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Virus-hagbard):"
 
 # Colours for items in the index
@@ -45,14 +45,14 @@ mono  header    bold                     "^(From|Subject|X-Junked-Because|X-Viru
 color index green         default "~R ~C nb@exoweb.net"
 color index brightgreen   default "~N ~C nb@exoweb.net"
 #color index green        black "~N (~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")"
-color index brightyellow  default "~N (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
-color index yellow        default "~R (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
-color index brightblue  default "~N ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
-color index blue        default "~R ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com)"
+color index brightyellow  default "~N (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com | ~C vincent@seravia.com)"
+color index yellow        default "~R (~C vincent@exoweb.net | ~C ant@exoweb.net | ~C linsong.qizi@gmail.com | ~C vincent@qnite.com | ~C vincent@setavia.com)"
+color index brightblue  default "~N ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com | ~C vincent@seravia.com)"
+color index blue        default "~R ( ~C linsong.qizi@gmail.com | ~C vincent@qnite.com | ~C vincent@seravia.com)"
 #color index black        red   "~N ~d >1d"
 color index red          default ~F
-color index black        green ~T
-color index brightwhite  default ~D
+color index default        green ~T
+color index brightmagenta  default ~D
 mono  index bold               ~N
 mono  index bold               ~F
 mono  index bold               ~T
