@@ -37,4 +37,8 @@ augroup filetypedetect
   au BufNewFile,BufRead *.blog source $VIMCFG/manualload/blog.vim
 
   au BufNewFile,BufRead .tmux.conf* setfiletype tmux
+
+  autocmd BufRead,BufNewFile *.wiki setfiletype Wikipedia
+  autocmd BufRead,BufNewFile wiki.seravia.3322.org* setfiletype Wikipedia
+
 augroup END
