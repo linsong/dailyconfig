@@ -302,7 +302,7 @@ settings = {
   };
   "fe-text" = { autostick_split_windows = "no"; actlist_sort = "refnum"; };
   "fe-common/irc" = { show_away_once = "no"; };
-  "irc/core" = { alternate_nick = "vincent@china"; };
+  "irc/core" = { alternate_nick = "vincent_wang"; };
   "perl/core/scripts" = {
     chanact_show_all = "no";
     chanact_separator = " ";

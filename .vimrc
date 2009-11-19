@@ -1651,6 +1651,9 @@ endif " has("autocmd")
     
     "### settings for vimim {{{2
     let g:vimim_i_ctrl6 = 1
+
+    " enable microsoft double pinyin
+    let g:vimim_double_pinyin_microsoft = 1
     "}}}2
     
     "### settings for EasyGrep.vim {{{2
