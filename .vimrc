@@ -1715,6 +1715,11 @@ endif " has("autocmd")
     nnoremap ,gc :GitCommit<Enter>
     nnoremap ,gp :GitPullRebase<Enter>
     "}}}2
+
+    "### settings for git-vim {{{2
+    let twitvim_api_root = "http://168.143.162.100"
+    let twitvim_browser_cmd = "open"
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 

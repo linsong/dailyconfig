@@ -41,4 +41,6 @@ augroup filetypedetect
   autocmd BufRead,BufNewFile *.wiki setfiletype Wikipedia
   autocmd BufRead,BufNewFile wiki.seravia.3322.org* setfiletype Wikipedia
 
+  autocmd BufRead,BufNewFile Twitter_* setfiletype  twitter
+
 augroup END
