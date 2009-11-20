@@ -378,6 +378,36 @@ __END
  }
  # }}}
 
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+ 
+function proml {
+  local        BLUE="\[\033[0;34m\]"
+  local         RED="\[\033[0;31m\]"
+  local   LIGHT_RED="\[\033[1;31m\]"
+  local       GREEN="\[\033[0;32m\]"
+  local LIGHT_GREEN="\[\033[1;32m\]"
+  local       WHITE="\[\033[1;37m\]"
+  local  LIGHT_GRAY="\[\033[0;37m\]"
+  case $TERM in
+    xterm*)
+    TITLEBAR='
+\[\033[32m\]\u@\h \[\033[33m\]'
+    ;;
+    *)
+    TITLEBAR=""
+    ;;
+  esac
+ 
+PS1="${TITLEBAR}\w[\033[0m\] [\A]
+\$BLUE[$RED\$(date +%H:%M)$BLUE]\
+$BLUE[$RED\u@\h:\w$GREEN\$(parse_git_branch)$BLUE]\
+$GREEN\$ "
+PS2='> '
+PS4='+ '
+}
+
 
 #{{{ wcd settings example for Mac OS X, it can be used on *nix system 
 # #  with some minor modification, put these lines to .bashrc.local file
@@ -399,6 +429,7 @@ __END
 # alias r='wcd -r'  # remove a directory and its treedata if the directory is empty
 # alias rt='wcd -rmtree' # remove a directory, all its subdirectory and related treedata
  #}}}
+ 
 
  if [ -e ${HOME}/.bashrc.local ]; then
     source ${HOME}/.bashrc.local

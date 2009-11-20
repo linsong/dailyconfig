@@ -1703,6 +1703,18 @@ endif " has("autocmd")
     "### settings for redocommand {{{2
     let g:redocommand_no_short_command = 1
     "}}}2
+  
+    "### settings for git-vim {{{2
+    let g:git_no_map_default = 1
+    nnoremap ,gd :GitDiff<Enter>
+    nnoremap ,gD :GitDiff --cached<Enter>
+    nnoremap ,gs :GitStatus<Enter>
+    nnoremap ,gl :GitLog<Enter>
+    nnoremap ,ga :GitAdd<Enter>
+    nnoremap ,gA :GitAdd <cfile><Enter>
+    nnoremap ,gc :GitCommit<Enter>
+    nnoremap ,gp :GitPullRebase<Enter>
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
