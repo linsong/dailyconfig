@@ -12,7 +12,7 @@ echo '!_TAG_PROGRAM_VERSION	5.7	//' >> $FILE_TAGS_NAME
 find $* \
     \( \
         -name '.DS_Store' -or \
-        -name '.tmp__*~' -or \
+        -name '.tmp_*~' -or \
         -name '*.pdf' -or \
         -name '*.jpg' -or \
         -name '*.png' -or \
@@ -20,11 +20,13 @@ find $* \
         -name '*.gif' -or \
         -name '*.ico' -or \
         -name '*.swp' -or \
+        -name '.gitignore' -or \
         -name '*.swo' \
     \) -prune -or \
     \( \
          -path '*/.svn/*' -or \
          -path '*/migrate/*' -or \
+         -path '*/.git/*' -or \
          -path '*/coverage/*' \
      \) -prune -or \
      -type f -print | \
