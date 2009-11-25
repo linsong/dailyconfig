@@ -189,7 +189,7 @@ def send_notify(profile, options):
     else:
         print "I don't know this kind of OS."
 
-def play_sound_effect():
+def play_sound_effect(options):
     if not options.sound:
         return
 

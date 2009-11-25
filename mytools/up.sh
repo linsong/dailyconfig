@@ -1,7 +1,8 @@
 #! /usr/bin/env bash
 
 echo "updating codes ..."
-svn up 
+#svn up 
+git pull --rebase
 
 echo 
 echo "generate tags ..."
