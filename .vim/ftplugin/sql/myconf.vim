@@ -39,6 +39,9 @@ if ! exists("b:mysqlini")
     nmap <buffer> <Enter> :call SmartExecSQL()<CR>
     vmap <buffer> <Enter> :call SmartExecSQL()<CR>
 
+    nmap <buffer> <C-Enter> :DBDescribeTable<CR>
+    vmap <buffer> <C-Enter> :DBDescribeTable<CR>
+
     nmap <buffer> ;f :.,.SQLUFormatter<CR>
     vmap <buffer> ;f :SQLUFormatter<CR>
 endif
