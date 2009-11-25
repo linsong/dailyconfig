@@ -53,11 +53,11 @@ let s:MODE_NAME = expand('<sfile>:t:r')
 
 "
 function s:enumItems(dir)
-  let key = getcwd() . "\n" . a:dir
+  let key = getcwd() . s:exclude . "\n" . a:dir
   if !exists('s:cache[key]')
     let s:cache[key] = fuf#enumExpandedDirsEntries(a:dir, s:exclude)
     if isdirectory(a:dir)
-      call insert(s:cache[key], fuf#makePathItem(a:dir . '.', 0))
+      call insert(s:cache[key], fuf#makePathItem(a:dir . '.', '', 0))
     endif
     call fuf#mapToSetSerialIndex(s:cache[key], 1)
     call fuf#mapToSetAbbrWithSnippedWordAsPath(s:cache[key])
@@ -82,22 +82,35 @@ function s:handler.getPrompt()
 endfunction
 
 "
+function s:handler.getPreviewHeight()
+  return g:fuf_previewHeight
+endfunction
+
+"
 function s:handler.targetsPath()
   return 1
 endfunction
 
 "
-function s:handler.onComplete(patternSet)
-  let items = copy(s:enumItems(a:patternSet.rawHead))
-  let items = filter(items, 'bufnr("^" . v:val.word . "$") != self.bufNrPrev')
-  return fuf#filterMatchesAndMapToSetRanks(
-        \ items, a:patternSet,
-        \ self.getFilteredStats(a:patternSet.raw), self.targetsPath())
+function s:handler.makePatternSet(patternBase)
+  return fuf#makePatternSet(a:patternBase, 's:parsePrimaryPatternForPathTail',
+        \                   self.partialMatching)
 endfunction
 
 "
-function s:handler.onOpen(expr, mode)
-  call s:listener.onComplete(a:expr, a:mode)
+function s:handler.makePreviewLines(word, count)
+  return fuf#makePreviewLinesForFile(a:word, count, self.getPreviewHeight())
+endfunction
+
+"
+function s:handler.getCompleteItems(patternPrimary)
+  let items = copy(s:enumItems(fuf#splitPath(a:patternPrimary).head))
+  return filter(items, 'bufnr("^" . v:val.word . "$") != self.bufNrPrev')
+endfunction
+
+"
+function s:handler.onOpen(word, mode)
+  call s:listener.onComplete(a:word, a:mode)
 endfunction
 
 "

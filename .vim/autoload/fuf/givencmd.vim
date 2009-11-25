@@ -39,10 +39,10 @@ endfunction
 "
 function fuf#givencmd#launch(initialPattern, partialMatching, prompt, items)
   let s:prompt = (empty(a:prompt) ? '>' : a:prompt)
-  let s:items = map(copy(a:items), '{ "word" : v:val }')
-  let s:items = map(s:items, 'fuf#setBoundariesWithWord(v:val)')
+  let s:items = copy(a:items)
+  call map(s:items, 'fuf#makeNonPathItem(v:val, "")')
   call fuf#mapToSetSerialIndex(s:items, 1)
-  let s:items = map(s:items, 'fuf#setAbbrWithFormattedWord(v:val)')
+  call map(s:items, 'fuf#setAbbrWithFormattedWord(v:val)')
   call fuf#launch(s:MODE_NAME, a:initialPattern, a:partialMatching)
 endfunction
 
@@ -69,23 +69,37 @@ function s:handler.getPrompt()
 endfunction
 
 "
+function s:handler.getPreviewHeight()
+  return 0
+endfunction
+
+"
 function s:handler.targetsPath()
   return 0
 endfunction
 
 "
-function s:handler.onComplete(patternSet)
-  return fuf#filterMatchesAndMapToSetRanks(
-        \ s:items, a:patternSet,
-        \ self.getFilteredStats(a:patternSet.raw), self.targetsPath())
+function s:handler.makePatternSet(patternBase)
+  return fuf#makePatternSet(a:patternBase, 's:parsePrimaryPatternForNonPath',
+        \                   self.partialMatching)
 endfunction
 
 "
-function s:handler.onOpen(expr, mode)
-  if a:expr[0] =~ '[:/?]'
-    call histadd(a:expr[0], a:expr[1:])
+function s:handler.makePreviewLines(word, count)
+  return []
+endfunction
+
+"
+function s:handler.getCompleteItems(patternPrimary)
+  return s:items
+endfunction
+
+"
+function s:handler.onOpen(word, mode)
+  if a:word[0] =~# '[:/?]'
+    call histadd(a:word[0], a:word[1:])
   endif
-  call feedkeys(a:expr . "\<CR>", 'n')
+  call feedkeys(a:word . "\<CR>", 'n')
 endfunction
 
 "
