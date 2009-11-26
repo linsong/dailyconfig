@@ -1,147 +1,3 @@
-" Linsong's vimrc comes from official vimrc example
-" vim: foldmethod=marker
-"
-" Maintainer:   Linsong  linsong dot qizi at gmail dot com
-" Last change:  Fri Dec  9 17:58:24 CST 2005
-"
-" To use it, copy it to
-"     for Unix and OS/2:  ~/.vimrc
-"         for Amiga:  s:.vimrc
-"  for MS-DOS and Win32:  $VIM\_vimrc
-"       for OpenVMS:  sys$login:.vimrc
-
-"## General Setting {{{1
-    " When started as "evim", evim.vim will already have done these settings.
-    if v:progname =~? "evim"
-      finish
-    endif
-
-    " Use Vim settings, rather then Vi settings (much better!).
-    " This must be first, because it changes other options as a side effect.
-    set nocompatible
-
-    " Switch syntax highlighting on, when the terminal has colors
-    " Also switch on highlighting the last used search pattern.
-    if &t_Co > 2 || has("gui_running")
-      syntax on
-      set hlsearch
-    endif
-
-    " Enable file type detection.
-    " Use the default filetype settings, so that mail gets 'tw' set to 72,
-    " 'cindent' is on in C files, etc.
-    " Also load indent files, to automatically do language-dependent indenting.
-    filetype plugin indent on
-
-    " allow backspacing over everything in insert mode
-    set backspace=indent,eol,start
-
-    set history=50      " keep 50 lines of command line history
-    set ruler       " show the cursor position all the time
-    set showcmd     " display incomplete commands
-    set incsearch       " do incremental searching
-
-    " set wildmenu on 
-    set wildmenu
-
-    " enable mouse
-    set mouse=a
-
-    " set search ignorecase 
-    set ignorecase
-
-    " when If both ignorecase and smartcase are set, Vim will ignore the case 
-    " of the search only if the search pattern is all in lower-case. But if 
-    " there are any upper-case characters in the search pattern, Vim will 
-    " assume you really want to do a case-sensitive search and will do 
-    " its matching accordingly
-    set smartcase
-
-    set sessionoptions+=unix,slash
-
-    " set tabstop value and shift width 
-    set ts=2
-    set sw=2
-    set expandtab
-    set smarttab
-
-    "setting about indent
-    " autoindent is not very convenient especially when editing mail text, 
-    " use filetype indent script instead
-    set noautoindent
-
-    " It seems smartindent make things bad instead of smart:
-    "  > You're probably setting 'smartindent' in your .vimrc.  'smartindent'
-    "  > is worse than cindent for C/C++/Java, and much worse than filetype
-    "  > indent scripts for other languages; I'd definitely recommend against
-    "  > using it. 
-    set nosmartindent
-
-    " always want at least two lines of context visible around the cursor at
-    " all times
-    " the drawback is: H/L will not arrive the real top/bottom of the buffer 
-    "set scrolloff=2
-
-    "setting about old window resizing behavior when open a new window
-    set winfixheight
-    " not let all windows keep the same height/width
-    set noequalalways
-
-    " set autochdir to true,so whenever u open a window or switch to a buffer,the
-    " path is set
-    if exists("&autochdir")
-        ""disable autochdir for now, since fuzzyfinder does not support it well
-        ":set autochdir 
-    endif
-
-    " set the path to find as many file as we can :)
-    " add the vim plugin search path 
-    :set path+=./**,../,../*,../..,../../*,$HOME/.vim/*
-
-    " set buffer is hidden when it is not displayed on the screen
-    " this is for MultiSearch.vim to work
-    " but for now, I use mark.vim instead of MultiSearch.vim, so this is not 
-    " useful, but keep it for now
-    :set hidden
-
-    set statusline=%<%f\ [%{&ff}]\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-
-    " setting for completion 
-    if v:version >= 700
-        :set completeopt=longest,menuone
-    endif
-
-    " search all the include files for a large project is deadly slow
-    :set complete-=i
-
-    :set wildmode=longest,full
-   
-    " always display the statusline
-    :set laststatus=2
-
-    " In shell scripts, there should be no spaces around "=".
-    " progname=/usr/local/txserver
-    " to open files in a shell script with gf command:
-    " TODO: this setting should only work when we are editing a shell 
-    " script, but for now, just leave it here and see how it works 
-    :set isfname -==
-
-    " save screen estate as much as possible
-    :set numberwidth=1
-
-    " set tags 
-    :set tags+=../tags,../../tags,ftags
-
-    :set number
-
-    :let g:mapleader='\'
-
-    if has("gui_macvim")
-        :set transparency=5
-    endif
-
-    :set previewheight=25
-"## }}}1
 
 "## Encodings {{{1
     "for more details, read help usr_45.txt
@@ -1381,7 +1237,7 @@ endif " has("autocmd")
     let g:fuf_mrufile_maxItem = 300
     let g:fuf_mrucmd_maxItem = 400
 
-    let  g:fuf_file_exclude = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|\.swo|\.DS_Store$|\.svn/$|\CVS/$|((^|[/\\])\.[/\\]$)'
+    let  g:fuf_file_exclude = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|\.swo|\.DS_Store$|\.svn/$|\.gitignore$|\.git/$|\CVS/$|((^|[/\\])\.[/\\]$)'
 
     let g:fuf_ignoreCase = 1
     let g:fuf_useMigemo = 0
@@ -1456,113 +1312,7 @@ endif " has("autocmd")
     :noremap ,s  :FufTag<CR> 
     :noremap <C-g> :FufTag<CR> 
 
-    "" obsolete
-    "let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{},
-                  "\    'MruFile':{}, 'MruCmd':{}, 'Bookmark':{},
-                  "\    'Dir':{}, 'Tag':{}, 'TaggedFile':{},
-                  "\    'GivenFile':{}}
-    "" [All Mode] This is mapped to switch to the next mode.
-    "let g:FuzzyFinderOptions.Base.key_next_mode = '<C-j>'
-    "" [All Mode] This is mapped to switch to the previous mode.
-    "let g:FuzzyFinderOptions.Base.key_prev_mode = '<C-k>'
-
-    "" [File Mode] This is a dictionary. Each value must be a list. All matchs of
-    "" a key in entered text is expanded with a value.
-    "let g:FuzzyFinderOptions.File.abbrev_map = 
-                "\    { "sr" : ["~/project/zax/siteradar"],
-                "\      "vp" : ["~/.vim/plugin"],
-                "\      ";r" : ["app/models", "app/views", "app/controllers", "test/functional", "test/integration", "test/unit", "test/fixtures", "db/fixtures"],
-                "\    }
-    "" [File Mode] The items matching this are excluded from the completion list.
-    "let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|\.o$|\.bak$|\.pyc$|\.exe$|\.bak$|\.swp$|\.swo|\.DS_Store$|\.svn/$|\CVS/$|((^|[/\\])\.[/\\]$)'
-
-    "" customize mode's prompts 
-    "let g:FuzzyFinderOptions.Buffer.prompt = '[Buffer]'
-    "let g:FuzzyFinderOptions.Buffer.prompt_highlight = 'BufferMode'
-    "let g:FuzzyFinderOptions.File.prompt = '[File]'
-    "let g:FuzzyFinderOptions.File.prompt_highlight = 'FileMode'
-    "let g:FuzzyFinderOptions.Dir.prompt = '[Dir]'
-    "let g:FuzzyFinderOptions.Dir.prompt_highlight = 'DirMode'
-    "let g:FuzzyFinderOptions.MruFile.prompt = '[MruFile]'
-    "let g:FuzzyFinderOptions.MruFile.prompt_highlight = 'MruFileMode'
-    "let g:FuzzyFinderOptions.MruCmd.prompt = '[MruCmd]'
-    "let g:FuzzyFinderOptions.MruCmd.prompt_highlight = 'MruCmdMode'
-    "let g:FuzzyFinderOptions.Bookmark.prompt = '[Bookmark]'
-    "let g:FuzzyFinderOptions.Bookmark.prompt_highlight = 'BookmarkMode'
-    "let g:FuzzyFinderOptions.Tag.prompt = '[Tag]'
-    "let g:FuzzyFinderOptions.Tag.prompt_highlight = 'TagMode'
-    "let g:FuzzyFinderOptions.TaggedFile.prompt = '[TaggedFile]'
-    "let g:FuzzyFinderOptions.TaggedFile.prompt_highlight = 'TaggedFileMode'
-    "let g:FuzzyFinderOptions.GivenFile.prompt = '[GivenFile]'
-    "let g:FuzzyFinderOptions.GivenFile.prompt_highlight = 'GivenFileMode'
-
-    "" [All Mode] This is mapped to temporarily switch whether or not to ignore
-    "" case.
-    "let g:FuzzyFinderOptions.Base.key_ignore_case = '<C-i>'
-    "let g:FuzzyFinderOptions.Base.ignore_case = 1
-
-    "" [All Mode] It uses Migemo if non-zero is set.
-    "let g:FuzzyFinderOptions.Base.migemo_support = 0
-
-    "" [All Mode] This is mapped to select completion item or finish input and
-    "" open a buffer/file in previous window.
-    "let g:FuzzyFinderOptions.Base.key_open = '<CR>'
-    "" [All Mode] This is mapped to select completion item or finish input and
-    "" open a buffer/file in split new window
-    "let g:FuzzyFinderOptions.Base.key_open_split = '<C-l>'
-    "" [All Mode] This is mapped to select completion item or finish input and
-    "" open a buffer/file in vertical-split new window.
-    "let g:FuzzyFinderOptions.Base.key_open_vsplit = '<C-V>'
-    "" [All Mode] This is mapped to select completion item or finish input and
-    "" open a buffer/file in a new tab page.
-    "let g:FuzzyFinderOptions.Base.key_open_tab = '<C-t>'
-
-""    :nnoremap ,ff :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-    ":noremap ,ff :FuzzyFinderFileWithCurrentBufferDir<CR>
-    ":noremap ,fb :FuzzyFinderBuffer<CR>
-    ":noremap ,fm :FuzzyFinderMruFile<CR>
-    ":noremap ,f; :FuzzyFinderMruCmd<CR>
-    ":noremap ,fk :FuzzyFinderBookmark<CR>
-    ":noremap ,fa :FuzzyFinderAddBookmarkAsSelectedText<CR>
-    ":noremap ,fd :FuzzyFinderDir<CR>
-    ":noremap ,ft :FuzzyFinderTaggedFile<CR>
-    ":noremap ,fg :FuzzyFinderTag<CR>
-    ":noremap ,f] :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
-    ":noremap ,fc :FuzzyFinderRenewCache<CR>
-    ":noremap ,fi :FuzzyFinderEditInfo<CR>
-
-
-    "" super find file command, will search the files recursively from current
-    "" directory
-    ":noremap <silent> ,fs :call g:FuzzyFinderMode.GivenFile.launch('', 0, split(glob("`~/tools/get_file_list.sh`"), "\n"))<CR>
-
-
-    "let listener = {}
-    "function! listener.onComplete(item, method)
-      "let content = join(split(a:item, ' ')[1:], ' ')
-      "exec  "norm i " . content . ''
-      ""call setline(line('.'), content)
-    "endfunction
-
-    "function! listener.onAbort()
-      "echo "Abort"
-    "endfunction
-
-    "" Select an item from a given list.
-    "if filereadable(expand("~/.mutt/aliases"))
-      "let g:aliases_lines = []
-      "for a in readfile(expand("~/.mutt/aliases"))
-          "let parts = split(a, ' ')
-          "call add(g:aliases_lines, join(parts[1:], ' '))
-      "endfor
-      ":noremap ,fe :call g:FuzzyFinderMode.CallbackItem.launch('', 1, listener, g:aliases_lines, 0)<CR>
-    "endif
-
-    "" FuzzyFinderTag is really useful especially after we process the tags
-    "" file, for example generate a tags file for files, that will minic the
-    "" behavior of TextMate easily. So give it a seperate shortcut 
-    ":noremap ,s  :FuzzyFinderTag<CR> 
-    ":noremap <C-g> :FuzzyFinderTag<CR> 
+    let g:fuf_previewHeight = 0
     "}}}2
     
     "### setting for view_diff.vim {{{2
@@ -1714,9 +1464,10 @@ endif " has("autocmd")
     nnoremap ,gA :GitAdd <cfile><Enter>
     nnoremap ,gc :GitCommit<Enter>
     nnoremap ,gp :GitPullRebase<Enter>
+    nnoremap ,gb :GitBlame<Enter>
     "}}}2
 
-    "### settings for git-vim {{{2
+    "### settings for twitvim {{{2
     let twitvim_api_root = "http://168.143.162.100"
     let twitvim_browser_cmd = "open"
     "}}}2
