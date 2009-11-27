@@ -1,5 +1,126 @@
-/.svn
+.svn/
 .DS_Store
 .*.swp
 .*.swo
+.mailcap
+.gem/
+.wcd
+.gemrc
+Sites/
+.global.todo.txt
+.keepassx
+Documents/
+.lesshst
+ports.bak
+.mysql_history
+.rails-plugin-sources
+.vimfuzzyfinder
+.profile
+GTD/
+.treedata.wcd
+.viminfo
+foo.html
+Downloads/
+Movies/
+.macports
+private/
+Public/
+Music/
+.svk/
+.CFUserTextEncoding
+Mail/
+dbext_sql_history.txt
+pre-config
+.Trash/
+.DS_Store/
+.keychain/
+.ssh/
+.irb_history
+.bash_history
+vimwiki/
+todo.gtd
+work/
+Pictures/
+.stack.wcd
+Desktop/
+.vimprojects
+foo.*
+.subversion/
+.cups/
+.Xauthority
+.rdebug_hist
+.libfx.db
+.vim-fuf
+.fastri-index
+tmux-*.log
+*.pyc
+.ec2/
+*.cache-2
+.gitconfig
+.swp
+.s3cfg
+.*.local
+*.so
+*.exe
+*.swf
+*.zip
+.vim/.netrwhist
+.vim/.VimballRecord
+.vim/.todo.txt
+tools/ElasticLoadBalancing-1.0.1.23/
+tools/ctags_delete
+tools/ec2-ami-tools-1.3-34544/
+tools/ec2-api-tools-1.3-42584/
+tools/mac_tool/synergy-1.3.1/
+tools/mac_tool/webkit2png.py
+
+.vim/tmp/
+.vimperator/info/
+.vimshell_hist
+.w3m/history
+FILES.txt
+Library/Address Book Plug-Ins/
+Library/Application Support/AddressBook/
+Library/Application Support/Adium 2.0/
+Library/Application Support/Books/
+Library/Application Support/Chess/
+Library/Application Support/CrashReporter/
+Library/Application Support/DVD Player/
+Library/Application Support/Firefox/
+Library/Application Support/Font Book/
+Library/Application Support/Front Row/
+Library/Application Support/Google/
+Library/Application Support/Growl/
+Library/Application Support/Photo Booth/
+Library/Application Support/Quicksilver/
+Library/Application Support/SIMBL/
+Library/Application Support/Skype/
+Library/Application Support/SyncServices/
+Library/Application Support/iStat menus/
+Library/Application Support/iSync/
+Library/Caches/
+Library/Calendars/
+Library/Contextual Menu Items/
+Library/Cookies/
+Library/Dictionaries/
+Library/Favorites/
+Library/FontCollections/
+Library/Fonts/
+Library/FunInputToy/
+Library/Google/
+Library/Keychains/
+Library/LaunchAgents/
+Library/Logs/
+Library/PhonePlugins/
+Library/Phones/
+Library/PreferencePanes/
+Library/Preferences/.GlobalPreferences.plist
+Library/Preferences/ByHost/
+Library/Printers/
+Library/PubSub/
+Library/Safari/
+Library/Thunderbird/
+Library/Preferences/
+tags
+ftags
 
