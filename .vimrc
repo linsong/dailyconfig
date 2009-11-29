@@ -1,3 +1,148 @@
+" Linsong's vimrc comes from official vimrc example
+" vim: foldmethod=marker
+"
+" Maintainer:   Linsong  linsong dot qizi at gmail dot com
+" Last change:  Fri Dec  9 17:58:24 CST 2005
+"
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+"         for Amiga:  s:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"       for OpenVMS:  sys$login:.vimrc
+
+"## General Setting {{{1
+    " When started as "evim", evim.vim will already have done these settings.
+    if v:progname =~? "evim"
+      finish
+    endif
+
+    " Use Vim settings, rather then Vi settings (much better!).
+    " This must be first, because it changes other options as a side effect.
+    set nocompatible
+
+    " Switch syntax highlighting on, when the terminal has colors
+    " Also switch on highlighting the last used search pattern.
+    if &t_Co > 2 || has("gui_running")
+      syntax on
+      set hlsearch
+    endif
+
+    " Enable file type detection.
+    " Use the default filetype settings, so that mail gets 'tw' set to 72,
+    " 'cindent' is on in C files, etc.
+    " Also load indent files, to automatically do language-dependent indenting.
+    filetype plugin indent on
+
+    " allow backspacing over everything in insert mode
+    set backspace=indent,eol,start
+
+    set history=50      " keep 50 lines of command line history
+    set ruler       " show the cursor position all the time
+    set showcmd     " display incomplete commands
+    set incsearch       " do incremental searching
+
+    " set wildmenu on 
+    set wildmenu
+
+    " enable mouse
+    set mouse=a
+
+    " set search ignorecase 
+    set ignorecase
+
+    " when If both ignorecase and smartcase are set, Vim will ignore the case 
+    " of the search only if the search pattern is all in lower-case. But if 
+    " there are any upper-case characters in the search pattern, Vim will 
+    " assume you really want to do a case-sensitive search and will do 
+    " its matching accordingly
+    set smartcase
+
+    set sessionoptions+=unix,slash
+
+    " set tabstop value and shift width 
+    set ts=2
+    set sw=2
+    set expandtab
+    set smarttab
+
+    "setting about indent
+    " autoindent is not very convenient especially when editing mail text, 
+    " use filetype indent script instead
+    set noautoindent
+
+    " It seems smartindent make things bad instead of smart:
+    "  > You're probably setting 'smartindent' in your .vimrc.  'smartindent'
+    "  > is worse than cindent for C/C++/Java, and much worse than filetype
+    "  > indent scripts for other languages; I'd definitely recommend against
+    "  > using it. 
+    set nosmartindent
+
+    " always want at least two lines of context visible around the cursor at
+    " all times
+    " the drawback is: H/L will not arrive the real top/bottom of the buffer 
+    "set scrolloff=2
+
+    "setting about old window resizing behavior when open a new window
+    set winfixheight
+    " not let all windows keep the same height/width
+    set noequalalways
+
+    " set autochdir to true,so whenever u open a window or switch to a buffer,the
+    " path is set
+    if exists("&autochdir")
+        ""disable autochdir for now, since fuzzyfinder does not support it well
+        ":set autochdir 
+    endif
+
+    " set the path to find as many file as we can :)
+    " add the vim plugin search path 
+    :set path+=./**,../,../*,../..,../../*,$HOME/.vim/*
+
+    " set buffer is hidden when it is not displayed on the screen
+    " this is for MultiSearch.vim to work
+    " but for now, I use mark.vim instead of MultiSearch.vim, so this is not 
+    " useful, but keep it for now
+    :set hidden
+
+    set statusline=%<%f\ [%{&ff}]\ %h%m%r%=%-14.(%l,%c%V%)\ %P
+
+    " setting for completion 
+    if v:version >= 700
+        :set completeopt=longest,menuone
+    endif
+
+    " search all the include files for a large project is deadly slow
+    :set complete-=i
+
+    :set wildmode=longest,full
+   
+    " always display the statusline
+    :set laststatus=2
+
+    " In shell scripts, there should be no spaces around "=".
+    " progname=/usr/local/txserver
+    " to open files in a shell script with gf command:
+    " TODO: this setting should only work when we are editing a shell 
+    " script, but for now, just leave it here and see how it works 
+    :set isfname -==
+
+    " save screen estate as much as possible
+    :set numberwidth=1
+
+    " set tags 
+    :set tags+=../tags,../../tags,ftags
+
+    :set number
+
+    :let g:mapleader='\'
+
+    if has("gui_macvim")
+        :set transparency=5
+    endif
+
+    :set previewheight=25
+"## }}}1
+
 
 "## Encodings {{{1
     "for more details, read help usr_45.txt
