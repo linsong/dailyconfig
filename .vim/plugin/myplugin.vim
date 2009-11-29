@@ -173,4 +173,12 @@ function! GetVisualSelectionEscaped(flags)
 endfunction
 "  }}}1
 
-" vim:ft=vim foldmethod=marker
+"Toggle Transparency {{{1
+function! ToggleTransparency()	
+    let new_val = 100 - str2nr(&transparency)
+    exec "set transparency=" . new_val
+endfunction
+"}}}1
+
+
+" vim:ft=vim foldmethod=marker ts=4 sw=4 expandtab

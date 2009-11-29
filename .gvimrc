@@ -44,6 +44,7 @@ set guioptions-=T
 if has("gui_macvim")
     set fuoptions=maxvert,maxhorz,background:Normal
     set lines=39 columns=157
+    :map ,, :call ToggleTransparency()<CR>
 endif
 
 " turn &cursorline on only in GUI && normal mode
