@@ -2,8 +2,8 @@
 " File:         VimExplorer.vim
 " Brief:        VE - the File Manager within Vim!
 " Authors:      Ming Bai <mbbill AT gmail DOT com>
-" Last Change:  2007-07-25 00:50:24
-" Version:      0.97
+" Last Change:  2007-08-08 15:17:46
+" Version:      0.98
 " Licence:      LGPL
 "
 " Usage:        :h VimExplorer
@@ -199,7 +199,7 @@ else
     let VEConf.filePanelSplitLocation = "belowright"
 endif
 
-"file panel sort type.
+"File panel sort type.
 if exists("g:VEConf_filePanelSortType")
     let VEConf.filePanelSortType = g:VEConf_filePanelSortType
 else
@@ -211,6 +211,13 @@ if exists("g:VEConf_showFileSizeInMKB")
     let VEConf.showFileSizeInMKB = g:VEConf_showFileSizeInMKB
 else
     let VEConf.showFileSizeInMKB = 1
+endif
+
+"File panel filter.
+if exists("g:VEConf_filePanelFilter")
+    let VEConf.filePanelFilter = g:VEConf_filePanelFilter
+else
+    let VEConf.filePanelFilter = ''
 endif
 
 
@@ -226,7 +233,7 @@ let VEConf.treePanelHotkey.addToFavorite   = 'F'
 let VEConf.treePanelHotkey.browseHistory   = 'b'
 let VEConf.treePanelHotkey.toggleFilePanel = 't'
 let VEConf.treePanelHotkey.toUpperDir      = '<bs>'
-let VEConf.treePanelHotkey.switchPanel     = '<tab>'
+let VEConf.treePanelHotkey.switchPanel     = '<c-tab>'
 let VEConf.treePanelHotkey.gotoPath        = '<c-g>'
 let VEConf.treePanelHotkey.quitVE          = 'Q'
 
@@ -252,17 +259,17 @@ let VEConf.filePanelHotkey.toggleTreePanel = 't'
 let VEConf.filePanelHotkey.toggleModes     = 'i'
 let VEConf.filePanelHotkey.newFile         = '+f'
 let VEConf.filePanelHotkey.newDirectory    = '+d'
-let VEConf.filePanelHotkey.switchPanel     = '<tab>'
+let VEConf.filePanelHotkey.switchPanel     = '<c-tab>'
 let VEConf.filePanelHotkey.quitVE          = 'Q'
 let VEConf.filePanelHotkey.toggleHidden    = 'H'
 let VEConf.filePanelHotkey.search          = 'g/'
-let VEConf.filePanelHotkey.markPlace       = 'M'
+let VEConf.filePanelHotkey.markPlace       = 'm'
 let VEConf.filePanelHotkey.gotoPlace       = "'"
-let VEConf.filePanelHotkey.viewMarks       = 'B'
+let VEConf.filePanelHotkey.viewMarks       = 'J'
 "Browsing
 let VEConf.filePanelHotkey.toUpperDir      = '<bs>'
-let VEConf.filePanelHotkey.gotoForward     = '.'
-let VEConf.filePanelHotkey.gotoBackward    = ','
+let VEConf.filePanelHotkey.gotoForward     = '<c-i>'
+let VEConf.filePanelHotkey.gotoBackward    = '<c-o>'
 let VEConf.filePanelHotkey.favorite        = 'f'
 let VEConf.filePanelHotkey.addToFavorite   = 'F'
 let VEConf.filePanelHotkey.browseHistory   = 'b'
@@ -278,11 +285,11 @@ let VEConf.filePanelHotkey.closePreview    = 'U'
 "mark
 let VEConf.filePanelHotkey.toggleSelectUp  = '<s-space>'
 let VEConf.filePanelHotkey.toggleSelectDown= '<space>'
-let VEConf.filePanelHotkey.markViaRegexp   = 'mr'
-let VEConf.filePanelHotkey.markVimFiles    = 'mv'
-let VEConf.filePanelHotkey.markDirectory   = 'md'
-let VEConf.filePanelHotkey.markExecutable  = 'me'
-let VEConf.filePanelHotkey.clearSelect     = 'mc'
+let VEConf.filePanelHotkey.markViaRegexp   = 'Mr'
+let VEConf.filePanelHotkey.markVimFiles    = 'Mv'
+let VEConf.filePanelHotkey.markDirectory   = 'Md'
+let VEConf.filePanelHotkey.markExecutable  = 'Me'
+let VEConf.filePanelHotkey.clearSelect     = 'Mc'
 "multiple file actions
 let VEConf.filePanelHotkey.deleteSelected  = 'sd'
 let VEConf.filePanelHotkey.yankSelected    = 'sy'
@@ -300,7 +307,6 @@ let VEConf.filePanelHotkey.tabView         = 'e'
 let VEConf.filePanelHotkey.openRenamer     = ';r'
 let VEConf.filePanelHotkey.startShell      = ';c'
 let VEConf.filePanelHotkey.startExplorer   = ';e'
-let VEConf.filePanelHotkey.openExternal    = ';o'
 
 if exists("g:VEConf_fileHotkey")
     if type(g:VEConf_fileHotkey) != type({})
@@ -352,9 +358,9 @@ endif
 let VEConf_singleFileHotKeys['openInNewTab'] = VEConf.filePanelHotkey.tabView
 function! VEConf_singleFileActions['openInNewTab'](path)
     if !isdirectory(a:path)
-        exec "tabe " . a:path
+        exec "tabe " . g:VEPlatform.escape(a:path)
     else
-        exec "VE " . a:path
+        exec "VE " . g:VEPlatform.escape(a:path)
     endif
 endfunction
 
@@ -377,15 +383,6 @@ function! VEConf_normalActions['startExplorer']()
     call g:VEPlatform.startExplorer()
 endfunction
 
-let VEConf_normalHotKeys['openExternal'] = VEConf.filePanelHotkey.openExternal
-function! VEConf_normalActions['openExternal']()
-    let winName = matchstr(bufname("%"),'_[^_]*$')
-    if has_key(s:VEContainer,winName)
-        let path = s:VEContainer[winName].filePanel.getPathUnderCursor(line(".")-1)
-        call g:VEPlatform.start(path)
-    endif
-endfunction
-
 "Delete multiple files.
 "Multiple file name are contained in the fileList.
 let VEConf_multiFileHotKeys['openMultiFilesWithVim'] = VEConf.filePanelHotkey.tabViewMulti
@@ -394,7 +391,7 @@ function! VEConf_multiFileActions['openMultiFilesWithVim'](fileList)
         return
     endif
     for i in a:fileList
-        exec "tabe " . i
+        exec "tabe " . g:VEPlatform.escape(i)
     endfor
 endfunction
 
@@ -494,19 +491,24 @@ function! VEPlatform.start(path)
     if g:VEPlatform.haswin32()
         let convPath = substitute(convPath,'/',"\\",'g')
         let convPath = " start \"\" \"" . convPath . "\""
-        call self.system(convPath)
+        let ret = self.system(convPath)
     else
         if g:VEConf_usingKDE
             let convPath = "kfmclient exec " . convPath
-            call self.system(convPath)
+            let ret = self.system(convPath)
         elseif g:VEConf_usingGnome
             let convPath = "gnome-open " . convPath
-            call self.system(convPath)
+            let ret = self.system(convPath)
         else " default using gnome-open.
             let convPath = "gnome-open " . convPath
-            call self.system(convPath)
+            let ret = self.system(convPath)
         endif
     endif
+    if !ret
+        echohl ErrorMsg | echomsg "Failed to start " . a:path | echohl None
+        return 0
+    endif
+    return 1
 endfunction
 
 function! VEPlatform.system(cmd)
@@ -517,11 +519,13 @@ function! VEPlatform.system(cmd)
         let convCmd = iconv(convCmd,&encoding,g:VEConf.systemEncoding)
     endif
     call system(convCmd)
+    return !(v:shell_error)
 endfunction
 
+" Return successful copyed file list.
 function! VEPlatform.copyMultiFile(fileList,topath)
     let boverWrite = g:VEConf.overWriteExisting
-    let filecount = 0
+    let retList = []
     for i in a:fileList
         "boverWrite 0 ask, 1 allyes, 2 allno
         if boverWrite == 0
@@ -530,30 +534,44 @@ function! VEPlatform.copyMultiFile(fileList,topath)
             endif
             let tofile = a:topath . matchstr(i,'[\\/]\zs[^\\/]\+$')
             if findfile(tofile) != ''
-                echohl WarningMsg
-                let result = tolower(input("File [ " . tofile . " ] exists! Over write ? (Y)es/(N)o/(A)llyes/A(L)lno/(C)ancel ","Y"))
-                echohl None
-                if result == 'y'
-                    let filecount = filecount + 1
-                    call self.copyfile(i,a:topath)
-                elseif result == 'n'
+                "echohl WarningMsg
+                "let result = tolower(input("File [ " . tofile . " ] exists! Over write ? (Y)es/(N)o/(A)llyes/A(L)lno/(C)ancel ","Y"))
+                let result = confirm("File [ " . matchstr(i,'[\\/]\zs[^\\/]\+$') .
+                            \" ] exists! Over write ? ","&Yes\n&No\nYes to &All\nNo &To All\n&Cancel ",1)
+                "echohl None
+                if result == 1
+                    if !self.copyfile(i,a:topath)
+                        echohl ErrorMsg | echomsg "Copy file error: " . i | echohl None
+                    else
+                        let retList += [i]
+                    endif
+                elseif result == 2
                     continue
-                elseif result == 'a'
+                elseif result == 3
                     let boverWrite = 1
-                    let filecount = filecount + 1
-                    call self.copyfile(i,a:topath)
-                elseif result == 'l'
+                    if !self.copyfile(i,a:topath)
+                        echohl ErrorMsg | echomsg "Copy file error: " . i | echohl None
+                    else
+                        let retList += [i]
+                    endif
+                elseif result == 4
                     let boverWrite = 2
                 else
                     break
                 endif
             else
-                let filecount = filecount + 1
-                call self.copyfile(i,a:topath)
+                if !self.copyfile(i,a:topath)
+                    echohl ErrorMsg | echomsg "Copy file error: " . i | echohl None
+                else
+                    let retList += [i]
+                endif
             endif
         elseif boverWrite == 1
-            let filecount = filecount + 1
-            call self.copyfile(i,a:topath)
+            if !self.copyfile(i,a:topath)
+                echohl ErrorMsg | echomsg "Copy file error: " . i | echohl None
+            else
+                let retList += [i]
+            endif
         elseif boverWrite == 2
             if i[-1:] == "\\" || i[-1:] == "/"
                 let i = i[:-2]
@@ -562,11 +580,15 @@ function! VEPlatform.copyMultiFile(fileList,topath)
             if findfile(tofile) != ''
                 continue
             endif
-            let filecount = filecount + 1
-            call self.copyfile(i,a:topath)
+            if !self.copyfile(i,a:topath)
+                echohl ErrorMsg | echomsg "Copy file error: " . i | echohl None
+            else
+                let retList += [i]
+            endif
         endif
     endfor
-    echohl Special | echomsg " " . filecount " file(s) pasted!" | echohl None
+    echohl Special | echomsg " " . len(retList) . " file(s) pasted!" | echohl None
+    return retList
 endfunction
 
 function! VEPlatform.copyfile(filename,topath)
@@ -587,10 +609,10 @@ function! VEPlatform.copyfile(filename,topath)
             let filename = "\"" . filename . "\""
             let cmd = "xcopy ". filename . " " . topath . " /I /H /R /Y"
         endif
-        call self.system(cmd)
+        return self.system(cmd)
     else
         let cmd = "cp -r " . filename . " " . topath
-        call self.system(cmd)
+        return self.system(cmd)
     endif
 endfunction
 
@@ -600,7 +622,6 @@ function! VEPlatform.mkdir(path)
     else
         let convPath = a:path
     endif
-    call confirm(convPath)
     return mkdir(convPath)
 endfunction
 
@@ -649,6 +670,25 @@ function! VEPlatform.globpath(path)
     endif
 endfunction
 
+"globpath used in file panel, including filter.
+function! VEPlatform.globpath_file(path)
+    if g:VEConf.filePanelFilter != ''
+        return globpath(a:path,g:VEConf.filePanelFilter)
+    endif
+    if g:VEConf.showHiddenFiles
+        let tmp = globpath(a:path,"*") . "\n" . globpath(a:path,".[^.]*") "need to cut . and ..
+        " can not show files start with .. such as ..foo , :(
+        " I do not know how to write the shell regexp.
+        if tmp == "\n"
+            return ''
+        else
+            return tmp
+        endif
+    else
+        return globpath(a:path,"*")
+    endif
+endfunction
+
 function! VEPlatform.cdToPath(path)
     try
         "In win32, VE can create folder starts with space. So ...
@@ -671,7 +711,9 @@ function! VEPlatform.startExplorer()
     if g:VEPlatform.haswin32()
         let pwd = substitute(pwd,'/',"\\",'g')
     endif
-    call self.system(g:VEConf.externalExplorer . " " . pwd)
+    if !self.system(g:VEConf.externalExplorer . " " . pwd)
+        echohl ErrorMsg | echomsg "Failed to start external explorer: " . g:VEConf.externalExplorer | echohl None
+    endif
 endfunction
 
 function! VEPlatform.getRoot(rootDict)
@@ -755,19 +797,29 @@ endfunction
 "default choice and return value:    1:YES 0:NO
 function! VEPlatform.confirm(text,defaultChoice)
     if a:defaultChoice
-        echohl WarningMsg
-        let result = tolower(input(a:text . "  ","Y"))
-        echohl None
+        let ret = confirm(a:text,"&Yes\n&No",1)
     else
-        echohl WarningMsg
-        let result = tolower(input(a:text . "  "),"N")
-        echohl None
+        let ret = confirm(a:text,"&Yes\n&No",2)
     endif
-    if result == "y" || result == "ye" || result == "yes"
+    if ret == 1
         return 1
     else
         return 0
     endif
+    "if a:defaultChoice
+    "    echohl WarningMsg
+    "    let result = tolower(input(a:text . "  ","Y"))
+    "    echohl None
+    "else
+    "    echohl WarningMsg
+    "    let result = tolower(input(a:text . "  "),"N")
+    "    echohl None
+    "endif
+    "if result == "y" || result == "ye" || result == "yes"
+    "    return 1
+    "else
+    "    return 0
+    "endif
 endfunction
 
 "delete a single file or directory
@@ -780,10 +832,10 @@ function! VEPlatform.deleteSingle(path)
             return 0
         endif
         if self.delete(a:path)
-            echohl Special | echomsg "File deleted!" | echohl None
+            echohl Special | echomsg "File: [" . a:path . "] deleted!" | echohl None
             return 1
         else
-            echohl ErrorMsg | echomsg "Can not delete the file!" | echohl None
+            echohl ErrorMsg | echomsg "Can not delete the file! [" . a:path . "]" | echohl None
             return 0
         endif
     else
@@ -804,7 +856,9 @@ function! VEPlatform.deleteMultiple(fileList)
         return 0
     endif
     for i in a:fileList
-        call self.delete(i)
+        if !self.delete(i)
+            echohl ErrorMsg | echomsg "Failed to delete: " . i | echohl None
+        endif
     endfor
     return 1
 endfunction
@@ -813,11 +867,10 @@ function! VEPlatform.delete(name)
     if isdirectory(a:name)
         "I have no idea how to judge if it is succeed :(
         if g:VEPlatform.haswin32()
-            call g:VEPlatform.system(" rmdir /S /Q \"" . self.escape(a:name) . "\"")
+            return g:VEPlatform.system(" rmdir /S /Q \"" . self.escape(a:name) . "\"")
         else
-            call g:VEPlatform.system("rm -r " . self.escape(a:name))
+            return g:VEPlatform.system("rm -r " . self.escape(a:name))
         endif
-        return 1
     else
         if delete(a:name) == 0
             return 1
@@ -1393,7 +1446,7 @@ function! s:VEFilePanel.toggleModes()
 endfunction
 
 function! s:VEFilePanel.getFileListFromCwd()
-    let self.fileList = split(g:VEPlatform.globpath(self.path),"\n")
+    let self.fileList = split(g:VEPlatform.globpath_file(self.path),"\n")
 endfunction
 
 " 1
@@ -1539,8 +1592,6 @@ function! s:VEFilePanel.sortByType()
             call add(fileGroup['#Directory'],i)
             continue
         endif
-        "hidden files starts with '.'  "hidden file should use
-        "globpath ".*"
         if g:VEPlatform.haswin32() && !&ssl
             let matchStr = '\\\..\+$'
         else
@@ -1646,7 +1697,7 @@ function! s:VEFilePanel.itemPreview(line)
     if path == ''
         return
     endif
-    exec g:VEConf.previewSplitLocation . " pedit " . path
+    exec g:VEConf.previewSplitLocation . " pedit " . g:VEPlatform.escape(path)
 endfunction
 
 function! s:VEFilePanel.singleFileAction(line,actionName)
@@ -1778,9 +1829,9 @@ function! s:VEFilePanel.paste()
     if s:VEContainer.yankMode == '' || s:VEContainer.clipboard == []
         return
     endif
-    call g:VEPlatform.copyMultiFile(s:VEContainer.clipboard,self.path)
-    if s:VEContainer.yankMode == 'cut'
-        for i in s:VEContainer.clipboard
+    let retList = g:VEPlatform.copyMultiFile(s:VEContainer.clipboard,self.path)
+    if s:VEContainer.yankMode == 'cut' && len(retList) != 0
+        for i in retList
             call g:VEPlatform.delete(i)
         endfor
         let s:VEContainer.yankMode = ''
@@ -2665,8 +2716,8 @@ function! VE_Diff()
             echohl WarningMsg | echo "Please select 2 files to diff!" | echohl None
             return
         endif
-        exec "tabe " . diffFiles[0]
-        exec "vertical diffsplit " . diffFiles[1]
+        exec "tabe " . g:VEPlatform.escape(diffFiles[0])
+        exec "vertical diffsplit " . g:VEPlatform.escape(diffFiles[1])
     endif
 endfunction
 
@@ -2808,7 +2859,7 @@ function! s:InstallDocumentation(full_name, revision)
 endfunction
 
 " Doc installation call {{{1
-silent call s:InstallDocumentation(expand('<sfile>:p'),"0.97")
+silent call s:InstallDocumentation(expand('<sfile>:p'),"0.98")
 "============================================================
 finish
 
@@ -2854,6 +2905,7 @@ CONTENTS                                        *VimExplorer-contents*
 8.  The Author..................................|VimExplorer-author|
 9.  Problems and Fixes..........................|VimExplorer-problems|
 10. Changelog...................................|VimExplorer-changelog|
+11. TODO........................................|VimExplorer-todo|
 
 
 ==============================================================================
@@ -2908,7 +2960,7 @@ addToFavorite           F               Add the folder under cursor to
 browseHistory           b               View browse history.
 toggleFilePanel         t               Toggle the file panel.
 toUpperDir              <bs>            Go to upper directory.
-switchPanel             <tab>           Switch to File Panel.
+switchPanel             <c-tab>         Switch to File Panel.
 gotoPath                <c-g>           Change to another path.
 quitVE                  Q               Quit VimExplorer.
 
@@ -2928,17 +2980,17 @@ toggleModes             i               Toggle file sort mode (type/data/file
                                         extension).
 newFile                 +f              Create a new file.
 newDirectory            +d              Create a new directory.
-switchPanel             <tab>           Switch to the Tree Panel.
-quitVE                  Q               Quit VimExplorer¡£
+switchPanel             <c-tab>         Switch to the Tree Panel.
+quitVE                  Q               Quit VimExplorer.
 toggleHidden            H               Toggle show hidden files.(files start
                                         with '.')
 search                  g/              Search.
 markPlace               m{a-z}          Put current path to register(a-z).
 gotoPlace               '{a-z}          Jump to path in register(a-z).
-viewMarks               B               View path in register.
+viewMarks               J               View path in register.
 toUpperDir              <bs>            Go to upper directory.
-gotoForward             .               Forward.
-gotoBackward            ,               Backward.
+gotoForward             <c-i>           Forward.
+gotoBackward            <c-o>           Backward.
 favorite                f               View favorite folder list.
 addToFavorite           F               Add the folder under cursor to
                                         favorite list. If no path under
@@ -2956,11 +3008,11 @@ toggleSelectUp          <s-space>       Move the cursor up and mark/unmark the
                                         file under cursor.
 toggleSelectDown        <space>         Mark/unmark the file under cursor and
                                         move the cursor down.
-markViaRegexp           mr              Mark via regular expression.
-markVimFiles            mv              Mark all vim files.
-markDirectory           md              Mark all directories.
-markExecutable          me              Mark all executable files.
-clearSelect             mc              Clear all marks.
+markViaRegexp           Mr              Mark via regular expression.
+markVimFiles            Mv              Mark all vim files.
+markDirectory           Md              Mark all directories.
+markExecutable          Me              Mark all executable files.
+clearSelect             Mc              Clear all marks.
 deleteSelected          sd              Delete marked files.
 yankSelected            sy              Copy marked files.
 cutSelected             sx              Cut marked files.
@@ -2972,8 +3024,7 @@ tabView                 e               Edit file in new tab.
 openRenamer             ;r              Open Renamer (Note 1)
 startShell              ;c              Start a shell from current path.
 startExplorer           ;e              Start another file
-                                        manager(nautilus,konquer,explorer.exe)¡£
-openfile                ;o              open file by gnome-open or kfmclient
+                                        manager(nautilus,konquer,explorer.exe).
 
 Visual Mode Hotkeys~
 visualSelect            <space>         Mark files.
@@ -2991,7 +3042,7 @@ Start VimExplorer.
 >
     VEC
 <
-Close VimExplorer£¬Hotkey |Q| has the same ability.
+Close VimExplorer, Hotkey |Q| has the same ability.
 
 ==============================================================================
 3.  Directory Browsing                          *VimExplorer-browse*
@@ -3028,9 +3079,9 @@ See Customization section for more details.
 3.3  Forward and Backward                       *VimExplorer-forbackward*
 
 When using "Enter" switch to an new folder, the path will be add to browse
-history. Then you can use |,| and |.| to go backward and forward. Hotkey |b|
-is used to list all browse history, select by number or mouse can take you
-directory to that path.
+history. Then you can use |<c-o>| and |<c-i>| to go backward and forward.
+Hotkey |b| is used to list all browse history, select by number or mouse can
+take you directory to that path.
 
 By default, the depth of browse history is 100. Controled by this variable:
 >
@@ -3046,8 +3097,8 @@ easy.
 
 3.5  Temp Marks                                 *VimExplorer-tempmark*
 
-Just like the favorites, |Ma| put current path into register 'a', and |'a| can
-jump to the path. |B| is used to list every non empty register. All paths in
+Just like the favorites, |ma| put current path into register 'a', and |'a| can
+jump to the path. |J| is used to list every non empty register. All paths in
 register will disappear after VimExplorer exists.
 
 ==============================================================================
@@ -3070,17 +3121,17 @@ cursor.
 
 4.3  Regexp Marks                               *VimExplorer-markregexp*
 
-Hotkey: |mr|
+Hotkey: |Mr|
 Only the file name is the target of regexp match. Example:
 >
     Mark file (regexp): ^abc.*\.vim$
 <
 It will mark all vim scripts start with abc. The following functionalities is
 derived from this feature:
-|mv|  mark all vim scripts.
-|me|  mark all executable files.
-|md|  mark all directories.
-and |mc| to clear all marks.
+|Mv|  mark all vim scripts.
+|Me|  mark all executable files.
+|Md|  mark all directories.
+and |Mc| to clear all marks.
 
 ==============================================================================
 5.  File Operations                             *VimExplorer-fileoperation*
@@ -3210,6 +3261,10 @@ File Panel Options~
 |g:VEConf_showFileSizeInMKB|        1: Show file size in MKB format. 0: always
                                     show file size in byte.
 
+|g:VEConf_filePanelFilter|          Filter of the file panel, which will be
+                                    passed to glob() function. Example:
+                                    let g:VEConf_filePanelFilter = '*.txt'
+
 7.2  Hotkey Customization                       *VimExplorer-custhotkey*
 
 All user defined hotkeys are controlled by the two dicts:
@@ -3291,32 +3346,57 @@ mail: mbbill<AT>gmail<Dot>com
 9.  Problems and Fixes                          *VimExplorer-problems*
 
                                                 *VimExplorer-p1*
-P1.  Case sensitive in Win32
+P1.  Case sensitive in Win32.
      At present, the path in win32 is case sensitive. Pay attention to this
      when starting VE, editing the favorite list or using <c-g> to change
      path. A good suggestion is using <tab> or <ctrl-d> to complete path
      automatically.
 
+                                                *VimExplorer-p2*
+P2.  'wildignre' option cause some files disappeared.
+     If 'wildignore' is not empty, glob() function will not return files
+     matching the file pattern listed in it, then you may find some files
+     disappeared in the file panel.
+
+
+
 ==============================================================================
 10. Changelog                                   *VimExplorer-changelog*
 
 0.95
-    - Initial release.
+    -   Initial release.
 
 0.96
-    - Bug fix: VE_normalAction not found.
+    -   Bug fix: VE_normalAction not found.
 
 0.97
-    - Change the behaviour of hotkey 'F', now it adds the path under cursor to
+    -   Change the behaviour of hotkey 'F', now it adds the path under cursor to
         favorite list. If no path under cursor, use current working path
         instead.(Thanks to Vincent Wang)
-    - Bug fix: escape ' %#' for path.
-    - Add options |g:VEConf_usingKDE| and |g:VEConf_usingGnome| for starting
+    -   Bug fix: escape ' %#' for path.
+    -   Add options |g:VEConf_usingKDE| and |g:VEConf_usingGnome| for starting
         program in *nix environment.
-    - Check if the script is already loaded, thanks to Dennis Hostetler.
-    - Change default g:VEConf_systemEncoding to '' (empty)
-    - Bug fix: favorite selection out of range.
+    -   Check if the script is already loaded, thanks to Dennis Hostetler.
+    -   Change default g:VEConf_systemEncoding to '' (empty).
+    -   Bug fix: favorite selection out of range.
+0.98
+    -   Add option VEConf_filePanelFilter.
+    -   Bug fix: Escape <space> in command 'e' 'se' 'u' and '='.
+    -   Bug fix: 'Cut' and 'Paste' command causes file lost.
+    -   Change the default hotkey 'M' and 'B' to 'm','J'.
+    -   Change forward and backward hotkey to |<c-o>| and |<c-i>|(<tab>).
+    -   Change hotkey |<tab>| to |<c-tab>|.
+    -   Change hotkey |mr| |mv| |md| |me| |mc| to |Mr| |Mv| |Md| |Me| |Mc|.
+    -   When GUI is running, use confirm() to pop a dialog instead of input().
 
+==============================================================================
+11. TODO                                        *VimExplorer-todo*
+    -   More clipboard.
+    -   Diff files in different directories.
+    -   Remember the cursor place when switch between directories.
+    -   Two panel mode, just like TotalCommand.
+    -   Diff directories.
+    -   Browse via e.g. FTP, SCP ... directorys on a server.
 
 ==============================================================================
 Note 1:

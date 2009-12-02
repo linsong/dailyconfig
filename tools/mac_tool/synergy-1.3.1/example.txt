@@ -1,0 +1,8 @@
+on server side, run: 
+ ./synergys -f -n apple --config synergy.conf
+
+on client side, run: 
+ ./synergyc -f apple.lan.exoweb.net 
+or
+ synergyc -f --name name server-host-name
+ (where name is the name for the client in the server's configuration)
