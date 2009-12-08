@@ -26,9 +26,14 @@ endif
 "
 
 "set colorscheme randomly
-let colorscheme_list = ['blacksea', 'desert', 'mymud',
-            \ 'dante', 'candy', 'elflord', 'golden',
-            \ 'less', 'vibrantink']
+if strftime("%H") > 17 && strftime("%H") < 7
+  let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
+else
+  " colorschemes for night
+  let colorscheme_list = ['blacksea', 'desert', 'mymud',
+              \ 'dante', 'candy', 'elflord', 'golden',
+              \ 'less', 'vibrantink', 'murphy']
+fi
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 ":colorscheme desert "mymud zenburn ps_color elflord metacosm dusk
 
