@@ -196,6 +196,20 @@ fi
  alias gad='git add'
  alias gst='git status'
  alias glg='git log'
+ alias gup='git pull --rebase'
+
+ # following are for git alias
+ complete -o bashdefault -o default -o nospace -F _git_checkout gco 2>/dev/null \
+ 	|| complete -o default -o nospace -F _git_checkout gco
+ complete -o bashdefault -o default -o nospace -F _git_commit gci 2>/dev/null \
+ 	|| complete -o default -o nospace -F _git_commit gci
+ complete -o bashdefault -o default -o nospace -F _git_add gad 2>/dev/null \
+ 	|| complete -o default -o nospace -F _git_add gad
+ complete -o bashdefault -o default -o nospace -F _git_branch gbr 2>/dev/null \
+ 	|| complete -o default -o nospace -F _git_branch gbr
+ complete -o bashdefault -o default -o nospace -F _git_log glg 2>/dev/null \
+ 	|| complete -o default -o nospace -F _git_log glg
+
 ###########################################################################
 ###
 ###            Function defines

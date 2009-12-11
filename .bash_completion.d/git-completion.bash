@@ -2217,18 +2217,6 @@ complete -o bashdefault -o default -o nospace -F _git git 2>/dev/null \
 complete -o bashdefault -o default -o nospace -F _gitk gitk 2>/dev/null \
 	|| complete -o default -o nospace -F _gitk gitk
 
-# following are for git alias
-complete -o bashdefault -o default -o nospace -F _git_checkout gco 2>/dev/null \
-	|| complete -o default -o nospace -F _git_checkout gco
-complete -o bashdefault -o default -o nospace -F _git_commit gci 2>/dev/null \
-	|| complete -o default -o nospace -F _git_commit gci
-complete -o bashdefault -o default -o nospace -F _git_add gad 2>/dev/null \
-	|| complete -o default -o nospace -F _git_add gad
-complete -o bashdefault -o default -o nospace -F _git_branch gbr 2>/dev/null \
-	|| complete -o default -o nospace -F _git_branch gbr
-complete -o bashdefault -o default -o nospace -F _git_log glg 2>/dev/null \
-	|| complete -o default -o nospace -F _git_log glg
-
 # The following are necessary only for Cygwin, and only are needed
 # when the user has tab-completed the executable name and consequently
 # included the '.exe' suffix.
