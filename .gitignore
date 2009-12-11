@@ -123,4 +123,27 @@ Library/Thunderbird/
 Library/Preferences/
 tags
 ftags
+.lftp/rl_history
+.libfetion.conf
+.local/
+.pyhist
+*.tgz
+*.zip
+tools/podcatcher
+tools/update_ip.sh
+WINDOWS_C
+.mutt/active_mail_setting
+.mutt/aliases
+.mutt/colours
+.netgrowlrc
+.tracker.yml
+.vim/AsNeeded/ANmenu
+.vim/AsNeeded/ANtags
+*.jax
+.bash_completion.d/git-completion.bash
+.fonts/encodings.dir
+.fonts/fonts.dir
+.fonts/fonts.list
+.fonts/fonts.scale
+work/
 
