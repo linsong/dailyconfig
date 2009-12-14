@@ -27,6 +27,7 @@ find $* \
          -path '*/.svn/*' -or \
          -path '*/migrate/*' -or \
          -path '*/.git/*' -or \
+         -path '*/tmp/*' -or \
          -path '*/coverage/*' \
      \) -prune -or \
      -type f -print | \
