@@ -52,26 +52,26 @@ endif
 
 if g:otl_bold_headers
   hi def otlTab0 ctermfg=1 cterm=bold gui=bold guifg=red term=reverse
-  hi def otlTab1 ctermfg=4 cterm=bold gui=bold guifg=blue term=reverse
-  hi def otlTab2 ctermfg=2 cterm=bold gui=bold guifg=darkgreen term=reverse
-  hi def otlTab3 ctermfg=3 cterm=bold gui=bold guifg=brown term=reverse
-  hi def otlTab4 ctermfg=5 cterm=bold gui=bold guifg=darkmagenta term=reverse
-  hi def otlTab5 ctermfg=6 cterm=bold gui=bold guifg=darkcyan term=reverse
+  hi def otlTab1 ctermfg=5 cterm=bold gui=bold guifg=darkmagenta term=reverse
+  hi def otlTab2 ctermfg=6 cterm=bold gui=bold guifg=darkcyan term=reverse
+  hi def otlTab3 ctermfg=2 cterm=bold gui=bold guifg=darkgreen term=reverse
+  hi def otlTab4 ctermfg=3 cterm=bold gui=bold guifg=brown term=reverse
+  hi def otlTab5 ctermfg=4 cterm=bold gui=bold guifg=darkblue term=reverse
   hi def otlTab6 ctermfg=1 cterm=bold gui=bold guifg=red term=reverse
-  hi def otlTab7 ctermfg=4 cterm=bold gui=bold guifg=blue term=reverse
-  hi def otlTab8 ctermfg=2 cterm=bold gui=bold guifg=darkgreen term=reverse
-  hi def otlTab9 ctermfg=3 cterm=bold gui=bold guifg=brown term=reverse
+  hi def otlTab7 ctermfg=5 cterm=bold gui=bold guifg=darkmagenta term=reverse
+  hi def otlTab8 ctermfg=6 cterm=bold gui=bold guifg=darkcyan term=reverse
+  hi def otlTab9 ctermfg=2 cterm=bold gui=bold guifg=darkgreen term=reverse
 else
   hi def otlTab0 ctermfg=1 cterm=NONE guifg=red
-  hi def otlTab1 ctermfg=4 cterm=NONE guifg=blue
-  hi def otlTab2 ctermfg=2 cterm=NONE guifg=darkgreen
-  hi def otlTab3 ctermfg=3 cterm=NONE guifg=brown
-  hi def otlTab4 ctermfg=5 cterm=NONE guifg=darkmagenta
-  hi def otlTab5 ctermfg=6 cterm=NONE guifg=darkcyan
+  hi def otlTab1 ctermfg=5 cterm=NONE guifg=darkmagenta
+  hi def otlTab2 ctermfg=6 cterm=NONE guifg=darkcyan
+  hi def otlTab3 ctermfg=2 cterm=NONE guifg=darkgreen
+  hi def otlTab4 ctermfg=3 cterm=NONE guifg=brown
+  hi def otlTab5 ctermfg=4 cterm=NONE guifg=darkblue
   hi def otlTab6 ctermfg=1 cterm=NONE guifg=red
-  hi def otlTab7 ctermfg=4 cterm=NONE guifg=blue
-  hi def otlTab8 ctermfg=2 cterm=NONE guifg=darkgreen
-  hi def otlTab9 ctermfg=3 cterm=NONE guifg=brown
+  hi def otlTab7 ctermfg=5 cterm=NONE guifg=darkmagenta
+  hi def otlTab8 ctermfg=6 cterm=NONE guifg=darkcyan
+  hi def otlTab9 ctermfg=2 cterm=NONE guifg=darkgreen
   hi def otlTodo ctermbg=3 cterm=NONE guibg=lightyellow
 endif
 
