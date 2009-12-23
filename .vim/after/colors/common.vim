@@ -19,14 +19,6 @@ hi BookmarkMode    ctermbg=Blue    ctermfg=Black   guibg=#9999FF guifg=DarkRed
 hi TagMode        ctermbg=Yellow  ctermfg=Green   guibg=#FFDB72 guifg=DarkGreen
 hi TaggedFileMode ctermbg=Yellow  ctermfg=Magenta guibg=#FFDB72 guifg=DarkMagenta
 
-if !exists('g:common_color_needed')
-    let g:common_color_needed = 0
-endif
-
-if g:common_color_needed == 0 
-    finish
-endif
-
 if v:version >= 700
     "highlight CursorLine term=underline cterm=underline guibg=#000000 
     "highlight CursorColumn term=underline cterm=underline guibg=#000000 
@@ -46,10 +38,17 @@ hi DiffDelete    cterm=bold ctermfg=4 ctermbg=6 gui=bold guifg=#0000ff guibg=#68
 hi DiffText      cterm=bold ctermbg=1 gui=bold,italic guifg=#000000 guibg=#980000
 
 " for omni completion
-hi Pmenu       guibg=grey35 ctermfg=253 ctermbg=238
-hi PmenuSel    guifg=DarkBlue guibg=LightGreen cterm=bold ctermfg=253 ctermbg=61
-hi PmenuSbar   guibg=Black cterm=bold ctermbg=63
-hi PmenuThumb  guifg=SeaGreen cterm=bold ctermfg=253 ctermbg=63 gui=reverse
+if &t_Co>=256
+  hi Pmenu       guibg=grey35 ctermfg=253 ctermbg=238
+  hi PmenuSel    guifg=DarkBlue guibg=LightGreen cterm=bold ctermfg=253 ctermbg=61
+  hi PmenuSbar   guibg=Black cterm=bold ctermbg=63
+  hi PmenuThumb  guifg=SeaGreen cterm=bold ctermfg=253 ctermbg=63 gui=reverse
+else
+  hi Pmenu       guibg=grey35 ctermbg=2
+  hi PmenuSel    guifg=DarkBlue guibg=LightGreen cterm=bold ctermbg=5
+  hi PmenuSbar   guibg=Black cterm=bold ctermbg=4
+  hi PmenuThumb  guifg=SeaGreen gui=reverse cterm=reverse
+endif
 
 " for Cursor
 "highlight Cursor     gui=none       guibg=DodgerBlue guifg=#ffffff
