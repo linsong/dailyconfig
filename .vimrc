@@ -104,7 +104,7 @@
     " useful, but keep it for now
     :set hidden
 
-    set statusline=%<%f\ [%{&ff}]\ %h%m%r%=%-14.(%l,%c%V%)\ %P
+    set statusline=%<%f\ [%{&ff}]%{StatusInfo()}\ %h%m%r%=%-14.(%l,%c%V%)\ %P
 
     " setting for completion 
     if v:version >= 700
@@ -235,7 +235,7 @@
     if exists('*pumvisible')
         "inoremap <Enter> <C-R>=pumvisible() ? "\<lt>C-y>" : "\<lt>Enter>"<CR>
         
-        :inoremap <expr> <cr>  pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+        ":inoremap <expr> <cr>  pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 
         "** These two mappings are probably the most rare, yet most valuable: **
         ":inoremap <expr> <c-n>  pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\ <lt>cr>"
@@ -263,8 +263,8 @@
     nnoremap <leader>q :close<CR>
 
     " mappings for quickfix mode 
-    nnoremap <xF4>   :cnext <CR>
-    nnoremap <S-xF4> :cprev <CR>
+    nnoremap <xF4>   :cnext \| norm zz<CR>
+    nnoremap <S-xF4> :cprev \| norm zz<CR>
     nnoremap <C-F4>   :cnfile <CR>
     nnoremap <S-C-F4> :cpfile <CR>
 
@@ -740,10 +740,10 @@ if has("autocmd")
 
         " display the status line in different ways based on the current
         " editing mode
-        "if version >= 700
-        "    au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=undercurl guisp=Magenta
-        "    au InsertLeave * hi StatusLine term=reverse ctermfg=0 ctermbg=2 gui=bold,reverse
-        "endif
+        if version >= 700
+           au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=undercurl guisp=Magenta
+           au InsertLeave * hi StatusLine term=reverse ctermfg=0 ctermbg=2 gui=bold,reverse
+        endif
         
         autocmd FileType html setlocal ts=2
         autocmd FileType html setlocal sw=2
@@ -794,10 +794,10 @@ if has("autocmd")
         :autocmd User Rails.test*       set ft=railstest.ruby
         :autocmd User Rails.migration*  set ft=railsmigration.ruby
         :autocmd User Rails.view.erb*   set ft=railsview.eruby
-        :autocmd User Rails             let g:Grep_Skip_Dirs = join(['log', 'vender', 'index', 'tmp', 'wireframes'] + Grep_Skip_Dirs_List, ' ')
+        :autocmd User Rails             let g:Grep_Skip_Dirs = join(['log', 'vender', 'index', 'tmp', 'wireframes', 'graphs', 'documents', 'pdf_forms'] + Grep_Skip_Dirs_List, ' ')
 
         " add the current extension to the grep file list
-        :autocmd BufNewFile,BufRead * let g:Grep_Default_Filelist = join(["*." . expand("%:e")] + Grep_Default_Filelist_List, ' ')
+        ":autocmd BufNewFile,BufRead * let g:Grep_Default_Filelist = join(["*." . expand("%:e")] + Grep_Default_Filelist_List, ' ')
 
     augroup END
     "}}}4
@@ -1616,6 +1616,12 @@ endif " has("autocmd")
     let twitvim_api_root = "http://168.143.162.100"
     let twitvim_browser_cmd = "open"
     "}}}2
+
+    "### settings for syntastic {{{2
+    let g:syntastic_enable_signs = 1
+    let g:syntastic_auto_loc_list = 1
+    "}}}2
+
 "## }}}1
 
 "## Xterm colors defination {{{1 

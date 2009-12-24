@@ -126,3 +126,4 @@ runtime plugin/AsNeeded.vim
 runtime plugin/ANcmds.vim
 runtime plugin/foldutil.vim
 runtime plugin/AlignPlugin.vim
+runtime plugin/myplugin.vim

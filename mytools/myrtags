@@ -15,6 +15,7 @@ find $* \
         -name '*.ico' -or \
         -name '*.swp' -or \
         -name '.gitignore' -or \
+        -name '*.swd' -or \
         -name '*.swo' \
     \) -prune -or \
     \( \
@@ -23,6 +24,7 @@ find $* \
          -path '*/.git/*' -or \
          -path '*/tmp/*' -or \
          -path '*/performance/*' -or \
+         -path '*/tax_chart/*' -or \
          -path '*/coverage/*' \
      \) -prune -or \
      -type f -print | \

@@ -180,5 +180,14 @@ function! ToggleTransparency()
 endfunction
 "}}}1
 
+"display git branch info is possible {{{1
+function! StatusInfo()
+  if exists('*GitBranch')
+    return '[' . GitBranch() . ']'
+  else
+    return ''
+  endif
+endfunction
+"}}}1
 
 " vim:ft=vim foldmethod=marker ts=4 sw=4 expandtab

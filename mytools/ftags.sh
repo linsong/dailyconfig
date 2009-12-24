@@ -20,6 +20,7 @@ find $* \
         -name '*.gif' -or \
         -name '*.ico' -or \
         -name '*.swp' -or \
+        -name '*.swd' -or \
         -name '.gitignore' -or \
         -name '*.swo' \
     \) -prune -or \
@@ -28,6 +29,8 @@ find $* \
          -path '*/migrate/*' -or \
          -path '*/.git/*' -or \
          -path '*/tmp/*' -or \
+         -path '*/performance/*' -or \
+         -path '*/tax_chart/*' -or \
          -path '*/coverage/*' \
      \) -prune -or \
      -type f -print | \
