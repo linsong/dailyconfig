@@ -1351,7 +1351,7 @@ endif " has("autocmd")
     "}}}2
    
     "### setting for toggle_words.vim {{{2
-     let g:toggle_words_dict = {'*': [['white', 'black'], ['add', 'remove']], 'python': [['if', 'elif', 'else']]}
+     let g:toggle_words_dict = {'*': [['white', 'black'], ['add', 'remove'], ['read', 'write']], 'python': [['if', 'elif', 'else']]}
      nmap ,t :ToggleWord<CR>
      vmap ,t <ESC>:ToggleWord<CR>
     "}}}2
@@ -1370,9 +1370,9 @@ endif " has("autocmd")
     "### setting for fuzzyfinder.vim {{{2
     let g:fuf_modesDisable = []
     let g:fuf_abbrevMap = 
-                \    { "sr" : ["~/project/zax/siteradar"],
-                \      "vp" : ["~/.vim/plugin"],
-                \      ";r" : ["app/models", "app/views", "app/controllers", "test/functional", "test/integration", "test/unit", "test/fixtures", "db/fixtures"],
+                \    { "^,w" : [$PROJECT_DIR],
+                \      "^,v" : map(filter(split(&runtimepath, ','), 'v:val !~ "after$"'), 'v:val . ''/**/'''),
+                \      "^,r" : ["app/models", "app/views", "app/controllers", "test/functional", "test/integration", "test/unit", "test/fixtures", "db/fixtures"],
                 \    }
     "let g:fuf_abbrevMap = {
           "\   '^vr:' : map(filter(split(&runtimepath, ','), 'v:val !~ "after$"'), 'v:val . ''/**/'''),
@@ -1620,6 +1620,11 @@ endif " has("autocmd")
     "### settings for syntastic {{{2
     let g:syntastic_enable_signs = 1
     let g:syntastic_auto_loc_list = 1
+    "}}}2
+
+    "### blogit {{{2
+    let blogit_unformat="html2text.py"
+    let blogit_format="rmarkdown.rb"
     "}}}2
 
 "## }}}1
