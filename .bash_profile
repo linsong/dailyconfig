@@ -48,9 +48,13 @@ fi
    INFOPATH="/opt/local/share/info:${INFOPATH}"
  fi
 
+ if [ -d /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin ]; then
+    PATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin:${PATH}
+ fi
+
 KEYCHAIN_CMD=$(which keychain)
 if [ -n "$KEYCHAIN_CMD" ]; then 
-    $KEYCHAIN_CMD ~/.ssh/specific-key/id_dsa_for_zax
+    $KEYCHAIN_CMD ~/.ssh/specific-key/id_dsa
     . ~/.keychain/$HOSTNAME-sh
 fi
 
@@ -80,6 +84,7 @@ case $(hostname) in
     *)
         ;;
 esac
+
 
 ## NOT DONE YET
 ## check current environment and set up relevant env virables
