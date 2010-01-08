@@ -1145,6 +1145,8 @@ endif " has("autocmd")
 
 "## Plugin related settings {{{1
 
+call pathogen#runtime_append_all_bundles() 
+
     "### setting for winmanager.vim {{{2
         ":let g:winManagerWindowLayout = "FileExplorer,TagsExplorer|BufExplorer"
         :let g:winManagerWindowLayout = "FileExplorer"
