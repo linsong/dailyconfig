@@ -102,6 +102,36 @@ if [ ! -e $HOME/mytools/fehviewer ]; then
     fi
 fi
 
+# function for alias completion support, refs: http://ubuntuforums.org/showthread.php?t=733397 
+# Wraps a completion function {{{1
+# make-completion-wrapper <actual completion function> <name of new func.>
+#                         <command name> <list supplied arguments>
+# eg.
+#   alias agi='apt-get install'
+#   make-completion-wrapper _apt_get _apt_get_install apt-get install
+# defines a function called _apt_get_install (that's $2) that will complete
+# the 'agi' alias. (complete -F _apt_get_install agi)
+#
+# complete -p <command name> to find the completion function for a command
+function make-completion-wrapper () {
+  local function_name="$2"
+  local arg_count=$(($#-3))
+  local comp_function_name="$1"
+  shift 2
+  local function="
+function $function_name {
+  ((COMP_CWORD+=$arg_count))
+  COMP_WORDS=( "$@" \${COMP_WORDS[@]:1} )
+  "$comp_function_name"
+  return 0
+}"
+  eval "$function"
+  echo $function_name
+  echo "$function"
+}
+
+# }}}1
+
 ###########################################################################
 ###
 ###            ALIAS defines
@@ -183,11 +213,14 @@ fi
 
  alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"' 
 
+ alias wp='cd $PROJECT_DIR'
+
  # alias for rails 
  alias ss='./script/server'
  alias sg='./script/generate'
  alias sc='./script/console'
  alias r='rake'
+
 
  # alias for git
  alias gco='git checkout'
@@ -196,7 +229,8 @@ fi
  alias gad='git add'
  alias gst='git status'
  alias glg='git log'
- alias gup='git pull --rebase'
+ alias gup='git pull --rebase && up.sh'
+ alias gdiff='git diff'
 
  # following are for git alias
  complete -o bashdefault -o default -o nospace -F _git_checkout gco 2>/dev/null \
@@ -209,6 +243,9 @@ fi
  	|| complete -o default -o nospace -F _git_branch gbr
  complete -o bashdefault -o default -o nospace -F _git_log glg 2>/dev/null \
  	|| complete -o default -o nospace -F _git_log glg
+ complete -o bashdefault -o default -o nospace -F _git_diff gdiff 2>/dev/null \
+ 	|| complete -o default -o nospace -F _git_diff gdiff
+
 
 ###########################################################################
 ###
@@ -400,11 +437,6 @@ __END
  }
  # }}}
 
-# deprecated, use __git_ps1 provided by git_completion.sh shipped with git-core
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
- 
 #{{{ wcd settings example for Mac OS X, it can be used on *nix system 
 # #  with some minor modification, put these lines to .bashrc.local file
 # export WCDEXCLUDE=/dev:/tmp:*CVS:*.svn:.Trash
@@ -415,10 +447,17 @@ function parse_git_branch {
 #    /usr/local/bin/wcd -z 30 -G $HOME/.wcd/bin $* && test -f $go && source $go
 # }
 
-# # -j option make wcd to change to the first option directly,
-# # if this is not what you want, you can just use '$ !!<CR>'
-# #  or <C-p><CR> to reexecute the command to go to the next option, it is cyclic
-# alias w='wcd -j'
+# -j option make wcd to change to the first option directly,
+# if this is not what you want, you can just use '$ !!<CR>'
+#  or <C-p><CR> to reexecute the command to go to the next option, it is cyclic
+function w
+{
+   wcd -q +n . -c $* 2>/dev/null
+}
+make-completion-wrapper _cd _w cd
+complete -o nospace -F _w w
+
+#
 # alias wg='wcd -g'
 
 # alias md='wcd -m' # mkdir a new directory and add it to treedata
@@ -436,3 +475,5 @@ KCD_INIT="/opt/local/etc/kcd.sh.init"
 if [ -e "$KCD_INIT" ]; then
 	. "$KCD_INIT"
 fi
+
+# vim: foldmethod=marker

@@ -140,10 +140,10 @@ WINDOWS_C
 .vim/AsNeeded/ANmenu
 .vim/AsNeeded/ANtags
 *.jax
-.bash_completion.d/git-completion.bash
 .fonts/encodings.dir
 .fonts/fonts.dir
 .fonts/fonts.list
 .fonts/fonts.scale
 work/
+blog/linsong.github.com/
 

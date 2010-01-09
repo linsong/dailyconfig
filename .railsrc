@@ -1,0 +1,28 @@
+#!/usr/bin/ruby
+ 
+begin
+  require 'hirb' # sudo gem install cldwalker-hirb --source http://gems.github.com
+  Hirb.enable
+rescue LoadError
+end
+ 
+def change_log(stream)
+  ActiveRecord::Base.logger = Logger.new(stream)
+  ActiveRecord::Base.clear_active_connections!
+end
+ 
+def show_log
+  change_log(STDOUT)
+end
+ 
+def hide_log
+  change_log(nil)
+end
+
+def get_task(task_id)
+  TaskEngine::Core::TaskInstance.find(task_id)
+end
+
+def exec_last
+  TaskEngine::Core::TaskInstance.last.execute!
+end
