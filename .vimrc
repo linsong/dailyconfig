@@ -1628,6 +1628,10 @@ call pathogen#runtime_append_all_bundles()
     let blogit_unformat="html2text.py"
     let blogit_format="rmarkdown.rb"
     "}}}2
+  
+    "### vimcommander {{{2
+	  :noremap <silent> ;vct                     :cal VimCommanderToggle()<CR>
+    "}}}2
 
 "## }}}1
 
