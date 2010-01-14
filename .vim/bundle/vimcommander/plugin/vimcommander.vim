@@ -68,6 +68,14 @@ fu! <SID>CommanderMappings()
 	noremap <silent> <buffer> <DEL>            :cal <SID>FileDelete()<CR>
 	noremap <silent> <buffer> <F10>            :cal VimCommanderToggle()<CR>
 	noremap <silent> <buffer> <F11>            :cal VimCommanderToggle()<CR>
+  " redefine some shortcuts
+	noremap <silent> <buffer> ;cp              :cal <SID>FileCopy(0)<CR>
+	noremap <silent> <buffer> ;bak             :cal <SID>FileCopy(1)<CR>
+	noremap <silent> <buffer> ;mov             :cal <SID>FileMove(0)<CR>
+	noremap <silent> <buffer> ;ren             :cal <SID>FileMove(1)<CR>
+	noremap <silent> <buffer> ;mkd             :cal <SID>DirCreate()<CR>
+	noremap <silent> <buffer> ;del             :cal <SID>FileDelete()<CR>
+
 	"Panel-dirs
 	noremap <silent> <buffer> <leader><Left>   :cal <SID>GetOrPutDir('l')<CR>
 	noremap <silent> <buffer> <leader><Right>  :cal <SID>GetOrPutDir('r')<CR>
