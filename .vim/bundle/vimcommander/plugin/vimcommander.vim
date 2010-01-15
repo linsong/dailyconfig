@@ -89,8 +89,11 @@ fu! <SID>CommanderMappings()
 	noremap <silent> <buffer> <leader>u        :cal <SID>ExchangeDirs()<CR>
 	noremap <silent> <buffer> <C-R>            :cal <SID>RefreshDisplays()<CR>
 	noremap <silent> <buffer> <leader>r        :cal <SID>RefreshDisplays()<CR>
-	noremap <silent> <buffer> <C-H>            :cal <SID>ShowHiddenFilesToggle()<CR>
+	"noremap <silent> <buffer> <C-H>            :cal <SID>ShowHiddenFilesToggle()<CR>
 	noremap <silent> <buffer> <leader>h        :cal <SID>ShowHiddenFilesToggle()<CR>
+	noremap <silent> <buffer> ;r               :cal <SID>RefreshDisplays()<CR>
+	noremap <silent> <buffer> ;o               :cal <SID>GetOrPutDir('r')<CR>
+
 	"File-selection
 	noremap <silent> <buffer> <Insert>         :cal <SID>Select()<CR>
 	noremap <silent> <buffer> <C-kPlus>        :cal <SID>SelectPattern('*')<CR>
@@ -100,6 +103,8 @@ fu! <SID>CommanderMappings()
 	noremap <silent> <buffer> <kMinus>         :cal <SID>DeSelectPatternAsk()<CR>
 	noremap <silent> <buffer> +                :cal <SID>SelectPatternAsk()<CR>
 	noremap <silent> <buffer> -                :cal <SID>DeSelectPatternAsk()<CR>
+	noremap <silent> <buffer> <Space>          :cal <SID>Select()<CR>
+	noremap <silent> <buffer> =                :cal <SID>SelectPatternAsk()<CR>
 	"Dir history
 	noremap <silent> <buffer> <C-t>            :cal <SID>PrevDir()<CR>
 	noremap <silent> <buffer> <leader>t        :cal <SID>PrevDir()<CR>

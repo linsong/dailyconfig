@@ -1630,7 +1630,7 @@ call pathogen#runtime_append_all_bundles()
     "}}}2
   
     "### vimcommander {{{2
-	  :noremap <silent> ;vct                     :cal VimCommanderToggle()<CR>
+	  :noremap <silent> ;vc                     :cal VimCommanderToggle()<CR>
     "}}}2
 
 "## }}}1
