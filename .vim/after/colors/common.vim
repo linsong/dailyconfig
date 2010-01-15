@@ -1,5 +1,5 @@
 " colors that will apply no matter what colorscheme is used. 
-
+"
 if v:version >= 700
     hi MarkWord1  ctermbg=Cyan    ctermfg=Black guibg=#8CCBEA   guifg=DarkRed
     hi MarkWord2  ctermbg=Green   ctermfg=Black guibg=#A4E57E   guifg=DarkRed
@@ -19,13 +19,6 @@ hi BookmarkMode    ctermbg=Blue    ctermfg=Black   guibg=#9999FF guifg=DarkRed
 hi TagMode        ctermbg=Yellow  ctermfg=Green   guibg=#FFDB72 guifg=DarkGreen
 hi TaggedFileMode ctermbg=Yellow  ctermfg=Magenta guibg=#FFDB72 guifg=DarkMagenta
 
-if v:version >= 700
-    "highlight CursorLine term=underline cterm=underline guibg=#000000 
-    "highlight CursorColumn term=underline cterm=underline guibg=#000000 
-    highlight CursorLine term=underline cterm=underline gui=none guibg=#003333
-    highlight CursorColumn term=underline cterm=underline gui=none guibg=#003333 
-endif
-
 " for visual mode and fold mode 
 hi Visual	gui=none guifg=khaki guibg=olivedrab
 hi Folded	guibg=grey30 guifg=gold 
@@ -39,10 +32,10 @@ hi DiffText      cterm=bold ctermbg=1 gui=bold,italic guifg=#000000 guibg=#98000
 
 " for omni completion
 if &t_Co>=256
-  hi Pmenu       guibg=grey35 ctermfg=253 ctermbg=238
-  hi PmenuSel    guifg=DarkBlue guibg=LightGreen cterm=bold ctermfg=253 ctermbg=61
-  hi PmenuSbar   guibg=Black cterm=bold ctermbg=63
-  hi PmenuThumb  guifg=SeaGreen cterm=bold ctermfg=253 ctermbg=63 gui=reverse
+  hi Pmenu       guibg=#4e4e8f guifg=#eeeeee ctermbg=13
+  hi PmenuSel    guibg=#2e2e3f guifg=#eeeeee cterm=bold ctermbg=8
+  hi PmenuSbar   guibg=#6e6eaf guifg=#eeeeee gui=bold cterm=bold ctermbg=7
+  hi PmenuThumb  guibg=#6e6eaf guifg=#eeeeee gui=bold cterm=reverse
 else
   hi Pmenu       guibg=grey35 ctermbg=2
   hi PmenuSel    guifg=DarkBlue guibg=LightGreen cterm=bold ctermbg=5
@@ -56,13 +49,24 @@ highlight Cursor     gui=none       guibg=Red guifg=#ffffff
 "highlight Cursor     ctermfg=Black	ctermbg=Green	 cterm=reverse
 highlight Cursor     ctermfg=Black	ctermbg=Red	 cterm=reverse
 
-" highlight defination for visualmark.vim
-if &bg == "dark"
-    highlight SignColor ctermfg=white ctermbg=blue guifg=white guibg=RoyalBlue3
-else
-    highlight SignColor ctermbg=white ctermfg=blue guibg=grey guifg=RoyalBlue3
-endif
-
 highlight IncSearch  term=reverse cterm=bold ctermfg=232 ctermbg=215 gui=reverse
 highlight Search     term=reverse ctermfg=232 ctermbg=215 guifg=Black guibg=Yellow
 
+if &background == "dark"
+
+  if v:version >= 700
+      highlight CursorLine term=underline cterm=underline guibg=Grey40
+      highlight CursorColumn term=reverse ctermbg=8 guibg=Grey40
+  endif
+
+  " highlight defination for visualmark.vim
+  highlight SignColor ctermfg=white ctermbg=blue guifg=white guibg=RoyalBlue3
+
+else " for light colorscheme
+  if v:version >= 700
+    highlight CursorLine term=underline cterm=underline gui=none guibg=Grey90
+    highlight CursorColumn term=reverse ctermbg=7 guibg=Grey90
+  endif
+
+  highlight SignColor ctermbg=white ctermfg=blue guibg=grey guifg=RoyalBlue3
+endif
