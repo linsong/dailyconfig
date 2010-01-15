@@ -126,8 +126,8 @@ function $function_name {
   return 0
 }"
   eval "$function"
-  echo $function_name
-  echo "$function"
+#  echo $function_name
+#  echo "$function"
 }
 
 # }}}1
