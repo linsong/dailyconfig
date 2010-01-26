@@ -457,6 +457,21 @@ function w
 make-completion-wrapper _cd _w cd
 complete -o nospace -F _w w
 
+function rt()
+{
+ # shortcut to start rails test
+ if [ $* ]; then 
+   case $* in 
+     */unit/*) rake test:units TEST=$* ;;
+     */functional/*) rake test:functionals TEST=$* ;;
+     */integration/*) rake test:intergration TEST=$* ;;
+     *) echo -n "this test is not supported" ;;
+    esac
+ else
+   rake 
+ fi
+}
+
 #
 # alias wg='wcd -g'
 
