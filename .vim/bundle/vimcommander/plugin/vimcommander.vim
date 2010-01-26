@@ -1,4 +1,4 @@
-"$Id: vimcommander.vim version 76 $
+"$Id: vimcommander.vim version 69 $
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Name:         vimcommander
 " Description:  total-commander-like file manager for vim.
@@ -21,7 +21,10 @@
 "                    with spaces and refactoring.
 "               Oleg Popov <dev-random at mail dot ru>, fix for browsing
 "                    hidden files.
-"               Devix for dir escape patch.
+"               Lajos Zaccomer <lajos@zaccomer.org>, custom starting paths.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let PROGRAM_NAME = "vimcommander"
+let PROGRAM_VERSION = "0.77"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Section: Documentation 
 "
@@ -68,13 +71,13 @@ fu! <SID>CommanderMappings()
 	noremap <silent> <buffer> <DEL>            :cal <SID>FileDelete()<CR>
 	noremap <silent> <buffer> <F10>            :cal VimCommanderToggle()<CR>
 	noremap <silent> <buffer> <F11>            :cal VimCommanderToggle()<CR>
-  " redefine some shortcuts
-	noremap <silent> <buffer> ;cp              :cal <SID>FileCopy(0)<CR>
-	noremap <silent> <buffer> ;bak             :cal <SID>FileCopy(1)<CR>
-	noremap <silent> <buffer> ;mov             :cal <SID>FileMove(0)<CR>
-	noremap <silent> <buffer> ;ren             :cal <SID>FileMove(1)<CR>
-	noremap <silent> <buffer> ;mkd             :cal <SID>DirCreate()<CR>
-	noremap <silent> <buffer> ;del             :cal <SID>FileDelete()<CR>
+   " redefine some shortcuts
+ 	noremap <silent> <buffer> ;cp              :cal <SID>FileCopy(0)<CR>
+ 	noremap <silent> <buffer> ;bak             :cal <SID>FileCopy(1)<CR>
+ 	noremap <silent> <buffer> ;mov             :cal <SID>FileMove(0)<CR>
+ 	noremap <silent> <buffer> ;ren             :cal <SID>FileMove(1)<CR>
+ 	noremap <silent> <buffer> ;mkd             :cal <SID>DirCreate()<CR>
+ 	noremap <silent> <buffer> ;del             :cal <SID>FileDelete()<CR>
 
 	"Panel-dirs
 	noremap <silent> <buffer> <leader><Left>   :cal <SID>GetOrPutDir('l')<CR>
@@ -91,8 +94,8 @@ fu! <SID>CommanderMappings()
 	noremap <silent> <buffer> <leader>r        :cal <SID>RefreshDisplays()<CR>
 	"noremap <silent> <buffer> <C-H>            :cal <SID>ShowHiddenFilesToggle()<CR>
 	noremap <silent> <buffer> <leader>h        :cal <SID>ShowHiddenFilesToggle()<CR>
-	noremap <silent> <buffer> ;r               :cal <SID>RefreshDisplays()<CR>
-	noremap <silent> <buffer> ;o               :cal <SID>GetOrPutDir('r')<CR>
+ 	noremap <silent> <buffer> ;r               :cal <SID>RefreshDisplays()<CR>
+ 	noremap <silent> <buffer> ;o               :cal <SID>GetOrPutDir('r')<CR>
 
 	"File-selection
 	noremap <silent> <buffer> <Insert>         :cal <SID>Select()<CR>
@@ -103,8 +106,9 @@ fu! <SID>CommanderMappings()
 	noremap <silent> <buffer> <kMinus>         :cal <SID>DeSelectPatternAsk()<CR>
 	noremap <silent> <buffer> +                :cal <SID>SelectPatternAsk()<CR>
 	noremap <silent> <buffer> -                :cal <SID>DeSelectPatternAsk()<CR>
-	noremap <silent> <buffer> <Space>          :cal <SID>Select()<CR>
-	noremap <silent> <buffer> =                :cal <SID>SelectPatternAsk()<CR>
+ 	noremap <silent> <buffer> <Space>          :cal <SID>Select()<CR>
+ 	noremap <silent> <buffer> =                :cal <SID>SelectPatternAsk()<CR>
+
 	"Dir history
 	noremap <silent> <buffer> <C-t>            :cal <SID>PrevDir()<CR>
 	noremap <silent> <buffer> <leader>t        :cal <SID>PrevDir()<CR>
@@ -134,8 +138,14 @@ endf
 fu!<SID>First()
 	cal <SID>SaveOpts()
 	cal <SID>InitOptions()
-	let s:path_left=getcwd()
-	let s:path_right=getcwd()
+	let s:path_left = getcwd()
+	if exists("g:vimcommander_first_path_left")
+		let s:path_left = g:vimcommander_first_path_left
+	end
+	let s:path_right = getcwd()
+	if exists("g:vimcommander_first_path_right")
+		let s:path_right = g:vimcommander_first_path_right
+	end
 	let s:line_right=2
 	let s:line_left=2
 	let g:vimcommander_lastside="VimCommanderLeft"
@@ -205,14 +215,14 @@ endf
 
 fu! <SID>LeftBufEnter()
 	if g:vimcommander_shallcd==1
-		exe "cd ".escape(<SID>MyPath())
+		exe "cd ".<SID>MyPath()
 	end
 	let g:vimcommander_lastside="VimCommanderLeft"
 endf
 
 fu! <SID>RightBufEnter()
 	if g:vimcommander_shallcd==1
-		exe "cd ".escape(<SID>MyPath())
+		exe "cd ".<SID>MyPath()
 	end
 	let g:vimcommander_lastside="VimCommanderRight"
 endf
@@ -349,16 +359,30 @@ fu! <SID>ProvideBuffer()
 endf
 
 fu! <SID>FileView()
-	let path=<SID>PathUnderCursor()
-	if(isdirectory(path))
-		return
+	let i=0
+	if strlen(b:vimcommander_selected)>0
+		let name=<SID>SelectedNum(b:vimcommander_selected, i)
+		let filename=<SID>MyPath().name
+		let i=i+1
+	else
+		let name=" "
+		let filename=<SID>PathUnderCursor()
 	end
-	"cal <SID>ProvideBuffer()
-	"exe "edit ".path
-	let s:buffer_to_load=path
-	cal <SID>Close()
-	setl noma
-	setl ro
+	let opt=""
+	while strlen(name)>0
+		if filereadable(filename)
+			cal system("(see ".shellescape(filename).") &")
+		en
+		if strlen(b:vimcommander_selected)>0
+			let name=<SID>SelectedNum(b:vimcommander_selected, i)
+			let filename=<SID>MyPath().name
+			let i=i+1
+		else
+			let name=""
+		end
+	endwhile
+	let b:vimcommander_selected=""
+	cal <SID>RefreshDisplays()
 endf
 
 fu! <SID>FileEdit()
@@ -425,7 +449,7 @@ fu! <SID>BuildTreeNoPrev(path)
 		let s:path_left=path
 	end
 	if g:vimcommander_shallcd==1
-		exe "cd ".escape(<SID>MyPath())
+		exe "cd ".<SID>MyPath()
 	end
 	cal setline(1,path)
 	setl noma nomod
@@ -1238,8 +1262,7 @@ if exists("b:vimcommander_install_doc") && b:vimcommander_install_doc==0
 	finish
 end
 
-let s:revision=
-			\ substitute("$Revision: 76 $",'\$\S*: \([.0-9]\+\) \$','\1','')
+let s:revision= PROGRAM_VERSION
 silent! let s:install_status =
 			\ <SID>SpellInstallDocumentation(expand('<sfile>:p'), s:revision)
 if (s:install_status == 1)
