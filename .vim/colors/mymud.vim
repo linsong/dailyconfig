@@ -2,7 +2,7 @@
 " mix mud and desert colorscheme to get a better one for me 
 "
 
-set background=light
+set background=dark
 hi clear
 if exists("syntax_on")
 	syntax reset

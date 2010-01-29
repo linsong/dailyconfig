@@ -43,4 +43,7 @@ augroup filetypedetect
 
   autocmd BufRead,BufNewFile Twitter_* setfiletype  twitter
 
+  autocmd BufRead,BufNewFile *.otl set ts=2
+
+  autocmd BufRead,BufNewFile *.rfc* setfiletype rfc
 augroup END

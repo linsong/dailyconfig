@@ -26,3 +26,7 @@ end
 def exec_last
   TaskEngine::Core::TaskInstance.last.execute!
 end
+
+def qtasks(state='queued')
+  TaskEngine::Core::TaskInstance.find_all_by_state(state)
+end

@@ -433,6 +433,12 @@
     "if !has("gui_running")
         ":set term=builtin_ansi
     "endif
+    
+    if has('clipboard')
+      :nmap ,cp :let @*=expand('%:p')<CR>
+      :nmap ,cpd :let @*=expand('%:p:h')<CR>
+      :nmap ,cpf :let @*=expand('%:t')<CR>
+    endif
 
 "## }}}1
 
@@ -794,7 +800,7 @@ if has("autocmd")
         :autocmd User Rails.test*       set ft=railstest.ruby
         :autocmd User Rails.migration*  set ft=railsmigration.ruby
         :autocmd User Rails.view.erb*   set ft=railsview.eruby
-        :autocmd User Rails             let g:Grep_Skip_Dirs = join(['log', 'vender', 'index', 'tmp', 'wireframes', 'graphs', 'documents', 'pdf_forms'] + Grep_Skip_Dirs_List, ' ')
+        :autocmd User Rails             let g:Grep_Skip_Dirs = join(['log', 'vender', 'index', 'tmp', 'wireframes', 'graphs', 'documents', 'pdf_forms', 'performance'] + Grep_Skip_Dirs_List, ' ')
 
         " add the current extension to the grep file list
         ":autocmd BufNewFile,BufRead * let g:Grep_Default_Filelist = join(["*." . expand("%:e")] + Grep_Default_Filelist_List, ' ')

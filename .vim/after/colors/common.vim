@@ -55,8 +55,8 @@ highlight Search     term=reverse ctermfg=232 ctermbg=215 guifg=Black guibg=Yell
 if &background == "dark"
 
   if v:version >= 700
-      highlight CursorLine term=underline cterm=underline guibg=Grey40
-      highlight CursorColumn term=reverse ctermbg=8 guibg=Grey40
+      highlight CursorLine term=underline cterm=underline guibg=Grey25
+      highlight CursorColumn term=reverse ctermbg=8 guibg=Grey25
   endif
 
   " highlight defination for visualmark.vim

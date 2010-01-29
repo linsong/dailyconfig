@@ -4,7 +4,7 @@
 " Version:1.0
 
 
-set background=light
+set background=dark
 hi clear
 if exists("syntax_on")
 	syntax reset
