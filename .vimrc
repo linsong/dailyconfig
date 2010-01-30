@@ -141,6 +141,8 @@
     endif
 
     :set previewheight=25
+
+    set listchars=tab:»-,trail:·,extends:»,precedes:«
 "## }}}1
 
 
