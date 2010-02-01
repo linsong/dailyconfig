@@ -145,7 +145,6 @@
     set listchars=tab:»-,trail:·,extends:»,precedes:«
 "## }}}1
 
-
 "## Encodings {{{1
     "for more details, read help usr_45.txt
     " encodings configure
@@ -1222,7 +1221,7 @@ call pathogen#runtime_append_all_bundles()
     "### setting for grep.vim {{{2
     let Grep_Key = '<F12>'
     let Grep_Default_Options = '-inH'
-    let Grep_Skip_Dirs_List = ['.svn', '.cvs', 'zope']
+    let Grep_Skip_Dirs_List = ['.svn', '.cvs', 'zope', '.git']
     let Grep_Skip_Dirs = join(g:Grep_Skip_Dirs_List, ' ')
     let Grep_Skip_Files_List = ['*.bak', '*~', '*.swp', '*.swo', '*.pyc', '*.swf', '*.exe', 'tags', 'TAGS']
     let Grep_Skip_Files = join(Grep_Skip_Files_List, ' ')

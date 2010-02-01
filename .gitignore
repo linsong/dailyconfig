@@ -144,6 +144,6 @@ WINDOWS_C
 .fonts/fonts.dir
 .fonts/fonts.list
 .fonts/fonts.scale
-work/
+work/*
 blog/linsong.github.com/
 
