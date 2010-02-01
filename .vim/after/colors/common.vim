@@ -49,8 +49,13 @@ highlight Cursor     gui=none       guibg=Red guifg=#ffffff
 "highlight Cursor     ctermfg=Black	ctermbg=Green	 cterm=reverse
 highlight Cursor     ctermfg=Black	ctermbg=Red	 cterm=reverse
 
-highlight IncSearch  term=reverse cterm=bold ctermfg=232 ctermbg=215 gui=reverse
-highlight Search     term=reverse ctermfg=232 ctermbg=215 guifg=Black guibg=Yellow
+if &t_Co>=256
+  highlight IncSearch  term=reverse cterm=bold ctermfg=232 ctermbg=215 gui=reverse
+  highlight Search     term=reverse ctermfg=232 ctermbg=215 guifg=Black guibg=Yellow
+else
+  highlight IncSearch  term=reverse cterm=reverse gui=reverse
+  highlight Search     term=reverse ctermfg=0 ctermbg=3 guifg=Black guibg=Yellow
+end
 
 if &background == "dark"
 
