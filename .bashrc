@@ -229,7 +229,7 @@ function $function_name {
  alias gad='git add'
  alias gst='git status'
  alias glg='git log'
- alias gup='git pull --rebase && up.sh'
+ alias gup='git pull && up.sh'
  alias gdiff='git diff'
 
  # following are for git alias
