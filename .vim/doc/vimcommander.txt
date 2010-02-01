@@ -1,4 +1,4 @@
-*vimcommander.txt*   total-commander-like file-manager for vim.       v1.54.2.9
+*vimcommander.txt*   total-commander-like file-manager for vim.       v76
 
 
                         VIMCOMMANDER REFERENCE MANUAL~
@@ -107,8 +107,6 @@ CONTENT                                                *vimcommander-contents*
     - Options for some of the behaviors.
     - Directory bookmarks.
     - Make selection by pattern faster.
-	- Rename-in-place.
-	- copy-paste mechanism.
 
 ==============================================================================
 6. VimCommander Links                                     *vimcommander-links*
