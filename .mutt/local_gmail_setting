@@ -1,0 +1,24 @@
+# vim: set ft=muttrc
+##########################################################
+###   GMail SETTING
+##########################################################
+set imap_user = 'linsong.qizi@gmail.com'
+#set imap_pass = 'yourpass' # let mutt ask me the password instead of store it here
+
+set smtp_url="smtp://linsong.qizi@gmail.com@smtp.gmail.com"
+# comment out the line below to let mutt to guess the authentication method one by one
+#set smtp_authenticators="cram-md5"
+
+set mbox_type=Maildir
+set folder=$HOME/Mail/gmail
+
+source $HOME/.mutt/muttrc.mailboxes
+
+#set imap_keepalive = 300
+#set folder = "imaps://imap.gmail.com:993"
+set spoolfile = "+INBOX"
+#set postponed="+[Gmail]/Drafts"
+#set record="+[Gmail]/Sent Mail"
+
+set mbox = "+mbox"
+
