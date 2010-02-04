@@ -3,7 +3,7 @@
 new-session -d -swork -n music
 #rename-window -t 0 musiC
 send -t work:0 'cd ~/Music'
-send -t work:0 'ncmpc'
+send -t work:0 'ncmpcpp'
 
 new-window -d -n mutt
 send -t work:1 'mutt'

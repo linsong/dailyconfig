@@ -113,6 +113,7 @@ source ~/.mutt/save-hooks                 # Define save-hooks.
 source ~/.mutt/folder-hooks               # Define folder-hooks.
 source ~/.mutt/fcc-hooks                  # Define fcc-hooks.
 source ~/.mutt/message-hooks              # Define message hooks.
+source ~/.mutt/send-hooks                 # Define send hooks.
 source ~/.mutt/scores                     # Define score rules
 
 #

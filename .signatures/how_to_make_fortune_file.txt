@@ -1,0 +1,4 @@
+1. sentences sperated by '%' single line in file foo
+2. run command: strfile foo
+3. fortune /path/to/foo
+

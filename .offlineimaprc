@@ -66,8 +66,8 @@ maxsyncaccounts = 1
 #
 # You can override this with a command-line option -u.
 
-ui = Curses.Blinkenlights, TTY.TTYUI,
-     Noninteractive.Basic, Noninteractive.Quiet
+#ui = Curses.Blinkenlights, TTY.TTYUI, Noninteractive.Basic, Noninteractive.Quiet
+ui = TTY.TTYUI, Noninteractive.Basic, Noninteractive.Quiet
 
 # If you try to synchronize messages to a read-only folder,
 # OfflineIMAP will generate a warning.  If you want to suppress these
@@ -101,7 +101,6 @@ ignore-readonly = no
 # The default is to have no timeout beyond the OS.  Times are given in seconds.
 #
 # socktimeout = 60
-socktimeout = 30
 
 # By default, OfflineIMAP will use fsync() to force data out to disk at
 # opportune times to ensure consistency.  This can, however, reduce
@@ -470,5 +469,5 @@ maxconnections = 1
 holdconnectionopen = yes
 keepalive = 60
 
-folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail', '[Gmail]/Drafts', '[Gmail]/Starred', 'Seravia', 'GitNotification', '[list]tmux']
+folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail', '[Gmail]/Drafts', '[Gmail]/Starred', 'Seravia', 'GitNotification', '[list]tmux', '[list]TopLanguage', '[list]mutt']
 

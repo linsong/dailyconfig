@@ -146,4 +146,6 @@ WINDOWS_C
 .fonts/fonts.scale
 work/*
 blog/linsong.github.com/
+.signatures/*.dat
+.signatures/seravia
 

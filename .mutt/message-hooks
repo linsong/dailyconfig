@@ -2,13 +2,11 @@
 #
 # Fine tune mutt depending on aspects of a message.
 #
-
+# hooks defined here will be triggered when reading email, look send-hooks for
+# hooks happening during composing email
+#
 # By default, don't do anything clever.
 message-hook . "unset display_filter"
-
-# default from address is my gmail address
-message-hook . "my_hdr From: Vincent Wang <linsong.qizi@gmail.com>"
-message-hook . "set from = linsong.qizi@gmail.com"
 
 # Sort out silly characters from Microsoft MUAs or MUAs that suffer the same
 # problems.
@@ -17,27 +15,3 @@ message-hook "~h \"X-Mailer: (Microsoft Outlook IMO|Experian ContactMail)\"" "se
 # IncrediMail, whatever the hell that is, sends out its text alternative as
 # DOS formatted text. Clean things up.
 message-hook "~h \"X-Mailer: IncrediMail" "set display_filter='tr -d \\\\r'"
-
-#message-hook "(~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")" "my_hdr From: Vincent Wang <vincent@exoweb.net>"
-#message-hook "(~x exoweb\.net | ~h \"^In-[Rr]eply-[Tt]o: .*exoweb\.net\")" "set from = vincent@exoweb.net"
-#message-hook "(~x nordicbet\.com | ~h \"^In-[Rr]eply-[Tt]o: .*nordicbet\.com\")" "my_hdr From: Vincent Wang <vincent@exoweb.net>"
-#message-hook "(~x nordicbet\.com | ~h \"^In-[Rr]eply-[Tt]o: .*nordicbet\.com\")" "set from = vincent@exoweb.net"
-#
-#message-hook "~f exoweb\.net" "set from='Vincent Wang <vincent@exoweb.net>'"
-#message-hook "~f nordicbet\.com" "set from='Vincent Wang <vincent@exoweb.net>'"
-message-hook "~f qnite\.com" "set from='Vincent Wang <vincent@qnite.com>'"
-
-message-hook "~L vincent@linsong\.org" "my_hdr From: Vincent Wang <vincent@linsong.org>"
-message-hook "~L vincent@linsong\.org" "set from = vincent@linsong.org"
-
-message-hook "~L wangwei@linsong\.org" "my_hdr From: Wang Wei <wangwei@linsong.org>"
-message-hook "~L wangwei@linsong\.org" "set from = wangwei@linsong.org"
-
-message-hook "~L vincent@qnite\.com" "my_hdr From: Vincent Wang <vincent@qnite.com>"
-message-hook "~L vincent@qnite\.com" "set from = vincent@qnite.com"
-# message-hook "~h \"^X-Forwarded-For: vincent@linsong\.org\"" "my_hdr From: vincent@linsong.org"
-
-message-hook "~f seravia\.com" "set from='Vincent Wang <vincent@seravia.com>'"
-message-hook "~f seravia\.com" "my_hdr From: Vincent Wang <vincent@seravia.com>"
-message-hook "~L vincent@seravia\.com" "my_hdr From: Vincent Wang <vincent@seravia.com>"
-message-hook "~L vincent@seravia\.com" "set from = vincent@seravia.com"

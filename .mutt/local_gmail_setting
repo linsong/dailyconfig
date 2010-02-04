@@ -11,14 +11,10 @@ set smtp_url="smtp://linsong.qizi@gmail.com@smtp.gmail.com"
 
 set mbox_type=Maildir
 set folder=$HOME/Mail/gmail
+set spoolfile = "+INBOX"
+set postponed="+[Gmail].Drafts"
+#set record="+[Gmail].Sent Mail"
 
 source $HOME/.mutt/muttrc.mailboxes
 
-#set imap_keepalive = 300
-#set folder = "imaps://imap.gmail.com:993"
-set spoolfile = "+INBOX"
-#set postponed="+[Gmail]/Drafts"
-#set record="+[Gmail]/Sent Mail"
-
-set mbox = "+mbox"
-
+set quit

@@ -3,9 +3,6 @@
 # Null out any folder specific keys.
 bind index @ noop
 
-# Set default signature
-#set signature=~/.signature
-
 set pager_stop                            # Don't skip msgs on next page.
 set pager_context = 1 
 set pager_index_lines = 10                 # when in pager mode, show a miniindex
