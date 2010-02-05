@@ -86,7 +86,7 @@ ignore-readonly = no
 # source file and call them from this config file.  You can find
 # an example of this in the manual.
 #
-# pythonfile = ~/.offlineimap.py
+pythonfile = ~/.offlineimap.py
 #
 
 # By default, OfflineIMAP will not exit due to a network error until
@@ -445,6 +445,8 @@ type = Gmail
 # Specify the Gmail user name. This is the only mandatory parameter.
 remoteuser = linsong.qizi@gmail.com
 
+remotepasseval = get_imap_passwd()
+
 # Deleting a message from a Gmail folder via the IMAP interface will
 # just remove that folder's label from the message: the message will
 # continue to exist in the '[Gmail]/All Mail' folder.  If `realdelete`
@@ -470,4 +472,3 @@ holdconnectionopen = yes
 keepalive = 60
 
 folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail', '[Gmail]/Drafts', '[Gmail]/Starred', 'Seravia', 'GitNotification', '[list]tmux', '[list]TopLanguage', '[list]mutt']
-
