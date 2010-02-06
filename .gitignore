@@ -148,4 +148,25 @@ work/*
 blog/linsong.github.com/
 .signatures/*.dat
 .signatures/seravia
-
+.offlineimap/
+temp
+sent/
+diary/
+Library/Application\ Support
+.monit.pid
+.monit.state
+.alias.wcd
+.fontconfig/*-x86.cache-3
+.mairixrc
+.mbsyncrc
+.mutt/msearch.sh
+.mutt/muttrc.mailboxes
+.ncmpcpp/error.log
+.ncmpcpp/keys
+*/.rtdata.wcd
+.vim/passwords.vim
+.vim/plugin/ANcmds.vim
+.w3m/cookie
+Library/ColorSync/
+Library/Images/
+Library/PDF Services/
