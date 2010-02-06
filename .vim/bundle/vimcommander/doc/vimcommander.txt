@@ -1,4 +1,4 @@
-*vimcommander.txt*   total-commander-like file-manager for vim.       v76
+*vimcommander.txt*   total-commander-like file-manager for vim.       v0.77
 
 
                         VIMCOMMANDER REFERENCE MANUAL~

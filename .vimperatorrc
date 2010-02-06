@@ -105,13 +105,18 @@ javascript <<EOF
 
 EOF
 
+"javascript <<EOF
+" inject_jquery = function(){
+"   var s = document.createElement('script');
+"   s.setAttribute('src', 'http://jquery.com/src/jquery-latest.js');
+"   document.getElementsByTagName('body')[0].appendChild(s);
+" };
+"EOF
+"command! jquery js inject_jquery()
+
 javascript <<EOF
- inject_jquery = function(){
-   var s = document.createElement('script');
-   s.setAttribute('src', 'http://jquery.com/src/jquery-latest.js');
-   document.getElementsByTagName('body')[0].appendChild(s);
- };
+delicious = function(){f='http://delicious.com/save?url='+encodeURIComponent(window.location.href)+'&title='+encodeURIComponent(document.title)+'&v=5&';a=function(){if(!window.open(f+'noui=1&jump=doclose','deliciousuiv5','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}};
 EOF
-command! jquery js inject_jquery()
+command! delicious js delicious()
 
 " vim: ft=vimperator sw=2 sts=2 foldmethod=marker
