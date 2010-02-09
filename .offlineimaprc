@@ -468,7 +468,8 @@ realdelete = no
 # spamfolder = [Google Mail]/Spam
 
 maxconnections = 1
-holdconnectionopen = yes
-keepalive = 60
+holdconnectionopen = no
+#holdconnectionopen = yes
+#keepalive = 60
 
-folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail', '[Gmail]/Drafts', '[Gmail]/Starred', 'Seravia', 'GitNotification', '[list]tmux', '[list]TopLanguage', '[list]mutt']
+folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail', '[Gmail]/Drafts', '[Gmail]/Starred', 'Seravia', 'GitNotification', '[list]tmux', '[list]TopLanguage', '[list]mutt', 'GoogleAlert', 'DailyRead']

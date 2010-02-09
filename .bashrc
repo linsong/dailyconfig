@@ -464,7 +464,7 @@ function rt()
    case $* in 
      */unit/*) rake test:units TEST=$* ;;
      */functional/*) rake test:functionals TEST=$* ;;
-     */integration/*) rake test:intergration TEST=$* ;;
+     */integration/*) rake test:integration TEST=$* ;;
      *) echo -n "this test is not supported" ;;
     esac
  else
