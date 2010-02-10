@@ -170,3 +170,4 @@ Library/Application\ Support
 Library/ColorSync/
 Library/Images/
 Library/PDF Services/
+~/.vim/bundle/**/.git
