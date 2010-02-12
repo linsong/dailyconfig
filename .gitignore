@@ -171,3 +171,15 @@ Library/ColorSync/
 Library/Images/
 Library/PDF Services/
 ~/.vim/bundle/**/.git
+share
+doc
+blog
+Library/Autosave Information/
+.w3m/*.html
+.w3m/w3mcache*
+.vim/doc/tags-ja
+.vim/manualload/vimim.pinyin_fcitx.txt
+.mpd/
+.lyrics/
+.cheat/
+.aria2/
