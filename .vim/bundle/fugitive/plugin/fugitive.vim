@@ -1,7 +1,9 @@
-" fugitive.vim - Fugitive
+" fugitive.vim - A Git wrapper so awesome, it should be illegal
 " Maintainer:   Tim Pope <vimNOSPAM@tpope.org>
+" Version:      1.0
+" GetLatestVimScripts: 2975 1 :AutoInstall: fugitive.vim
 
-if (exists("g:loaded_fugitive") && g:loaded_fugitive) || &cp
+if exists('g:loaded_fugitive') || &cp
   finish
 endif
 let g:loaded_fugitive = 1
@@ -532,10 +534,7 @@ function! s:StageToggle(lnum1,lnum2) abort
       if getline('.') == '# Changes to be committed:'
         return 'Gcommit'
       endif
-      let filename = matchstr(line,'^#\t[[:alpha:] ]\+: *\zs.*')
-      if filename ==# ''
-        let filename = matchstr(line,'^#\t\zs.*')
-      endif
+      let filename = matchstr(line,'^#\t\%([[:alpha:] ]\+: *\)\=\zs.*')
       if filename ==# ''
         continue
       endif
@@ -557,10 +556,15 @@ function! s:StageToggle(lnum1,lnum2) abort
       let output .= call(s:repo().git_chomp_in_tree,cmd,s:repo())."\n"
     endfor
     if exists('first_filename')
+      let jump = first_filename
+      let f = matchstr(getline(a:lnum1-1),'^#\t\%([[:alpha:] ]\+: *\)\=\zs.*')
+      if f !=# '' | let jump = f | endif
+      let f = matchstr(getline(a:lnum2+1),'^#\t\%([[:alpha:] ]\+: *\)\=\zs.*')
+      if f !=# '' | let jump = f | endif
       silent! edit!
       1
       redraw
-      call search('^#\t\%([[:alpha:] ]\+: *\)\=\V'.first_filename.'\$','W')
+      call search('^#\t\%([[:alpha:] ]\+: *\)\=\V'.jump.'\$','W')
     endif
     echo s:sub(s:gsub(output,'\n+','\n'),'\n$','')
   catch /^fugitive:/
@@ -580,10 +584,7 @@ function! s:StagePatch(lnum1,lnum2) abort
     elseif line == '# Changed but not updated:'
       return 'Git add --patch'
     endif
-    let filename = matchstr(line,'^#\t[[:alpha:] ]\+: *\zs.*')
-    if filename ==# ''
-      let filename = matchstr(line,'^#\t\zs.*')
-    endif
+    let filename = matchstr(line,'^#\t\%([[:alpha:] ]\+: *\)\=\zs.*')
     if filename ==# ''
       continue
     endif
@@ -1012,14 +1013,14 @@ function! s:Diff(...) abort
       let file = s:buffer().path(':0:')
     elseif a:1 =~# '^:/'
       try
-        let file = s:repo().rev_parse(a:1)
+        let file = s:repo().rev_parse(a:1).s:buffer().path(':')
       catch /^fugitive:/
         return 'echoerr v:errmsg'
       endtry
     else
       let file = s:buffer().expand(a:1)
     endif
-    if file !~ ':' && file !~ '^/'
+    if file !~# ':' && file !~# '^/' && s:repo().git_chomp('cat-file','-t',file) =~# '^\%(tag\|commit\)$'
       let file = file.s:buffer().path(':')
     endif
   else
@@ -1173,7 +1174,7 @@ function! s:Blame(bang,line1,line2,count) abort
         normal! zt
         execute current
         execute "vertical resize ".(match(getline('.'),'\s\+\d\+)')+1)
-        setlocal nomodified nomodifiable nonumber scrollbind nowrap foldcolumn=0 nofoldenable filetype=fugitiveblame
+        setlocal nomodified nomodifiable bufhidden=delete nonumber scrollbind nowrap foldcolumn=0 nofoldenable filetype=fugitiveblame
         nnoremap <buffer> <silent> q    :<C-U>bdelete<CR>
         nnoremap <buffer> <silent> <CR> :<C-U>exe <SID>BlameJump('')<CR>
         nnoremap <buffer> <silent> P    :<C-U>exe <SID>BlameJump('^'.v:count1)<CR>
@@ -1476,7 +1477,10 @@ function! s:JumpInit() abort
     nnoremap <buffer> <silent> P     :<C-U>exe <SID>Edit('edit',<SID>buffer().commit().'^'.v:count1.<SID>buffer().path(':'))<CR>
     nnoremap <buffer> <silent> ~     :<C-U>exe <SID>Edit('edit',<SID>buffer().commit().'~'.v:count1.<SID>buffer().path(':'))<CR>
     nnoremap <buffer> <silent> C     :<C-U>exe <SID>Edit('edit',<SID>buffer().containing_commit())<CR>
-    nnoremap <buffer> <silent> c     :<C-U>exe <SID>Edit('pedit',<SID>buffer().containing_commit())<CR>
+    nnoremap <buffer> <silent> cc    :<C-U>exe <SID>Edit('edit',<SID>buffer().containing_commit())<CR>
+    nnoremap <buffer> <silent> co    :<C-U>exe <SID>Edit('split',<SID>buffer().containing_commit())<CR>
+    nnoremap <buffer> <silent> cO    :<C-U>exe <SID>Edit('tabedit',<SID>buffer().containing_commit())<CR>
+    nnoremap <buffer> <silent> cp    :<C-U>exe <SID>Edit('pedit',<SID>buffer().containing_commit())<CR>
   endif
 endfunction
 
