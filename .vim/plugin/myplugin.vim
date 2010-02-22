@@ -182,8 +182,8 @@ endfunction
 
 "display git branch info is possible {{{1
 function! StatusInfo()
-  if exists('*GitBranch')
-    return '[' . GitBranch() . ']'
+  if exists('*fugitive#statusline')
+    return fugitive#statusline()
   else
     return ''
   endif

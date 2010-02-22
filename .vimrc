@@ -1639,7 +1639,18 @@ call pathogen#runtime_append_all_bundles()
     "### vimcommander {{{2
 	  :noremap <silent> ;vc                     :cal VimCommanderToggle()<CR>
     "}}}2
+    
+    "### screen {{{2
+    let g:ScreenImpl = 'Tmux'
+    "}}}2
 
+    "### fugitive {{{2
+    map ,gb :Gblame<CR>
+    map ,gs :Gstatus<CR>
+    map ,gd :Gdiff<CR>
+    map ,gl :Glog<CR>
+    map ,gc :Gcommit<CR>
+    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
