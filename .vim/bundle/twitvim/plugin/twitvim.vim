@@ -460,7 +460,7 @@ function! s:curl_curl(url, login, proxy, proxylogin, parms)
     endif
 
     if a:proxy != ""
-	let curlcmd .= '-x "'.a:proxy.'" '
+	let curlcmd .= '----socks5-hostname "'.a:proxy.'" '
     endif
 
     if a:proxylogin != ""
