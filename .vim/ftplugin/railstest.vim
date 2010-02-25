@@ -1,1 +1,1 @@
-noremap! ;e :silent! !tmux -L main send-keys "rt %:p" "Enter" <CR>
+nmap ;e :call system('tmux -L main send-keys "rt ' . expand("%:p") . '" "Enter"')<CR>
