@@ -206,7 +206,7 @@ function! s:ScreenShellAttach(session)
   let g:ScreenShellSession = s:screen{g:ScreenImpl}.attachSession(a:session)
 
   if g:ScreenShellSession != '0' && !exists(':ScreenSend')
-    command -nargs=0 -range=% ScreenSend :call <SID>ScreenSend(<line1>, <line2>)
+    command -nargs=0 -range ScreenSend :call <SID>ScreenSend(<line1>, <line2>)
     let g:ScreenShellSend = s:ScreenSendFuncRef()
     let g:ScreenShellFocus = s:ScreenFocusFuncRef()
   endif
@@ -367,7 +367,7 @@ function! s:ScreenInit(cmd)
   endif
 
   if !exists(':ScreenSend')
-    command -nargs=0 -range=% ScreenSend :call <SID>ScreenSend(<line1>, <line2>)
+    command -nargs=0 -range ScreenSend :call <SID>ScreenSend(<line1>, <line2>)
     let g:ScreenShellSend = s:ScreenSendFuncRef()
     let g:ScreenShellFocus = s:ScreenFocusFuncRef()
     " remove :ScreenShell command to avoid accidentally calling it again.
@@ -863,8 +863,25 @@ function s:screenTmux.attachSession(session) dict " {{{
   " for sessions created on the default server, we can get the list of
   " sessions, but tmux doesn't appear to have a way to send commands targeting
   " a specific session, which is why we use -S to target servers.
-  echom 'Attaching to an existing session is currently not supported with tmux.'
-  return
+  "echom 'Attaching to an existing session is currently not supported with tmux.'
+  "return
+  if a:session != ''
+    let sessions = split(glob("/tmp/tmux-*/" . a:session), '\n')
+    if len(sessions) == 0
+      echoerr 'unable to find the tmux session "' . a:session . '"'
+      return 
+    else
+      return sessions[0]
+    endif
+  else
+    let sessions = split(glob("/tmp/tmux-*/*"), '\n')
+    if len(sessions) == 0
+      echoerr 'unable to find any tmux session'
+      return 
+    else
+      return sessions[0]
+    endif
+  endif
 endfunction " }}}
 
 function s:screenTmux.bootstrap(server, sessionfile, cmd) dict " {{{
