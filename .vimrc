@@ -372,6 +372,13 @@
     " (it will prompt for sudo password when writing)
     cmap w!! %!sudo tee > /dev/null %
 
+    " Center screen on next/previous selection.
+    nnoremap n nzz
+    nnoremap N Nzz
+    " Last and next jump should center too.
+    nnoremap <C-o> <C-o>zz
+    nnoremap <C-i> <C-i>zz
+
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 
@@ -1382,6 +1389,7 @@ call pathogen#runtime_append_all_bundles()
                 \    { "^,w" : [$PROJECT_DIR],
                 \      "^,v" : map(filter(split(&runtimepath, ','), 'v:val !~ "after$"'), 'v:val . ''/**/'''),
                 \      "^,r" : ["app/models", "app/views", "app/controllers", "test/functional", "test/integration", "test/unit", "test/fixtures", "db/fixtures"],
+                \      "^,u" : [$PROJECT_DIR . "/../ui_design/template/feb2010/html/02 - current/"],
                 \    }
     "let g:fuf_abbrevMap = {
           "\   '^vr:' : map(filter(split(&runtimepath, ','), 'v:val !~ "after$"'), 'v:val . ''/**/'''),
@@ -1625,7 +1633,7 @@ call pathogen#runtime_append_all_bundles()
     let twitvim_api_root = "http://168.143.162.100"
     let twitvim_browser_cmd = "open"
     "}}}2
-
+    
     "### settings for syntastic {{{2
     let g:syntastic_enable_signs = 1
     let g:syntastic_auto_loc_list = 1
@@ -1642,6 +1650,9 @@ call pathogen#runtime_append_all_bundles()
     
     "### screen {{{2
     let g:ScreenImpl = 'Tmux'
+    "let g:ScreenImpl = 'GnuScreen'
+    "noremap <Enter>  exists('ScreenSend') ? :ScreenSend : <Enter><CR>
+    "noremap ;e exists(':ScreenSend') ? :ScreenShellSend("ruby -Itest " . expand("%:p")) : j <CR>
     "}}}2
 
     "### fugitive {{{2
@@ -1650,6 +1661,12 @@ call pathogen#runtime_append_all_bundles()
     map ,gd :Gdiff<CR>
     map ,gl :Glog<CR>
     map ,gc :Gcommit<CR>
+    "}}}2
+
+    "### Ultisnips {{{2
+    let g:UltiSnipsExpandTrigger="<tab>"
+    let g:UltiSnipsJumpForwardTrigger="<tab>"
+    let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
     "}}}2
 "## }}}1
 
