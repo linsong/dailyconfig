@@ -379,6 +379,15 @@
     nnoremap <C-o> <C-o>zz
     nnoremap <C-i> <C-i>zz
 
+    "redefine esc 
+    ino jj <esc>
+    ino kk <esc>
+
+    cno jj <c-c>
+    cno kk <c-c>
+
+    vno v <esc>
+
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 
@@ -1652,7 +1661,7 @@ call pathogen#runtime_append_all_bundles()
     let g:ScreenImpl = 'Tmux'
     "let g:ScreenImpl = 'GnuScreen'
     "noremap <Enter>  exists('ScreenSend') ? :ScreenSend : <Enter><CR>
-    "noremap ;e exists(':ScreenSend') ? :ScreenShellSend("ruby -Itest " . expand("%:p")) : j <CR>
+    noremap ;e :call ScreenShellSend("ruby -Itest " . expand("%:p"))<CR>
     "}}}2
 
     "### fugitive {{{2
