@@ -376,8 +376,8 @@
     nnoremap n nzz
     nnoremap N Nzz
     " Last and next jump should center too.
-    nnoremap <C-o> <C-o>zz
-    nnoremap <C-i> <C-i>zz
+    "nnoremap <C-o> <C-o>zz
+    "nnoremap <C-i> <C-i>zz
 
     "redefine esc 
     ino jj <esc>
@@ -386,7 +386,7 @@
     cno jj <c-c>
     cno kk <c-c>
 
-    vno v <esc>
+    "vno v <esc>
 
 "## }}}1
 
@@ -1376,7 +1376,7 @@ call pathogen#runtime_append_all_bundles()
     "}}}2
    
     "### setting for toggle_words.vim {{{2
-     let g:toggle_words_dict = {'*': [['white', 'black'], ['add', 'remove'], ['read', 'write']], 'python': [['if', 'elif', 'else']]}
+     let g:toggle_words_dict = {'*': [['white', 'black'], ['add', 'remove'], ['read', 'write'], ['hide', 'show'], ['before', 'after'], ['up', 'down'], ['open', 'close'], ['right', 'left'], ['long', 'short'], ['big', 'small']], 'python': [['if', 'elif', 'else']]}
      nmap ,t :ToggleWord<CR>
      vmap ,t <ESC>:ToggleWord<CR>
     "}}}2
@@ -1481,7 +1481,6 @@ call pathogen#runtime_append_all_bundles()
     " file, for example generate a tags file for files, that will minic the
     " behavior of TextMate easily. So give it a seperate shortcut 
     :noremap ,s  :FufTag<CR> 
-    :noremap <C-g> :FufTag<CR> 
 
     let g:fuf_previewHeight = 0
     "}}}2
@@ -1672,11 +1671,6 @@ call pathogen#runtime_append_all_bundles()
     map ,gc :Gcommit<CR>
     "}}}2
 
-    "### Ultisnips {{{2
-    let g:UltiSnipsExpandTrigger="<tab>"
-    let g:UltiSnipsJumpForwardTrigger="<tab>"
-    let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-    "}}}2
 "## }}}1
 
 "## Xterm colors defination {{{1 
