@@ -461,12 +461,13 @@ function rt()
 {
  # shortcut to start rails test
  if [ $* ]; then 
-   case $* in 
-     */unit/*) rake test:units TEST=$* ;;
-     */functional/*) rake test:functionals TEST=$* ;;
-     */integration/*) rake test:integration TEST=$* ;;
-     *) echo -n "this test is not supported" ;;
-    esac
+   ruby -Itest $*
+   #case $* in 
+     #*/unit/*) rake test:units TEST=$* ;;
+     #*/functional/*) rake test:functionals TEST=$* ;;
+     #*/integration/*) rake test:integration TEST=$* ;;
+     #*) echo -n "this test is not supported" ;;
+    #esac
  else
    rake 
  fi
