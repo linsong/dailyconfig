@@ -18,7 +18,10 @@ def unescape(s):
     try:
         return _UNESCAPE.sub(fixup,s.decode("utf-8")).encode("utf-8")
     except:
-        print s.decode("utf-8")
+        try:
+            print s.decode("utf-8")
+        except:
+            return ""
 
 def parse_content(c):
     try:
@@ -68,12 +71,31 @@ def write_snippets(snip_descr, f):
         f.write(d["content"].encode("utf-8") + "\n")
         f.write("endsnippet\n\n")
 
+def get_bundle(bundle):
+    print "Getting bundle for '%s'" % bundle
+    rv = fetch_snippets(bundle)
+    write_snippets(rv, open("tm_" + bundle.lower() + ".snippets","w"))
 
+def get_all_bundles():
+    url = "http://svn.textmate.org/trunk/Bundles/"
+    content = urllib.urlopen(url).read()
+    names = []
+    for link in re.findall("<li>(.*?)</li>", content):
+        m = re.match(r'<a\s*href="(.*)\.tmbundle/"\s*>(.*).tmbundle/</a>', link)
+        if not m:
+          continue
+
+        link, name = m.groups()
+        names.append(name)
+    for name in names:
+      get_bundle(name)
 
 if __name__ == '__main__':
     import sys
 
     bundle = sys.argv[1]
-    rv = fetch_snippets(bundle)
-    write_snippets(rv, open("tm_" + bundle.lower() + ".snippets","w"))
+    if bundle == 'all':
+      get_all_bundles()
+    else:
+      get_bundle(bundle)
 

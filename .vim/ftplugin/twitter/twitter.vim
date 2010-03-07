@@ -18,5 +18,7 @@ if ! exists("b:twitter_ini")
   " for now, retweet are script functions
   "map <buffer> r :retweet<CR>
   "map <buffer> R :reply<CR>
+  
+  map <buffer> g/ :SearchTwitter 
 
 end
