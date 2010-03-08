@@ -3,6 +3,7 @@
 
 import urllib
 import re
+import glob
 from xml.etree import ElementTree
 from xml.parsers.expat import ExpatError
 import htmlentitydefs
@@ -73,8 +74,12 @@ def write_snippets(snip_descr, f):
 
 def get_bundle(bundle):
     print "Getting bundle for '%s'" % bundle
-    rv = fetch_snippets(bundle)
-    write_snippets(rv, open("tm_" + bundle.lower() + ".snippets","w"))
+    if bundle.endswith('/'):
+      rv = fetch_snippets_from_folder(bundle)
+      write_snippets(rv, open("tm_cucumber.snippets","w"))
+    else:
+      rv = fetch_snippets(bundle)
+      write_snippets(rv, open("tm_" + bundle.lower() + ".snippets","w"))
 
 def get_all_bundles():
     url = "http://svn.textmate.org/trunk/Bundles/"
@@ -90,6 +95,18 @@ def get_all_bundles():
     for name in names:
       get_bundle(name)
 
+def fetch_snippets_from_folder(bundle):
+  import pdb, readline; pdb.set_trace();
+  rv = []
+  for fname in glob.glob(bundle + "*.tmSnippet"):
+    name = unescape(fname.rsplit('.', 1)[0].split('/')[-1]) # remove Extension
+    print "Fetching data for Snippet '%s'" % name
+    content = file(fname).read()
+    cont = parse_content(content)
+    if cont:
+        rv.append((name, cont))
+  return rv
+
 if __name__ == '__main__':
     import sys
 
@@ -98,4 +115,7 @@ if __name__ == '__main__':
       get_all_bundles()
     else:
       get_bundle(bundle)
+
+
+
 
