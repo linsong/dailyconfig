@@ -1618,6 +1618,8 @@ call pathogen#runtime_append_all_bundles()
     let g:UltiSnipsExpandTrigger="<tab>" 
     let g:UltiSnipsJumpForwardTrigger="<tab>" 
     let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
+
+    command! ResetUltiSnip :py UltiSnips_Manager.reset()
     "}}}2
 
     "### settings for redocommand {{{2
