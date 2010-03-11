@@ -10,7 +10,5 @@
 " to the maintainer.
 
 " make gtd filetype
-augroup filetypedetect
-  au! BufRead,BufNewFile *.gtd	set filetype=gtd
-augroup END
+au! BufRead,BufNewFile *.gtd	set filetype=gtd
 
