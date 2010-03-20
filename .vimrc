@@ -379,15 +379,6 @@
     "nnoremap <C-o> <C-o>zz
     "nnoremap <C-i> <C-i>zz
 
-    "redefine esc 
-    ino jj <esc>
-    ino kk <esc>
-
-    cno jj <c-c>
-    cno kk <c-c>
-
-    "vno v <esc>
-
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 

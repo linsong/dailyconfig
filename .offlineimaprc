@@ -172,7 +172,7 @@ remoterepository = GmailServerRepository
 # fractional minutes (ie, 3.25).
 
 # autorefresh = 5
-autorefresh = 2
+autorefresh = 1
 
 # You can tell offlineimap to do a number of quicker synchronizations
 # between full updates.  A quick synchronization only synchronizes
