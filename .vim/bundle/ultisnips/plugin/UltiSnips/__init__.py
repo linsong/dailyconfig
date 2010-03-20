@@ -505,7 +505,7 @@ class SnippetManager(object):
         self._snippets[ft] = {}
         for p in vim.eval("&runtimepath").split(',')[::-1]:
             pattern = p + os.path.sep + "UltiSnips" + os.path.sep + \
-                    "*%s.snippets" % ft
+                    "%s.snippets" % ft
             extra_pattern = p + os.path.sep + "UltiSnips" + os.path.sep + \
                     "*[-_]%s.snippets" % ft
 
