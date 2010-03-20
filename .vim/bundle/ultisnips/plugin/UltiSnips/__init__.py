@@ -188,7 +188,7 @@ class SnippetManager(object):
     def expand(self):
         if not self._try_expand():
             self._handle_failure(self.expand_trigger)
-    
+
     def expand_or_jump(self):
         """
         This function is used for people who wants to have the same trigger for
@@ -294,7 +294,7 @@ class SnippetManager(object):
             self._reinit()
 
             self._check_if_still_inside_snippet()
-    
+
     def _jump(self, backwards = False):
         if self._cs:
             self._expect_move_wo_change = True
@@ -506,8 +506,10 @@ class SnippetManager(object):
         for p in vim.eval("&runtimepath").split(',')[::-1]:
             pattern = p + os.path.sep + "UltiSnips" + os.path.sep + \
                     "*%s.snippets" % ft
+            extra_pattern = p + os.path.sep + "UltiSnips" + os.path.sep + \
+                    "*[-_]%s.snippets" % ft
 
-            for fn in glob.glob(pattern):
+            for fn in glob.glob(pattern)+glob.glob(extra_pattern):
                 self._load_snippets_from(ft, fn)
 
 
