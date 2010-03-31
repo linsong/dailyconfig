@@ -1,0 +1,641 @@
+snippet $ "$ (Select DOM Element)"
+\$(${1/(.+)/(?1:':)/}${1:string/element/array/function/jQuery object/string, context}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet this "$(this)"
+\$(this)$0
+endsnippet
+
+snippet $.ajax "$_ajax(hash)"
+\$.ajax({
+  url: "${1:mydomain.com/url}",
+  type: "${2:POST}",
+${3/(.+)/(?1:  dataType\: ":)/}${3:xml/html/script/json}${3/(.+)/(?1:",
+:)/}${4/(.+)/(?1:  data\: $.param\( $\(":)/}${4:Element or Expression}${4/(.+)/(?1:"\) \),
+:)/}${5/(.+)/(?1:  complete\: function\(\) {:)/}${5:
+    //called when complete}${5/(.+)/(?1:  },
+:)/}${6/(.+)/(?1:  success\: function\(\) {:)/}${6:
+    //called when successful}${6/(.+)/(?1: },
+:)/}${7/(.+)/(?1:  error\: function\(\) {:)/}${7:
+    //called when there is an error}${7/(.+)/(?1:  },
+:)/}});
+$0
+endsnippet
+
+snippet $.ajaxError "$_ajaxError"
+.ajaxError(function(${1:request, settings}) {
+  ${2://stuff to do when an AJAX call returns an error};
+});
+$0
+endsnippet
+
+snippet $.ajaxSend "$_ajaxSend"
+.ajaxSend(function(${1:request, settings}) {
+  ${2://stuff to do before an AJAX request is sent};
+});
+$0
+endsnippet
+
+snippet $.ajaxSetup "$_ajaxSetup"
+\$.ajaxSetup({
+  url: "${1:mydomain.com/url}",
+  type: "${2:POST}",
+${3/(.+)/(?1:  dataType\: ":)/}${3:xml/html/script/json}${3/(.+)/(?1:",
+:)/}${4/(.+)/(?1:  data\: $.param\( $\(":)/}${4:Element or Expression}${4/(.+)/(?1:"\) \),
+:)/}${5/(.+)/(?1:  complete\: function\(\) {:)/}${5:
+    //called when complete}${5/(.+)/(?1:  },
+:)/}${6/(.+)/(?1:  success\: function\(\) {:)/}${6:
+    //called when successful}${6/(.+)/(?1: },
+:)/}${7/(.+)/(?1:  error\: function\(\) {:)/}${7:
+    //called when there is an error}${7/(.+)/(?1:  },
+:)/}});
+$0
+endsnippet
+
+snippet $.ajaxSuccess "$_ajaxSuccess"
+.ajaxSuccess(function() {
+	${1:// executes whenever an AJAX request completes successfully}
+});$0
+endsnippet
+
+snippet $.get "$_get"
+\$.get('${1:/test/ajax-test.xml}'${2/(.+)/(?1:, function\(xml\){
+ :)/}${2:alert( $("title",xml).text() )//optional stuff to do after get}${2/(.+)/(?1:;
+}:)/});
+$0
+endsnippet
+
+snippet $.getIfModified "$_getIfModified"
+\$.getIfModified('${1:/test/test.cgi}'${3/(.+)/(?1:, function\(data\){
+ :)/}${3:alert( $"Data loaded: " + data )//optional stuff to do after get}${3/(.+)/(?1:;
+}:)/});
+$0
+endsnippet
+
+snippet $.getJSON "$_getJSON"
+\$.getJSON('${1:/path/to/file.cgi}'${2/(.+)/(?1:,{
+ :)/}${2:param1: "value1", param2: "value2"}${2/(.+)/(?1:}:)/}${3/(.+)/(?1:,
+ function\(json\){
+    :)/}${3://stuff to do after event occurs};${3/(.+)/(?1:
+}:)/});
+$0
+endsnippet
+
+snippet $.getScript "$_getScript"
+\$.getScript('${1:somescript.js}'${3/(.+)/(?1:, function\(\){
+ :)/}${3://optional stuff to do after getScript}${3/(.+)/(?1:;
+}:)/});
+$0
+endsnippet
+
+snippet $.post "$_post"
+\$.post('${1:/path/to/file.cgi}'${2/(.+)/(?1:,{
+ :)/}${2:param1: "value1", param2: "value2"}${2/(.+)/(?1:}:)/}${3/(.+)/(?1:,
+ function\(\){
+    :)/}${3://stuff to do *after* page is loaded};${3/(.+)/(?1:
+}:)/});
+$0
+
+
+endsnippet
+
+snippet $.trim "$_trim"
+\$.trim('${1:string}')$0
+endsnippet
+
+snippet : ":checked"
+:checked
+endsnippet
+
+snippet : ":contains('test')"
+:contains('${1:test}')$0
+endsnippet
+
+snippet : ":disabled"
+:disabled
+endsnippet
+
+snippet : ":empty"
+:empty
+endsnippet
+
+snippet : ":enabled"
+:enabled
+endsnippet
+
+snippet : ":eq(n)"
+:eq(${1:n})$0
+endsnippet
+
+snippet : ":even"
+:even
+endsnippet
+
+snippet : ":first-child"
+:first-child
+endsnippet
+
+snippet : ":first-of-type"
+:first-of-type
+endsnippet
+
+snippet : ":first"
+:first
+endsnippet
+
+snippet : ":gt(n)"
+:gt(${1:n})$0
+endsnippet
+
+snippet : ":hidden"
+:hidden
+
+endsnippet
+
+snippet : ":last-child"
+:last-child
+endsnippet
+
+snippet : ":last-of-type"
+:last-of-type
+endsnippet
+
+snippet : ":last"
+:last
+endsnippet
+
+snippet : ":lt(n)"
+:lt(${1:n})$0
+endsnippet
+
+snippet : ":not(s)"
+:not(${1:s})$0
+endsnippet
+
+snippet : ":nth-child(n)"
+:nth-child(${1:n})$0
+endsnippet
+
+snippet : ":nth-last-child(n)"
+:nth-last-child(${1:n})$0
+endsnippet
+
+snippet : ":nth-of-type(n)"
+:nth-of-type(${1:n})$0
+endsnippet
+
+snippet : ":odd"
+:odd
+endsnippet
+
+snippet : ":only-child"
+:only-child
+endsnippet
+
+snippet : ":only-of-type"
+:only-of-type
+endsnippet
+
+snippet : ":parent"
+:parent
+
+endsnippet
+
+snippet : ":root"
+:root
+endsnippet
+
+snippet : ":visible"
+:visible
+
+endsnippet
+
+snippet .add "add"
+.add('${1:selector expression}')$0
+endsnippet
+
+snippet .addClass "addClass"
+.addClass('${1:class name}')$0
+endsnippet
+
+snippet .after "after"
+.after('${1:Some text <b>and bold!</b>}')$0
+endsnippet
+
+snippet $.ajaxStart "ajaxStart"
+\$.ajaxStart(function() {
+  ${1://stuff to do when an AJAX call is started and no other AJAX calls are in progress};
+});
+$0
+endsnippet
+
+snippet $.ajaxStop "ajaxStop"
+\$.ajaxStop(function() {
+  ${1://stuff to do when all AJAX calls have completed};
+});
+$0
+endsnippet
+
+snippet .animate "animate"
+.animate({${1:param1: value1, param2: value2}}, ${2:speed})$0
+endsnippet
+
+snippet .append "append"
+.append('${1:Some text <b>and bold!</b>}')$0
+endsnippet
+
+snippet .appendTo "appendTo"
+.appendTo('${1:selector expression}')$0
+endsnippet
+
+snippet .attr "attr(hash)"
+.attr({'${1:attribute1}'${2/(.+)/(?1:\: :)/}${2/(^[0-9]+$)|.+/(?1::')/}${2:value1}${2/(^[0-9]+$)|.+/(?1::')/}, '${3:attribute2}'${4/(.+)/(?1:\: :)/}${4/(^[0-9]+$)|.+/(?1::')/}${4:value2}${4/(^[0-9]+$)|.+/(?1::')/}})$0
+endsnippet
+
+snippet .attr "attr"
+.attr('${1:attribute}'${2/(.+)/(?1:, :)/}${2/(^[0-9]+$)|.+/(?1::')/}${2:value}${2/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .before "before"
+.before('${1:Some text <b>and bold!</b>}')$0
+endsnippet
+
+snippet .bind "bind"
+.bind('${1:event name}', function(${2:event}) {
+	${0:// Act on the event}
+});
+endsnippet
+
+snippet .blur "blur"
+.blur(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .change "change"
+.change(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .children "children"
+.children(${1/(.+)/(?1:':)/}${1:selector expression}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet .click "click"
+.click(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet clone "clone"
+.clone()$0
+endsnippet
+
+snippet .contains "contains"
+.contains('${1:text to find}')$0
+endsnippet
+
+snippet .css "css(hash)"
+.css({${1:attribute1}: '${2:value1}', ${3:attribute2}: '${4:value2}'})$0
+endsnippet
+
+snippet .css "css"
+.css('${1:attribute}', '${2:value}')$0
+endsnippet
+
+snippet .dblclick "dblclick"
+.dblclick(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .each "each"
+.each(function(index) {
+	${0:this.innerHTML = this + " is the element, " + index + " is the position";}
+});
+endsnippet
+
+snippet .end "end"
+.end()$0
+endsnippet
+
+snippet .error "error"
+.error(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .fadeIn "fadeIn - with callback"
+.fadeIn(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, function() {
+	${0://Stuff to do *after* the animation takes place};
+});
+
+endsnippet
+
+snippet .fadeIn "fadeIn"
+.fadeIn(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .fadeOut "fadeOut - with callback"
+.fadeOut(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, function() {
+	${0://Stuff to do *after* the animation takes place};
+});
+
+endsnippet
+
+snippet .fadeOut "fadeOut"
+.fadeOut(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .fadeTo "fadeTo - with callback"
+.fadeTo(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, ${2:0.5}, function() {
+	${0://Stuff to do *after* the animation takes place};
+});
+
+endsnippet
+
+snippet .fadeTo "fadeTo"
+.fadeTo(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, ${2:0.5})$0
+endsnippet
+
+snippet .filter "filter"
+.filter('${1:selector expression}')$0
+endsnippet
+
+snippet .find "find"
+.find('${1:selector expression}')$0
+endsnippet
+
+snippet .focus "focus"
+.focus(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .get "get"
+.get(${1:element index})$0
+endsnippet
+
+snippet .height "height"
+.height(${1:integer})$0
+endsnippet
+
+snippet .hide "hide - with callback"
+.hide(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, function() {
+	${0://Stuff to do *after* the animation takes place};
+});
+
+endsnippet
+
+snippet .hide "hide"
+.hide(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .hover "hover"
+.hover(function() {
+	${1:// Stuff to do when the mouse enters the element;}
+}, function() {
+	${2:// Stuff to do when the mouse leaves the element;}
+});$0
+endsnippet
+
+snippet .html "html"
+.html(${1/(.+)/(?1:':)/}${1:Some text <b>and bold!</b>}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet .insertAfter "insertAfter"
+.insertAfter('${1:selector expression}')$0
+endsnippet
+
+snippet .insertBefore "insertBefore"
+.insertBefore('${1:selector expression}')$0
+endsnippet
+
+snippet .is "is"
+.is('${1:selector expression}')$0
+endsnippet
+
+snippet .load "load (AHAH)"
+.load('${1:/path/to/file.htm}'${2/(.+)/(?1:,{
+ :)/}${2:param1: "value1", param2: "value2"}${2/(.+)/(?1:}:)/}${3/(.+)/(?1:,
+ function\(\){
+    :)/}${3:// Stuff to do after the page is loaded}${3/(.+)/(?1:
+}:)/});
+$0
+endsnippet
+
+snippet .load "load"
+.load(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .loadIfModified "loadIfModified"
+.loadIfModified('${1:/path/to/file.html}'${2/(.+)/(?1:,{
+ :)/}${2:param1: "value1", param2: "value2"}${2/(.+)/(?1:}:)/}${3/(.+)/(?1:,
+ function\(\){
+    :)/}${3:// Stuff to do after the page is loaded}${3/(.+)/(?1:
+}:)/});
+$0
+endsnippet
+
+snippet .mousedown "mousedown"
+.mousedown(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .mousemove "mousemove"
+.mousemove(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .mouseout "mouseout"
+.mouseout(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .mouseover "mouseover"
+.mouseover(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .mouseup "mouseup"
+.mouseup(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .next "next"
+.next(${1/(.+)/(?1:':)/}${1:selector expression}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet .not "not"
+.not('${1:selector expression}')$0
+endsnippet
+
+snippet .one "one"
+.one('${1:event name}', function(${2:event}) {
+	${0:// Act on the event once}
+});
+endsnippet
+
+snippet .parent "parent"
+.parent(${1/(.+)/(?1:':)/}${1:selector expression}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet .parents "parents"
+.parents(${1/(.+)/(?1:':)/}${1:selector expression}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet .prepend "prepend"
+.prepend('${1:Some text <b>and bold!</b>}')$0
+endsnippet
+
+snippet .prependTo "prependTo"
+.prependTo('${1:selector expression}')$0
+endsnippet
+
+snippet .prev "prev"
+.prev(${1/(.+)/(?1:':)/}${1:selector expression}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet ready "ready"
+\$(document).ready(function() {
+	${0:// Stuff to do as soon as the DOM is ready;}
+});
+
+endsnippet
+
+snippet .remove "remove"
+.remove()$0
+endsnippet
+
+snippet .removeAttr "removeAttr"
+.removeAttr('${1:attribute name}')$0
+endsnippet
+
+snippet .removeClass "removeClass"
+.removeClass('${1:class name}')$0
+endsnippet
+
+snippet .reset "reset"
+.reset(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .resize "resize"
+.resize(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .scroll "scroll"
+.scroll(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .select "select"
+.select(function() {
+	${0:// Act on the event}
+});
+endsnippet
+
+snippet .show "show - with callback"
+.show(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, function() {
+	${0://Stuff to do *after* the animation takes place};
+});
+
+endsnippet
+
+snippet .show "show"
+.show(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .siblings "siblings"
+.siblings(${1/(.+)/(?1:':)/}${1:selector expression}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet .size "size"
+.size()$0
+endsnippet
+
+snippet .slideDown "slideDown - with callback"
+.slideDown(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, function() {
+	${0://Stuff to do *after* the animation takes place};
+});
+
+endsnippet
+
+snippet .slideDown "slideDown"
+.slideDown(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .slideToggle "slideToggle"
+.slideToggle(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .slideUp "slideUp - with callback"
+.slideUp(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/}, function() {
+	${0://Stuff to do *after* the animation takes place};
+});
+
+endsnippet
+
+snippet .slideUp "slideUp"
+.slideUp(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .submit "submit"
+.submit(${1:function() {
+	${0:// Act on the event}
+\}});
+endsnippet
+
+snippet .text "text"
+.text(${1:'some text'})$0
+endsnippet
+
+snippet .toggle "toggle (show:hide)"
+.toggle(${1/(^[0-9]+$)|.+/(?1::')/}${1:slow/400/fast}${1/(^[0-9]+$)|.+/(?1::')/})$0
+endsnippet
+
+snippet .toggle "toggle"
+.toggle(function() {
+	${1:// Stuff to do every *odd* time the element is clicked;}
+}, function() {
+	${2:// Stuff to do every *even* time the element is clicked;}
+});
+$0
+endsnippet
+
+snippet .toggleClass "toggleClass"
+.toggleClass('${1:class name}')$0
+endsnippet
+
+snippet .trigger "trigger"
+.trigger('${1:event name}')$0
+endsnippet
+
+snippet .unbind "unbind"
+.unbind('${1:event name}')$0
+endsnippet
+
+snippet .val "val"
+.val(${1/(.+)/(?1:':)/}${1:text}${1/(.+)/(?1:':)/})$0
+endsnippet
+
+snippet .width "width"
+.width(${1:integer})$0
+endsnippet
+
+snippet .wrap "wrap"
+.wrap('${1:<div class="extra-wrapper"></div>}')$0
+endsnippet
+
