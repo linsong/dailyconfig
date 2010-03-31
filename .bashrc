@@ -255,7 +255,7 @@ function $function_name {
 # alias rt='wcd -rmtree' # remove a directory, all its subdirectory and related treedata
  #}}}
  
- if [ -e ${HOME}/.bashrc.func]; then
+ if [ -e ${HOME}/.bashrc.func ]; then
     source ${HOME}/.bashrc.func
  fi
 

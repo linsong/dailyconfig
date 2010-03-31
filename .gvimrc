@@ -29,7 +29,10 @@ endif
 "let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
 let colorscheme_list = ['blacksea', 'desert', 'mymud',
             \ 'dante', 'candy', 'elflord', 'golden',
-            \ 'less', 'vibrantink', 'murphy']
+            \ 'less', 'vibrantink', 'murphy',
+            \ 'baycomb', 'bensday', 'blackboard', 'blacklight',
+            \ 'darkburn', 'darker-robin', 'darkerdesert'
+            \ 'darkZ', 'desertEx']
 "if ((strftime("%H") < 17 && strftime("%H") > 7))
   "let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
 "else
