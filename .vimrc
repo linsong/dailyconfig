@@ -378,6 +378,10 @@
     " Last and next jump should center too.
     "nnoremap <C-o> <C-o>zz
     "nnoremap <C-i> <C-i>zz
+  
+    " use < and > to turn a half page horizontally
+    nnoremap > zL
+    nnoremap < zH
 
 "## }}}1
 
@@ -1154,7 +1158,7 @@ endif " has("autocmd")
       hi link textSnip SpecialComment
     endfunction
     " }}}2
-
+    
 "## }}}1
 
 "## Plugin related settings {{{1

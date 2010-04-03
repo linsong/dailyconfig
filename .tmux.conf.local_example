@@ -1,5 +1,7 @@
 # C-m means Enter
 #new-session -n music -s main
+setw -g monitor-activity off
+
 new-session -d -swork -n music
 #rename-window -t 0 musiC
 send -t work:0 'cd ~/Music'
@@ -19,6 +21,8 @@ send -t work:9 'cd ~/GTD; ~/tools/gtd; vim todo.gtd'
 
 selectw -t work:1
 
+bind-key C-w switch-client -t work
+
 # second session
 new-session -d -s panel
 set -t panel status-bg green
@@ -28,6 +32,7 @@ link-window -dk -t :9 -s work:9
 new-window -d -t :2
 new-window -d -t :3
 
+bind-key C-p switch-client -t panel
 
 # third session
 new-session -d -s misc
@@ -38,6 +43,7 @@ link-window -dk -t :9 -s work:9
 new-window -d -t :2
 new-window -d -t :3
 
+bind-key C-m switch-client -t misc
 
 ####################################
 ### setting for servers 
