@@ -32,6 +32,10 @@ class VimProxy
     setSign(fname, lnum)
   end
 
+  def shutdown
+    sendCmd(%Q{:qall}) 
+  end
+
   protected
 
   def locate(fname, lnum)
@@ -61,6 +65,10 @@ end
 
 proxy = VimProxy.new
 proxy.init
+
+Signal.trap("EXIT") do
+  proxy.shutdown
+end
 
 ARGF.each do |line|
   proxy.show($1, $2) if line =~ /^(\/[^:]+):(\d+)/
