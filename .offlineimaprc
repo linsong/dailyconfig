@@ -183,7 +183,7 @@ autorefresh = 1
 # quick updates between each full synchronization (requires autorefresh).
 
 # quick = 10
-quick = 10
+quick = 3 
 
 # You can specify a pre and post sync hook to execute a external command.
 # in this case a call to imapfilter to filter mail before the sync process
