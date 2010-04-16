@@ -35,9 +35,11 @@ set! browser.urlbar.doubleClickSelectsAll=true
 "Map paste operation normally.
 imap <C-v> <C-v>
 
-" use c-n and c-p to go up and down in insert mode
+" use c-n and c-p to go up and down in insert and command mode
 imap <C-n> <down>
 imap <C-p> <up>
+cmap <C-n> <down>
+cmap <C-p> <up>
 
 :command! -nargs=* g open google <args>
 :map ,g :g 

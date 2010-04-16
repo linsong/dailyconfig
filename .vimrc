@@ -351,6 +351,17 @@
         :nnoremap <silent> <D-<> :if tabpagenr() == 1\|exe "tabm ".tabpagenr("$")\|else\|exe "tabm ".(tabpagenr()-2)\|endif<CR> 
     endif 
 
+    :map <silent> ,1 :tabnext 1<CR>
+    :map <silent> ,2 :tabnext 2<CR>
+    :map <silent> ,3 :tabnext 3<CR>
+    :map <silent> ,4 :tabnext 4<CR>
+    :map <silent> ,5 :tabnext 5<CR>
+    :map <silent> ,6 :tabnext 6<CR>
+    :map <silent> ,7 :tabnext 7<CR>
+    :map <silent> ,8 :tabnext 8<CR>
+    :map <silent> ,9 :tabnext 9<CR>
+    :map <silent> ,0 :tabnext 10<CR>
+
     :nnoremap <silent> <C-n> :tabnext<CR>
     :nnoremap <silent> <C-p> :tabprevious<CR>
 
