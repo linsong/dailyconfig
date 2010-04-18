@@ -173,7 +173,8 @@ __END
 
  #growl() { echo -e $'\e]9;'${1}'\007' ; return  ; }
  growl() { netgrowl.py -q -n "ShellNotification" -m "$*"; }
- g() { netgrowl.py -q -n "ShellNotification" -m "$*"; }
+ #g() { netgrowl.py -q -n "ShellNotification" -m "$*"; }
+ g() { growlnotify -s --image ~/Desktop/mylogo.png -n "ShellNotification" -m "$*" "Notification" 2>/dev/null; }
 
  function v()
  {
