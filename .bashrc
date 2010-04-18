@@ -149,7 +149,7 @@ function $function_name {
  alias sl='ls -lt'
  alias l='ls -CF'
  alias c='clear'
- alias j='jobs'
+ #alias j='jobs'
  alias h='history'
  
  alias xx='rxvt -geometry 125x44 -sr -sl 10000 -fg white -bg black -fb fixedsys -fn fixedsys -tn rxvt -cr SkyBlue -e /bin/bash --login -i&'
@@ -255,11 +255,13 @@ function $function_name {
 # alias rt='wcd -rmtree' # remove a directory, all its subdirectory and related treedata
  #}}}
  
- if [ -e ${HOME}/.bashrc.func ]; then
-    source ${HOME}/.bashrc.func
+ if [ -e "${HOME}/.bash.d" ]; then 
+   for i in ${HOME}/.bash.d/*; do 
+     source $i; 
+   done 
  fi
 
- if [ -e ${HOME}/.bashrc.local ]; then
+ if [ -e "${HOME}/.bashrc.local" ]; then
     source ${HOME}/.bashrc.local
  fi
 
