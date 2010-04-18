@@ -391,8 +391,8 @@
     "nnoremap <C-i> <C-i>zz
   
     " use < and > to turn a half page horizontally
-    nnoremap > zL
-    nnoremap < zH
+    nnoremap } zL
+    nnoremap { zH
 
 "## }}}1
 
