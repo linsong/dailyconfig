@@ -183,3 +183,11 @@ Library/Autosave Information/
 .lyrics/
 .cheat/
 .aria2/
+.autojump_errors
+.autojump_py
+.autojump_py.bak
+.bash.d/autojump.bash
+.serverauth.*
+.swn
+.swo
+Library/Recent Servers
