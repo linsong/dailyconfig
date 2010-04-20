@@ -688,7 +688,7 @@
 
         " windows setting end }}}2
     elseif has('macunix') "macosx specific settings {{{2
-        set guifont=Monaco:h14
+        set guifont=Monaco:h13
         let Grep_Xargs_Options = '-0' 
         " macosx specific settings end}}}2
     else  " linux like platform specific setting {{{2
@@ -1679,6 +1679,17 @@ call pathogen#runtime_append_all_bundles()
     map ,gc :Gcommit<CR>
     "}}}2
 
+    "### xptemplate {{{2
+    "avoid key conflict
+    let g:SuperTabMappingForward = '<Plug>supertabKey'
+
+    "if nothing matched in xpt, try supertab
+    let g:xptemplate_fallback = '<Plug>supertabKey'
+
+    "xpt uses <Tab> as trigger key
+    let g:xptemplate_key = '<Tab>'
+    "}}}2
+
 "## }}}1
 
 "## Xterm colors defination {{{1 
@@ -1957,3 +1968,4 @@ command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 if filereadable(expand('~/.vimrc.local'))
     source ~/.vimrc.local
 endif
+
