@@ -1,10 +1,10 @@
 XPTemplate priority=personal+
 XPTemplateDef
 
-XPT d " insert debugger 
+XPT debug " insert debugger 
 debugger
 
-XPT dd "insert ruby-debug
+XPT debug_include "insert ruby-debug
 require "rubygems"
 require "ruby-debug"
 

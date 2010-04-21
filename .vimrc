@@ -1537,6 +1537,7 @@ call pathogen#runtime_append_all_bundles()
     
     "### settings for autocomplpop.vim {{{2
     let g:AutoComplPop_NotEnableAtStartup = 1
+    let g:acp_behaviorKeywordLength = 4
     "}}}2
 
     "### settting for blockdiff.vim {{{2
@@ -1688,6 +1689,9 @@ call pathogen#runtime_append_all_bundles()
 
     "xpt uses <Tab> as trigger key
     let g:xptemplate_key = '<Tab>'
+
+    "disable brace complete
+    let g:xptemplate_brace_complete = 0
     "}}}2
 
 "## }}}1
