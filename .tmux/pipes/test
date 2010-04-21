@@ -1,0 +1,5 @@
+#! /usr/bin/env ruby
+
+ARGF.each do |line|
+  system(%Q{/usr/local/bin/growlnotify --image ~/Desktop/mylogo.png -n "ShellNotification" -m "#{$1}" "Notification" 2>/dev/null;}) if line =~ /^(\d+ tests, \d+ assertions, \d+ failures, \d+ errors)/
+end
