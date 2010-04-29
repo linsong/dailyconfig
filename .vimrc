@@ -1692,6 +1692,8 @@ call pathogen#runtime_append_all_bundles()
 
     "disable brace complete
     let g:xptemplate_brace_complete = 0
+
+    let g:xptemplate_pum_tab_nav = 1
     "}}}2
 
 "## }}}1
