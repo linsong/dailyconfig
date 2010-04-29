@@ -1,0 +1,13 @@
+#       $NetBSD: crontab,v 1.13 1997/10/26 13:36:31 lukem Exp $
+#
+# /etc/crontab - vincent's crontab
+#
+SHELL=/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:$HOME/tools:$HOME/mytools:/usr/local/bin
+
+#min	hour	mday	month	wday	command
+30	12	*	*	3	update_podcasts.sh
+#48 	9 	* 	* 	* 	growlnotify -s --image ~/Desktop/mylogo.png -n "ShellNotification" -m "hello" "Notification" 2>/dev/null
+
+# vim: noexpandtab ts=8
+
