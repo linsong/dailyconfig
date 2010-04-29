@@ -1528,6 +1528,8 @@ call pathogen#runtime_append_all_bundles()
     "### settings for acp.vim {{{2
     map ,ace :AcpEnable<CR>
     map ,acd :AcpDisable<CR>
+    let g:AutoComplPop_NotEnableAtStartup = 1
+    let g:acp_behaviorKeywordLength = 4
     "}}}2
     
     "### settings for rcsvers.vim {{{2
@@ -1535,11 +1537,6 @@ call pathogen#runtime_append_all_bundles()
     let g:rvExcludeExpression = '\c\.pyc\|\c\.pyo\|\c\.bmp'
     "}}}2
     
-    "### settings for autocomplpop.vim {{{2
-    let g:AutoComplPop_NotEnableAtStartup = 1
-    let g:acp_behaviorKeywordLength = 4
-    "}}}2
-
     "### settting for blockdiff.vim {{{2
     vmap ,d1 :call BlockDiff_GetBlock1()<CR>
     vmap ,d2 :call BlockDiff_GetBlock2()<CR>
@@ -1689,6 +1686,9 @@ call pathogen#runtime_append_all_bundles()
 
     "xpt uses <Tab> as trigger key
     let g:xptemplate_key = '<Tab>'
+
+    "xpt trigger snippet only when there are at least one character
+    let g:xptemplate_minimal_prefix = 1
 
     "disable brace complete
     let g:xptemplate_brace_complete = 0
