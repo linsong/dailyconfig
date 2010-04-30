@@ -1684,8 +1684,10 @@ call pathogen#runtime_append_all_bundles()
     "if nothing matched in xpt, try supertab
     let g:xptemplate_fallback = '<Plug>supertabKey'
 
-    "xpt uses <Tab> as trigger key
+    ""xpt uses <Tab> as trigger key
     let g:xptemplate_key = '<Tab>'
+
+    let g:xptemplate_nav_next = '<C-j>'
 
     "xpt trigger snippet only when there are at least one character
     let g:xptemplate_minimal_prefix = 1

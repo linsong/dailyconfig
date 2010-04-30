@@ -1,24 +1,25 @@
 XPTemplate priority=personal+
 XPTemplateDef
 
+XPT setup "setup ...
+setup do 
+  `content^
+end
+
+XPT should "should ...
+should "`description^" do
+  `cursor^
+end
+
 XPT cont "context"
 context "`description^" do
-  `setup^ do
-    `^
-  end
-  `should...{{^should "`description^" do
-    `cursor^
-  end
+  `setup...{{^`:setup:^
   `}}^
+  `should...{{^`:should:^ `}}^
 end
 
 XPT laf "load_all_fixtures"
 load_all_fixtures
-
-XPT should "should"
-should "`^" do
-  `cursor^
-end
 
 
 XPT should_allow_values_for "should_allow_values_for"
