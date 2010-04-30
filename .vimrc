@@ -1687,7 +1687,7 @@ call pathogen#runtime_append_all_bundles()
     ""xpt uses <Tab> as trigger key
     let g:xptemplate_key = '<Tab>'
 
-    let g:xptemplate_nav_next = '<C-n>'
+    let g:xptemplate_nav_next = '<C-k>'
 
     "xpt trigger snippet only when there are at least one character
     let g:xptemplate_minimal_prefix = 1
