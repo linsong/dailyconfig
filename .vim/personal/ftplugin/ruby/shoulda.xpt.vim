@@ -3,7 +3,7 @@ XPTemplateDef
 
 XPT setup "setup ...
 setup do 
-  `content^
+  `cursor^
 end
 
 XPT should "should ...
@@ -13,9 +13,7 @@ end
 
 XPT cont "context"
 context "`description^" do
-  `setup...{{^`:setup:^
-  `}}^
-  `should...{{^`:should:^ `}}^
+  `cursor^
 end
 
 XPT laf "load_all_fixtures"
