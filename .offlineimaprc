@@ -182,8 +182,7 @@ autorefresh = 1
 # -1 to always do quick updates, or a positive integer to do that many
 # quick updates between each full synchronization (requires autorefresh).
 
-# quick = 10
-quick = 3 
+quick = 10
 
 # You can specify a pre and post sync hook to execute a external command.
 # in this case a call to imapfilter to filter mail before the sync process
@@ -472,4 +471,17 @@ holdconnectionopen = no
 #holdconnectionopen = yes
 #keepalive = 60
 
-folderfilter = lambda foldername: foldername in ['INBOX', '[Gmail]/Sent Mail', '[Gmail]/Drafts', '[Gmail]/Starred', 'Seravia', 'GitNotification', '[list]tmux', '[list]TopLanguage', '[list]mutt', 'GoogleAlert', 'DailyRead']
+folderfilter = lambda foldername: foldername in ['INBOX',
+                                                 '[Gmail]/Sent Mail',
+                                                 '[Gmail]/Drafts',
+                                                 '[Gmail]/Starred',
+                                                 'Seravia',
+                                                 'GitNotification',
+                                                 '[list]tmux',
+                                                 '[list]TopLanguage',
+                                                 '[list]mutt',
+                                                 '[list]xptemplate',
+                                                 'GoogleAlert',
+                                                 'DailyRead']
+
+# vim: ft=python.conf
