@@ -99,9 +99,9 @@ fun! s:CreateSession( sess )
     if !exists( 'b:__xpp_sess_count' )
         let b:__xpp_sess_count = 0
     endif
-    let action = ''
     let b:__xpp_sess_count += 1
     let a:sess.sessCount = b:__xpp_sess_count
+    let action = ''
     if exists( 'b:__xpp_current_session' )
         call s:End()
         if pumvisible()
@@ -143,63 +143,48 @@ fun! s:KeyPopup( doCallback, ifEnlarge ) dict
     return "\<C-r>=XPPprocess(" . string( actionList ) . ")\<CR>"
 endfunction 
 fun! s:ListPopup( doCallback, ifEnlarge ) dict 
-    let actionClosePum = ''
     let actionList = []
     if self.longest !=# self.prefix
         let actionList += ['clearPum',  'clearPrefix', 'clearPum', 'typeLongest' ]
     endif
-    if 0
-    else
-        if self.popupCount > 1
-              \ && a:ifEnlarge
-              \ && self.acceptEmpty
-              \ && self.prefix == ''
+    if self.popupCount > 1 && a:ifEnlarge && self.acceptEmpty && self.prefix == ''
+        let self.matched = ''
+        let self.matchedCallback = 'onOneMatch'
+        let actionList = []
+        let actionList += [ 'clearPum',  'clearPrefix', 'clearPum', 'callback' ]
+    elseif len(self.currentList) == 0
+        let self.matched = ''
+        let self.matchedCallback = 'onEmpty'
+        let actionList += ['callback']
+    elseif len(self.currentList) == 1
+          \ && a:doCallback
+        let self.matched = type(self.currentList[0]) == type({}) ? self.currentList[0].word : self.currentList[0]
+        let self.matchedCallback = 'onOneMatch'
+        let actionList += ['clearPum', 'clearPrefix', 'clearPum', 'typeMatched', 'callback']
+    elseif self.prefix != "" 
+          \ && self.longest ==? self.prefix 
+        if a:doCallback && self.matchPrefix
             let self.matched = ''
-            let self.matchedCallback = 'onOneMatch'
-            let actionList = []
-            let actionList += [ 'clearPum',  'clearPrefix', 'clearPum', 'callback' ]
-        elseif len(self.currentList) == 0
-            let self.matched = ''
-            let self.matchedCallback = 'onEmpty'
-            let actionList += ['callback']
-        elseif len(self.currentList) == 1
-              \ && a:doCallback
-            if self.matchPrefix
-                let self.matched = type(self.currentList[0]) == type({}) ? self.currentList[0].word : self.currentList[0]
-                let self.matchedCallback = 'onOneMatch'
-                let actionList += ['clearPum', 'clearPrefix', 'clearPum', 'typeMatched', 'callback']
-            else
-                let actionClosePum = PUMclear()
-                let actionList += [ 'popup', 'fixPopup' ]
-            endif
-        elseif self.prefix != "" 
-              \ && self.longest ==? self.prefix 
-            if self.matchPrefix && a:doCallback
-                let self.matched = ''
-                for item in self.currentList
-                    let key = type(item) == type({}) ? item.word : item
-                    if key ==? self.prefix
-                        let self.matched = key
-                        let self.matchedCallback = 'onOneMatch'
-                        let actionList += ['clearPum', 'clearPrefix', 'clearPum', 'typeLongest', 'callback']
-                        break
-                    endif
-                endfor
-                if self.matched == ''
-                    let actionClosePum = PUMclear()
-                    let actionList += [ 'popup', 'fixPopup' ]
+            for item in self.currentList
+                let key = type(item) == type({}) ? item.word : item
+                if key ==? self.prefix
+                    let self.matched = key
+                    let self.matchedCallback = 'onOneMatch'
+                    let actionList += ['clearPum', 'clearPrefix', 'clearPum', 'typeLongest', 'callback']
+                    break
                 endif
-            else
-                let actionClosePum = PUMclear()
+            endfor
+            if self.matched == ''
                 let actionList += [ 'popup', 'fixPopup' ]
             endif
         else
-            let actionClosePum = PUMclear()
             let actionList += [ 'popup', 'fixPopup' ]
         endif
+    else
+        let actionList += [ 'popup', 'fixPopup' ]
     endif
     let self.matchPrefix = 1
-    return actionClosePum . "\<C-r>=XPPprocess(" . string( actionList ) . ")\<CR>"
+    return "\<C-r>=XPPprocess(" . string( actionList ) . ")\<CR>"
 endfunction 
 fun! s:SetTriggerKey( key ) dict 
     let self.key = a:key
@@ -256,7 +241,7 @@ fun! s:_InitBuffer()
     call b:_xpp_setting_switch.AddList( 
           \ [ '&l:cinkeys', '' ], 
           \ [ '&l:indentkeys', '' ], 
-          \ [ '&completeopt', 'menu,longest,menuone' ], 
+          \ [ '&completeopt', 'menu,longest' ], 
           \)
     let b:__xpp_buffer_init = 1
 endfunction 
@@ -406,16 +391,16 @@ fun! XPPcr()
     endif
     return "\<C-r>=XPPaccept()\<CR>"
 endfunction 
-fun! XPPup( key ) 
+fun! XPPup() 
     if !s:PopupCheck( s:CHECK_PUM )
-        call feedkeys( a:key, 'mt' )
+        call feedkeys("\<UP>", 'mt')
         return ""
     endif
     return "\<C-p>"
 endfunction 
-fun! XPPdown( key ) 
+fun! XPPdown() 
     if !s:PopupCheck( s:CHECK_PUM )
-        call feedkeys( a:key, 'mt' )
+        call feedkeys("\<DOWN>", 'mt')
         return ""
     endif
     return "\<C-n>"
@@ -457,16 +442,16 @@ fun! XPPshorten()
     let action = actions . repeat( "\<bs>", len(current) - len(shorterKey) ) . "\<C-r>=XPPrepopup(0, 'noenlarge')\<cr>"
     return action
 endfunction 
-fun! XPPenlarge( key ) 
+fun! XPPenlarge() 
     if !s:PopupCheck( s:CHECK_PUM )
-        call feedkeys( a:key, 'm' )
+        call feedkeys("\<tab>", 'm')
         return ""
     endif
     return "\<C-r>=XPPrepopup(1, 'enlarge')\<cr>"
 endfunction 
-fun! XPPcancel( key ) 
+fun! XPPcancel() 
     if !s:PopupCheck()
-        call feedkeys( a:key, 'mt' )
+        call feedkeys("\<C-e>", 'mt')
         return ""
     endif
     return "\<C-r>=XPPprocess(" . string( [ 'clearPum', 'clearPrefix', 'typeLongest', 'end' ] ) . ")\<cr>"
@@ -516,24 +501,24 @@ fun! s:ApplyMapAndSetting()
     let b:__xpp_pushed = 1
     call b:_xpp_map_saver.Save()
     let sess = b:__xpp_current_session
-    exe 'inoremap <silent> <buffer> <UP>'   '<C-r>=XPPup("\<lt>UP>")<CR>'
-    exe 'inoremap <silent> <buffer> <DOWN>' '<C-r>=XPPdown("\<lt>DOWN>")<CR>'
+    exe 'inoremap <silent> <buffer> <UP>'   '<C-r>=XPPup()<CR>'
+    exe 'inoremap <silent> <buffer> <DOWN>' '<C-r>=XPPdown()<CR>'
     exe 'inoremap <silent> <buffer> <bs>'  '<C-r>=XPPshorten()<cr>'
-    exe 'inoremap <silent> <buffer> <C-e>' '<C-r>=XPPcancel("\<lt>C-e>")<cr>'
+    exe 'inoremap <silent> <buffer> <C-e>' '<C-r>=XPPcancel()<cr>'
+    exe 'inoremap <silent> <buffer> <C-y>' '<C-r>=XPPaccept()<cr>'
     if sess.tabNav
-        exe 'inoremap <silent> <buffer> <S-tab>' '<C-r>=XPPup("\<lt>S-Tab>")<cr>'
-        exe 'inoremap <silent> <buffer> <tab>' '<C-r>=XPPdown("\<lt>TAB>")<cr>'
-        exe 'inoremap <silent> <buffer> <cr>'  '<C-r>=XPPenlarge("\<lt>CR>")<cr>'
-        exe 'inoremap <silent> <buffer> <C-y>' '<C-r>=XPPenlarge("\<lt>C-y>")<cr>'
+        exe 'inoremap <silent> <buffer> <S-tab>' '<C-r>=XPPup()<cr>'
+        exe 'inoremap <silent> <buffer> <tab>' '<C-r>=XPPdown()<cr>'
+        exe 'inoremap <silent> <buffer> <cr>'  '<C-r>=XPPenlarge()<cr>'
+        exe 'inoremap <silent> <buffer> <C-y>' '<C-r>=XPPenlarge()<cr>'
     else
-        exe 'inoremap <silent> <buffer> <tab>' '<C-r>=XPPenlarge("\<lt>TAB>")<cr>'
-        exe 'inoremap <silent> <buffer> <cr>'  '<C-r>=XPPenlarge("\<lt>CR>")<cr>'
-        exe 'inoremap <silent> <buffer> <C-y>' '<C-r>=XPPenlarge("\<lt>C-y>")<cr>'
+        exe 'inoremap <silent> <buffer> <tab>' '<C-r>=XPPenlarge()<cr>'
+        exe 'inoremap <silent> <buffer> <cr>'  '<C-r>=XPPcr()<cr>'
+        exe 'inoremap <silent> <buffer> <C-y>' '<C-r>=XPPaccept()<cr>'
     endif
     augroup XPpopup
         au!
         au CursorMovedI * call s:CheckAndFinish()
-        au InsertEnter * call XPPend()
     augroup END
     call b:_xpp_setting_switch.Switch()
     if exists( ':AcpLock' )

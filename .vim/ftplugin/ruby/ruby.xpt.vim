@@ -64,7 +64,7 @@ endfunction "}}}
 "{{{ s:assert_map
 let s:assert_map = {
       \'block'          : ''                                                        . ' { `cursor^ }',
-      \'equals'         : '(`expected^, `actual^`, `message^)'                      . '',
+      \'equal'         : '(`expected^, `actual^`, `message^)'                      . '',
       \'in_delta'       : '(`expected float^, `actual float^, `delta^`, `message^)' . '',
       \'instance_of'    : '(`klass^, `object to compare^`, `message^)'              . '',
       \'kind_of'        : '(`klass^, `object to compare^`, `message^)'              . '',
