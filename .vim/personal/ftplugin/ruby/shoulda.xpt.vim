@@ -36,10 +36,10 @@ should_be_restful do |resource|
 end
 
 
-XPT should_be_restful "should_be_restful"
+XPT should_be_restful2 "should_be_restful"
 should_be_restful do |resource|
   resource.formats = [:html]
-  `resource.`something^^
+  `resource.`something^
 end
 `cursor^
 
