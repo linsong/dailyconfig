@@ -1172,9 +1172,10 @@ endif " has("autocmd")
     
 "## }}}1
 
-"## Plugin related settings {{{1
-
-call pathogen#runtime_append_all_bundles() 
+    "## Plugin related settings {{{1
+    
+    "call pathogen#helptags()
+    call pathogen#runtime_append_all_bundles() 
 
     "### setting for winmanager.vim {{{2
         ":let g:winManagerWindowLayout = "FileExplorer,TagsExplorer|BufExplorer"
