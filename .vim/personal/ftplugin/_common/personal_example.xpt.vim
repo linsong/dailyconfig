@@ -8,10 +8,7 @@ XPTemplate priority=personal
 
 
 " XPTvar $author       you have not yet set $author variable
-XPTvar $author       'Vincent Wang'
 " XPTvar $email        you have not yet set $email variable
-
-XPTvar $SPop ''
 
 XPT yoursnippet " tips here
 bla bla

@@ -2,7 +2,7 @@ XPTemplate priority=personal+
 XPTemplateDef
 
 XPT acol
-add_column `:`table^`, :`column^`, `string^ `CURSOR^
+add_column `:`table^`, :`column^`, `:string^ `cursor^
 
 XPT rcol
-remove_column `:`table^`, :`column^ `CURSOR^
+remove_column `:`table^`, :`column^ `cursor^

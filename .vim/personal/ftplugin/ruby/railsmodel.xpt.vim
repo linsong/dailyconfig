@@ -3,13 +3,13 @@ XPTemplateDef
 
 
 XPT has_many
-has_many :`^`...{{^, :dependent => :destroy_all`...}}^
+has_many :`^
 
 XPT belongs_to 
-belongs_to `:`^
+belongs_to :`^
 
 XPT has_one
-has_one `:`^
+has_one :`^
 
 XPT validates_associated
 validates_associated :`^
