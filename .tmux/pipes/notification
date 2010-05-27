@@ -1,0 +1,16 @@
+#! /usr/bin/env ruby
+
+event_hash = {
+  /^=> Ctrl-C to shutdown server/ => lambda { ["Rails started"] },
+  /^(\d+ tests, \d+ assertions, \d+ failures, \d+ errors)/ => lambda { [$1, "Ruby Test"] },
+}
+
+def notify(msg, title="Notification") 
+  system(%Q{/usr/local/bin/growlnotify --image ~/Desktop/mylogo.png -n "ShellNotification" -m "#{msg}" "#{title}" 2>/dev/null;}) 
+end
+
+ARGF.each do |line|
+  event_hash.each_pair do |k, v|
+    notify(*v.call) if line =~ k
+  end
+end

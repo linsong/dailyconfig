@@ -70,8 +70,13 @@ Signal.trap("EXIT") do
   proxy.shutdown
 end
 
+last_match_time = Time.now
+
 ARGF.each do |line|
-  proxy.show($1, $2) if line =~ /^(\/[^:]+):(\d+)/
+  if line =~ /^(\/[^:]+):(\d+)/ && (Time.now - last_match_time) > 0.5
+    proxy.show($1, $2) 
+    last_match_time = Time.now
+  end
 end
 
 
