@@ -1,5 +1,14 @@
 XPTemplate priority=personal+
-XPTemplateDef
+
+let s:f = g:XPTfuncs()
+
+" use snippet 'varConst' to generate contant variables
+" use snippet 'varFormat' to generate formatting variables
+" use snippet 'varSpaces' to generate spacing variables
+
+
+XPTinclude
+    \ _common/common
 
 XPT %
 <% `^ %>`cursor^
@@ -122,4 +131,9 @@ render :text => "`Text here...^", :status => `401^
 
 XPT d
 <% debugger %>
+
+XPT benchmark_ wrap=wrapped " .. benchmark 
+<% benchmark("`^") do %>
+    `wrapped^ 
+<% end %>
 

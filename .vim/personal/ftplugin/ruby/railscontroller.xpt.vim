@@ -11,10 +11,11 @@ XPTinclude
 
 XPTemplateDef
 
-XPT benchmark_ wraponly=wrapped " .. benchmark 
+XPT benchmark_ wrap=wrapped " .. benchmark 
 self.class.benchmark("`^") do 
     `wrapped^ 
 end
+..XPT
 
 "snippet rt within the same controller
 "redirect_to :action => "${1:index}"
