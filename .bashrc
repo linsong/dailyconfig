@@ -231,6 +231,7 @@ function $function_name {
  alias glg='git log'
  alias gup='git pull && up.sh'
  alias gdiff='git diff'
+ alias gvdiff='git diff | v'
 
  # following are for git alias
  complete -o bashdefault -o default -o nospace -F _git_checkout gco 2>/dev/null \

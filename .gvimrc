@@ -27,12 +27,13 @@ endif
 
 "set colorscheme randomly
 "let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
+"spring, pyte, mayansmoke
 let colorscheme_list = ['blacksea', 'desert', 'mymud',
             \ 'dante', 'candy', 'elflord', 'golden',
             \ 'less', 'vibrantink', 'murphy',
             \ 'baycomb', 'bensday', 'blackboard', 'blacklight',
             \ 'darkburn', 'darker-robin', 'darkerdesert'
-            \ 'darkZ', 'desertEx']
+            \ 'darkZ', 'desertEx', 'ChocolateLiquor']
 "if ((strftime("%H") < 17 && strftime("%H") > 7))
   "let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
 "else

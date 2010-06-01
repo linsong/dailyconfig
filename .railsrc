@@ -30,3 +30,15 @@ end
 def qtasks(state='queued')
   TaskEngine::Core::TaskInstance.find_all_by_state(state)
 end
+
+def load_routes
+  puts %q{
+  >> rts = ActionController::Routing::Routes
+  >> rts.recognize_path("/")
+  => {:controller=>"albums", :action=>"index"}
+
+  >> rts.generate(:controller=>'albums',:action=>'index')
+  => "/music"
+  }
+  ActionController::Routing::Routes
+end
