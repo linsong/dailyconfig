@@ -6,7 +6,9 @@ set wildoptions=auto
 set complete=l
 "set complete=sbhfS
 
-set defsearch=google
+"should match the name set in ":dialog searchengine" dialog
+"set defsearch=google
+set defsearch=g 
 set hlsearch 
 set incsearch
 set smartcase

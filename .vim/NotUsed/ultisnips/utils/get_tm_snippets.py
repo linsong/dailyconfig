@@ -38,7 +38,7 @@ def parse_content(c):
         return None
 
 def fetch_snippets(name):
-    base_url = "http://svn.textmate.org/trunk/Bundles/" + name + ".tmbundle/"
+    base_url = "http://svn.textmate.org/trunk/Review/Bundles/" + name + ".tmbundle/"
     snippet_idx = base_url + "Snippets/"
 
     idx_list = urllib.urlopen(snippet_idx).read()
@@ -96,7 +96,6 @@ def get_all_bundles():
       get_bundle(name)
 
 def fetch_snippets_from_folder(bundle):
-  import pdb, readline; pdb.set_trace();
   rv = []
   for fname in glob.glob(bundle + "*.tmSnippet"):
     name = unescape(fname.rsplit('.', 1)[0].split('/')[-1]) # remove Extension

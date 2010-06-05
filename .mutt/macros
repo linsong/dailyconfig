@@ -27,12 +27,6 @@ macro index "<esc>v"    "<pipe-message>urlview<enter>" "open url with urlview"
 macro pager ",v"    "<pipe-message>vim -<enter>"                          # View the message in less.
 macro pager "w"      "<enter-command>set invsmart_wrap invmarkers<enter>" # Toggle wrap stuff
 macro pager "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
-macro pager ",1" "<change-folder> =vincent<enter>"
-macro pager ",2" "<change-folder> =exoweb/work<enter>"
-macro pager ",3" "<change-folder> =maillists/python-chinese@lists.python.cn<enter>"
-macro pager ",4" "<change-folder> =maillists/vim@vim.org<enter>"
-macro pager ",9" "<change-folder> =maillists/<tab><tab>"
-macro pager ",0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
 macro pager "<esc>0"    "<enter-command>set pager_index_lines=0<enter>"      # Change PIL size
 macro pager "<esc>1"    "<enter-command>set pager_index_lines=2<enter>"      # Change PIL size
 macro pager "<esc>2"    "<enter-command>set pager_index_lines=4<enter>"      # Change PIL size
@@ -53,8 +47,13 @@ macro pager "<esc>l"    "<enter-command>set invpipe_decode<enter>\
 #macro pager "\Cs\Cj" "<pipe-message>spamprobe spam<enter>"                # This message is junk.
 #macro pager "\Cs\Cg" "<pipe-message>spamprobe good<enter>"                # This message is good.
 
-macro generic "<esc>1" ":set from='Vincent Wang <linsong.qizi@gmail.com>'<enter>"
-#macro generic "<esc>2" ":set from='Vincent Wang <vincent@exoweb.net>'<enter>"
-macro generic "<esc>2" ":set from='Vincent Wang <vincent@linsong.org>'<enter>"
-macro generic "<esc>3" ":set from='Vincent Wang <vincent@qnite.com>'<enter>"
+macro generic ",1" "<change-folder> =INBOX<enter>"
+macro generic ",2" "<change-folder> =[Gmail].Drafts<enter>"
+macro generic ",3" "<change-folder> =[Gmail].Starred<enter>"
+macro generic ",4" "<change-folder> =[Gmail].Sent\ Mail<enter>"
 
+macro generic ",6" "<change-folder> =Seravia<enter>"
+macro generic ",7" "<change-folder> =[list]tmux<enter>"
+macro generic ",8" "<change-folder> =[list]xptemplate<enter>"
+macro generic ",9" "<change-folder> =[list]<tab><tab>"
+#macro generic ",0" "<change-folder> imaps://imap.exoweb.net/INBOX<enter>"
