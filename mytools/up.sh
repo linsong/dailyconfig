@@ -3,7 +3,7 @@
 echo "updating codes ..."
 #svn up 
 #git pull --rebase
-git pull
+#git pull
 
 echo 
 echo "generate tags ..."
