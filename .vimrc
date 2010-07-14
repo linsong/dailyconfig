@@ -394,6 +394,10 @@
     nnoremap } zL
     nnoremap { zH
 
+    " use two windows to view a long file
+    " from vim tip wiki: http://vim.wikia.com/wiki/View_text_file_in_two_columns
+    :noremap <silent> <Leader>vs :<C-u>let @z=&so<CR>:set so=0 noscb<CR>:bo vs<CR>Ljzt:setl scb<CR><C-w>p:setl scb<CR>:let &so=@z<CR>
+
 "## }}}1
 
 "## Mappings for vim keycodes {{{1 
@@ -1698,6 +1702,10 @@ endif " has("autocmd")
     let g:xptemplate_brace_complete = 0
 
     let g:xptemplate_pum_tab_nav = 1
+    "}}}2
+    
+    "### reload {{2
+    let g:reload_on_write = 0 "disable reload by default, use :ReloadScript manually
     "}}}2
 
 "## }}}1
