@@ -130,7 +130,8 @@ pythonfile = ~/.offlineimap.py
 enabled = yes
 filename = ~/.mutt/muttrc.mailboxes
 header = "mailboxes "
-peritem = "+%(accountname)s/%(foldername)s"
+#peritem = "+%(accountname)s/%(foldername)s"
+peritem = "+%(foldername)s"
 sep = " "
 footer = "\n"
 
@@ -481,7 +482,9 @@ folderfilter = lambda foldername: foldername in ['INBOX',
                                                  '[list]TopLanguage',
                                                  '[list]mutt',
                                                  '[list]xptemplate',
+                                                 '[list]vim_user',
                                                  'GoogleAlert',
-                                                 'DailyRead']
+                                                 'DailyRead',
+                                                 '96angel']
 
 # vim: ft=python.conf

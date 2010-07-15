@@ -4,7 +4,7 @@
 #
 
 unsubscribe *
-subscribe `cd $HOME/Mail/maillists && echo *`
+subscribe `cd $HOME/Mail/maillists && echo ".*"`
 #subscribe vim@vim.org
 #subscribe vim-dev@vim.org
 #subscribe vim-annouce@vim.org
