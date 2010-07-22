@@ -141,6 +141,17 @@ if has("win32")
     "let g:utl_mt_text_directory = ':!start C:\winnt\explorer.exe "%P"'  " Windows Explorer (id=mt_dir_win)
     "let g:utl_mt_text_directory = ':!start cmd /K cd /D "%P"'	" Dos box
 
+elseif has("macunix")
+    let mac_open_cmd = ':silent !open "%p"'	
+    let g:utl_mt_audio_mpeg	  = mac_open_cmd
+    let g:utl_mt_application_excel = mac_open_cmd
+    let g:utl_mt_application_msword = mac_open_cmd
+    let g:utl_mt_application_powerpoint = mac_open_cmd
+    let g:utl_mt_application_pdf	  = mac_open_cmd
+    let g:utl_mt_application_rtf	  = mac_open_cmd
+    let g:utl_mt_text_html = mac_open_cmd
+    let g:utl_mt_application_zip= mac_open_cmd
+
 elseif has("unix")
 
     " Linux/KDE
