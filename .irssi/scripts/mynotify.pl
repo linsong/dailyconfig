@@ -19,7 +19,7 @@ $VERSION = '0.1';
 	name		=>	'mynotify',
 	description	=>	'Sends out notifications for Irssi',
 	license		=>	'BSD',
-	url			=>	'http://vincent-wang.blogspot.com'
+	url			=>	'http://linsong.github.com'
 );
 
 sub cmd_help ($$$) {
@@ -43,7 +43,7 @@ sub notify($$$$)
 
     # now, I hide the details of OS behind netgrowl.py 
     #system("netgrowl.py -q -n '$title' -m '$data'");
-    open(TEMP_HANDLER, '|' . "netgrowl.py -q -n '" . $title . "' -m '" . $data . "'");
+    open(TEMP_HANDLER, '|' . "netgrowl.py -q -n '" . $title . "' -m '" . $data . "' &>/dev/null");
     close(TEMP_HANDLER);
 }
 

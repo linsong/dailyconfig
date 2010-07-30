@@ -2,7 +2,7 @@
 " Description: Highlight several words in different colors simultaneously. 
 "
 " Copyright:   (C) 2005-2008 by Yuheng Xie
-"              (C) 2008-2009 by Ingo Karkat
+"              (C) 2008-2010 by Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'. 
 "
 " Maintainer:  Ingo Karkat <ingo@karkat.de> 
@@ -10,8 +10,34 @@
 " Dependencies:
 "  - SearchSpecial.vim autoload script (optional, for improved search messages). 
 "
-" Version:     2.3.0
+" Version:     2.4.0
 " Changes:
+" 13-Jul-2010, Ingo Karkat
+" - ENH: The MarkSearch mappings (<Leader>[*#/?]) add the original cursor
+"   position to the jump list, like the built-in [/?*#nN] commands. This allows
+"   to use the regular jump commands for mark matches, like with regular search
+"   matches. 
+"
+" 19-Feb-2010, Andy Wokula
+" - BUG: Clearing of an accidental zero-width match (e.g. via :Mark \zs) results
+"   in endless loop. Thanks to Andy Wokula for the patch. 
+"
+" 17-Nov-2009, Ingo Karkat + Andy Wokula
+" - BUG: Creation of literal pattern via '\V' in {Visual}<Leader>m mapping
+"   collided with individual escaping done in <Leader>m mapping so that an
+"   escaped '\*' would be interpreted as a multi item when both modes are used
+"   for marking. Replaced \V with s:EscapeText() to be consistent. Replaced the
+"   (overly) generic mark#GetVisualSelectionEscaped() with
+"   mark#GetVisualSelectionAsRegexp() and
+"   mark#GetVisualSelectionAsLiteralPattern(). Thanks to Andy Wokula for the
+"   patch. 
+"
+" 06-Jul-2009, Ingo Karkat
+" - Re-wrote s:AnyMark() in functional programming style. 
+" - Now resetting 'smartcase' before the search, this setting should not be
+"   considered for *-command-alike searches and cannot be supported because all
+"   mark patterns are concatenated into one large regexp, anyway. 
+"
 " 04-Jul-2009, Ingo Karkat
 " - Re-wrote s:Search() to handle v:count: 
 "   - Obsoleted s:current_mark_position; mark#CurrentMark() now returns both the
@@ -63,28 +89,11 @@ function! s:GetVisualSelection()
 	let @a = save_a
 	return res
 endfunction
-
-function! mark#GetVisualSelectionEscaped(flags)
-	" flags:
-	"  "e" \  -> \\  
-	"  "n" \n -> \\n  for multi-lines visual selection
-	"  "N" \n removed
-	"  "V" \V added   for marking plain ^, $, etc.
-	let result = s:GetVisualSelection()
-	let i = 0
-	while i < strlen(a:flags)
-		if a:flags[i] ==# "e"
-			let result = escape(result, '\')
-		elseif a:flags[i] ==# "n"
-			let result = substitute(result, '\n', '\\n', 'g')
-		elseif a:flags[i] ==# "N"
-			let result = substitute(result, '\n', '', 'g')
-		elseif a:flags[i] ==# "V"
-			let result = '\V' . result
-		endif
-		let i = i + 1
-	endwhile
-	return result
+function! mark#GetVisualSelectionAsLiteralPattern()
+	return s:EscapeText(s:GetVisualSelection())
+endfunction
+function! mark#GetVisualSelectionAsRegexp()
+	return substitute(s:GetVisualSelection(), '\n', '', 'g')
 endfunction
 
 " Manually input a regular expression. 
@@ -120,6 +129,8 @@ function! s:MarkMatch( indices, expr )
 		" (But honor an explicit case-sensitive regexp via the /\C/ atom.) 
 		let l:expr = ((&ignorecase && a:expr !~# '\\\@<!\\C') ? '\c' . a:expr : a:expr)
 
+		" Info: matchadd() does not consider the 'magic' (it's always on),
+		" 'ignorecase' and 'smartcase' settings. 
 		let w:mwMatch[a:indices[0]] = matchadd('MarkWord' . (a:indices[0] + 1), l:expr, -10)
 	endif
 endfunction
@@ -243,6 +254,9 @@ function! mark#CurrentMark()
 				if b < col(".") && col(".") <= e
 					return [g:mwWord[i], [line("."), (b + 1)]]
 				endif
+				if b == e
+					break
+				endif
 				let start = e
 			endwhile
 		endif
@@ -311,6 +325,15 @@ endfunction
 function! s:Search( pattern, isBackward, currentMarkPosition, searchType )
 	let l:save_view = winsaveview()
 
+	" searchpos() obeys the 'smartcase' setting; however, this setting doesn't
+	" make sense for the mark search, because all patterns for the marks are
+	" concatenated as branches in one large regexp, and because patterns that
+	" result from the *-command-alike mappings should not obey 'smartcase' (like
+	" the * command itself), anyway. If the :Mark command wants to support
+	" 'smartcase', it'd have to emulate that into the regular expression. 
+	let l:save_smartcase = &smartcase
+	set nosmartcase
+
 	let l:count = v:count1
 	let [l:startLine, l:startCol] = [line('.'), col('.')]
 	let l:isWrapped = 0
@@ -327,8 +350,10 @@ function! s:Search( pattern, isBackward, currentMarkPosition, searchType )
 			" not at the start of the mark text). 
 			" In contrast to the normal search, this is not considered the first
 			" match. The mark text is one entity; if the cursor is positioned anywhere
-			" inside the mark text, the mark text is considered the current mark. In
-			" normal search, the cursor can be positioned anywhere (via offsets)
+			" inside the mark text, the mark text is considered the current mark. The
+			" built-in '*' and '#' commands behave in the same way; the entire <cword>
+			" text is considered the current match, and jumps move outside that text.
+			" In normal search, the cursor can be positioned anywhere (via offsets)
 			" around the search, and only that single cursor position is considered
 			" the current match. 
 			" Thus, the search is retried without a decrease of l:count, but only if
@@ -361,12 +386,26 @@ function! s:Search( pattern, isBackward, currentMarkPosition, searchType )
 			break
 		endif
 	endwhile
+	let &smartcase = l:save_smartcase
 	
 	" We're not stuck when the search wrapped around and landed on the current
 	" mark; that's why we exclude a possible wrap-around via v:count1 == 1. 
 	let l:isStuckAtCurrentMark = ([l:line, l:col] == a:currentMarkPosition && v:count1 == 1)
 	if l:line > 0 && ! l:isStuckAtCurrentMark
+		let l:matchPosition = getpos('.')
+
+		" Open fold at the search result, like the built-in commands. 
 		normal! zv
+
+		" Add the original cursor position to the jump list, like the
+		" [/?*#nN] commands. 
+		" Implementation: Memorize the match position, restore the view to the state
+		" before the search, then jump straight back to the match position. This
+		" also allows us to set a jump only if a match was found. (:call
+		" setpos("''", ...) doesn't work in Vim 7.2) 
+		call winrestview(l:save_view)
+		normal! m'
+		call setpos('.', l:matchPosition)
 
 		if l:isWrapped
 			call s:WrapMessage(a:searchType, a:pattern, a:isBackward)
@@ -389,19 +428,7 @@ endfunction
 
 " Combine all marks into one regexp. 
 function! s:AnyMark()
-	let w = ""
-	let i = 0
-	while i < g:mwCycleMax
-		if !empty(g:mwWord[i])
-			if w != ""
-				let w = w . '\|' . g:mwWord[i]
-			else
-				let w = g:mwWord[i]
-			endif
-		endif
-		let i += 1
-	endwhile
-	return w
+	return join(filter(copy(g:mwWord), '! empty(v:val)'), '\|')
 endfunction
 
 " Search any mark. 

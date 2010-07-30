@@ -1365,7 +1365,7 @@ endif " has("autocmd")
     "}}}2
 
     "### setting for DirDiff.vim {{{2
-    let g:DirDiffExcludes = "*.pyc,*.pye,.svn,*.svn-base,*.svn-work,*~,*.orig,*.rej,*.swf"
+    let g:DirDiffExcludes = "*.pyc,*.pye,.svn,*.svn-base,*.svn-work,*~,*.orig,*.rej,*.swf,.*.swp,.*.swo"
     "}}}2
 
     "### setting for exo-codereview.vim {{{2
@@ -1514,6 +1514,8 @@ endif " has("autocmd")
     let g:dbext_default_host = 'localhost'
 
     let g:dbext_default_use_sep_result_buffer = 1
+    let g:dbext_default_always_prompt_for_variables = 1
+    "let g:dbext_default_display_cmd_line = 1
     "}}}2
     
     "### settings for blogger.vim {{{2
@@ -1548,6 +1550,9 @@ endif " has("autocmd")
     "}}}2
     
     "### settings for mark.vim {{{2
+    let g:mwHistAdd = "/@" 
+    nmap <Plug>IgnoreMarkSearchNext <Plug>MarkSearchNext 
+    nmap <Plug>IgnoreMarkSearchPrev <Plug>MarkSearchPrev
     "if &t_Co>=256 || has("gui_running")
         "let loop_count = 0
         "let bg_colors = ["red","yellow","blue","green","magenta","cyan","gray","brown"]
