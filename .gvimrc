@@ -28,20 +28,17 @@ endif
 "set colorscheme randomly
 "let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
 "spring, pyte, mayansmoke
-let g:colorscheme_list = ['blacksea', 'desert', 'mymud',
-            \ 'dante', 'candy', 'elflord', 'golden',
-            \ 'less', 'vibrantink', 'murphy',
-            \ 'baycomb', 'bensday', 'blackboard', 'blacklight',
-            \ 'darkburn', 'darker-robin', 'darkerdesert',
-            \ 'darkZ', 'desertEx', 'ChocolateLiquor']
-"if ((strftime("%H") < 17 && strftime("%H") > 7))
-  "let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
-"else
-  "" colorschemes for night
-  "let colorscheme_list = ['blacksea', 'desert', 'mymud',
-              "\ 'dante', 'candy', 'elflord', 'golden',
-              "\ 'less', 'vibrantink', 'murphy']
-"fi
+if ((strftime("%H") < 17 && strftime("%H") > 7))
+  let g:colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
+else
+  " colorschemes for night
+  let g:colorscheme_list = ['blacksea', 'desert', 'mymud',
+              \ 'dante', 'candy', 'elflord', 'golden',
+              \ 'less', 'vibrantink', 'murphy',
+              \ 'baycomb', 'bensday', 'blackboard', 'blacklight',
+              \ 'darkburn', 'darker-robin', 'darkerdesert',
+              \ 'darkZ', 'desertEx', 'ChocolateLiquor']
+fi
 exec "colorscheme " . g:colorscheme_list[localtime()%len(g:colorscheme_list)]
 ":colorscheme desert "mymud zenburn ps_color elflord metacosm dusk
 
