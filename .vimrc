@@ -1387,7 +1387,7 @@ endif " has("autocmd")
     "}}}2
    
     "### setting for toggle_words.vim {{{2
-     let g:toggle_words_dict = {'*': [['white', 'black'], ['add', 'remove'], ['read', 'write'], ['hide', 'show'], ['before', 'after'], ['up', 'down'], ['open', 'close'], ['right', 'left'], ['long', 'short'], ['big', 'small']], 'python': [['if', 'elif', 'else']]}
+     let g:toggle_words_dict = {'*': [['white', 'black'], ['add', 'remove'], ['read', 'write'], ['hide', 'show'], ['before', 'after'], ['up', 'down'], ['open', 'close'], ['right', 'left'], ['long', 'short'], ['big', 'small'], ['post', 'get']], 'python': [['if', 'elif', 'else']]}
      nmap ,t :ToggleWord<CR>
      vmap ,t <ESC>:ToggleWord<CR>
     "}}}2

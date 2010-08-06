@@ -25,20 +25,19 @@ endif
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 "
 
+colorscheme desert
 "set colorscheme randomly
-"let colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
-"spring, pyte, mayansmoke
-if ((strftime("%H") < 17 && strftime("%H") > 7))
-  let g:colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
-else
+"if ((strftime("%H") < 17 && strftime("%H") > 7))
+  "let g:colorscheme_list = ['sienna', 'oceanlight', 'autumnleaf']
+"else
   " colorschemes for night
   let g:colorscheme_list = ['blacksea', 'desert', 'mymud',
               \ 'dante', 'candy', 'elflord', 'golden',
               \ 'less', 'vibrantink', 'murphy',
               \ 'baycomb', 'bensday', 'blackboard', 'blacklight',
-              \ 'darkburn', 'darker-robin', 'darkerdesert',
+              \ 'darkburn', 'darker-robin',
               \ 'darkZ', 'desertEx', 'ChocolateLiquor']
-fi
+"endif
 exec "colorscheme " . g:colorscheme_list[localtime()%len(g:colorscheme_list)]
 ":colorscheme desert "mymud zenburn ps_color elflord metacosm dusk
 
