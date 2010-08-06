@@ -4,3 +4,6 @@
 [submodule ".mutt"]
 	path = .mutt
 	url = git@github.com:linsong/mutt-config.git
+[submodule ".vimperator"]
+	path = .vimperator
+	url = git@github.com:linsong/vimperator-config.git
