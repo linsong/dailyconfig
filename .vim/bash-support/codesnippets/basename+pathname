@@ -1,2 +1,0 @@
-basename=${pathname##*/}
-dirname=${pathname%/*}
