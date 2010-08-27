@@ -7,6 +7,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:$HOME/tools:$HOME/mytools:/usr/local/bin
 
 #min	hour	mday	month	wday	command
 30	12	*	*	3	update_podcasts.sh
+*/5     *       *       *       *       update_ip.sh
 #48 	9 	* 	* 	* 	growlnotify -s --image ~/Desktop/mylogo.png -n "ShellNotification" -m "hello" "Notification" 2>/dev/null
 
 # vim: noexpandtab ts=8

@@ -15,7 +15,6 @@ servers = (
     ssl_verify = "no";
     autoconnect = "no";
   },
-  { address = "irc.stealth.net"; chatnet = "IRCnet"; port = "6668"; },
   { address = "irc.efnet.net"; chatnet = "EFNet"; port = "6667"; },
   { 
     address = "irc.undernet.org";
@@ -51,6 +50,7 @@ chatnets = {
     max_msgs = "5";
     max_whois = "4";
     max_query_chans = "5";
+    autosendcmd = "/msg nickserv identify vincent_wang enjoy@2007; wait 2000";
   };
   WorkIRCnet = {
     type = "IRC";
@@ -95,13 +95,13 @@ chatnets = {
 };
 
 channels = (
-  { name = "#irssi";      chatnet = "IRCnet"; autojoin = "yes"; },
-  { name = "#django";     chatnet = "IRCnet"; autojoin = "yes"; },
-  { name = "#vim";        chatnet = "IRCnet"; autojoin = "yes"; },
-  { name = "#ubuntu-cn";  chatnet = "IRCnet"; autojoin = "yes"; }, 
+  { name = "#irssi"; chatnet = "IRCnet"; autojoin = "yes"; },
+  { name = "#rubyonrails"; chatnet = "IRCnet"; autojoin = "yes"; },
+  { name = "#vim"; chatnet = "IRCnet"; autojoin = "yes"; },
+  { name = "#ubuntu-cn"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "#postgresql"; chatnet = "IRCnet"; autojoin = "yes"; },
-  { name = "silc";        chatnet = "silc";   autojoin = "No"; }
-  { name = "#archlinux";  chatnet = "IRCnet"; autojoin = "yes"; },
+  { name = "silc"; chatnet = "silc"; autojoin = "No"; },
+  { name = "#archlinux"; chatnet = "IRCnet"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -285,8 +285,8 @@ statusbar = {
 settings = {
   core = {
     real_name = "Vincent Wang";
-    user_name = "vincent";
-    nick = "vincent";
+    user_name = "vincent_wang";
+    nick = "vincent_wang";
     recode_fallback = "utf-8";
     recode_out_default_charset = "utf-8";
     timestamp_format = "%H:%M";
@@ -318,7 +318,8 @@ settings = {
     wordcompletion_pass = " ";
     wordcompletion_user = "vincent";
     openurl_max_urls = "50";
-    openurl_app_http = "firefox -remote \"ping()\" && firefox -remote \"openURL( $1 )\" || firefox \"$1\" &";
+    #openurl_app_http = "firefox -remote \"ping()\" && firefox -remote \"openURL( $1 )\" || firefox \"$1\" &";
+    openurl_app_http = "open $1";
   };
 };
 keyboard = (
@@ -333,7 +334,7 @@ keyboard = (
   { key = "meta-s"; id = "change_window"; data = "2"; },
   { key = "meta-u"; id = "change_window"; data = "3"; },
   { key = "meta-v"; id = "change_window"; data = "4"; },
-  { key = "meta-d"; id = "change_window"; data = "5"; },
+  { key = "meta-r"; id = "change_window"; data = "5"; },
   { key = "meta-p"; id = "change_window"; data = "6"; },
   { key = "meta-b"; id = "change_window"; data = "7"; },
   { key = "meta-i"; id = "change_window"; data = "8"; },
@@ -359,6 +360,11 @@ hilights = (
 );
 ignores = (
   { mask = "*zzz*"; level = "NICKS"; },
+  {
+    ### i'm ignoring /joins /parts and /quits to improve readability
+    level = "JOINS PARTS QUITS";
+    network = "IRCnet";
+  },
   { 
     level = "ACTIONS";
     pattern = "is (away|gone|back)";
@@ -409,7 +415,7 @@ windows = {
       {
         type = "CHANNEL";
         chat_type = "IRC";
-        name = "#django";
+        name = "#rubyonrails";
         tag = "IRCnet";
       }
     );
