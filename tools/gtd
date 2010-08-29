@@ -35,7 +35,7 @@ Revision 1.1  2004/11/29 13:56:13  km9725
 Fixed handling of recurring tasks
 """
 
-MAKEBACKUPS = False
+MAKEBACKUPS = True
 DATADIR = '.'
 TODOFILE = './todo.gtd'
 DONEFILE = './done.gtd'
@@ -335,7 +335,8 @@ class Task(object):
                 file = self.getRootTitle()
                 s.append( ' PRE='+','.join( map(lambda x: re.sub(re.escape(file+'|'),'',x),P)) )
         s.append( LINESEP )
-        note = re.sub('(?m)^[ \t]*(?=\S)','          ', self.notes.strip()).rstrip()
+        #note = re.sub('(?m)^[ \t]*(?=\S)','          ', self.notes.strip()).rstrip()
+        note = re.sub('(?m)^[ ]*','          ', self.notes).rstrip()
         if note:
             s.append( note )
             s.append(LINESEP)        
@@ -390,7 +391,8 @@ class Task(object):
                     s.append( ' PRE='+','.join( map(lambda x: re.sub(re.escape(file+'|'),'',x),P)) )
             s.append( ' ID=%d'%self.id )
             s.append( LINESEP )
-            note = re.sub('(?m)^[ \t]*(?=\S)',indent, self.notes.strip()).rstrip()
+            #note = re.sub('(?m)^[ \t]*(?=\S)',indent, self.notes.strip()).rstrip()
+            note = re.sub('(?m)^[ ]*',indent, self.notes).rstrip()
             if note:
                 s.append( note )
                 s.append( LINESEP )
