@@ -1,0 +1,9 @@
+# define ruby file type
+--type-add=ruby=.erb,.erb.html,.yml
+--type-set=yml=.yml,.yaml
+
+# use less by default and set its options
+#--pager=less -R -M --shift 5 -i
+
+# always color
+--color

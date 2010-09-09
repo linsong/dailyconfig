@@ -256,20 +256,20 @@ function $function_name {
 # alias rt='wcd -rmtree' # remove a directory, all its subdirectory and related treedata
  #}}}
  
- if [ -e "${HOME}/.bash.d" ]; then 
-   for i in ${HOME}/.bash.d/*; do 
-     source $i; 
-   done 
- fi
-
- if [ -e "${HOME}/.bashrc.local" ]; then
-    source ${HOME}/.bashrc.local
- fi
-
 # For kcd
 KCD_INIT="/opt/local/etc/kcd.sh.init"
 if [ -e "$KCD_INIT" ]; then
 	. "$KCD_INIT"
+fi
+
+if [ -e "${HOME}/.bash.d" ]; then 
+  for i in ${HOME}/.bash.d/*; do 
+    source $i; 
+  done 
+fi
+
+if [ -e "${HOME}/.bashrc.local" ]; then
+   source ${HOME}/.bashrc.local
 fi
 
 # vim: foldmethod=marker
