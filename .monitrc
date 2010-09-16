@@ -225,7 +225,7 @@ set httpd port 2812 and
   #if failed port 7777 with timeout 15 seconds
      #then restart 
 
-check process offlineimap with pidfile /Users/vincent/.offlineimap/pid
+check process imap with pidfile /Users/vincent/.offlineimap/pid
   start program = "/opt/local/bin/offlineimap -u Noninteractive.Basic"
-  stop program  = "/bin/kill $(cat /Users/vincent/.offlineimap/pid)"
-  group imap
+  # monit use exec to run command, so we need to use bash -c for shell commmand
+  stop program  = "/bin/bash -c '/bin/kill `/bin/cat /Users/vincent/.offlineimap/pid`'"
