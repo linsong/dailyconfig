@@ -43,7 +43,7 @@ keymap V  VIEW_IMAGE
 keymap i  INFO
 
 keymap ESC-i SAVE_IMAGE
-keymap R   PEEK_LINK
+keymap p   PEEK_LINK
 keymap C-g LINE_INFO
 keymap O EXTERN_LINK
 
@@ -57,7 +57,7 @@ keymap |   PIPE_BUF
 keymap B BACK
 keymap . NEXT
 keymap , PREV
-keymap s SELECT_MENU
+keymap S SELECT_MENU
 keymap ESC-s SAVE
 keymap v VIEW
 keymap P PRINT
@@ -69,8 +69,8 @@ keymap ESC-r RESHAPE
 # Tab operation
 keymap C-p PREV_TAB
 keymap C-n NEXT_TAB
-keymap T NEW_TAB
-keymap t TAB_MENU
+keymap t NEW_TAB
+keymap T TAB_MENU
 keymap d CLOSE_TAB
 
 keymap ESC-b VIEW_BOOKMARK
