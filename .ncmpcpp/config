@@ -212,13 +212,16 @@ mpd_music_dir = "~/Music"
 ## Attention: It doesn't support song format anymore.
 ## Use `ncmpcpp --now-playing SONG_FORMAT` instead.
 ##
-#execute_on_song_change = ""
+#execute_on_song_change = "`ncmpcpp --now-playing SONG_FORMAT`"
+execute_on_song_change = "growlnotify -i mp3 -n ncmpcpp -m `ncmpcpp  --now-playing` 2>/dev/null"
 #
 #playlist_show_remaining_time = "no"
 #
 #playlist_display_mode = "classic" (classic/columns)
+playlist_display_mode = "columns"
 #
 #browser_display_mode = "classic" (classic/columns)
+browser_display_mode = "columns"
 #
 #search_engine_display_mode = "classic" (classic/columns)
 #
@@ -256,6 +259,7 @@ user_interface = "alternative"
 #fancy_scrolling = "yes"
 #
 #cyclic_scrolling = "no"
+cyclic_scrolling = "yes"
 #
 #lines_scrolled = "2"
 #
@@ -327,8 +331,10 @@ follow_now_playing_lyrics = "yes"
 #lyrics_database = "1"
 #
 #external_editor = ""
+external_editor = "vim"
 #
 #use_console_editor = "no" (set to yes, if your editor is console app)
+use_console_editor = "yes" 
 #
 ##### colors definitions #####
 #
