@@ -7,3 +7,6 @@
 [submodule ".vimperator"]
 	path = .vimperator
 	url = git@github.com:linsong/vimperator-config.git
+[submodule ".w3m"]
+	path = .w3m
+	url = git@github.com:linsong/w3m-config.git
