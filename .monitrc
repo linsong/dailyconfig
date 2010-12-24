@@ -234,3 +234,7 @@ check process mpd with pidfile /Users/vincent/.mpd/mpd.pid
   start program = "/opt/local/bin/mpd --no-daemon /Users/vincent/.mpdconf_for_macosx"
   # monit use exec to run command, so we need to use bash -c for shell commmand
   stop program  = "/bin/bash -c '/bin/kill `/bin/cat /Users/vincent/.mpd/mpd.pid`'"
+
+check process mongodb with pidfile /Users/vincent/.mongodb/mongodb.pid 
+  start program = "/opt/local/bin/mongod --dbpath /Users/vincent/.mongodb/data --pidfilepath /Users/vincent/.mongodb/mongodb.pid"
+  stop program = "/bin/bash -c '/bin/kill `/bin/cat /Users/vincent/.mongodb/mongodb.pid`'"
