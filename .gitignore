@@ -210,4 +210,5 @@ projects/
 tmux.conf.local
 tools/aws
 tools/socks_proxy.sh
-
+custom/seravia.bash
+old_conf/.bashrc.local
