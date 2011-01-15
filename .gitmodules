@@ -10,3 +10,6 @@
 [submodule ".w3m"]
 	path = .w3m
 	url = git@github.com:linsong/w3m-config.git
+[submodule ".oh-my-zsh"]
+	path = .oh-my-zsh
+	url = git@github.com:linsong/oh-my-zsh.git
