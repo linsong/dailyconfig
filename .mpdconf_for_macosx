@@ -6,7 +6,7 @@ music_directory                 "~/Music"
 playlist_directory              "~/.mpd/playlists"
 db_file                         "~/.mpd/mpd.db"
 log_file                        "~/.mpd/mpd.log"
-error_file                      "~/.mpd/mpd.error"
+#error_file                      "~/.mpd/mpd.error"
 ################################################################
 
 
@@ -141,7 +141,7 @@ state_file                      "~/.mpd/mpdstate"
 # If you want MPD to adjust the volume of audio sent to the
 # audio outputs, you can tell it to use the software mixer:
 #
-#mixer_type                      "software"
+mixer_type                      "software"
 #
 ################################################################
 
@@ -162,7 +162,7 @@ state_file                      "~/.mpd/mpdstate"
 # volume of all songs played to be adjusted so that they sound
 # as though they are of equal loudness.
 #
-#volume_normalization            "no"
+volume_normalization            "no"
 #
 ################################################################
 
