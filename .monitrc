@@ -36,7 +36,7 @@ set logfile syslog facility log_daemon
 #                localhost                   # fallback relay
 #
 #
-set mailserver localhost
+#set mailserver localhost
 ## By default monit will drop alert events if no mail servers are available. 
 ## If you want to keep the alerts for a later delivery retry, you can use the 
 ## EVENTQUEUE statement. The base directory where undelivered alerts will be 
@@ -236,5 +236,8 @@ check process mpd with pidfile /Users/vincent/.mpd/mpd.pid
   stop program  = "/bin/bash -c '/bin/kill `/bin/cat /Users/vincent/.mpd/mpd.pid`'"
 
 check process mongodb with pidfile /Users/vincent/.mongodb/mongodb.pid 
-  start program = "/opt/local/bin/mongod --dbpath /Users/vincent/.mongodb/data --pidfilepath /Users/vincent/.mongodb/mongodb.pid"
+  start program = "/opt/local/bin/mongod -f /Users/vincent/.mongodb.conf --pidfilepath /Users/vincent/.mongodb/mongodb.pid"
   stop program = "/bin/bash -c '/bin/kill `/bin/cat /Users/vincent/.mongodb/mongodb.pid`'"
+
+check host localhost with address 127.0.0.1
+  if failed port 53092 then exec "/bin/bash -c '/opt/local/bin/fastri-server'"
