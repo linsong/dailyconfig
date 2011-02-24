@@ -239,5 +239,6 @@ check process mongodb with pidfile /Users/vincent/.mongodb/mongodb.pid
   start program = "/opt/local/bin/mongod -f /Users/vincent/.mongodb.conf --pidfilepath /Users/vincent/.mongodb/mongodb.pid"
   stop program = "/bin/bash -c '/bin/kill `/bin/cat /Users/vincent/.mongodb/mongodb.pid`'"
 
-check host localhost with address 127.0.0.1
-  if failed port 53092 then exec "/bin/bash -c '/opt/local/bin/fastri-server'"
+check process fastri with pidfile /Users/vincent/.pids/fastri-server.pid 
+  start program = "/Users/vincent/tools/daemon_launcher.sh start /opt/local/bin/fastri-server"
+  stop program = "/Users/vincent/tools/daemon_launcher.sh stop /opt/local/bin/fastri-server"
