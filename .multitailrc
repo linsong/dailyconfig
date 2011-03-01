@@ -653,7 +653,7 @@ abbreviate_filesize:on
 show_subwindow_id:off
 #
 # attributes for the marker-line
-markerline_color:red,black,reverse
+markerline_color:yellow,black,reverse
 #
 # show timestamp in markerline?
 markerline_timestamp:on
