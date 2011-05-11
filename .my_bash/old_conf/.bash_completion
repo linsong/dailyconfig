@@ -1,6 +1,0 @@
-MY_BASH_COMPLETION_DIR=$HOME/.bash_completion.d
-for i in $MY_BASH_COMPLETION_DIR/*; do
-     [[ ${i##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
-         [ \( -f $i -o -h $i \) -a -r $i ] && . $i
-done
-
