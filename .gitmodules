@@ -13,3 +13,6 @@
 [submodule ".oh-my-zsh"]
 	path = .oh-my-zsh
 	url = git@github.com:linsong/oh-my-zsh.git
+[submodule ".my_bash"]
+	path = .my_bash
+	url = git@github.com:linsong/my_bash.git
