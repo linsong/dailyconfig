@@ -1,33 +1,21 @@
 #!/usr/bin/ruby
+
+require 'rubygems'  unless defined? Gem
+
 require 'irb/completion'
 require 'irb/ext/save-history'
 
-#require 'rubygems'
-#%x{gem install 'wirble' --no-ri --no-rdoc} unless Gem.available?('wirble')
-#Gem.refresh 
-#require 'wirble'
-
-#Wirble.init
-#Wirble.colorize
-
-#colors = Wirble::Colorize.colors.merge({
- #:object_class => :purple,
- #:symbol => :purple,
- #:symbol_prefix => :purple
-#})
-#Wirble::Colorize.colors = colors 
+require 'irbtools/configure'
+Irbtools.remove_library :wirb
+Irbtools.remove_library :fancy_irb
+Irbtools.remove_library :boson
+Irbtools.add_library :wirb, :thread => -1 do Wirb.start end
+#Irbtools.add_library :fancy_irb, :thread => -1 do FancyIrb.start end # fancy_irb breaks interactive_editor
+Irbtools.start
 
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
-
 IRB.conf[:PROMPT_MODE] = :SIMPLE
-
-#%w[rubygems irbtools looksee/shortcuts].each do |gem|
-  #begin
-    #require gem
-  #rescue LoadError
-  #end
-#end
 
 class Object
   # list methods which aren't in superclass
