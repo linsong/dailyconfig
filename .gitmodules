@@ -16,3 +16,6 @@
 [submodule ".my_bash"]
 	path = .my_bash
 	url = git@github.com:linsong/my_bash.git
+[submodule "my_bash"]
+	path = my_bash
+	url = git@github.com:linsong/my_bash.git
