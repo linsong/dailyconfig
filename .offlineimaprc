@@ -483,8 +483,13 @@ folderfilter = lambda foldername: foldername in ['INBOX',
                                                  '[list]mutt',
                                                  '[list]xptemplate',
                                                  '[list]vim_user',
+                                                 '[list]mongodb',
+                                                 '[list]iTerm2',
                                                  'GoogleAlert',
                                                  'DailyRead',
-                                                 '96angel']
+                                                 '96angel',
+                                                 '[2010]06_11',
+                                                 '[2010]01_06',
+                                                 ]
 
 # vim: ft=python.conf
