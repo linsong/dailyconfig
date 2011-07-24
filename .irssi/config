@@ -15,6 +15,7 @@ servers = (
     ssl_verify = "no";
     autoconnect = "no";
   },
+  { address = "im.bitlbee.org"; chatnet = "BitlBee"; port = "6667"; },
   { address = "irc.efnet.net"; chatnet = "EFNet"; port = "6667"; },
   { 
     address = "irc.undernet.org";
@@ -92,6 +93,7 @@ chatnets = {
     max_whois = "30";
   };
   SILC = { type = "SILC"; };
+  BitlBee = { type = "IRC"; };
 };
 
 channels = (
@@ -325,7 +327,6 @@ settings = {
 keyboard = (
   { key = "^F"; id = "forward_character"; data = ""; },
   { key = "^B"; id = "backward_character"; data = ""; },
-  { key = "^W"; id = "key"; data = "window "; },
   { key = "window-^C"; id = "command"; data = "WINDOW NEW SPLIT"; },
   { key = "window-^K"; id = "command"; data = "WINDOW UP"; },
   { key = "window-^J"; id = "command"; data = "WINDOW DOWN"; },
@@ -335,11 +336,15 @@ keyboard = (
   { key = "meta-u"; id = "change_window"; data = "3"; },
   { key = "meta-v"; id = "change_window"; data = "4"; },
   { key = "meta-r"; id = "change_window"; data = "5"; },
-  { key = "meta-p"; id = "change_window"; data = "6"; },
+  { key = "meta-p"; id = "scroll_backward"; data = ""; },
   { key = "meta-b"; id = "change_window"; data = "7"; },
   { key = "meta-i"; id = "change_window"; data = "8"; },
   { key = "meta-a"; id = "change_window"; data = "9"; },
-  { key = "meta-x"; id = "change_window"; data = "10"; }
+  { key = "meta-x"; id = "change_window"; data = "10"; },
+  { key = "^f"; id = "scroll_forward"; data = ""; },
+  { key = "^b"; id = "scroll_backward"; data = ""; },
+  { key = "meta-n"; id = "scroll_forward"; data = ""; },
+  { key = "^w"; id = "delete_previous_word"; data = ""; }
 );
 hilights = (
   {
