@@ -212,3 +212,6 @@ tools/aws
 tools/socks_proxy.sh
 .my_bash/old_conf/.bashrc.local
 .my_bash/custom/seravia.bash
+.shell-fm/cache/
+.shell-fm/scrobble-cache
+.shell-fm/shell-fm.rc
