@@ -1,0 +1,5 @@
+username = vincentww
+password = PASSWORD
+default-radio = lastfm://user/vincentww/recommended
+stream-timeout = 30
+minimum = 80
