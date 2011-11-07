@@ -322,6 +322,8 @@ settings = {
     openurl_max_urls = "50";
     #openurl_app_http = "firefox -remote \"ping()\" && firefox -remote \"openURL( $1 )\" || firefox \"$1\" &";
     openurl_app_http = "open $1";
+    growl_on_regex = "vincent_wang";
+    growl_icon = "irssi.png";
   };
 };
 keyboard = (

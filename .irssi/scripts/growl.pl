@@ -1,81 +1,165 @@
-#!/usr/bin/env perl -w
+# == WHAT
+# Simple script for growl notifications in irssi
 #
-# This is a simple irssi script to send out Growl notifications using
-# Mac::Growl. Currently, it sends notifications when your name is
-# highlighted, and when you receive private messages.
+# == WHO
+# Nate Murray 2008
+# 
+# == CONFIG
+#   /SET growl_icon [filename]
+#   /SET growl_on_regex [regex]
+#   /SET growl_channel_regex [regex]
 #
+# == EXAMPLES
+#
+#   growl on mynickname
+#   /SET growl_on_regex mynickname
+#
+#   growl on everything:
+#   /SET growl_on_regex .*
+#
+#   everything but jdewey
+#   /SET growl_on_regex (?=^(?:(?!jdewey).)*$).*
+#
+#   only growl things for mychannel1 and mychannel2
+#   /SET growl_channel_regex (mychannel1|mychannel2)
+# 
+#   enable the icon
+#   /SET growl_icon irssi-flame.png
+# 
+# == INSTALL
+# Place these files in `~/.irssi/scripts/`. Put your growl icon in there too.
+# /script load growl.pl
+#
+# == CONTRIBUTE
+# If anyone has a better suggestion to DRY up the signals I would appreciate it. 
+# 
+# http://gist.github.com/6206
+# or 
+# git clone git://gist.github.com/6206.git gist-6206
 
 use strict;
-use vars qw($VERSION %IRSSI $Notes $AppName);
-
 use Irssi;
-use Mac::Growl;
+use vars qw($VERSION %IRSSI);
+# use Config;
 
-$VERSION = '0.05';
+# Dev. info ^_^
+$VERSION = "0.0";
 %IRSSI = (
-	authors		=>	'Nelson Elhage, Toby Peterson',
-	contact		=>	'Hanji@users.sourceforge.net, toby@opendarwin.org',
-	name		=>	'growl',
-	description	=>	'Sends out Growl notifications for Irssi',
-	license		=>	'BSD',
-	url			=>	'http://growl.info/',
+    authors     => "Nate Murray",
+    contact     => "nate\@natemurray.com",
+    name        => "Growl",
+    description => "Simple script that will growlnotify the messages",
+    license     => "GPL",
+    url         => "http://www.xcombinator.com",
+    changed     => "Mon Sep 22 11:55:07 PDT 2008"
 );
 
-sub cmd_growl ($$$) {
-	Irssi::print('%G>>%n Growl can be configured using three settings:');
-	Irssi::print('%G>>%n growl_show_privmsg : Notify about private messages.');
-	Irssi::print('%G>>%n growl_show_hilight : Notify when your name is hilighted.');
-	Irssi::print('%G>>$h growl_show_notify : Notify when someone on your away list joins or leaves.');  
+# All the works
+sub do_growl {
+    my ($server, $title, $data) = @_;
+    my $icon = growl_locate_icon(Irssi::settings_get_str('growl_icon'));
+    $data =~ s/["';]//g;
+    if ($server->{usermode_away}) {
+      system("growlnotify --sticky --image '$icon' -m '$data' -t '$title' >> /dev/null 2>&1");
+    } else {
+      system("growlnotify --image '$icon' -m '$data' -t '$title' >> /dev/null 2>&1");
+    }
+    return 1
 }
 
-$Notes = ["Script message", "Message notification"];
-$AppName = "irssi";
+sub growl_it {
+    my ($server, $title, $data, $channel, $nick) = @_;
 
-Mac::Growl::RegisterNotifications($AppName, $Notes, $Notes);
+    my $filter = Irssi::settings_get_str('growl_on_regex');
+    my $channel_filter = Irssi::settings_get_str('growl_channel_regex');
+    my $growl_on_nick = Irssi::settings_get_str('growl_on_nick');
 
-sub sig_message_private ($$$$) {
-	return unless Irssi::settings_get_bool('growl_show_privmsg');
+    my $current_nick = $server->{nick};
+        if($filter) {
+            return 0 if $data !~ /$filter/;
+        }
+        if($channel_filter && $server->ischannel($channel)) {
+            return 0 if $channel !~ /$channel_filter/;
+        }
 
-	my ($server, $data, $nick, $address) = @_;
-
-	Mac::Growl::PostNotification($AppName, "Message notification", "$nick", "$data");
+    $title = $title . " " . $channel;
+    do_growl($server, $title, $data);
 }
 
-sub sig_print_text ($$$) {
-	return unless Irssi::settings_get_bool('growl_show_hilight');
-
-	my ($dest, $text, $stripped) = @_;
-
-	if ($dest->{level} & MSGLEVEL_HILIGHT) {
-		Mac::Growl::PostNotification($AppName, "Message notification", $dest->{target}, $stripped);
-	}
+# All the works
+sub growl_message {
+    my ($server, $data, $nick, $mask, $target) = @_;
+    growl_it($server, $nick, $data, $target, $nick);
+    Irssi::signal_continue($server, $data, $nick, $mask, $target);
 }
 
-sub sig_notify_joined ($$$$$$) {
-	return unless Irssi::settings_get_bool('growl_show_notify');
-	my ($server, $nick, $user, $host, $realname, $away) = @_;
-	
-	Mac::Growl::PostNotification($AppName, "Message notification", $realname || $nick,
-		"<$nick!$user\@$host>\nHas joined $server->{chatnet}");
+sub growl_join {
+    my ($server, $channel, $nick, $address) = @_;
+    growl_it($server, "Join", "$nick has joined", $channel, $nick);
+    Irssi::signal_continue($server, $channel, $nick, $address);
 }
 
-sub sig_notify_left ($$$$$$) {
-	return unless Irssi::settings_get_bool('growl_show_notify');
-	my ($server, $nick, $user, $host, $realname, $away) = @_;
-	
-	Mac::Growl::PostNotification($AppName, "Message notification", $realname || $nick,
-		"<$nick!$user\@$host>\nHas left $server->{chatnet}");	
+sub growl_part {
+    my ($server, $channel, $nick, $address) = @_;
+    growl_it($server, "Part", "$nick has parted", $channel, $nick);
+    Irssi::signal_continue($server, $channel, $nick, $address);
 }
 
-Irssi::command_bind('growl', 'cmd_growl');
+sub growl_quit {
+    my ($server, $nick, $address, $reason) = @_;
+    growl_it($server, "Quit", "$nick has quit: $reason", $server, $nick);
+    Irssi::signal_continue($server, $nick, $address, $reason);
+}
 
-Irssi::signal_add_last('message private', \&sig_message_private);
-Irssi::signal_add_last('print text', \&sig_print_text);
-Irssi::signal_add_last('notifylist joined', \&sig_notify_joined);
-Irssi::signal_add_last('notifylist left', \&sig_notify_left);
+sub growl_invite {
+    my ($server, $channel, $nick, $address) = @_;
+    growl_it($server, "Invite", "$nick has invited you on $channel", $channel, $nick);
+    Irssi::signal_continue($server, $channel, $address);
+}
 
-Irssi::settings_add_bool($IRSSI{'name'}, 'growl_show_privmsg', 1);
-Irssi::settings_add_bool($IRSSI{'name'}, 'growl_show_hilight', 1);
-Irssi::settings_add_bool($IRSSI{'name'}, 'growl_show_notify', 1);
+sub growl_topic {
+    my ($server, $channel, $topic, $nick, $address) = @_;
+    growl_it($server, "Topic: $topic", "$nick has changed the topic to $topic on $channel", $channel, $nick);
+    Irssi::signal_continue($server, $channel, $topic, $nick, $address);
+}
 
-Irssi::print('%G>>%n '.$IRSSI{name}.' '.$VERSION.' loaded (/growl for help)');
+sub growl_privmsg {
+    # $server = server record where the message came
+    # $data = the raw data received from server, with PRIVMSGs it is:
+    #         "target :text" where target is either your nick or #channel
+    # $nick = the nick who sent the message
+    # $host = host of the nick who sent the message
+    my ($server, $data, $nick, $host) = @_;
+    my ($target, $text) = split(/ :/, $data, 2);
+    # growl_it($server, $nick, $data, $target, $nick); # actually, don't do this.
+    Irssi::signal_continue($server, $data, $nick, $host);
+}
+
+sub growl_locate_icon {
+    # $file = the name of the icon file to look for
+    my ($file) = @_;
+    if (-e "$file") {
+        return "$file";
+    }
+    foreach (@INC) {
+        if (-e "$_/$file") {
+            return "$_/$file";
+        }
+    }
+}
+
+# Hook me up
+Irssi::settings_add_str('misc', 'growl_icon', 'irssi-flame.png');
+Irssi::settings_add_str('misc', 'growl_on_regex', 0);      # false
+Irssi::settings_add_str('misc', 'growl_channel_regex', 0); # false
+Irssi::settings_add_str('misc', 'growl_on_nick', 1);       # true
+Irssi::signal_add('message public', 'growl_message');
+Irssi::signal_add('message private', 'growl_message');
+Irssi::signal_add('message own_public', 'growl_message');
+Irssi::signal_add('message own_private', 'growl_message');
+Irssi::signal_add('message join', 'growl_join');
+Irssi::signal_add('message part', 'growl_part');
+Irssi::signal_add('message quit', 'growl_quit');
+Irssi::signal_add('message invite', 'growl_invite');
+Irssi::signal_add('message topic', 'growl_topic');
+Irssi::signal_add('event privmsg', 'growl_privmsg');
