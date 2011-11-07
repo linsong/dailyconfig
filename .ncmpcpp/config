@@ -214,7 +214,7 @@ mpd_music_dir = "~/Music"
 ##
 #execute_on_song_change = "`ncmpcpp --now-playing SONG_FORMAT`"
 #execute_on_song_change = "growlnotify -i mp3 -n ncmpcpp -m `ncmpcpp  --now-playing` 2>/dev/null"
-execute_on_song_change = "growlnotify --image ~/data/icons/clef-icon.png -n ncmpcpp -m `ncmpcpp  --now-playing` 2>/dev/null"
+#execute_on_song_change = "growlnotify --image ~/data/icons/clef-icon.png -n ncmpcpp -m `ncmpcpp  --now-playing` 2>/dev/null"
 #
 #playlist_show_remaining_time = "no"
 #
