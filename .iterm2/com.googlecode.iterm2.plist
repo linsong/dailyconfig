@@ -20,6 +20,8 @@
 	<true/>
 	<key>Control</key>
 	<integer>1</integer>
+	<key>CopyLastNewline</key>
+	<false/>
 	<key>CopySelection</key>
 	<true/>
 	<key>CursorType</key>
@@ -3973,7 +3975,7 @@
 		</dict>
 	</dict>
 	<key>Default Arrangement Name</key>
-	<string>Arrangement 2</string>
+	<string>home</string>
 	<key>Default Bookmark Guid</key>
 	<string>7BEAAB39-FF0A-4D87-BE67-AF7FF195F94F</string>
 	<key>DimBackgroundWindows</key>
@@ -3982,6 +3984,8 @@
 	<true/>
 	<key>DimOnlyText</key>
 	<false/>
+	<key>DisableFullscreenTransparency</key>
+	<false/>
 	<key>EnableGrowl</key>
 	<false/>
 	<key>EnableRendezvous</key>
@@ -3989,7 +3993,7 @@
 	<key>FocusFollowsMouse</key>
 	<false/>
 	<key>FsTabDelay</key>
-	<real>1</real>
+	<real>10</real>
 	<key>HiddenAFRStrokeThickness</key>
 	<real>0.0</real>
 	<key>HiddenAdvancedFontRendering</key>
@@ -4028,66 +4032,22 @@
 	<true/>
 	<key>MaxVertically</key>
 	<false/>
-	<key>NSColorPanelMode</key>
-	<string>6</string>
-	<key>NSColorPanelVisibleSwatchRows</key>
-	<integer>1</integer>
-	<key>NSColorPickerPageableNameListDefaults</key>
-	<string>1Apple</string>
-	<key>NSColorPickerSlidersDefaults</key>
-	<string>0</string>
-	<key>NSColorPickerUserDefaults</key>
-	<string>Spectrum</string>
-	<key>NSFontPanelAttributes</key>
-	<string>1, 1</string>
 	<key>NSNavBrowserPreferedColumnContentWidth</key>
 	<real>186</real>
-	<key>NSNavLastCurrentDirectory</key>
-	<string>~/iterm2_profile</string>
 	<key>NSNavLastRootDirectory</key>
 	<string>~</string>
-	<key>NSNavPanelExpandedSizeForOpenMode</key>
-	<string>{518, 403}</string>
-	<key>NSNavSidebarWidth</key>
-	<real>120</real>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
 	<string></string>
-	<key>NSToolbar Configuration Terminal Toolbar</key>
-	<dict>
-		<key>TB Display Mode</key>
-		<integer>1</integer>
-		<key>TB Icon Size Mode</key>
-		<integer>1</integer>
-		<key>TB Is Shown</key>
-		<integer>0</integer>
-		<key>TB Item Identifiers</key>
-		<array>
-			<string>New</string>
-			<string>Info</string>
-			<string>NSToolbarSeparatorItem</string>
-			<string>NSToolbarCustomizeToolbarItem</string>
-			<string>Close</string>
-			<string>NSToolbarSeparatorItem</string>
-			<string>Command</string>
-			<string>Profiles</string>
-		</array>
-		<key>TB Size Mode</key>
-		<integer>1</integer>
-		<key>TB Visibility Priority Values</key>
-		<dict/>
-	</dict>
-	<key>NSWindow Frame NSColorPanel</key>
-	<string>307 274 201 309 0 0 1440 878 </string>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>768 86 445 270 0 0 1440 878 </string>
+	<string>260 121 445 270 0 0 1920 1058 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>124 219 851 483 0 0 1280 778 </string>
+	<string>1991 224 924 485 1440 -83 1920 1080 </string>
 	<key>NSWindow Frame SUStatusFrame</key>
-	<string>522 537 384 129 0 0 1280 778 </string>
+	<string>2085 510 384 129 1440 -83 1920 1080 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>-216 800 1920 1080 -216 800 1920 1080 </string>
+	<string>1440 -83 1920 1080 1440 -83 1920 1080 </string>
 	<key>NeverWarnAboutShortLivedSessions_7BEAAB39-FF0A-4D87-BE67-AF7FF195F94F</key>
 	<true/>
 	<key>New Bookmarks</key>
@@ -4095,6 +4055,18 @@
 		<dict>
 			<key>ASCII Anti Aliased</key>
 			<true/>
+			<key>AWDS Pane Directory</key>
+			<string></string>
+			<key>AWDS Pane Option</key>
+			<string>Recycle</string>
+			<key>AWDS Tab Directory</key>
+			<string></string>
+			<key>AWDS Tab Option</key>
+			<string>No</string>
+			<key>AWDS Window Directory</key>
+			<string></string>
+			<key>AWDS Window Option</key>
+			<string>No</string>
 			<key>Ambiguous Double Width</key>
 			<false/>
 			<key>Ansi 0 Color</key>
@@ -4304,7 +4276,7 @@
 			<key>Custom Command</key>
 			<string>No</string>
 			<key>Custom Directory</key>
-			<string>No</string>
+			<string>Advanced</string>
 			<key>Default Bookmark</key>
 			<string>No</string>
 			<key>Disable Printing</key>
@@ -4523,7 +4495,7 @@
 			<string>Monaco 12</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
-			<key>Prompt Before Closing</key>
+			<key>Prompt Before Closing 2</key>
 			<integer>0</integer>
 			<key>Right Option Key Sends</key>
 			<integer>2</integer>
@@ -4534,6 +4506,8 @@
 			<key>Scrollback Lines</key>
 			<integer>0</integer>
 			<key>Scrollback With Status Bar</key>
+			<true/>
+			<key>Scrollback in Alternate Screen</key>
 			<true/>
 			<key>Selected Text Color</key>
 			<dict>
@@ -4553,14 +4527,116 @@
 				<key>Red Component</key>
 				<real>0.70980393886566162</real>
 			</dict>
+			<key>Semantic History</key>
+			<dict>
+				<key>action</key>
+				<string>best editor</string>
+				<key>editor</key>
+				<string>org.vim.MacVim</string>
+				<key>text</key>
+				<string></string>
+			</dict>
 			<key>Send Code When Idle</key>
 			<false/>
+			<key>Set Local Environment Vars</key>
+			<true/>
 			<key>Shortcut</key>
 			<string>1</string>
 			<key>Silence Bell</key>
 			<false/>
 			<key>Smart Cursor Color</key>
 			<true/>
+			<key>Smart Selection Rules</key>
+			<array>
+				<dict>
+					<key>notes</key>
+					<string>Word bounded by whitespace</string>
+					<key>precision</key>
+					<string>low</string>
+					<key>regex</key>
+					<string>\S+</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>C++ namespace::identifier</string>
+					<key>precision</key>
+					<string>normal</string>
+					<key>regex</key>
+					<string>([a-zA-Z0-9_]+::)+[a-zA-Z0-9_]+</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>Paths</string>
+					<key>precision</key>
+					<string>normal</string>
+					<key>regex</key>
+					<string>\~?/?([[:letter:][:number:]._-]+/+)+[[:letter:][:number:]._-]+/?</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>Quoted string</string>
+					<key>precision</key>
+					<string>normal</string>
+					<key>regex</key>
+					<string>@?"(?:[^"\\]|\\.)*"</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>Java/Python include paths</string>
+					<key>precision</key>
+					<string>normal</string>
+					<key>regex</key>
+					<string>([[:letter:][:number:]._]+\.)+[[:letter:][:number:]._]+</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>mailto URL</string>
+					<key>precision</key>
+					<string>normal</string>
+					<key>regex</key>
+					<string>\bmailto:([a-z0-9A-Z_]+@)?([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\b</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>Obj-C selector</string>
+					<key>precision</key>
+					<string>high</string>
+					<key>regex</key>
+					<string>@selector\([^)]+\)</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>email address</string>
+					<key>precision</key>
+					<string>high</string>
+					<key>regex</key>
+					<string>\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>HTTP URL</string>
+					<key>precision</key>
+					<string>very_high</string>
+					<key>regex</key>
+					<string>https?://([a-z0-9A-Z]+(:[a-zA-Z0-9]+)?@)?([a-z0-9A-Z]+\.)+[A-Za-z]+((:[0-9]+)?)(/[a-zA-Z0-9;/\.\-_+%?&amp;@=#\(\)]*)?</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>SSH URL</string>
+					<key>precision</key>
+					<string>very_high</string>
+					<key>regex</key>
+					<string>\bssh:([a-z0-9A-Z_]+@)?([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\b</string>
+				</dict>
+				<dict>
+					<key>notes</key>
+					<string>Telnet URL</string>
+					<key>precision</key>
+					<string>very_high</string>
+					<key>regex</key>
+					<string>\btelnet:([a-z0-9A-Z_]+@)?([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\b</string>
+				</dict>
+			</array>
 			<key>Space</key>
 			<integer>-1</integer>
 			<key>Sync Title</key>
@@ -4573,6 +4649,8 @@
 			<string>xterm-256color</string>
 			<key>Transparency</key>
 			<real>0.048058252781629562</real>
+			<key>Triggers</key>
+			<array/>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>
@@ -5019,7 +5097,7 @@
 			<string>Monaco 12</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
-			<key>Prompt Before Closing</key>
+			<key>Prompt Before Closing 2</key>
 			<integer>0</integer>
 			<key>Right Option Key Sends</key>
 			<integer>2</integer>
@@ -5030,6 +5108,8 @@
 			<key>Scrollback Lines</key>
 			<integer>0</integer>
 			<key>Scrollback With Status Bar</key>
+			<true/>
+			<key>Scrollback in Alternate Screen</key>
 			<true/>
 			<key>Selected Text Color</key>
 			<dict>
@@ -5514,7 +5594,7 @@
 			<string>Monaco 12</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
-			<key>Prompt Before Closing</key>
+			<key>Prompt Before Closing 2</key>
 			<integer>0</integer>
 			<key>Right Option Key Sends</key>
 			<integer>2</integer>
@@ -5525,6 +5605,8 @@
 			<key>Scrollback Lines</key>
 			<integer>0</integer>
 			<key>Scrollback With Status Bar</key>
+			<true/>
+			<key>Scrollback in Alternate Screen</key>
 			<true/>
 			<key>Selected Text Color</key>
 			<dict>
@@ -5591,7 +5673,7 @@
 	<key>PasteFromClipboard</key>
 	<true/>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/linsong/.iterm2</string>
+	<string>/Users/vincent/.iterm2</string>
 	<key>PromptOnClose</key>
 	<false/>
 	<key>PromptOnQuit</key>
@@ -5602,8 +5684,6 @@
 	<integer>8</integer>
 	<key>RightOption</key>
 	<integer>3</integer>
-	<key>SUAutomaticallyUpdate</key>
-	<false/>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
@@ -5611,8 +5691,10 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2011-09-02T13:12:15Z</date>
+	<date>2011-11-02T07:28:47Z</date>
 	<key>SavePasteHistory</key>
+	<false/>
+	<key>Show Toolbelt</key>
 	<false/>
 	<key>ShowBookmarkName</key>
 	<false/>
@@ -5628,8 +5710,14 @@
 	<integer>6</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
-	<key>UKCrashReporterLastCrashReportDate</key>
-	<real>1307090432</real>
+	<key>ThreeFingerEmulates</key>
+	<false/>
+	<key>ToolbeltTools</key>
+	<array>
+		<string>Profiles</string>
+		<string>Paste History</string>
+		<string>Jobs</string>
+	</array>
 	<key>URLHandlersByGuid</key>
 	<dict/>
 	<key>UseBorder</key>
@@ -6162,7 +6250,7 @@
 										<key>Rows</key>
 										<integer>46</integer>
 										<key>Working Directory</key>
-										<string>/Users/linsong</string>
+										<string>/Users/vincent</string>
 									</dict>
 									<key>View Type</key>
 									<string>SessionView</string>
@@ -6695,7 +6783,7 @@
 										<key>Rows</key>
 										<integer>46</integer>
 										<key>Working Directory</key>
-										<string>/Users/linsong</string>
+										<string>/Users/vincent</string>
 									</dict>
 									<key>View Type</key>
 									<string>SessionView</string>
@@ -7205,7 +7293,7 @@
 										<key>Rows</key>
 										<integer>46</integer>
 										<key>Working Directory</key>
-										<string>/Users/linsong</string>
+										<string>/Users/vincent</string>
 									</dict>
 									<key>View Type</key>
 									<string>SessionView</string>
@@ -7495,6 +7583,8 @@
 											<string>No</string>
 											<key>Default Bookmark</key>
 											<string>No</string>
+											<key>Disable Printing</key>
+											<false/>
 											<key>Disable Smcup Rmcup</key>
 											<true/>
 											<key>Disable Window Resizing</key>
@@ -7518,6 +7608,13 @@
 											<integer>0</integer>
 											<key>Initial Text</key>
 											<string></string>
+											<key>Jobs to Ignore</key>
+											<array>
+												<string>rlogin</string>
+												<string>ssh</string>
+												<string>slogin</string>
+												<string>telnet</string>
+											</array>
 											<key>Keyboard Map</key>
 											<dict>
 												<key>0x7f-0x0</key>
@@ -7702,6 +7799,8 @@
 											<string>Monaco 12</string>
 											<key>Option Key Sends</key>
 											<integer>2</integer>
+											<key>Prompt Before Closing</key>
+											<integer>0</integer>
 											<key>Right Option Key Sends</key>
 											<integer>2</integer>
 											<key>Rows</key>
@@ -7766,11 +7865,11 @@
 											<string>/Users/vincent</string>
 										</dict>
 										<key>Columns</key>
-										<integer>200</integer>
+										<integer>183</integer>
 										<key>Rows</key>
 										<integer>63</integer>
 										<key>Working Directory</key>
-										<string>/Users/linsong</string>
+										<string>/Users/vincent</string>
 									</dict>
 									<key>View Type</key>
 									<string>SessionView</string>
@@ -7779,7 +7878,7 @@
 										<key>height</key>
 										<real>1080</real>
 										<key>width</key>
-										<real>1415</real>
+										<real>1296</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -8010,6 +8109,8 @@
 													<string>No</string>
 													<key>Default Bookmark</key>
 													<string>No</string>
+													<key>Disable Printing</key>
+													<false/>
 													<key>Disable Smcup Rmcup</key>
 													<true/>
 													<key>Disable Window Resizing</key>
@@ -8033,6 +8134,13 @@
 													<integer>0</integer>
 													<key>Initial Text</key>
 													<string></string>
+													<key>Jobs to Ignore</key>
+													<array>
+														<string>rlogin</string>
+														<string>ssh</string>
+														<string>slogin</string>
+														<string>telnet</string>
+													</array>
 													<key>Keyboard Map</key>
 													<dict>
 														<key>0x7f-0x0</key>
@@ -8217,6 +8325,8 @@
 													<string>Monaco 12</string>
 													<key>Option Key Sends</key>
 													<integer>2</integer>
+													<key>Prompt Before Closing</key>
+													<integer>0</integer>
 													<key>Right Option Key Sends</key>
 													<integer>2</integer>
 													<key>Rows</key>
@@ -8281,11 +8391,11 @@
 													<string>/Users/vincent</string>
 												</dict>
 												<key>Columns</key>
-												<integer>70</integer>
+												<integer>87</integer>
 												<key>Rows</key>
 												<integer>31</integer>
 												<key>Working Directory</key>
-												<string>/Users/linsong</string>
+												<string>/Users/vincent</string>
 											</dict>
 											<key>View Type</key>
 											<string>SessionView</string>
@@ -8294,7 +8404,7 @@
 												<key>height</key>
 												<real>539</real>
 												<key>width</key>
-												<real>504</real>
+												<real>623</real>
 												<key>x</key>
 												<real>0.0</real>
 												<key>y</key>
@@ -8522,6 +8632,8 @@
 													<string>No</string>
 													<key>Default Bookmark</key>
 													<string>No</string>
+													<key>Disable Printing</key>
+													<false/>
 													<key>Disable Smcup Rmcup</key>
 													<true/>
 													<key>Disable Window Resizing</key>
@@ -8545,6 +8657,13 @@
 													<integer>0</integer>
 													<key>Initial Text</key>
 													<string></string>
+													<key>Jobs to Ignore</key>
+													<array>
+														<string>rlogin</string>
+														<string>ssh</string>
+														<string>slogin</string>
+														<string>telnet</string>
+													</array>
 													<key>Keyboard Map</key>
 													<dict>
 														<key>0x7f-0x0</key>
@@ -8729,6 +8848,8 @@
 													<string>Monaco 12</string>
 													<key>Option Key Sends</key>
 													<integer>2</integer>
+													<key>Prompt Before Closing</key>
+													<integer>0</integer>
 													<key>Right Option Key Sends</key>
 													<integer>2</integer>
 													<key>Rows</key>
@@ -8793,11 +8914,11 @@
 													<string>/Users/vincent</string>
 												</dict>
 												<key>Columns</key>
-												<integer>70</integer>
+												<integer>87</integer>
 												<key>Rows</key>
 												<integer>31</integer>
 												<key>Working Directory</key>
-												<string>/Users/linsong</string>
+												<string>/Users/vincent</string>
 											</dict>
 											<key>View Type</key>
 											<string>SessionView</string>
@@ -8806,7 +8927,7 @@
 												<key>height</key>
 												<real>540</real>
 												<key>width</key>
-												<real>504</real>
+												<real>623</real>
 												<key>x</key>
 												<real>0.0</real>
 												<key>y</key>
@@ -8821,9 +8942,9 @@
 										<key>height</key>
 										<real>1080</real>
 										<key>width</key>
-										<real>504</real>
+										<real>623</real>
 										<key>x</key>
-										<real>1416</real>
+										<real>1297</real>
 										<key>y</key>
 										<real>0.0</real>
 									</dict>
@@ -9074,6 +9195,8 @@
 											<string>No</string>
 											<key>Default Bookmark</key>
 											<string>No</string>
+											<key>Disable Printing</key>
+											<false/>
 											<key>Disable Smcup Rmcup</key>
 											<true/>
 											<key>Disable Window Resizing</key>
@@ -9097,6 +9220,13 @@
 											<integer>0</integer>
 											<key>Initial Text</key>
 											<string></string>
+											<key>Jobs to Ignore</key>
+											<array>
+												<string>rlogin</string>
+												<string>ssh</string>
+												<string>slogin</string>
+												<string>telnet</string>
+											</array>
 											<key>Keyboard Map</key>
 											<dict>
 												<key>0x7f-0x0</key>
@@ -9281,6 +9411,8 @@
 											<string>Monaco 12</string>
 											<key>Option Key Sends</key>
 											<integer>2</integer>
+											<key>Prompt Before Closing</key>
+											<integer>0</integer>
 											<key>Right Option Key Sends</key>
 											<integer>2</integer>
 											<key>Rows</key>
@@ -9349,7 +9481,7 @@
 										<key>Rows</key>
 										<integer>63</integer>
 										<key>Working Directory</key>
-										<string>/Users/linsong</string>
+										<string>/Users/vincent</string>
 									</dict>
 									<key>View Type</key>
 									<string>SessionView</string>
@@ -9406,6 +9538,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>1.0.0.20110828</string>
+	<string>1.0.0.20111020</string>
 </dict>
 </plist>
