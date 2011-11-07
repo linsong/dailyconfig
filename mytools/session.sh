@@ -2,6 +2,8 @@
 
 [ ! -z "$TMUX" ] && exit
 
+monit
+
 #TMUX="tmux -udLmain" # for v1.0- version 
 TMUX="tmux -u" # use 'default' socket 
 

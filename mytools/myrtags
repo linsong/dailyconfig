@@ -17,6 +17,7 @@ find $* \
         -name '.gitignore' -or \
         -name '*.swd' -or \
         -name '*.swo' \
+        -name 'sandbox.sql' \
     \) -prune -or \
     \( \
          -path '*/.svn/*' -or \
@@ -24,6 +25,8 @@ find $* \
          -path '*/.git/*' -or \
          -path '*/tmp/*' -or \
          -path '*/performance/*' -or \
+         -path '*/doc/*' -or \
+         -path '*/log/*' -or \
          -path '*/tax_chart/*' -or \
          -path '*/coverage/*' \
      \) -prune -or \

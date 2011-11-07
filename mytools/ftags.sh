@@ -22,6 +22,7 @@ find $* \
         -name '*.swp' -or \
         -name '*.swd' -or \
         -name '.gitignore' -or \
+        -name '*.pyc' -or \
         -name '*.swo' \
     \) -prune -or \
     \( \
@@ -31,7 +32,9 @@ find $* \
          -path '*/tmp/*' -or \
          -path '*/performance/*' -or \
          -path '*/tax_chart/*' -or \
-         -path '*/coverage/*' \
+         -path '*/coverage/*' -or \
+         -path '*/doc/*' -or \
+         -path '*/.cache/*' \
      \) -prune -or \
      -type f -print | \
 ruby -nle 'puts %Q{#{File.basename($_)}\t#{$_}\t#{%q{/^/;"}}\tr}' | \
