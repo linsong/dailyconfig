@@ -215,3 +215,33 @@ tools/socks_proxy.sh
 .shell-fm/cache/
 .shell-fm/scrobble-cache
 .shell-fm/shell-fm.rc
+.avidemux/
+.cache_cheats
+.eclipse/
+.irb-history
+.pentadactyl/
+.pow
+.profile.macports-saved_2011-09-17_at_00:20:27
+.psql_history
+.route53
+.slocdata/
+.vim-fuf-data/
+Library/.localized
+Library/Compositions/
+Library/Input Methods/
+Library/VirtualBox/
+Library/iTunes/
+VirtualBox VMs/
+autojump/
+costs.txt
+data/fonts/
+fortunes/
+mysignature
+mytools/clean_before_leaving
+tools/wol.new
+workspace
+.pip
+_rvm
+.virtualenvs
+.npm
+.rvm
