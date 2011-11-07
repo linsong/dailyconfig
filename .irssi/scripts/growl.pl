@@ -75,12 +75,14 @@ sub growl_it {
     my $growl_on_nick = Irssi::settings_get_str('growl_on_nick');
 
     my $current_nick = $server->{nick};
-        if($filter) {
-            return 0 if $data !~ /$filter/;
-        }
+    if(!$growl_on_nick || ($growl_on_nick && $current_nick !~ /$nick/i)) {
         if($channel_filter && $server->ischannel($channel)) {
-            return 0 if $channel !~ /$channel_filter/;
+            return 0 if $channel !~ /$channel_filter/i;
         }
+        if($filter) {
+            return 0 if $data !~ /$filter/i;
+        }
+    }
 
     $title = $title . " " . $channel;
     do_growl($server, $title, $data);
