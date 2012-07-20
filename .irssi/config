@@ -105,6 +105,7 @@ channels = (
   { name = "#postgresql"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#archlinux"; chatnet = "IRCnet"; autojoin = "yes"; }
+  { name = "#qt"; chatnet = "IRCnet"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -344,7 +345,7 @@ keyboard = (
   { key = "meta-b"; id = "change_window"; data = "7"; },
   { key = "meta-i"; id = "change_window"; data = "8"; },
   { key = "meta-a"; id = "change_window"; data = "9"; },
-  { key = "meta-x"; id = "change_window"; data = "10"; },
+  { key = "meta-q"; id = "change_window"; data = "10"; },
   { key = "^f"; id = "scroll_forward"; data = ""; },
   { key = "^b"; id = "scroll_backward"; data = ""; },
   { key = "meta-n"; id = "scroll_forward"; data = ""; },
@@ -479,10 +480,22 @@ windows = {
     sticky = "yes";
     parent = "3";
   };
+  10 = {
+    items = (
+      {
+        type = "CHANNEL";
+        chat_type = "IRC";
+        name = "#qt";
+        tag = "IRCnet";
+      }
+    );
+    sticky = "yes";
+    parent = "3";
+  };
 };
 mainwindows = {
-  3 = { first_line = "27"; lines = "21"; };
-  2 = { first_line = "8"; lines = "24"; };
+  3 = { first_line = "19"; lines = "20"; };
+  2 = { first_line = "8"; lines = "10"; };
   1 = { first_line = "1"; lines = "7"; };
 };
 notifies = { scrum = { ircnets = ( "scrum", "in", "3", "minutes" ); }; };
