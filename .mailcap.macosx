@@ -1,13 +1,13 @@
 # Images
-Image/JPEG; /Users/vincent/tools/mac_tool/view_attachment %s jpeg
-Image/PNG; /Users/vincent/tools/mac_tool/view_attachment %s png
-Image/GIF; /Users/vincent/tools/mac_tool/view_attachment %s gif
+Image/JPEG; /Users/vincent/tools/mac_tool/view_attachment.sh %s jpeg
+Image/PNG; /Users/vincent/tools/mac_tool/view_attachment.sh %s png
+Image/GIF; /Users/vincent/tools/mac_tool/view_attachment.sh %s gif
 
 # UnIdentified.
-Application/octet-stream; /Users/vincent/tools/mac_tool/view_attachment %s "-" 
+Application/octet-stream; /Users/vincent/tools/mac_tool/view_attachment.sh %s "-" 
 
 # PDF
-Application/PDF; /Users/vincent/tools/mac_tool/view_attachment %s pdf
+Application/PDF; /Users/vincent/tools/mac_tool/view_attachment.sh %s pdf
 document/pdf; /Users/vincent/tools/mac_tool/view_attachment.sh %s -
 
 # HTML

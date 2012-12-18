@@ -1,12 +1,14 @@
-#!/bin/sh -x
+#! /bin/bash
 
-[ ! -z "$TMUX" ] && exit
+tmux start-server 
 
-monit
+session=${1:-base}
+if ! $(tmux has-session -t $session ); then 
+  env TMUX= tmux start-server \; source-file $HOME/.tmux/profiles/$session
+fi 
 
-#TMUX="tmux -udLmain" # for v1.0- version 
-TMUX="tmux -u" # use 'default' socket 
-
-$TMUX has -t work 2>/dev/null || $TMUX -q start
-#exec $TMUX attach -d -t work
-exec $TMUX attach -t work # don't use '-d' if you want to multiuser can attach to the same session at the same time
+if [ -z $TMUX ]; then 
+  tmux -u attach-session -t $session
+else
+  tmux -u switch-client -t $session
+fi

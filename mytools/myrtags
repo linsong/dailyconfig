@@ -28,7 +28,8 @@ find $* \
          -path '*/doc/*' -or \
          -path '*/log/*' -or \
          -path '*/tax_chart/*' -or \
-         -path '*/coverage/*' \
+         -path '*/coverage/*' -or \
+         -path '.*cache*' \
      \) -prune -or \
      -type f -print | \
 ctags -R --sort=yes -L -

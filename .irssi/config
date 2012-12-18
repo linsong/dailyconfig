@@ -104,7 +104,7 @@ channels = (
   { name = "#ubuntu-cn"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "#postgresql"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
-  { name = "#archlinux"; chatnet = "IRCnet"; autojoin = "yes"; }
+  { name = "#archlinux"; chatnet = "IRCnet"; autojoin = "yes"; },
   { name = "#qt"; chatnet = "IRCnet"; autojoin = "yes"; }
 );
 

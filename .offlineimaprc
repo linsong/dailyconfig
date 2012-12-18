@@ -476,20 +476,27 @@ folderfilter = lambda foldername: foldername in ['INBOX',
                                                  '[Gmail]/Sent Mail',
                                                  '[Gmail]/Drafts',
                                                  '[Gmail]/Starred',
-                                                 'Seravia',
-                                                 'GitNotification',
-                                                 '[list]tmux',
-                                                 '[list]TopLanguage',
-                                                 '[list]mutt',
-                                                 '[list]xptemplate',
-                                                 '[list]vim_user',
-                                                 '[list]mongodb',
-                                                 '[list]iTerm2',
-                                                 'GoogleAlert',
-                                                 'DailyRead',
+                                                 'EasyIO',
+                                                 #'Seravia',
+                                                 #'GitNotification',
+                                                 #'[list]tmux',
+                                                 #'[list]TopLanguage',
+                                                 #'[list]mutt',
+                                                 #'[list]xptemplate',
+                                                 #'[list]vim_user',
+                                                 #'[list]mongodb',
+                                                 #'[list]iTerm2',
+                                                 #'GoogleAlert',
+                                                 #'DailyRead',
                                                  '96angel',
                                                  '[2010]06_11',
                                                  '[2010]01_06',
+                                                 'CIL',
+                                                 'CIL/Notification',
                                                  ]
+
+# imap.gmail.com fingerprint
+#cert_fingerprint=f3043dd689a2e7dddfbef82703a6c65ea9b634c1
+cert_fingerprint=6d1b5b5ee0180ab493b71d3b94534b5ab937d042
 
 # vim: ft=python.conf

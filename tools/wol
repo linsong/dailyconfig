@@ -7,5 +7,8 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
 # wake up a windows box in chengxuan office
 # to wake other computer, just replace the mac address 
-mac_addr = '\x00\x1a\xa0\xbe\xd1\x56'
-s.sendto('\xff'*6 + mac_addr*16, ("255.255.255.255",9))
+#mac_addr = '\xf4\x6d\x04\x56\x73\xbe'
+mac_addr = '\x00\x11\x32\x16\x7b\x2c'
+s.sendto('\xff'*6 + mac_addr*16, ("255.255.255.255", 7))
+s.close()
+
