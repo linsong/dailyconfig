@@ -1,0 +1,21 @@
+" XVim features list: https://github.com/JugglerShu/XVim/blob/master/Documents/Users/FeatureList.md
+
+:map <c-h> <c-w>h
+:map <c-l> <c-w>l
+:map <c-j> <c-w>j
+:map <c-k> <c-w>k
+
+:map zz :w<cr><c-w>q 
+:map ;; :w<CR>
+:map ;c :run<CR>
+:map ,k :xhelp<CR>
+
+:map zc :xccmd fold<CR>
+:map zo :xccmd unfold<CR>
+
+:map <c-p> :xccmd openQuickly<CR>
+:map ;a :xccmd jumpToNextCounterpart<CR>
+:map K :xccmd searchDocumentationForSelectedText<CR>
+:map ;d :xccmd toggleDebuggerVisibility<CR>
+
+xccmd toggleToolbarShown<CR>
