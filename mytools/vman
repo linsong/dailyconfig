@@ -1,2 +1,3 @@
 #! /bin/sh
-vim --noplugin  -c "ru manpageview.vim" -c ":Man $@" -c ":only"
+# vim --noplugin  -c "ru manpageview.vim" -c ":Man $@" -c ":only"
+vim  -c ":Man $1 $2" -c ":silent only"

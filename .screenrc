@@ -26,7 +26,7 @@ startup_message off
 #nethack on
 
 #defflow on # will force screen to process ^S/^Q
-deflogin on
+# deflogin on
 
 autodetach on
 
@@ -51,8 +51,8 @@ bind ^\
 # Make them better
 bind \\ quit
 bind K kill
-bind I login on
-bind O login off
+# bind I login on
+# bind O login off
 bind } history
 
 bind j focus down
@@ -149,31 +149,31 @@ ignorecase on
 #
 # Settings only work ver 4.00.3+
 #
-bind + resize -v +3
-bind _ resize -v -3
+# bind + resize -v +3
+# bind _ resize -v -3
 
 # settings about layout
-layout new
-bind y command -c layout
-bind -c layout y    layout next
-bind -c layout ' '  layout next
-#bind -c layout    layout prev
-bind -c layout n    layout next
-bind -c layout p    layout prev
-bind -c layout 0    layout select 0
-bind -c layout 1    layout select 1
-bind -c layout 2    layout select 2
-bind -c layout 3    layout select 3
-bind -c layout 4    layout select 4
-bind -c layout 5    layout select 5
-bind -c layout 6    layout select 6
-bind -c layout 7    layout select 7
-bind -c layout 8    layout select 8
-bind -c layout 9    layout select 9
-bind -c layout \'   layout select
-bind -c layout ?    layout show
-bind -c layout i    layout number
-bind -c layout c    layout new
+# layout new
+# bind y command -c layout
+# bind -c layout y    layout next
+# bind -c layout ' '  layout next
+# #bind -c layout    layout prev
+# bind -c layout n    layout next
+# bind -c layout p    layout prev
+# bind -c layout 0    layout select 0
+# bind -c layout 1    layout select 1
+# bind -c layout 2    layout select 2
+# bind -c layout 3    layout select 3
+# bind -c layout 4    layout select 4
+# bind -c layout 5    layout select 5
+# bind -c layout 6    layout select 6
+# bind -c layout 7    layout select 7
+# bind -c layout 8    layout select 8
+# bind -c layout 9    layout select 9
+# bind -c layout \'   layout select
+# bind -c layout ?    layout show
+# bind -c layout i    layout number
+# bind -c layout c    layout new
 
 # ------------------------------------------------------------------------------
 # STARTUP SCREENS
@@ -183,6 +183,6 @@ bind -c layout c    layout new
 #
 
 # source local settings 
-source ${HOME}/.screenrc.local
+# source ${HOME}/.screenrc.local
 # maybe following line is smarter ;)
 #source ${HOME}/.screenrc-${HOST}
