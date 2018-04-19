@@ -23,8 +23,10 @@ modifier_handler = function(evt)
   elseif prev_modifiers["ctrl"] and len(curr_modifiers) == 0 and send_escape then
     send_escape = false
     hs.eventtap.keyStroke({}, "ESCAPE")
-    -- hs.eventtap.event.newKeyEvent({}, 'escape', true)
-    -- hs.eventtap.event.newKeyEvent({}, 'escape', false)
+    -- return true, {
+    --   hs.eventtap.event.newKeyEvent({}, 'escape', true),
+    --   hs.eventtap.event.newKeyEvent({}, 'escape', false)
+    -- }
   else
     send_escape = false
   end
@@ -35,7 +37,7 @@ end
 
 -- Call the modifier_handler function anytime a modifier key is pressed or released
 modifier_tap = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, modifier_handler)
-modifier_tap:start()
+-- modifier_tap:start()
 
 
 -- If any non-modifier key is pressed, we know we won't be sending an escape
@@ -43,4 +45,18 @@ non_modifier_tap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(e
   send_escape = false
   return false
 end)
-non_modifier_tap:start()
+-- non_modifier_tap:start()
+
+enabled_apps = { VimR = true, iTerm2 = true }
+local watcher = hs.application.watcher.new(function(name, event, app) 
+  if enabled_apps[name] and (event == hs.application.watcher.activated or event == hs.application.watcher.launched or event == hs.application.watcher.unhidden) then
+    modifier_tap:start()
+    non_modifier_tap:start()
+  end
+
+  if enabled_apps[name] and (event == hs.application.watcher.deactivated or event == hs.application.watcher.hidden or event == hs.application.watcher.terminated) then
+    modifier_tap:stop()
+    non_modifier_tap:stop()
+  end
+end)
+watcher:start()
