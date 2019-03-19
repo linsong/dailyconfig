@@ -108,12 +108,42 @@ EXEC 01;33
 .tif 01;35
 
 # the following setting come from wangwei
+# Audio format
 .mp3 01;32
 .MP3 01;32
 .wma 01;32
 .WMA 01;32
 .mid 01;32
 .MID 01;32
+
+# Video formats 
+.mov    01;32
+.mpg    01;32
+.mpeg   01;32
+.m2v    01;32
+.mkv    01;32
+.ogm    01;32
+.mp4    01;32
+.m4v    01;32
+.mp4v   01;32
+.vob    01;32
+.qt     01;32
+.nuv    01;32
+.wmv    01;32
+.asf    01;32
+.rm     01;32
+.rmvb   01;32
+.flc    01;32
+.avi    01;32
+.fli    01;32
+.flv    01;32
+.gl     01;32
+.m2ts   01;32
+# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
+.axv 01;32
+.anx 01;32
+.ogv 01;32
+.ogx 01;32
 
 .vim 01;36
 .VIM 01;36
