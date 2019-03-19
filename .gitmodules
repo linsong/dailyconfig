@@ -22,3 +22,6 @@
 [submodule ".vifm"]
 	path = .vifm
 	url = git@github.com:linsong/dot_vifm.git
+[submodule ".tmux"]
+	path = .tmux
+	url = git@github.com:linsong/dot_tmux.git
