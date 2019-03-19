@@ -126,7 +126,8 @@ local watcher = hs.application.watcher.new(function(name, event, app)
   end
 
   -- auto start vim mode for below apps
-  if name ~= "iBooks" and name ~= "Dash" and name ~= "Preview" then
+  -- if name ~= "iBooks" and name ~= "Dash" and name ~= "Preview" then
+  if name ~= "iBooks" and name ~= "Preview" then
     return 
   end
   
@@ -137,4 +138,4 @@ local watcher = hs.application.watcher.new(function(name, event, app)
   end
 end)
 
-watcher:start()
+-- watcher:start()

@@ -7,7 +7,7 @@ local hyper = {"cmd", "alt"}
 
 require "layout"
 require "vimkeys"
-require "remap_capslock"
+-- require "remap_capslock"
 
 -- define modal key {{{1
 local modkey = hs.hotkey.modal.new('cmd-alt', 'h')
