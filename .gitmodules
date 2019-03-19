@@ -19,3 +19,6 @@
 [submodule ".hammerspoon"]
 	path = .hammerspoon
 	url = git@github.com:linsong/dot_hammerspoon.git
+[submodule ".vifm"]
+	path = .vifm
+	url = git@github.com:linsong/dot_vifm.git
