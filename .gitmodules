@@ -22,3 +22,9 @@
 [submodule ".mutt"]
 	path = .mutt
 	url = git@github.com:linsong/mutt-config.git
+[submodule ".tmux"]
+	path = .tmux
+	url = git@github.com:linsong/dot_tmux.git
+[submodule ".config/mpv"]
+	path = .config/mpv
+	url = git@github.com:linsong/dot_mpv.git
